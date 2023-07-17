@@ -55,13 +55,15 @@ ENV NODE_ENV production
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 
-# Copy the production dependencies from the deps stage and also
-# the built application from the build stage into the image.
+# Copy the production dependencies without dev dependencies to save some space from the deps stage
+# and also the built application from the build stage into the image.
 COPY --from=deps /usr/src/wbms_be/node_modules ./node_modules
 
 COPY --from=build /usr/src/wbms_be/dist ./dist
 COPY --from=build /usr/src/wbms_be/prisma ./prisma
 COPY --from=build /usr/src/wbms_be/cert ./dist/semai/cert
+# Copy generated prisma client from 
+COPY --from=build /usr/src/wbms_be/node_modules/.prisma/client  ./node_modules/.prisma/client   
 
 # Expose the port that the application listens on.
 EXPOSE 6001
