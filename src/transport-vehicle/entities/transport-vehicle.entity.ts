@@ -1,11 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { TransportVehicle } from '@prisma/client';
+import { ApiProperty } from "@nestjs/swagger";
+import { TransportVehicle } from "@prisma/client";
 
 export class TransportVehicleEntity implements TransportVehicle {
   @ApiProperty() id: string;
 
   @ApiProperty() refType: number;
   @ApiProperty() refId: string;
+  @ApiProperty() codeSap: string;
 
   @ApiProperty() companyId: string;
   @ApiProperty() companyRefId: string;

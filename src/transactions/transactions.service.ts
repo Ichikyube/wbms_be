@@ -32,7 +32,6 @@ export class TransactionService {
 
     try {
       const records = await this.db.transaction.findMany();
-
       dataOut.records = records;
     } catch (error) {
       dataOut.status = false;

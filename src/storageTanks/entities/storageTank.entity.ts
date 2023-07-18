@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { StorageTank } from '@prisma/client';
+import { ApiProperty } from "@nestjs/swagger";
+import { StorageTank } from "@prisma/client";
 
 export class StorageTankEntity implements StorageTank {
   @ApiProperty() id: string;
@@ -20,6 +20,7 @@ export class StorageTankEntity implements StorageTank {
   @ApiProperty() productName: string;
 
   @ApiProperty() code: string;
+  @ApiProperty() codeSap: string;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string;
   @ApiProperty() description: string;

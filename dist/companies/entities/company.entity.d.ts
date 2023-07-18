@@ -1,0 +1,30 @@
+import { Company } from '@prisma/client';
+export declare class CompanyEntity implements Company {
+    id: string;
+    refType: number;
+    refId: string;
+    code: string;
+    codeSap: string;
+    name: string;
+    shortName: string;
+    address: string;
+    addressExt: string;
+    postalCode: string;
+    country: string;
+    province: string;
+    city: string;
+    phone: string;
+    url: string;
+    contactName: string;
+    contactEmail: string;
+    contactPhone: string;
+    isMillOperator: boolean;
+    isTransporter: boolean;
+    isSiteOperator: boolean;
+    isEstate: boolean;
+    isDeleted: boolean;
+    userCreated: string;
+    userModified: string;
+    dtCreated: Date;
+    dtModified: Date;
+}

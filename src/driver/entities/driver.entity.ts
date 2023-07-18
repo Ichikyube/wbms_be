@@ -6,6 +6,7 @@ export class DriverEntity implements Driver {
 
   @ApiProperty() refType: number;
   @ApiProperty() refId: string;
+  @ApiProperty() codeSap: string;
 
   @ApiProperty() companyId: string;
   @ApiProperty() companyRefId: string;

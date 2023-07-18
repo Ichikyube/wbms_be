@@ -348,6 +348,7 @@ model StorageTank {
   productName  String? @db.VarChar(50)
 
   code        String  @db.VarChar(50)
+  codeSap     String  @db.VarChar(50)
   name        String  @db.VarChar(50)
   shortName   String? @db.VarChar(50)
   description String? @db.VarChar(500)
@@ -373,7 +374,8 @@ model Driver {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0)
   refId   String? @db.VarChar(50)
-
+  codeSap      String  @db.VarChar(50)
+  
   companyId    String? @db.Char(36)
   companyRefId String? @db.VarChar(50)
   companyName  String  @db.VarChar(50)
@@ -383,8 +385,10 @@ model Driver {
   address   String?   @db.VarChar(250)
   email     String?   @db.VarChar(30)
   phone     String?   @db.VarChar(30)
+
   licenseNo String?   @db.VarChar(30)
   licenseED DateTime?
+
 
   isDeleted    Boolean  @default(false)
   userCreated  String   @db.Char(36)
@@ -400,6 +404,7 @@ model TransportVehicle {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0)
   refId   String? @db.VarChar(50)
+  codeSap     String  @db.VarChar(50)
 
   companyId    String? @db.Char(36)
   companyRefId String? @db.VarChar(50)

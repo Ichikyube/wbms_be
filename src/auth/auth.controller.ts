@@ -1,31 +1,41 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Req, Get, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Req,
+  Get,
+  Res,
+} from "@nestjs/common";
+import { Request, Response } from "express";
+import { ApiTags } from "@nestjs/swagger";
 
-import { AuthService } from './auth.service';
-import { AtGuard, RtGuard } from 'src/common/guards';
-import { SigninDto } from './dto';
-import { CreateUserDto } from 'src/users/dto';
+import { AuthService } from "./auth.service";
+import { AtGuard, RtGuard } from "src/common/guards";
+import { SigninDto } from "./dto";
+import { CreateUserDto } from "src/users/dto";
 
-@ApiTags('Auth')
-@Controller('api/auth')
+@ApiTags("Auth")
+@Controller("api/auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Get('iam')
+  @Get("iam")
   @UseGuards(AtGuard)
   async getIAM(@Req() req: Request) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
-        user: null
+        user: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
-      const user = await this.authService.getIAM(req.user['id']);
+      const user = await this.authService.getIAM(req.user["id"]);
 
       const { username, email, name, division, position, phone } = user;
 
@@ -39,16 +49,17 @@ export class AuthController {
     return dataOut;
   }
 
-  @Post('signup')
+  @Post("signup")
+  @UseGuards()
   @HttpCode(HttpStatus.CREATED)
   async signup(@Body() dto: CreateUserDto) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
-        user: null
+        user: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -56,7 +67,15 @@ export class AuthController {
 
       const { username, email, nik, name, division, position, phone } = user;
 
-      dataOut.data.user = { username, email, nik, name, division, position, phone };
+      dataOut.data.user = {
+        username,
+        email,
+        nik,
+        name,
+        division,
+        position,
+        phone,
+      };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -66,17 +85,21 @@ export class AuthController {
     return dataOut;
   }
 
-  @Post('signin')
+  @Post("signin")
+  @UseGuards()
   @HttpCode(HttpStatus.OK)
-  async signin(@Body() dto: SigninDto, @Res({ passthrough: true }) res: Response) {
+  async signin(
+    @Body() dto: SigninDto,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         tokens: null,
-        user: null
+        user: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -85,7 +108,7 @@ export class AuthController {
       dataOut.data.tokens = tokens;
       dataOut.data.user = user;
       // dataOut.data = { tokens, user };
-      dataOut.message = 'Signed in successfully.';
+      dataOut.message = "Signed in successfully.";
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -95,25 +118,28 @@ export class AuthController {
     return dataOut;
   }
 
-  @Post('signout')
+  @Post("signout")
   @UseGuards(AtGuard)
   @HttpCode(HttpStatus.OK)
-  async signout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async signout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {},
-      logs: {}
+      logs: {},
     };
 
     try {
-      const isSuccess = await this.authService.signout(req.user['sub'], res);
+      const isSuccess = await this.authService.signout(req.user["sub"], res);
 
       if (isSuccess) {
-        dataOut.message = 'Signed out successfully.';
+        dataOut.message = "Signed out successfully.";
       } else {
         dataOut.status = false;
-        dataOut.message = 'Already signed out.';
+        dataOut.message = "Already signed out.";
       }
     } catch (error) {
       dataOut.status = false;
@@ -124,24 +150,31 @@ export class AuthController {
     return dataOut;
   }
 
-  @Post('refresh')
+  @Post("refresh")
   @UseGuards(RtGuard)
   @HttpCode(HttpStatus.OK)
-  async refreshToken(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async refreshToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
-        tokens: null
+        tokens: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
-      const tokens = await this.authService.refreshToken(req.user['sub'], req.user['refreshToken'], res);
+      const tokens = await this.authService.refreshToken(
+        req.user["sub"],
+        req.user["refreshToken"],
+        res
+      );
 
       dataOut.data.tokens = tokens;
-      dataOut.message = 'Token refreshed successfully.';
+      dataOut.message = "Token refreshed successfully.";
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

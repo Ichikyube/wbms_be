@@ -5,7 +5,8 @@ export class CreateDriverDto {
   @ApiProperty() @IsUUID() @IsNotEmpty() companyId?: string;
   @ApiProperty({ required: false }) @IsUUID() @IsOptional() companyRefId?: string;
   @ApiProperty() @IsString() @IsNotEmpty() companyName: string;
-
+  @ApiProperty({ required: false }) @IsString() @IsOptional() codeSap: string;
+  
   @ApiProperty() @IsString() @IsNotEmpty() nik: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiProperty({ required: false }) @IsString() @IsOptional() address?: string;

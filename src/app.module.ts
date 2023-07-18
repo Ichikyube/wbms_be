@@ -20,8 +20,10 @@ import { StorageTanksModule } from './storageTanks/storageTanks.module';
 import { ProductGroupsModule } from './productGroups/productGroups.module';
 import { ProvincesModule } from './provinces/provinces.module';
 import { SemaiModule } from './semai/semai.module';
+import { APP_GUARD } from '@nestjs/core';
 import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
+import { AtGuard } from './common/guards';
 
 @Module({
   imports: [
@@ -47,6 +49,12 @@ import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.mo
     SemaiModule,
     DriverModule,
     TransportVehicleModule
-  ]
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule {}

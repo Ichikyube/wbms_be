@@ -95,7 +95,7 @@ export class SemaiService {
 
       if (!response.success) throw new Error(response?.message);
 
-      dataOut.data.sites = response.record;
+      dataOut.data.sites = response.records;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

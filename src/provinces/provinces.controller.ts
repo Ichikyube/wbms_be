@@ -1,22 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
-import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
+import { Request } from "express";
+import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
 
-import { ProvincesService } from './provinces.service';
-import { CreateProvinceDto, UpdateProvinceDto } from './dto';
-import { ProvinceEntity } from './entities';
+import { ProvincesService } from "./provinces.service";
+import { CreateProvinceDto, UpdateProvinceDto } from "./dto";
+import { ProvinceEntity } from "./entities";
+import { SaveUserIdGuard } from "src/common/guards/SaveUserIdGuard ";
 
-@ApiTags('Provinces')
-@Controller('api/provinces')
+@ApiTags("Provinces")
+@Controller("api/provinces")
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
-  @Get('')
+  @Get("")
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAll() {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: {
           records: [],
@@ -41,12 +52,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Get('deleted')
+  @Get("deleted")
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: {
           records: [],
@@ -71,12 +82,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiCreatedResponse({ type: ProvinceEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param("id") id: string) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: null,
       },
@@ -96,12 +107,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Post('search-first')
+  @Post("search-first")
   @ApiCreatedResponse({ type: ProvinceEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: {
           records: [],
@@ -128,12 +139,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Post('search-many')
+  @Post("search-many")
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: {
           records: [],
@@ -158,12 +169,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Post('search-first-deleted')
+  @Post("search-first-deleted")
   @ApiCreatedResponse({ type: ProvinceEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: {
           records: [],
@@ -190,12 +201,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Post('search-many-deleted')
+  @Post("search-many-deleted")
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: {
           records: [],
@@ -221,11 +232,12 @@ export class ProvincesController {
   }
 
   @Post()
+  @UseGuards(SaveUserIdGuard)
   @ApiCreatedResponse({ type: ProvinceEntity })
   async create(@Body() dto: CreateProvinceDto, @Req() req: Request) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: null,
       },
@@ -233,7 +245,7 @@ export class ProvincesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user["id"];
       const record = await this.provincesService.create(dto, userId);
 
       dataOut.data.province = record;
@@ -246,12 +258,16 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiCreatedResponse({ type: ProvinceEntity })
-  async updateById(@Param('id') id: string, @Body() dto: UpdateProvinceDto, @Req() req: Request) {
+  async updateById(
+    @Param("id") id: string,
+    @Body() dto: UpdateProvinceDto,
+    @Req() req: Request
+  ) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: null,
       },
@@ -259,7 +275,7 @@ export class ProvincesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = ""; //req.user['id'];
       console.log(id);
       const record = await this.provincesService.updateById(id, dto, userId);
 
@@ -273,12 +289,12 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiCreatedResponse({ type: ProvinceEntity })
-  async deleteById(@Param('id') id: string, @Req() req: Request) {
+  async deleteById(@Param("id") id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         province: null,
       },
@@ -286,7 +302,7 @@ export class ProvincesController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ""; // req.user['id'];
       const record = await this.provincesService.deleteById(id, userId);
 
       dataOut.data.province = record;

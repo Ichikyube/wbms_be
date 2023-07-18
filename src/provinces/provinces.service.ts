@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
-import { DbService } from 'src/db/db.service';
-import { CreateProvinceDto, UpdateProvinceDto } from './dto';
-import { ProvinceEntity } from './entities';
+import { DbService } from "src/db/db.service";
+import { CreateProvinceDto, UpdateProvinceDto } from "./dto";
+import { ProvinceEntity } from "./entities";
 
 @Injectable()
 export class ProvincesService {
@@ -64,12 +64,15 @@ export class ProvincesService {
     return records;
   }
 
-  async create(dto: CreateProvinceDto, userId: string): Promise<ProvinceEntity> {
+  async create(
+    dto: CreateProvinceDto,
+    userId: string
+  ): Promise<ProvinceEntity> {
     const params = {
       data: {
         ...dto,
         userCreated: userId,
-        userModified: userId,
+        userModified: "",
       },
     };
 
@@ -78,7 +81,11 @@ export class ProvincesService {
     return record;
   }
 
-  async updateById(id: string, dto: UpdateProvinceDto, userId: string): Promise<ProvinceEntity> {
+  async updateById(
+    id: string,
+    dto: UpdateProvinceDto,
+    userId: string
+  ): Promise<ProvinceEntity> {
     const params = {
       where: { id },
       data: { ...dto, userModified: userId },

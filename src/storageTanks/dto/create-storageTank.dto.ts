@@ -1,5 +1,12 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsUUID, IsOptional, IsInt, IsNumber } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import {
+  IsString,
+  IsNotEmpty,
+  IsUUID,
+  IsOptional,
+  IsInt,
+  IsNumber,
+} from "class-validator";
 
 export class CreateStorageTankDto {
   @ApiProperty() @IsUUID() @IsNotEmpty() siteId: string;
@@ -15,6 +22,7 @@ export class CreateStorageTankDto {
   @ApiProperty() @IsString() @IsNotEmpty() productName: string;
 
   @ApiProperty() @IsString() @IsNotEmpty() code: string;
+  @ApiProperty() @IsString() @IsOptional() codeSap: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiPropertyOptional() @IsString() @IsOptional() shortName: string;
   @ApiPropertyOptional() @IsString() @IsOptional() description: string;

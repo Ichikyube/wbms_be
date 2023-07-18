@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
-import { DbService } from 'src/db/db.service';
-import { SemaiService } from 'src/semai/semai.service';
-import { CreateSiteDto, UpdateSiteDto } from './dto';
-import { SiteEntity } from './entities/site.entity';
+import { DbService } from "src/db/db.service";
+import { SemaiService } from "src/semai/semai.service";
+import { CreateSiteDto, UpdateSiteDto } from "./dto";
+import { SiteEntity } from "./entities/site.entity";
 
 @Injectable()
 export class SitesService {
   constructor(
     private db: DbService,
     private config: ConfigService,
-    private semaiService: SemaiService,
+    private semaiService: SemaiService
   ) {}
 
   async getAll(): Promise<SiteEntity[]> {
@@ -87,7 +87,7 @@ export class SitesService {
   async updateById(
     id: string,
     dto: UpdateSiteDto,
-    userId: string,
+    userId: string
   ): Promise<SiteEntity> {
     const params = {
       where: { id },
@@ -144,7 +144,7 @@ export class SitesService {
 
                   isMill: site?.isMill,
 
-                  isDeleted: site?.isDeleted,
+                  isDeleted: !!site?.isDeleted,
                 },
               })
               .then((res) => console.log(res));
@@ -173,10 +173,10 @@ export class SitesService {
 
                   isMill: site?.isMill,
 
-                  isDeleted: site?.isDeleted,
+                  isDeleted: !!site?.isDeleted,
 
-                  userCreated: '',
-                  userModified: '',
+                  userCreated: "",
+                  userModified: "",
                 },
               })
               .then((res) => console.log(res));
