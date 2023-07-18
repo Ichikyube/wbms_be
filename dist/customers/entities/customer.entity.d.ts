@@ -1,4 +1,4 @@
-import { Customer } from '@prisma/client';
+import { Customer } from "@prisma/client";
 export declare class CustomerEntity implements Customer {
     id: string;
     customerTypeId: string;

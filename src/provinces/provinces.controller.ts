@@ -232,7 +232,6 @@ export class ProvincesController {
   }
 
   @Post()
-  @UseGuards(SaveUserIdGuard)
   @ApiCreatedResponse({ type: ProvinceEntity })
   async create(@Body() dto: CreateProvinceDto, @Req() req: Request) {
     const dataOut = {

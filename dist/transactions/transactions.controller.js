@@ -16,6 +16,7 @@ exports.TransactionController = void 0;
 const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const transactions_service_1 = require("./transactions.service");
+const dto_1 = require("./dto");
 let TransactionController = exports.TransactionController = class TransactionController {
     constructor(transactionService) {
         this.transactionService = transactionService;
@@ -108,7 +109,7 @@ __decorate([
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [dto_1.CreateTransactionDto]),
     __metadata("design:returntype", void 0)
 ], TransactionController.prototype, "create", null);
 __decorate([

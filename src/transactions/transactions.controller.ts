@@ -8,6 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { TransactionService } from './transactions.service';
+import { CreateTransactionDto } from './dto';
 
 @Controller('api/transactions')
 export class TransactionController {
@@ -49,7 +50,7 @@ export class TransactionController {
   }
 
   @Post()
-  create(@Body() dto: any) {
+  create(@Body() dto: CreateTransactionDto) {
     return this.transactionService.create(dto);
   }
 

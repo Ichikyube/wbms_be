@@ -1,4 +1,5 @@
 import { TransactionService } from './transactions.service';
+import { CreateTransactionDto } from './dto';
 export declare class TransactionController {
     private transactionService;
     constructor(transactionService: TransactionService);
@@ -56,7 +57,7 @@ export declare class TransactionController {
         record: {};
         logs: {};
     }>;
-    create(dto: any): Promise<{
+    create(dto: CreateTransactionDto): Promise<{
         status: boolean;
         message: string;
         page: number;

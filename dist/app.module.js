@@ -28,10 +28,8 @@ const storageTanks_module_1 = require("./storageTanks/storageTanks.module");
 const productGroups_module_1 = require("./productGroups/productGroups.module");
 const provinces_module_1 = require("./provinces/provinces.module");
 const semai_module_1 = require("./semai/semai.module");
-const core_1 = require("@nestjs/core");
 const driver_module_1 = require("./driver/driver.module");
 const transport_vehicle_module_1 = require("./transport-vehicle/transport-vehicle.module");
-const guards_1 = require("./common/guards");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -58,13 +56,7 @@ exports.AppModule = AppModule = __decorate([
             provinces_module_1.ProvincesModule,
             semai_module_1.SemaiModule,
             driver_module_1.DriverModule,
-            transport_vehicle_module_1.TransportVehicleModule
-        ],
-        providers: [
-            {
-                provide: core_1.APP_GUARD,
-                useClass: guards_1.AtGuard,
-            },
+            transport_vehicle_module_1.TransportVehicleModule,
         ],
     })
 ], AppModule);

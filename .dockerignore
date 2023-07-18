@@ -1,37 +1,15 @@
-# Include any files or directories that you don't want to be copied to your
+.dockerignore
+.env
+.eslintrc.js
+.git
+.gitignore
+.prettierrc
 
-# container here (e.g., local build artifacts, temporary files, etc.).
+build
+dist
+test
+node_modules
 
-#
-
-# For more help, visit the .dockerignore file reference guide at
-
-# https://docs.docker.com/engine/reference/builder/#dockerignore-file
-
-**/.classpath
-**/.dockerignore
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/.vscode
-**/.next
-**/.cache
-**/*.*proj.user
-**/\*.dbmdl
-**/_.jfm
-**/charts
-**/docker-compose_
-**/compose\*
-**/Dockerfile\*
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-**/build
-\*\*/dist
-LICENSE
+Dockerfile
+Dockerfile.prod
 README.md

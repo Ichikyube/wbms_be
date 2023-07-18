@@ -19,7 +19,6 @@ const swagger_1 = require("@nestjs/swagger");
 const provinces_service_1 = require("./provinces.service");
 const dto_1 = require("./dto");
 const entities_1 = require("./entities");
-const SaveUserIdGuard_1 = require("../common/guards/SaveUserIdGuard ");
 let ProvincesController = exports.ProvincesController = class ProvincesController {
     constructor(provincesService) {
         this.provincesService = provincesService;
@@ -326,7 +325,6 @@ __decorate([
 ], ProvincesController.prototype, "searchManyDeleted", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(SaveUserIdGuard_1.SaveUserIdGuard),
     (0, swagger_1.ApiCreatedResponse)({ type: entities_1.ProvinceEntity }),
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)()),

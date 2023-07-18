@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 let SaveUserIdGuard = exports.SaveUserIdGuard = class SaveUserIdGuard {
     canActivate(context) {
         const request = context.switchToHttp().getRequest();
-        const userId = request.user.id;
+        const userId = request.user['id'];
         request.userId = userId;
         return true;
     }
