@@ -10,6 +10,7 @@ export declare class SemaiService {
     constructor(db: DbService, config: ConfigService);
     WBMS_SEMAI_API_URL: any;
     WBMS_SEMAI_API_KEY: any;
+    WBMS_CERT_DIR: string;
     WBMS_SEMAI_CERT: any;
     WBMS_SEMAI_KEY: any;
     httpsAgent: https.Agent;
