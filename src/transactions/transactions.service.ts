@@ -10,6 +10,7 @@ import { CreateTransactionDto } from './dto';
 
 import { DraftTransactionDto } from './dto/draft-transaction.dto';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
+import { TransactionEntity } from './transaction.entity';
 
 @Injectable()
 export class TransactionService {
@@ -259,7 +260,7 @@ export class TransactionService {
     return dataOut;
   }
 
-  async create(dto: any) {
+  async create(CreateTransactionDto: CreateTransactionDto): Promise<TransactionEntity> {
     const dataOut = {
       status: true,
       message: '',
@@ -271,10 +272,8 @@ export class TransactionService {
 
     try {
       console.log('create new data:');
-      console.log(dto);
-      const record = await this.db.transaction.create({
-        data: { ...dto, userCreated: '', userModified: '' }
-      });
+      console.log(CreateTransactionDto);
+      const record = await this.db.transaction.create({data:CreateTransactionDto});
 
       dataOut.record = record;
     } catch (error) {
