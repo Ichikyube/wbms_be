@@ -1,16 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { DbService } from 'src/db/db.service';
-import * as moment from 'moment';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { DbService } from "src/db/db.service";
+import * as moment from "moment";
 
-import { SemaiService } from 'src/semai/semai.service';
-import { ConfigsService } from 'src/configs/configs.service';
+import { SemaiService } from "src/semai/semai.service";
+import { ConfigsService } from "src/configs/configs.service";
 
-import { CreateTransactionDto } from './dto';
+import { CreateTransactionDto } from "./dto";
 
+<<<<<<< HEAD
 import { DraftTransactionDto } from './dto/draft-transaction.dto';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
-import { TransactionEntity } from './transaction.entity';
+=======
+import { DraftTransactionDto } from "./dto/draft-transaction.dto";
+import { QrcodeDto } from "src/semai/dto/qrcode.dt";
+import { TransactionEntity } from "./transaction.entity";
+>>>>>>> nani
 
 @Injectable()
 export class TransactionService {
@@ -24,11 +29,11 @@ export class TransactionService {
   async getAll() {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       page: 0,
       totalRecords: 0,
       records: {},
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -46,16 +51,16 @@ export class TransactionService {
   async searchMany(query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       page: 0,
       totalRecords: 0,
       records: {},
-      logs: {}
+      logs: {},
     };
 
     try {
       const records = await this.db.transaction.findMany({
-        ...query
+        ...query,
       });
 
       dataOut.records = records;
@@ -71,14 +76,14 @@ export class TransactionService {
   async searchFirst(query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       record: {},
-      logs: {}
+      logs: {},
     };
 
     try {
       const record = await this.db.transaction.findFirst({
-        ...query
+        ...query,
       });
 
       dataOut.record = record;
@@ -94,13 +99,13 @@ export class TransactionService {
   async openCreateByQrcodeSemai(body: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         transaction: {},
-        tType: '',
-        urlPath: ''
+        tType: "",
+        urlPath: "",
       },
-      logs: {}
+      logs: {},
     };
 
     const { content, tType } = body;
@@ -123,22 +128,33 @@ export class TransactionService {
       const urlMapping = this.configWbms.WbTransactionUrlMapping();
 
       try {
-        dataOut.data.tType = statusMapping[tType][decodedQrcode.vehicleOperationStatus][decodedQrcode.deliveryStatus];
+        dataOut.data.tType =
+          statusMapping[tType][decodedQrcode.vehicleOperationStatus][
+            decodedQrcode.deliveryStatus
+          ];
 
-        dataOut.data.urlPath = urlMapping[tType][decodedQrcode.vehicleOperationStatus][decodedQrcode.deliveryStatus];
+        dataOut.data.urlPath =
+          urlMapping[tType][decodedQrcode.vehicleOperationStatus][
+            decodedQrcode.deliveryStatus
+          ];
       } catch (error) {
-        throw new Error('Backend: Vehicle Operation Status atau Delivery Status tidak valid.');
+        throw new Error(
+          "Backend: Vehicle Operation Status atau Delivery Status tidak valid."
+        );
       }
 
-      const transaction: DraftTransactionDto = this.copyQrToTransaction(decodedQrcode, tType);
+      const transaction: DraftTransactionDto = this.copyQrToTransaction(
+        decodedQrcode,
+        tType
+      );
 
       const dtTransaction = await this.searchFirst({
         where: {
           transportVehiclePlateNo: transaction.transportVehiclePlateNo,
           progressStatus: { not: 15 },
-          tType
+          tType,
         },
-        orderBy: { bonTripNo: 'desc' }
+        orderBy: { bonTripNo: "desc" },
       }).then((res) => res.record);
 
       // if (decodedQrcode.vehicleOperationStatus == 1) {
@@ -187,9 +203,9 @@ export class TransactionService {
   async searchByQR(query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {},
-      logs: {}
+      logs: {},
     };
 
     const { content, tType } = query;
@@ -210,19 +226,19 @@ export class TransactionService {
   async getByPlateNo(query: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       page: 0,
       totalRecords: 0,
       record: {},
-      logs: {}
+      logs: {},
     };
 
-    const { key, sort = 'asc' } = query;
+    const { key, sort = "asc" } = query;
 
     try {
       const record = await this.db.transaction.findFirst({
         where: { transportVehiclePlateNo: key },
-        orderBy: { id: sort }
+        orderBy: { id: sort },
       });
 
       dataOut.record = record;
@@ -238,16 +254,16 @@ export class TransactionService {
   async getById(id: string) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       page: 0,
       totalRecords: 0,
       record: {},
-      logs: {}
+      logs: {},
     };
 
     try {
       const record = await this.db.transaction.findUnique({
-        where: { id }
+        where: { id },
       });
 
       dataOut.record = record;
@@ -260,20 +276,39 @@ export class TransactionService {
     return dataOut;
   }
 
-  async create(CreateTransactionDto: CreateTransactionDto): Promise<TransactionEntity> {
+<<<<<<< HEAD
+  async create(dto: any) {
+=======
+  async create(createTransactionDto: any) {
+>>>>>>> nani
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       page: 0,
       totalRecords: 0,
       record: {},
-      logs: {}
+      logs: {},
     };
 
     try {
+<<<<<<< HEAD
       console.log('create new data:');
-      console.log(CreateTransactionDto);
-      const record = await this.db.transaction.create(CreateTransactionDto);
+      console.log(dto);
+      const record = await this.db.transaction.create({
+        data: { ...dto, userCreated: '', userModified: '' }
+      });
+=======
+      console.log("create new data:");
+      console.log(createTransactionDto);
+      // const product
+      // const transporter
+      // const driver
+      // const originSite
+      // const destinationSite
+      // const originSourceStorageTank
+      // const destinationSinkStorageTank
+      const record = await this.db.transaction.create(createTransactionDto);
+>>>>>>> nani
 
       dataOut.record = record;
     } catch (error) {
@@ -290,17 +325,17 @@ export class TransactionService {
   async updateById(id: string, dto: any) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       page: 0,
       totalRecords: 0,
       record: {},
-      logs: {}
+      logs: {},
     };
 
     try {
       const record = await this.db.transaction.update({
         where: { id },
-        data: { ...dto, userModified: '' }
+        data: { ...dto, userModified: "" },
       });
 
       dataOut.record = record;
@@ -327,7 +362,9 @@ export class TransactionService {
 
     transaction.deliveryOrderId = dto?.deliveryOrderId;
     transaction.deliveryOrderNo = dto?.deliveryOrderNo;
-    transaction.deliveryDate = dto.deliveryDate ? moment(dto?.deliveryDate).toDate() : null;
+    transaction.deliveryDate = dto.deliveryDate
+      ? moment(dto?.deliveryDate).toDate()
+      : null;
 
     transaction.transporterCompanyCode = dto.transporterCompanyCode;
     transaction.transporterCompanyName = dto.transporterCompanyFullName;

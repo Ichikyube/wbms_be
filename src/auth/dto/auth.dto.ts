@@ -1,5 +1,12 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import {
+  IsString,
+  IsEmail,
+  IsNotEmpty,
+  IsPhoneNumber,
+  Length,
+  IsOptional,
+} from "class-validator";
 
 export class SignupDto {
   @ApiProperty() @IsString() @IsNotEmpty() username: string;
@@ -15,15 +22,15 @@ export class SignupDto {
   @IsString()
   @IsNotEmpty()
   @Length(8, 20, {
-    message: 'Panjang password minimal 8 karakter dan maksimal 20 karakter.'
+    message: "Panjang password minimal 8 karakter dan maksimal 20 karakter.",
   })
   password: string;
 }
 
 export class SigninDto {
-  @ApiPropertyOptional() @IsString() username: string;
-  @ApiPropertyOptional() @IsEmail() email: string;
-  @ApiPropertyOptional() @IsString() nik: string;
+  @ApiPropertyOptional() @IsString() @IsOptional() username: string;
+  @ApiPropertyOptional() @IsEmail() @IsOptional() email: string;
+  @ApiPropertyOptional() @IsString() @IsOptional() nik: string;
 
   @ApiProperty() @IsString() @IsNotEmpty() password: string;
 }

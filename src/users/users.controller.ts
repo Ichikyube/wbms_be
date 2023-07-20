@@ -10,25 +10,25 @@ import {
   Patch,
   HttpStatus,
   HttpCode,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { Request } from "express";
 
-import { UsersService } from './users.service';
-import { AtGuard } from 'src/common/guards';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { UsersService } from "./users.service";
+import { AtGuard } from "src/common/guards";
+import { CreateUserDto, UpdateUserDto } from "./dto";
 
-@ApiTags('Users')
+@ApiTags("Users")
 @UseGuards(AtGuard)
-@Controller('api/users')
+@Controller("api/users")
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get('iam')
+  @Get("iam")
   async getIAM(@Req() req: Request) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: null,
       },
@@ -36,7 +36,7 @@ export class UsersController {
     };
 
     try {
-      const user = await this.usersService.getIAM(req.user['id']);
+      const user = await this.usersService.getIAM(req.user["id"]);
 
       const { username, email, name, division, position, phone } = user;
 
@@ -54,7 +54,7 @@ export class UsersController {
   async getAll() {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: {
           page: 0,
@@ -79,11 +79,11 @@ export class UsersController {
     return dataOut;
   }
 
-  @Get('deleted')
+  @Get("deleted")
   async getAllDeleted() {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: {
           page: 0,
@@ -105,11 +105,11 @@ export class UsersController {
     return dataOut;
   }
 
-  @Get(':id')
-  async getById(@Param('id') userId: string) {
+  @Get(":id")
+  async getById(@Param("id") userId: string) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: {
           page: 0,
@@ -143,32 +143,32 @@ export class UsersController {
     return dataOut;
   }
 
-  @Post('search-first')
+  @Post("search-first")
   searchFirst(@Body() query: any) {
     return this.usersService.searchFirst(query);
   }
 
-  @Post('search-many')
+  @Post("search-many")
   searchMany(@Body() query: any) {
     return this.usersService.searchMany(query);
   }
 
-  @Post('search-first-deleted')
+  @Post("search-first-deleted")
   searchFirstDeleted(@Body() query: any) {
     return this.usersService.searchFirstDeleted(query);
   }
 
-  @Post('search-many-deleted')
+  @Post("search-many-deleted")
   searchDeleted(@Body() query: any) {
     return this.usersService.searchManyDeleted(query);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateUserDto) {
+  async create(@Body() dto: CreateUserDto, @Req() req: Request) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: null,
       },
@@ -176,7 +176,8 @@ export class UsersController {
     };
 
     try {
-      const user = await this.usersService.create(dto);
+      const userId = req.user["id"];
+      const user = await this.usersService.create(dto, userId);
 
       const { username, email, name, division, position, phone } = user;
 
@@ -190,11 +191,15 @@ export class UsersController {
     return dataOut;
   }
 
-  @Patch(':id')
-  async updateById(@Param('id') userId: string, @Body() dto: UpdateUserDto) {
+  @Patch(":id")
+  async updateById(
+    @Param("id") userId: string,
+    @Body() dto: UpdateUserDto,
+    @Req() req: Request
+  ) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: null,
       },
@@ -202,7 +207,8 @@ export class UsersController {
     };
 
     try {
-      const user = await this.usersService.updateById(userId, dto);
+      const userId = ""; //req.user['id'];
+      const user = await this.usersService.updateById(userId, dto, userId);
 
       const { username, email, name, division, position, phone } = user;
 
@@ -216,11 +222,11 @@ export class UsersController {
     return dataOut;
   }
 
-  @Delete(':id')
-  async deleteById(@Param('id') userId: string) {
+  @Delete(":id")
+  async deleteById(@Param("id") id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
-      message: '',
+      message: "",
       data: {
         user: null,
       },
@@ -228,7 +234,8 @@ export class UsersController {
     };
 
     try {
-      const user = await this.usersService.deleteById(userId);
+      const userId = ""; // req.user['id'];
+      const user = await this.usersService.deleteById(id, userId);
 
       const { username, email, name, isDisabled, isDeleted } = user;
 
@@ -236,7 +243,7 @@ export class UsersController {
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, reqParam: { userId }, error };
+      dataOut.logs = { ...dataOut.logs, reqParams: { id }, error };
     }
 
     return dataOut;
