@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 
 export class UserEntity implements User {
   @ApiProperty() id: string;
@@ -16,7 +16,7 @@ export class UserEntity implements User {
   @ApiProperty() hashedPassword: string;
   @ApiProperty() hashedRT: string | null;
 
-  @ApiProperty() role: string;
+  @ApiProperty() role: UserRole;
 
   @ApiProperty() isEmailVerified: boolean;
   @ApiProperty() isLDAPUser: boolean;

@@ -12,7 +12,7 @@ export declare class JwtStrategy extends JwtStrategy_base {
         id: string;
         username: string;
         email: string;
-        role: string;
+        role: import(".prisma/client").UserRole;
     }>;
 }
 export {};

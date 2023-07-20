@@ -1,7 +1,7 @@
-import { ConfigService } from '@nestjs/config';
-import { DbService } from 'src/db/db.service';
-import { SemaiService } from 'src/semai/semai.service';
-import { ConfigsService } from 'src/configs/configs.service';
+import { ConfigService } from "@nestjs/config";
+import { DbService } from "src/db/db.service";
+import { SemaiService } from "src/semai/semai.service";
+import { ConfigsService } from "src/configs/configs.service";
 export declare class TransactionService {
     private db;
     private config;
@@ -62,7 +62,7 @@ export declare class TransactionService {
         record: {};
         logs: {};
     }>;
-    create(dto: any): Promise<{
+    create(createTransactionDto: any): Promise<{
         status: boolean;
         message: string;
         page: number;

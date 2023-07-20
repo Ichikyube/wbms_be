@@ -21,19 +21,22 @@ let UsersService = exports.UsersService = class UsersService {
     }
     async getIAM(id) {
         const user = await this.db.user.findUnique({ where: { id } });
+        if (!user) {
+            throw new common_1.NotFoundException();
+        }
         delete user.hashedPassword;
         delete user.hashedRT;
         return user;
     }
     async getAll() {
         const records = await this.db.user.findMany({
-            where: { isDeleted: false }
+            where: { isDeleted: false },
         });
         return records;
     }
     async getAllDeleted() {
         const records = await this.db.user.findMany({
-            where: { isDeleted: true }
+            where: { isDeleted: true },
         });
         return records;
     }
@@ -41,7 +44,27 @@ let UsersService = exports.UsersService = class UsersService {
         const user = await this.db.user.findUnique({ where: { id } });
         return user;
     }
-    async create(dto) {
+    async searchFirst(query) {
+        query.where = Object.assign(Object.assign({}, query.where), { isDeleted: false });
+        const record = await this.db.user.findFirst(query);
+        return record;
+    }
+    async searchMany(query) {
+        query.where = Object.assign(Object.assign({}, query.where), { isDeleted: false });
+        const records = await this.db.user.findMany(query);
+        return records;
+    }
+    async searchFirstDeleted(query) {
+        query.where = Object.assign(Object.assign({}, query.where), { isDeleted: true });
+        const record = await this.db.user.findFirst(query);
+        return record;
+    }
+    async searchManyDeleted(query) {
+        query.where = Object.assign(Object.assign({}, query.where), { isDeleted: true });
+        const records = await this.db.user.findMany(query);
+        return records;
+    }
+    async create(dto, userId) {
         const hashedPassword = await (0, argon2_1.hash)(dto.password);
         const user = await this.db.user
             .create({
@@ -54,56 +77,63 @@ let UsersService = exports.UsersService = class UsersService {
                 position: dto.position,
                 phone: dto.phone,
                 hashedPassword: hashedPassword,
-                role: dto.role
-            }
+                role: dto.role,
+                userCreated: userId,
+                userModified: userId,
+            },
         })
             .catch((error) => {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2002')
-                    throw new common_1.ForbiddenException('Username/Email/NIK already taken.');
+                if (error.code === "P2002")
+                    throw new common_1.ForbiddenException("Username/Email/NIK already taken.");
             }
             throw error;
         });
         return user;
     }
-    async updateById(id, dto) {
+    async updateById(id, dto, userId) {
         let updateData = new entities_1.UserEntity();
         if (dto.password)
             updateData.hashedPassword = await (0, argon2_1.hash)(dto.password);
         delete dto.password;
-        updateData = Object.assign(Object.assign({}, updateData), dto);
+        updateData = Object.assign(Object.assign(Object.assign({}, updateData), dto), { userModified: userId });
         const user = await this.db.user
             .update({
             where: { id },
-            data: Object.assign({}, updateData)
+            data: Object.assign({}, updateData),
         })
             .catch((error) => {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2002')
-                    throw new common_1.ForbiddenException('Credentials taken.');
+                if (error.code === "P2002")
+                    throw new common_1.ForbiddenException("Username/Email/NIK already taken.");
             }
             throw error;
         });
         return user;
     }
-    async deleteById(id) {
+    async deleteById(id, userId) {
         const user = await this.db.user.update({
             where: { id },
-            data: { isDisabled: true, isDeleted: true }
+            data: { isDisabled: true, isDeleted: true, userModified: userId },
         });
         return user;
     }
-    searchFirst(query) {
-        throw new Error('Method not implemented.');
-    }
-    searchMany(query) {
-        throw new Error('Method not implemented.');
-    }
-    searchFirstDeleted(query) {
-        throw new Error('Method not implemented.');
-    }
-    searchManyDeleted(query) {
-        throw new Error('Method not implemented.');
+    async updateUserRole(userId, userRole) {
+        try {
+            return await this.db.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    role: userRole,
+                },
+            });
+        }
+        catch (err) {
+            if ((err === null || err === void 0 ? void 0 : err.code) === "P2025") {
+                throw new common_1.NotFoundException(`Record ${userId} to update not found`);
+            }
+        }
     }
 };
 exports.UsersService = UsersService = __decorate([

@@ -1,6 +1,6 @@
-import { Request } from 'express';
-import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { Request } from "express";
+import { UsersService } from "./users.service";
+import { CreateUserDto, UpdateUserDto } from "./dto";
 export declare class UsersController {
     private usersService;
     constructor(usersService: UsersService);
@@ -48,11 +48,11 @@ export declare class UsersController {
         };
         logs: {};
     }>;
-    searchFirst(query: any): void;
-    searchMany(query: any): void;
-    searchFirstDeleted(query: any): void;
-    searchDeleted(query: any): void;
-    create(dto: CreateUserDto): Promise<{
+    searchFirst(query: any): Promise<import("./entities").UserEntity>;
+    searchMany(query: any): Promise<import("./entities").UserEntity[]>;
+    searchFirstDeleted(query: any): Promise<import("./entities").UserEntity>;
+    searchDeleted(query: any): Promise<import("./entities").UserEntity[]>;
+    create(dto: CreateUserDto, req: Request): Promise<{
         status: boolean;
         message: string;
         data: {
@@ -60,7 +60,7 @@ export declare class UsersController {
         };
         logs: {};
     }>;
-    updateById(userId: string, dto: UpdateUserDto): Promise<{
+    updateById(userId: string, dto: UpdateUserDto, req: Request): Promise<{
         status: boolean;
         message: string;
         data: {
@@ -68,7 +68,7 @@ export declare class UsersController {
         };
         logs: {};
     }>;
-    deleteById(userId: string): Promise<{
+    deleteById(id: string, req: Request): Promise<{
         status: boolean;
         message: string;
         data: {

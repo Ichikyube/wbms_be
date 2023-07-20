@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 export declare class UserEntity implements User {
     id: string;
     username: string;
@@ -10,7 +10,7 @@ export declare class UserEntity implements User {
     phone: string;
     hashedPassword: string;
     hashedRT: string | null;
-    role: string;
+    role: UserRole;
     isEmailVerified: boolean;
     isLDAPUser: boolean;
     isDisabled: boolean;

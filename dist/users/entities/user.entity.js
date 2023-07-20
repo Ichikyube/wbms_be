@@ -12,9 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserEntity = void 0;
 const openapi = require("@nestjs/swagger");
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 class UserEntity {
     static _OPENAPI_METADATA_FACTORY() {
-        return { id: { required: true, type: () => String }, username: { required: true, type: () => String }, email: { required: true, type: () => String }, nik: { required: true, type: () => String }, name: { required: true, type: () => String }, division: { required: true, type: () => String }, position: { required: true, type: () => String }, phone: { required: true, type: () => String }, hashedPassword: { required: true, type: () => String }, hashedRT: { required: true, type: () => String, nullable: true }, role: { required: true, type: () => String }, isEmailVerified: { required: true, type: () => Boolean }, isLDAPUser: { required: true, type: () => Boolean }, isDisabled: { required: true, type: () => Boolean }, isDeleted: { required: true, type: () => Boolean }, userCreated: { required: true, type: () => String }, userModified: { required: true, type: () => String }, dtCreated: { required: true, type: () => Date }, dtModified: { required: true, type: () => Date } };
+        return { id: { required: true, type: () => String }, username: { required: true, type: () => String }, email: { required: true, type: () => String }, nik: { required: true, type: () => String }, name: { required: true, type: () => String }, division: { required: true, type: () => String }, position: { required: true, type: () => String }, phone: { required: true, type: () => String }, hashedPassword: { required: true, type: () => String }, hashedRT: { required: true, type: () => String, nullable: true }, role: { required: true, type: () => Object }, isEmailVerified: { required: true, type: () => Boolean }, isLDAPUser: { required: true, type: () => Boolean }, isDisabled: { required: true, type: () => Boolean }, isDeleted: { required: true, type: () => Boolean }, userCreated: { required: true, type: () => String }, userModified: { required: true, type: () => String }, dtCreated: { required: true, type: () => Date }, dtModified: { required: true, type: () => Date } };
     }
 }
 exports.UserEntity = UserEntity;

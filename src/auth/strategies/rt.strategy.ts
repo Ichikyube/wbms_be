@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Request } from 'express';
+import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { PassportStrategy } from "@nestjs/passport";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import { Request } from "express";
+import { JwtPayloadWithRt } from "../types/jwtPayloadWithRt.type";
 
 @Injectable()
-export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
   constructor(config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -13,23 +14,24 @@ export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
       ignoreExpiration: false,
-      secretOrKey: config.get('WBMS_JWT_RT_KEY'),
+      secretOrKey: config.get("WBMS_JWT_RT_KEY"),
       passReqToCallback: true,
     });
   }
 
   private static extractJWT(req: Request): string | null {
-    if (req.cookies && 'rt' in req.cookies) return req.cookies.rt;
+    if (req.cookies && "rt" in req.cookies) return req.cookies.rt;
 
     return null;
   }
 
-  async validate(req: Request, payload: { sub: string; username: string }) {
-    // const refreshToken = req.get('authorization').replace('Bearer', '').trim();
+  async validate(req: Request, payload: JwtPayloadWithRt) {
     let refreshToken = null;
 
-    if (req.cookies && 'rt' in req.cookies) refreshToken = req.cookies.rt;
-    else refreshToken = req.get('authorization').replace('Bearer', '').trim();
+    if (req.cookies && "rt" in req.cookies) refreshToken = req.cookies.rt;
+    else refreshToken = req?.get("authorization")?.replace("Bearer", "").trim();
+
+    if (!refreshToken) throw new ForbiddenException("Refresh token malformed");
 
     return { ...payload, refreshToken };
   }

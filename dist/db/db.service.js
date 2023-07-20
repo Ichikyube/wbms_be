@@ -18,9 +18,9 @@ let DbService = exports.DbService = class DbService extends client_1.PrismaClien
         super({
             datasources: {
                 db: {
-                    url: config.get('WBMS_DB_URL')
-                }
-            }
+                    url: config.get("WBMS_DB_URL"),
+                },
+            },
         });
     }
     async onModuleInit() {

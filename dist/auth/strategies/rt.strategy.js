@@ -15,7 +15,7 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
-let RtStrategy = exports.RtStrategy = RtStrategy_1 = class RtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, 'jwt-refresh') {
+let RtStrategy = exports.RtStrategy = RtStrategy_1 = class RtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy, "jwt-refresh") {
     constructor(config) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromExtractors([
@@ -23,21 +23,24 @@ let RtStrategy = exports.RtStrategy = RtStrategy_1 = class RtStrategy extends (0
                 passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ]),
             ignoreExpiration: false,
-            secretOrKey: config.get('WBMS_JWT_RT_KEY'),
+            secretOrKey: config.get("WBMS_JWT_RT_KEY"),
             passReqToCallback: true,
         });
     }
     static extractJWT(req) {
-        if (req.cookies && 'rt' in req.cookies)
+        if (req.cookies && "rt" in req.cookies)
             return req.cookies.rt;
         return null;
     }
     async validate(req, payload) {
+        var _a;
         let refreshToken = null;
-        if (req.cookies && 'rt' in req.cookies)
+        if (req.cookies && "rt" in req.cookies)
             refreshToken = req.cookies.rt;
         else
-            refreshToken = req.get('authorization').replace('Bearer', '').trim();
+            refreshToken = (_a = req === null || req === void 0 ? void 0 : req.get("authorization")) === null || _a === void 0 ? void 0 : _a.replace("Bearer", "").trim();
+        if (!refreshToken)
+            throw new common_1.ForbiddenException("Refresh token malformed");
         return Object.assign(Object.assign({}, payload), { refreshToken });
     }
 };

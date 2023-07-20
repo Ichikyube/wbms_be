@@ -9,17 +9,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
 const dist_1 = require("@nestjs/jwt/dist");
+const passport_1 = require("@nestjs/passport");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const strategies_1 = require("./strategies");
 const users_module_1 = require("../users/users.module");
+const ldap_strategy_1 = require("./strategies/ldap.strategy");
 let AuthModule = exports.AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [users_module_1.UsersModule, dist_1.JwtModule.register({})],
+        imports: [
+            users_module_1.UsersModule,
+            dist_1.JwtModule.register({}),
+            passport_1.PassportModule.register({ defaultStrategy: "ldap" }),
+        ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, strategies_1.JwtStrategy, strategies_1.RtStrategy, strategies_1.AtStrategy],
+        providers: [auth_service_1.AuthService, strategies_1.JwtStrategy, strategies_1.RtStrategy, strategies_1.AtStrategy, ldap_strategy_1.LdapStrategy],
+        exports: [passport_1.PassportModule],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

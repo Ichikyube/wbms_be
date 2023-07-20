@@ -9,9 +9,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthMiddleware = void 0;
 const common_1 = require("@nestjs/common");
 let AuthMiddleware = exports.AuthMiddleware = class AuthMiddleware {
+    constructor() {
+        this.logger = new common_1.Logger("HTTP");
+    }
     use(req, res, next) {
+        const { ip, method, originalUrl } = req;
+        const userAgent = req.get("user-agent") || "";
+        res.on("finish", () => {
+            const { statusCode } = res;
+            const contentLength = res.get("content-length");
+            this.logger.log(`${method} ${originalUrl} ${statusCode} ${contentLength} — ${userAgent} ${ip}`);
+            if (method !== "GET") {
+                this.logger.debug(`Request body — ${JSON.stringify(req.body, null, 2)}`);
+            }
+        });
+        console.log("Request...");
         const userId = req.user["id"];
         req.userId = userId;
+        if (!req.headers["authorization"]) {
+            throw new common_1.UnauthorizedException();
+        }
         next();
     }
 };

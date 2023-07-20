@@ -12,10 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
 const openapi = require("@nestjs/swagger");
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { username: { required: true, type: () => String }, email: { required: true, type: () => String }, nik: { required: true, type: () => String }, name: { required: true, type: () => String }, division: { required: true, type: () => String }, position: { required: true, type: () => String }, phone: { required: false, type: () => String }, password: { required: true, type: () => String, minLength: 8, maxLength: 20 }, role: { required: false, type: () => String }, isLDAPUser: { required: true, type: () => Boolean } };
+        return { username: { required: true, type: () => String }, email: { required: true, type: () => String }, nik: { required: true, type: () => String }, name: { required: true, type: () => String }, division: { required: true, type: () => String }, position: { required: true, type: () => String }, phone: { required: false, type: () => String }, password: { required: true, type: () => String, minLength: 8, maxLength: 20 }, role: { required: false, type: () => Object }, isLDAPUser: { required: true, type: () => Boolean } };
     }
 }
 exports.CreateUserDto = CreateUserDto;
@@ -64,8 +65,13 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Length)(8, 20, {
-        message: 'Panjang password minimal 8 karakter dan maksimal 20 karakter.'
+        message: "Panjang password minimal 8 karakter dan maksimal 20 karakter.",
     }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(client_1.UserRole),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "role", void 0);
 //# sourceMappingURL=create-user.dto.js.map

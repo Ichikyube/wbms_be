@@ -278,7 +278,7 @@ model User {
   phone          String? @db.VarChar(30)
   hashedPassword String  @db.VarChar(100)
   hashedRT       String? @db.VarChar(100)
-  role           String  @default("STAFF") @db.VarChar(30)
+  role           UserRole  @default(STAFF) 
 
   isEmailVerified Boolean @default(false)
   isLDAPUser      Boolean @default(true)
@@ -289,6 +289,16 @@ model User {
   userModified String?  @db.Char(36)
   dtCreated    DateTime @default(now())
   dtModified   DateTime @updatedAt
+}
+
+enum UserRole {
+  STAFF1 = 'Staff Labanan'
+  STAFF2 = 'Staff PKS'
+  STAFF3 = 'Staff T30'
+  SUPERVISOR = 'Supervisor'
+  MANAGER = 'Manager'
+  MILL_HEAD = 'Mill Head'
+  ADMIN = 'Administrator' 
 }
 
 model Product {

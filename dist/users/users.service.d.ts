@@ -1,6 +1,7 @@
-import { DbService } from 'src/db/db.service';
-import { CreateUserDto, UpdateUserDto } from './dto';
-import { UserEntity } from './entities';
+import { User, UserRole } from "@prisma/client";
+import { DbService } from "src/db/db.service";
+import { CreateUserDto, UpdateUserDto } from "./dto";
+import { UserEntity } from "./entities";
 export declare class UsersService {
     private db;
     constructor(db: DbService);
@@ -8,9 +9,13 @@ export declare class UsersService {
     getAll(): Promise<UserEntity[]>;
     getAllDeleted(): Promise<UserEntity[]>;
     getById(id: string): Promise<UserEntity>;
-    create(dto: CreateUserDto): Promise<UserEntity>;
-    updateById(id: string, dto: UpdateUserDto): Promise<UserEntity>;
-    deleteById(id: string): Promise<import("@prisma/client/runtime/library").GetResult<{
+    searchFirst(query: any): Promise<UserEntity>;
+    searchMany(query: any): Promise<UserEntity[]>;
+    searchFirstDeleted(query: any): Promise<UserEntity>;
+    searchManyDeleted(query: any): Promise<UserEntity[]>;
+    create(dto: CreateUserDto, userId: string): Promise<UserEntity>;
+    updateById(id: string, dto: UpdateUserDto, userId: string): Promise<UserEntity>;
+    deleteById(id: string, userId: string): Promise<import("@prisma/client/runtime/library").GetResult<{
         id: string;
         username: string;
         email: string;
@@ -21,7 +26,7 @@ export declare class UsersService {
         phone: string;
         hashedPassword: string;
         hashedRT: string;
-        role: string;
+        role: UserRole;
         isEmailVerified: boolean;
         isLDAPUser: boolean;
         isDisabled: boolean;
@@ -31,8 +36,5 @@ export declare class UsersService {
         dtCreated: Date;
         dtModified: Date;
     }, unknown> & {}>;
-    searchFirst(query: any): void;
-    searchMany(query: any): void;
-    searchFirstDeleted(query: any): void;
-    searchManyDeleted(query: any): void;
+    updateUserRole(userId: string, userRole: UserRole): Promise<User>;
 }

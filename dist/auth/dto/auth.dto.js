@@ -65,7 +65,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Length)(8, 20, {
-        message: 'Panjang password minimal 8 karakter dan maksimal 20 karakter.'
+        message: "Panjang password minimal 8 karakter dan maksimal 20 karakter.",
     }),
     __metadata("design:type", String)
 ], SignupDto.prototype, "password", void 0);
@@ -78,16 +78,19 @@ exports.SigninDto = SigninDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], SigninDto.prototype, "username", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], SigninDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], SigninDto.prototype, "nik", void 0);
 __decorate([

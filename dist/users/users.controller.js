@@ -26,14 +26,14 @@ let UsersController = exports.UsersController = class UsersController {
     async getIAM(req) {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: null,
             },
             logs: {},
         };
         try {
-            const user = await this.usersService.getIAM(req.user['id']);
+            const user = await this.usersService.getIAM(req.user["id"]);
             const { username, email, name, division, position, phone } = user;
             dataOut.data.user = { username, email, name, division, position, phone };
         }
@@ -47,7 +47,7 @@ let UsersController = exports.UsersController = class UsersController {
     async getAll() {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: {
                     page: 0,
@@ -72,7 +72,7 @@ let UsersController = exports.UsersController = class UsersController {
     async getAllDeleted() {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: {
                     page: 0,
@@ -95,7 +95,7 @@ let UsersController = exports.UsersController = class UsersController {
     async getById(userId) {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: {
                     page: 0,
@@ -137,17 +137,18 @@ let UsersController = exports.UsersController = class UsersController {
     searchDeleted(query) {
         return this.usersService.searchManyDeleted(query);
     }
-    async create(dto) {
+    async create(dto, req) {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: null,
             },
             logs: {},
         };
         try {
-            const user = await this.usersService.create(dto);
+            const userId = req.user["id"];
+            const user = await this.usersService.create(dto, userId);
             const { username, email, name, division, position, phone } = user;
             dataOut.data.user = { username, email, name, division, position, phone };
         }
@@ -158,17 +159,18 @@ let UsersController = exports.UsersController = class UsersController {
         }
         return dataOut;
     }
-    async updateById(userId, dto) {
+    async updateById(userId, dto, req) {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: null,
             },
             logs: {},
         };
         try {
-            const user = await this.usersService.updateById(userId, dto);
+            const userId = "";
+            const user = await this.usersService.updateById(userId, dto, userId);
             const { username, email, name, division, position, phone } = user;
             dataOut.data.user = { username, email, name, division, position, phone };
         }
@@ -179,30 +181,31 @@ let UsersController = exports.UsersController = class UsersController {
         }
         return dataOut;
     }
-    async deleteById(userId) {
+    async deleteById(id, req) {
         const dataOut = {
             status: true,
-            message: '',
+            message: "",
             data: {
                 user: null,
             },
             logs: {},
         };
         try {
-            const user = await this.usersService.deleteById(userId);
+            const userId = "";
+            const user = await this.usersService.deleteById(id, userId);
             const { username, email, name, isDisabled, isDeleted } = user;
             dataOut.data.user = { username, email, name, isDisabled, isDeleted };
         }
         catch (error) {
             dataOut.status = false;
             dataOut.message = error.message;
-            dataOut.logs = Object.assign(Object.assign({}, dataOut.logs), { reqParam: { userId }, error });
+            dataOut.logs = Object.assign(Object.assign({}, dataOut.logs), { reqParams: { id }, error });
         }
         return dataOut;
     }
 };
 __decorate([
-    (0, common_1.Get)('iam'),
+    (0, common_1.Get)("iam"),
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -217,47 +220,47 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAll", null);
 __decorate([
-    (0, common_1.Get)('deleted'),
+    (0, common_1.Get)("deleted"),
     openapi.ApiResponse({ status: 200 }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAllDeleted", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)(":id"),
     openapi.ApiResponse({ status: 200 }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getById", null);
 __decorate([
-    (0, common_1.Post)('search-first'),
-    openapi.ApiResponse({ status: 201 }),
+    (0, common_1.Post)("search-first"),
+    openapi.ApiResponse({ status: 201, type: require("./entities/user.entity").UserEntity }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "searchFirst", null);
 __decorate([
-    (0, common_1.Post)('search-many'),
-    openapi.ApiResponse({ status: 201 }),
+    (0, common_1.Post)("search-many"),
+    openapi.ApiResponse({ status: 201, type: [require("./entities/user.entity").UserEntity] }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "searchMany", null);
 __decorate([
-    (0, common_1.Post)('search-first-deleted'),
-    openapi.ApiResponse({ status: 201 }),
+    (0, common_1.Post)("search-first-deleted"),
+    openapi.ApiResponse({ status: 201, type: require("./entities/user.entity").UserEntity }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "searchFirstDeleted", null);
 __decorate([
-    (0, common_1.Post)('search-many-deleted'),
-    openapi.ApiResponse({ status: 201 }),
+    (0, common_1.Post)("search-many-deleted"),
+    openapi.ApiResponse({ status: 201, type: [require("./entities/user.entity").UserEntity] }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -268,31 +271,34 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     openapi.ApiResponse({ status: common_1.HttpStatus.CREATED }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [dto_1.CreateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Patch)(":id"),
     openapi.ApiResponse({ status: 200 }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [String, dto_1.UpdateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateById", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Delete)(":id"),
     openapi.ApiResponse({ status: 200 }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteById", null);
 exports.UsersController = UsersController = __decorate([
-    (0, swagger_1.ApiTags)('Users'),
+    (0, swagger_1.ApiTags)("Users"),
     (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Controller)('api/users'),
+    (0, common_1.Controller)("api/users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

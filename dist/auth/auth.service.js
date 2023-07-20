@@ -24,13 +24,24 @@ let AuthService = exports.AuthService = class AuthService {
         this.usersService = usersService;
     }
     async signup(dto) {
-        const user = await this.usersService.create(dto);
+        const userId = "";
+        const user = await this.usersService.create(dto, userId);
+        const tokens = await this.signTokens({
+            sub: user.id,
+            username: user.username,
+            role: user.role,
+        });
+        await this.updateRtHash(user.id, tokens.refresh_token);
         return user;
     }
     async signin(dto, res) {
         const user = await this.db.user.findFirst({
             where: {
-                OR: [{ username: dto.username }, { email: dto.email }, { nik: dto.nik }]
+                OR: [
+                    { username: dto.username },
+                    { email: dto.email },
+                    { nik: dto.nik },
+                ],
             },
             select: {
                 id: true,
@@ -39,24 +50,28 @@ let AuthService = exports.AuthService = class AuthService {
                 nik: true,
                 name: true,
                 role: true,
-                hashedPassword: true
-            }
+                hashedPassword: true,
+            },
         });
         if (!user)
-            throw new common_1.ForbiddenException('Invalid username or password.');
+            throw new common_1.ForbiddenException("Invalid username or password.");
         const pwMatches = await (0, argon2_1.verify)(user.hashedPassword, dto.password);
         if (!pwMatches)
-            throw new common_1.ForbiddenException('Invalid username or password.');
+            throw new common_1.ForbiddenException("Invalid username or password.");
         delete user.hashedPassword;
-        const tokens = await this.signTokens(user.id, user.username);
-        await this.updateRtHash(user.id, tokens.refresh_token);
-        res.cookie('at', tokens.access_token, {
-            httpOnly: true,
-            sameSite: 'lax'
+        const tokens = await this.signTokens({
+            sub: user.id,
+            username: user.username,
+            role: user.role,
         });
-        res.cookie('rt', tokens.refresh_token, {
+        await this.updateRtHash(user.id, tokens.refresh_token);
+        res.cookie("at", tokens.access_token, {
             httpOnly: true,
-            sameSite: 'lax'
+            sameSite: "lax",
+        });
+        res.cookie("rt", tokens.refresh_token, {
+            httpOnly: true,
+            sameSite: "lax",
         });
         return { tokens, user };
     }
@@ -69,37 +84,41 @@ let AuthService = exports.AuthService = class AuthService {
             where: {
                 id: userId,
                 hashedRT: {
-                    not: null
-                }
+                    not: null,
+                },
             },
             data: {
-                hashedRT: null
-            }
+                hashedRT: null,
+            },
         });
-        res.clearCookie('at');
-        res.clearCookie('rt');
+        res.clearCookie("at");
+        res.clearCookie("rt");
         return updatedCount.count > 0 ? true : false;
     }
     async refreshToken(userId, rt, res) {
         const user = await this.db.user.findUnique({
             where: {
-                id: userId
-            }
+                id: userId,
+            },
         });
-        if (!user)
-            throw new common_1.ForbiddenException('Access Denied');
+        if (!user || !user.hashedRT)
+            throw new common_1.ForbiddenException("Access Denied");
         const rtMatches = await (0, argon2_1.verify)(user.hashedRT, rt);
         if (!rtMatches)
-            throw new common_1.ForbiddenException('Access Denied');
-        const tokens = await this.signTokens(user.id, user.username);
-        await this.updateRtHash(user.id, tokens.refresh_token);
-        res.cookie('at', tokens.access_token, {
-            httpOnly: true,
-            sameSite: 'strict'
+            throw new common_1.ForbiddenException("Access Denied");
+        const tokens = await this.signTokens({
+            sub: user.id,
+            username: user.email,
+            role: user.role,
         });
-        res.cookie('rt', tokens.refresh_token, {
+        await this.updateRtHash(user.id, tokens.refresh_token);
+        res.cookie("at", tokens.access_token, {
             httpOnly: true,
-            sameSite: 'strict'
+            sameSite: "strict",
+        });
+        res.cookie("rt", tokens.refresh_token, {
+            httpOnly: true,
+            sameSite: "strict",
         });
         return tokens;
     }
@@ -107,43 +126,35 @@ let AuthService = exports.AuthService = class AuthService {
         const hashedRT = await (0, argon2_1.hash)(rt);
         await this.db.user.update({
             where: {
-                id: userId
+                id: userId,
             },
             data: {
-                hashedRT
-            }
+                hashedRT,
+            },
         });
     }
-    async signToken(userId, username) {
-        const payload = {
-            sub: userId,
-            username
-        };
-        const secret = this.config.get('WBMS_JWT_KEY');
-        const token = await this.jwt.signAsync(payload, {
+    async signToken(jwtPayload) {
+        const secret = this.config.get("WBMS_JWT_KEY");
+        const token = await this.jwt.signAsync(jwtPayload, {
             secret,
-            expiresIn: '15m'
+            expiresIn: "15m",
         });
         return { access_token: token };
     }
-    async signTokens(userId, username) {
-        const payload = {
-            sub: userId,
-            username
-        };
-        const secret_at = this.config.get('WBMS_JWT_AT_KEY');
-        const secret_rt = this.config.get('WBMS_JWT_RT_KEY');
+    async signTokens(jwtPayload) {
+        const secret_at = this.config.get("WBMS_JWT_AT_KEY");
+        const secret_rt = this.config.get("WBMS_JWT_RT_KEY");
         const [at, rt] = await Promise.all([
-            await this.jwt.signAsync(payload, {
+            await this.jwt.signAsync(jwtPayload, {
                 secret: secret_at,
-                expiresIn: 60 * 15
+                expiresIn: 60 * 15,
             }),
-            await this.jwt.signAsync(payload, {
+            await this.jwt.signAsync(jwtPayload, {
                 secret: secret_rt,
-                expiresIn: 60 * 60 * 24 * 7
-            })
+                expiresIn: 60 * 60 * 24 * 7,
+            }),
         ]);
-        return { access_token: at, refresh_token: rt };
+        return { access_token: at, refresh_token: rt, access_type: "Bearer" };
     }
 };
 exports.AuthService = AuthService = __decorate([

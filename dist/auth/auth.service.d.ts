@@ -1,12 +1,13 @@
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { DbService } from 'src/db/db.service';
-import { SigninDto } from './dto';
-import { Tokens } from './types';
-import { UsersService } from 'src/users/users.service';
-import { CreateUserDto } from 'src/users/dto';
-import { UserEntity } from 'src/users/entities/user.entity';
-import { Response } from 'express';
+import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+import { DbService } from "src/db/db.service";
+import { SigninDto } from "./dto";
+import { Tokens } from "./types";
+import { UsersService } from "src/users/users.service";
+import { CreateUserDto } from "src/users/dto";
+import { UserEntity } from "src/users/entities/user.entity";
+import { Response } from "express";
+import { JwtPayload } from "./types/jwtPayload.type";
 export declare class AuthService {
     private db;
     private jwt;
@@ -22,8 +23,8 @@ export declare class AuthService {
     signout(userId: string, res: Response): Promise<boolean>;
     refreshToken(userId: string, rt: string, res: Response): Promise<Tokens>;
     updateRtHash(userId: string, rt: string): Promise<void>;
-    signToken(userId: string, username: string): Promise<{
+    signToken(jwtPayload: JwtPayload): Promise<{
         access_token: string;
     }>;
-    signTokens(userId: string, username: string): Promise<Tokens>;
+    signTokens(jwtPayload: JwtPayload): Promise<Tokens>;
 }
