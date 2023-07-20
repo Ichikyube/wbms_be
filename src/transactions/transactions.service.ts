@@ -8,14 +8,9 @@ import { ConfigsService } from "src/configs/configs.service";
 
 import { CreateTransactionDto } from "./dto";
 
-<<<<<<< HEAD
-import { DraftTransactionDto } from './dto/draft-transaction.dto';
-import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
-=======
 import { DraftTransactionDto } from "./dto/draft-transaction.dto";
 import { QrcodeDto } from "src/semai/dto/qrcode.dt";
 import { TransactionEntity } from "./transaction.entity";
->>>>>>> nani
 
 @Injectable()
 export class TransactionService {
@@ -276,11 +271,7 @@ export class TransactionService {
     return dataOut;
   }
 
-<<<<<<< HEAD
-  async create(dto: any) {
-=======
   async create(createTransactionDto: any) {
->>>>>>> nani
     const dataOut = {
       status: true,
       message: "",
@@ -291,13 +282,6 @@ export class TransactionService {
     };
 
     try {
-<<<<<<< HEAD
-      console.log('create new data:');
-      console.log(dto);
-      const record = await this.db.transaction.create({
-        data: { ...dto, userCreated: '', userModified: '' }
-      });
-=======
       console.log("create new data:");
       console.log(createTransactionDto);
       // const product
@@ -308,7 +292,6 @@ export class TransactionService {
       // const originSourceStorageTank
       // const destinationSinkStorageTank
       const record = await this.db.transaction.create(createTransactionDto);
->>>>>>> nani
 
       dataOut.record = record;
     } catch (error) {
