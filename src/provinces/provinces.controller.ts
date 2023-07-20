@@ -16,12 +16,17 @@ import { ProvincesService } from "./provinces.service";
 import { CreateProvinceDto, UpdateProvinceDto } from "./dto";
 import { ProvinceEntity } from "./entities";
 import { SaveUserIdGuard } from "src/common/guards/SaveUserIdGuard ";
+import { Roles } from "src/common/decorators";
+import { UserRole } from "@prisma/client";
+import { RolesGuard } from "src/common/guards/roles.guard";
 
 @ApiTags("Provinces")
 @Controller("api/provinces")
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @Get("")
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAll() {

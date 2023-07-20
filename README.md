@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -71,3 +72,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+=======
+docker image on almyra/wbms_bet:v1.1
+
+https://docs.docker.com/docker-hub/builds/
+https://docs.github.com/en/actions/quickstart 
+https://docs.github.com/en/actions/creating-actions
+https://www.howtogeek.com/devops/how-to-set-up-automatic-builds-for-docker-images-on-github/
+>>>>>>> nani
