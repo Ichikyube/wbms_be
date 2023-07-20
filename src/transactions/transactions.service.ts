@@ -273,7 +273,7 @@ export class TransactionService {
     try {
       console.log('create new data:');
       console.log(CreateTransactionDto);
-      const record = await this.db.transaction.create({data:CreateTransactionDto});
+      const record = await this.db.transaction.create(CreateTransactionDto);
 
       dataOut.record = record;
     } catch (error) {
