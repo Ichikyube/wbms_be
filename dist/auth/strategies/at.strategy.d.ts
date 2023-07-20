@@ -16,7 +16,7 @@ export declare class AtStrategy extends AtStrategy_base {
         id: string;
         username: string;
         email: string;
-        role: string;
+        role: import(".prisma/client").UserRole;
     }>;
 }
 export {};

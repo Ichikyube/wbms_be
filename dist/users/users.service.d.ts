@@ -21,7 +21,7 @@ export declare class UsersService {
         phone: string;
         hashedPassword: string;
         hashedRT: string;
-        role: string;
+        role: import(".prisma/client").UserRole;
         isEmailVerified: boolean;
         isLDAPUser: boolean;
         isDisabled: boolean;
