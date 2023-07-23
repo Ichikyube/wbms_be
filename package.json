@@ -7,6 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "casl-generate": "npx ts-node ./src/casl/generator.ts",
+    "prisma:generate": "prisma generate && npm run casl-generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -20,6 +22,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@casl/ability": "^6.5.0",
+    "@casl/prisma": "^1.4.1",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.5",
     "@nestjs/config": "^3.0.0",
@@ -30,6 +34,7 @@
     "@nestjs/swagger": "^7.1.1",
     "@prisma/client": "^5.0.0",
     "argon2": "^0.30.3",
+    "casl-prisma-generator": "^1.0.21",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",

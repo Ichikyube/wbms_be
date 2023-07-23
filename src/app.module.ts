@@ -27,6 +27,9 @@ import { AtGuard } from "./common/guards";
 import { TimestampInterceptor } from "./common/interceptors/timestamp.interceptor";
 import { RolesController } from './rbac/roles/roles.controller';
 import { RbacModule } from './rbac/rbac.module';
+import { CaslAbilityFactory } from "./casl/ability";
+import { CaslGuard } from "./common/guards/casl.guard";
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -53,17 +56,24 @@ import { RbacModule } from './rbac/rbac.module';
     DriverModule,
     TransportVehicleModule,
     RbacModule,
+    CaslModule,
   ],
   controllers: [RolesController],
-  // providers: [
-  //   {
-  //     provide: APP_GUARD,
-  //     useClass: AtGuard,
-  //   },
-  //   {
-  //     provide: APP_INTERCEPTOR,
-  //     useClass: TimestampInterceptor,
-  //   },
-  // ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimestampInterceptor,
+    },
+    CaslAbilityFactory,
+    {
+      provide: APP_GUARD,
+      useClass: CaslGuard,
+    },
+  ],
+  
 })
 export class AppModule {}

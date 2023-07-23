@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Controller('api/transactions')
 export class TransactionController {
@@ -55,7 +56,7 @@ export class TransactionController {
   }
 
   @Patch(':id')
-  updateById(@Param('id') id: string, @Body() dto: any) {
+  updateById(@Param('id') id: string, @Body() dto: UpdateTransactionDto) {
     return this.transactionService.updateById(id, dto);
   }
 }
