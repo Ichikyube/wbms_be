@@ -25,6 +25,8 @@ import { DriverModule } from "./driver/driver.module";
 import { TransportVehicleModule } from "./transport-vehicle/transport-vehicle.module";
 import { AtGuard } from "./common/guards";
 import { TimestampInterceptor } from "./common/interceptors/timestamp.interceptor";
+import { RolesController } from './rbac/roles/roles.controller';
+import { RbacModule } from './rbac/rbac.module';
 
 @Module({
   imports: [
@@ -50,7 +52,9 @@ import { TimestampInterceptor } from "./common/interceptors/timestamp.intercepto
     SemaiModule,
     DriverModule,
     TransportVehicleModule,
+    RbacModule,
   ],
+  controllers: [RolesController],
   // providers: [
   //   {
   //     provide: APP_GUARD,

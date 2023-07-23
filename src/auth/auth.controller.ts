@@ -8,14 +8,36 @@ import {
   Req,
   Get,
   Res,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from "@nestjs/common";
-import { Request, Response } from "express";
-import { ApiTags } from "@nestjs/swagger";
+import {
+  Request,
+  Response
+} from "express";
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags
+} from "@nestjs/swagger";
 
-import { AuthService } from "./auth.service";
-import { AtGuard, RtGuard } from "src/common/guards";
-import { SigninDto } from "./dto";
-import { CreateUserDto } from "src/users/dto";
+import {
+  AuthService
+} from "./auth.service";
+import {
+  AtGuard,
+  RtGuard
+} from "src/common/guards";
+import {
+  SigninDto
+} from "./dto";
+import {
+  CreateUserDto
+} from "src/users/dto";
 
 @ApiTags("Auth")
 @Controller("api/auth")
@@ -37,13 +59,30 @@ export class AuthController {
     try {
       const user = await this.authService.getIAM(req.user["id"]);
 
-      const { username, email, name, division, position, phone } = user;
+      const {
+        username,
+        email,
+        name,
+        division,
+        position,
+        phone
+      } = user;
 
-      dataOut.data.user = { username, email, name, division, position, phone };
+      dataOut.data.user = {
+        username,
+        email,
+        name,
+        division,
+        position,
+        phone
+      };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, error };
+      dataOut.logs = {
+        ...dataOut.logs,
+        error
+      };
     }
 
     return dataOut;
@@ -51,6 +90,16 @@ export class AuthController {
 
   @Post("signup")
   @UseGuards()
+  @ApiOperation({
+    summary: "Create a user",
+  })
+  @ApiCreatedResponse({ description: "User has been successfully created" })
+  @ApiBadRequestResponse({
+      description: "Some character error or type error",
+  })
+  @ApiForbiddenResponse({
+      description: "User already exists",
+  })
   @HttpCode(HttpStatus.CREATED)
   async signup(@Body() dto: CreateUserDto) {
     const dataOut = {
@@ -65,7 +114,15 @@ export class AuthController {
     try {
       const user = await this.authService.signup(dto);
 
-      const { username, email, nik, name, division, position, phone } = user;
+      const {
+        username,
+        email,
+        nik,
+        name,
+        division,
+        position,
+        phone
+      } = user;
 
       dataOut.data.user = {
         username,
@@ -79,18 +136,42 @@ export class AuthController {
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, error };
+      dataOut.logs = {
+        ...dataOut.logs,
+        error
+      };
     }
 
     return dataOut;
   }
 
   @Post("signin")
-  @UseGuards()
+  // @UseGuards(GuestGuard) 
+  @ApiOperation({
+    summary: 'User login API',
+  })
+  // @ApiResponse({
+  //   status: HttpStatus.OK,
+  //   type: SwaggerBaseApiResponse(AuthTokenOutput),
+  // })
+  // @ApiResponse({
+  //   status: HttpStatus.UNAUTHORIZED,
+  //   type: BaseApiErrorResponse,
+  // })
+  @ApiOkResponse({ description: "User has been successfully logged in" })
+  @ApiBadRequestResponse({
+      description: "Some character error or type error",
+  })
+  @ApiForbiddenResponse({
+      description: "Email or password incorrect",
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   async signin(
     @Body() dto: SigninDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({
+      passthrough: true
+    }) res: Response
   ) {
     const dataOut = {
       status: true,
@@ -103,7 +184,10 @@ export class AuthController {
     };
 
     try {
-      const { tokens, user } = await this.authService.signin(dto, res);
+      const {
+        tokens,
+        user
+      } = await this.authService.signin(dto, res);
 
       dataOut.data.tokens = tokens;
       dataOut.data.user = user;
@@ -112,7 +196,10 @@ export class AuthController {
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, error };
+      dataOut.logs = {
+        ...dataOut.logs,
+        error
+      };
     }
 
     return dataOut;
@@ -120,10 +207,18 @@ export class AuthController {
 
   @Post("signout")
   @UseGuards(AtGuard)
+  @ApiOperation({
+    summary: "Logout with a user",
+  })
+  @ApiOkResponse({
+    description: "User has been successfully logout"
+  })
   @HttpCode(HttpStatus.OK)
   async signout(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response
+    @Res({
+      passthrough: true
+    }) res: Response
   ) {
     const dataOut = {
       status: true,
@@ -144,7 +239,10 @@ export class AuthController {
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, error };
+      dataOut.logs = {
+        ...dataOut.logs,
+        error
+      };
     }
 
     return dataOut;
@@ -152,10 +250,19 @@ export class AuthController {
 
   @Post("refresh")
   @UseGuards(RtGuard)
+  @ApiOperation({
+      summary: "Refresh user token",
+  })
+  @ApiOkResponse({ description: "Token has been successfully refresh" })
+  @ApiForbiddenResponse({
+      description: "Access Denied",
+  })
   @HttpCode(HttpStatus.OK)
   async refreshToken(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response
+    @Res({
+      passthrough: true
+    }) res: Response
   ) {
     const dataOut = {
       status: true,
@@ -178,7 +285,10 @@ export class AuthController {
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, error };
+      dataOut.logs = {
+        ...dataOut.logs,
+        error
+      };
     }
 
     return dataOut;

@@ -9,9 +9,6 @@
 # https://github.com/docker/awesome-compose
 version: "3.8"
 services:
-<<<<<<< HEAD
-  server:
-=======
   wbms-db:
     image: "bitnami/mariadb"
     restart: always
@@ -37,64 +34,22 @@ services:
     networks:
       - armin-net
   wbms_be:
-    image: wbms_bet
+    image: almyra/wbms_bet:v1.1
     depends_on:
       - wbms-db
     restart: always
     ports:
       - 6001:6001
->>>>>>> nani
     build:
       context: .
     environment:
       NODE_ENV: production
-<<<<<<< HEAD
-    ports:
-      - 6001:6001
-=======
       WBMS_APP_PORT: 6001
       WBMS_DB_DOMAIN: "wbms-db"
       WBMS_DB_PORT: "3306"
       WBMS_DB_USER: "wbms_dbu"
       WBMS_DB_PASSWORD: "3031323334"
       WBMS_DB_NAME: "wbms"
->>>>>>> nani
-
-# The commented out section below is an example of how to define a PostgreSQL
-# database that your application can use. `depends_on` tells Docker Compose to
-# start the database before your application. The `db-data` volume persists the
-# database data between container restarts. The `db-password` secret is used
-# to set the database password. You must create `db/password.txt` and add
-# a password of your choosing to it before running `docker-compose up`.
-#     depends_on:
-#       db:
-#         condition: service_healthy
-#   db:
-#     image: postgres
-#     restart: always
-#     user: postgres
-#     secrets:
-#       - db-password
-#     volumes:
-#       - db-data:/var/lib/postgresql/data
-#     environment:
-#       - POSTGRES_DB=example
-#       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-#     expose:
-#       - 5432
-#     healthcheck:
-#       test: [ "CMD", "pg_isready" ]
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
-# volumes:
-#   db-data:
-# secrets:
-#   db-password:
-#     file: db/password.txt
-
-<<<<<<< HEAD
-=======
       WBMS_WB_PORT: "9001"
       WBMS_WB_MIN_WEIGHT: 1
       WBMS_WB_STABLE_PERIOD: 3000
@@ -102,16 +57,6 @@ services:
       WBMS_SEMAI_API_KEY: "lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso"
     networks:
       - armin-net
-
-  wbms-fo:
-    image: "mromzy/wbms-fo:0.28.01"
-    restart: always
-    ports:
-      - 8000:3000
-
-    networks:
-      - armin-net
-
   wbms-phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -125,4 +70,3 @@ services:
 networks:
   armin-net:
     driver: bridge
->>>>>>> nani

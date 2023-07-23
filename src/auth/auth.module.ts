@@ -6,6 +6,7 @@ import { AuthService } from "./auth.service";
 import { AtStrategy, JwtStrategy, RtStrategy } from "./strategies";
 import { UsersModule } from "src/users/users.module";
 import { LdapStrategy } from "./strategies/ldap.strategy";
+import { RolesService } from '../rbac/roles/roles.service';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { LdapStrategy } from "./strategies/ldap.strategy";
     PassportModule.register({ defaultStrategy: "ldap" }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy],
+  providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy, RolesService],
   exports: [PassportModule],
 })
 export class AuthModule {}

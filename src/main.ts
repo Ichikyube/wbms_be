@@ -6,6 +6,7 @@ import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
+import { configureSwaggerDocs } from './configs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,30 +23,23 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: false, // Jika ingin diblock data selain data di dto harus dirubah whitelist = true
       transform: true, // Jika true, maka DataIn akan di transform sesuai dengan deklarinnya, tidak perlu menggunakan ParseXXXPipe
       forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
   const prismaService = app.get(DbService);
   await prismaService.enableShutdownHooks(app);
-
-  const configSwagger = new DocumentBuilder()
-    .setTitle('Weighbridge Management System')
-    .setDescription('Weighbridge Management System API Documentation')
-    .setVersion('0.1')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, configSwagger);
-  SwaggerModule.setup('api', app, document, {
-    customSiteTitle: 'DSN - Weighbridge Management System',
-  });
-
+  configureSwaggerDocs(app, config);
+	// const swaggerDoc = new SwaggerDocumentation(app);
+	// swaggerDoc.serve();
   await app.listen(WBMS_APP_PORT || 6001);
 }
 bootstrap();

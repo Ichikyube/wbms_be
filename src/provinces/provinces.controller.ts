@@ -25,7 +25,7 @@ import { RolesGuard } from "src/common/guards/roles.guard";
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.Administrator)
   @UseGuards(RolesGuard)
   @Get("")
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
