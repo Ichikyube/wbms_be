@@ -21,6 +21,11 @@ export class SitesController {
   constructor(private readonly sitesService: SitesService) {}
 
   @Get('sync-with-semai')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   async syncWithSemai() {
     const dataOut = {
       status: true,
@@ -50,6 +55,11 @@ export class SitesController {
   }
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -80,6 +90,11 @@ export class SitesController {
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -110,6 +125,11 @@ export class SitesController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -135,6 +155,11 @@ export class SitesController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -167,6 +192,11 @@ export class SitesController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -197,6 +227,11 @@ export class SitesController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -229,6 +264,11 @@ export class SitesController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -259,6 +299,11 @@ export class SitesController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity })
   async create(@Body() dto: CreateSiteDto, @Req() req: Request) {
     const dataOut = {
@@ -285,6 +330,11 @@ export class SitesController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity })
   async updateById(
     @Param('id') id: string,
@@ -316,6 +366,11 @@ export class SitesController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: SiteEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

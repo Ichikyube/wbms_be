@@ -21,6 +21,11 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -51,6 +56,11 @@ export class ProductsController {
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -81,6 +91,11 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -106,6 +121,11 @@ export class ProductsController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -138,6 +158,11 @@ export class ProductsController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -168,6 +193,11 @@ export class ProductsController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -200,6 +230,11 @@ export class ProductsController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -230,6 +265,11 @@ export class ProductsController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity })
   async create(@Body() dto: CreateProductDto, @Req() req: Request) {
     const dataOut = {
@@ -256,6 +296,11 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity })
   async updateById(
     @Param('id') id: string,
@@ -287,6 +332,11 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { WeighbridgesService } from './weighbridges.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
 import { WeighbridgeEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Weighbridges')
 @Controller('api/weighbridges')
@@ -21,6 +22,11 @@ export class WeighbridgesController {
   constructor(private weighbridgesService: WeighbridgesService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -51,6 +57,11 @@ export class WeighbridgesController {
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -81,6 +92,11 @@ export class WeighbridgesController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -106,6 +122,11 @@ export class WeighbridgesController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -138,6 +159,11 @@ export class WeighbridgesController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -168,6 +194,11 @@ export class WeighbridgesController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -200,6 +231,11 @@ export class WeighbridgesController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -230,6 +266,11 @@ export class WeighbridgesController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async create(@Body() dto: CreateWeighbridgeDto, @Req() req: Request) {
     const dataOut = {
@@ -256,6 +297,11 @@ export class WeighbridgesController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async updateById(
     @Param('id') id: string,
@@ -287,6 +333,11 @@ export class WeighbridgesController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

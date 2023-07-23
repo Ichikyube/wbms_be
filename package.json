@@ -34,6 +34,7 @@
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
     "moment": "^2.29.4",
+    "nest-access-control": "^2.2.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-ldapauth": "^3.0.1",

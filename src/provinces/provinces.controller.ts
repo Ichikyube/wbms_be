@@ -25,9 +25,14 @@ import { RolesGuard } from "src/common/guards/roles.guard";
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
-  @Roles(UserRole.Administrator)
-  @UseGuards(RolesGuard)
+  // @Roles(UserRole.Administrator)
+  // @UseGuards(RolesGuard)
   @Get("")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -58,6 +63,11 @@ export class ProvincesController {
   }
 
   @Get("deleted")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -88,6 +98,11 @@ export class ProvincesController {
   }
 
   @Get(":id")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async getById(@Param("id") id: string) {
     const dataOut = {
@@ -113,6 +128,11 @@ export class ProvincesController {
   }
 
   @Post("search-first")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -145,6 +165,11 @@ export class ProvincesController {
   }
 
   @Post("search-many")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -175,6 +200,11 @@ export class ProvincesController {
   }
 
   @Post("search-first-deleted")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -207,6 +237,11 @@ export class ProvincesController {
   }
 
   @Post("search-many-deleted")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -237,6 +272,11 @@ export class ProvincesController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async create(@Body() dto: CreateProvinceDto, @Req() req: Request) {
     const dataOut = {
@@ -263,6 +303,11 @@ export class ProvincesController {
   }
 
   @Patch(":id")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async updateById(
     @Param("id") id: string,
@@ -294,6 +339,11 @@ export class ProvincesController {
   }
 
   @Delete(":id")
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async deleteById(@Param("id") id: string, @Req() req: Request) {
     const dataOut = {

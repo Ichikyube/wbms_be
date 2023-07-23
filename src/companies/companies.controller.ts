@@ -14,8 +14,14 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
 import { CompanyEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Companies')
+@UseRoles({
+  resource: 'employeeData',
+  action: 'read',
+  possession: 'any'
+})
 @Controller('api/companies')
 export class CompaniesController {
   constructor(private companiesService: CompaniesService) {}
@@ -82,6 +88,11 @@ export class CompaniesController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -107,6 +118,11 @@ export class CompaniesController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -139,6 +155,11 @@ export class CompaniesController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -169,6 +190,11 @@ export class CompaniesController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -201,6 +227,11 @@ export class CompaniesController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -231,6 +262,11 @@ export class CompaniesController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async create(@Body() dto: CreateCompanyDto, @Req() req: Request) {
     const dataOut = {
@@ -257,6 +293,11 @@ export class CompaniesController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async updateById(
     @Param('id') id: string,
@@ -287,6 +328,11 @@ export class CompaniesController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

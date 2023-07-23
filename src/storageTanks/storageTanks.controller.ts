@@ -12,6 +12,11 @@ export class StorageTanksController {
   constructor(private storageTanksService: StorageTanksService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -42,6 +47,11 @@ export class StorageTanksController {
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -72,6 +82,11 @@ export class StorageTanksController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -97,6 +112,11 @@ export class StorageTanksController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -129,6 +149,11 @@ export class StorageTanksController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -159,6 +184,11 @@ export class StorageTanksController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -191,6 +221,11 @@ export class StorageTanksController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -221,6 +256,11 @@ export class StorageTanksController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async create(@Body() dto: CreateStorageTankDto, @Req() req: Request) {
     const dataOut = {
@@ -247,6 +287,11 @@ export class StorageTanksController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async updateById(@Param('id') id: string, @Body() dto: UpdateStorageTankDto, @Req() req: Request) {
     const dataOut = {
@@ -274,6 +319,11 @@ export class StorageTanksController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

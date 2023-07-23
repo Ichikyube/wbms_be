@@ -8,42 +8,78 @@ import {
   Delete,
 } from '@nestjs/common';
 import { BarcodeTypesService } from './barcodeTypes.service';
+import { UseRoles } from 'nest-access-control';
 
 @Controller('api/barcodetypes')
 export class BarcodeTypesController {
   constructor(private customerTypesService: BarcodeTypesService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   getAll() {
     return this.customerTypesService.getAll();
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   searchMany(@Body() query: any) {
     return this.customerTypesService.searchMany(query);
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   searchFirst(@Body() query: any) {
     return this.customerTypesService.searchFirst(query);
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   getById(@Param('id') id: string) {
     return this.customerTypesService.getById(id);
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   create(@Body() dto: any) {
     return this.customerTypesService.create(dto);
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   updateById(@Param('id') id: string, @Body() dto: any) {
     return this.customerTypesService.updateById(id, dto);
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   deleteById(@Param('id') id: string) {
     return this.customerTypesService.deleteById(id);
   }

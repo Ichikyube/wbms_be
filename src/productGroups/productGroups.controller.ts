@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ProductGroupsService } from './productGroups.service';
 import { CreateProductGroupDto, UpdateProductGroupDto } from './dto';
 import { ProductGroupEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Product Groups')
 @Controller('api/product-groups')
@@ -21,6 +22,11 @@ export class ProductGroupsController {
   constructor(private productGroupsService: ProductGroupsService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -51,6 +57,11 @@ export class ProductGroupsController {
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -81,6 +92,11 @@ export class ProductGroupsController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -106,6 +122,11 @@ export class ProductGroupsController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -138,6 +159,11 @@ export class ProductGroupsController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -168,6 +194,11 @@ export class ProductGroupsController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -200,6 +231,11 @@ export class ProductGroupsController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -230,6 +266,11 @@ export class ProductGroupsController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async create(@Body() dto: CreateProductGroupDto, @Req() req: Request) {
     const dataOut = {
@@ -256,6 +297,11 @@ export class ProductGroupsController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async updateById(
     @Param('id') id: string,
@@ -291,6 +337,11 @@ export class ProductGroupsController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CitiesService } from './cities.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Cities')
 @Controller('api/cities')
@@ -21,6 +22,11 @@ export class CitiesController {
   constructor(private citiesService: CitiesService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -49,10 +55,14 @@ export class CitiesController {
 
     return dataOut;
 
-    return;
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -83,6 +93,11 @@ export class CitiesController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -108,6 +123,11 @@ export class CitiesController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -140,6 +160,11 @@ export class CitiesController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -170,6 +195,11 @@ export class CitiesController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -202,6 +232,11 @@ export class CitiesController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -232,6 +267,11 @@ export class CitiesController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity })
   async create(@Body() dto: CreateCityDto, @Req() req: Request) {
     const dataOut = {
@@ -258,6 +298,11 @@ export class CitiesController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity })
   async updateById(
     @Param('id') id: string,
@@ -288,6 +333,11 @@ export class CitiesController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'employeeData',
+    action: 'read',
+    possession: 'any'
+  })
   @ApiCreatedResponse({ type: CityEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
