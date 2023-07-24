@@ -334,14 +334,20 @@ model RolePermission {
 
 model Permission {
   id         Int       @id @default(autoincrement())
-  ptype      String    @db.VarChar(50)
-  pcode      String?
+  allowRead   Boolean
+  allowCreate Boolean
+  allowWrite  Boolean
+  allowDelete Boolean
   resource_id String    @db.Char(36)   
   role_permission_id Int
   role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
   @@map(name: "menu")
 }
 
+model Resource {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(255)
+}
 
 model Product {
   id      String  @id @default(uuid()) @db.Char(36)
