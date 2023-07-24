@@ -2,13 +2,13 @@ import {
   Injectable,
   ForbiddenException,
   NotFoundException,
-} from "@nestjs/common";
-import { Prisma, User, UserRole } from "@prisma/client";
-import { hash } from "argon2";
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { hash } from 'argon2';
 
-import { DbService } from "src/db/db.service";
-import { CreateUserDto, UpdateUserDto } from "./dto";
-import { UserEntity } from "./entities";
+import { DbService } from 'src/db/db.service';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { UserEntity } from './entities';
 
 @Injectable()
 export class UsersService {
@@ -86,32 +86,37 @@ export class UsersService {
     return records;
   }
 
-  async create(dto: CreateUserDto, userId: string): Promise<UserEntity> {
+  async create(dto: any, userId: string): Promise<UserEntity> {
     // generate the password hash
     const hashedPassword = await hash(dto.password);
-
+    const data = {
+      username: dto.username,
+      email: dto.email,
+      nik: dto.nik,
+      name: dto.name,
+      profilePic: dto.profilePic,
+      fileLocation: dto.fileLocation,
+      address: dto.address,
+      birthDate: dto.birthDate,
+      division: dto.division,
+      position: dto.position,
+      phone: dto.phone,
+      hashedPassword: hashedPassword,
+      role: dto.role,
+      roleModel: dto.roleModel,
+      userCreated: userId,
+      userModified: userId,
+    };
     // save the new user in the db
     const user = await this.db.user
       .create({
-        data: {
-          username: dto.username,
-          email: dto.email,
-          nik: dto.nik,
-          name: dto.name,
-          division: dto.division,
-          position: dto.position,
-          phone: dto.phone,
-          hashedPassword: hashedPassword,
-          role: dto.role,
-          userCreated: userId,
-          userModified: userId,
-        },
+        data,
       })
       .catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           // if (error.code === 'P2002') throw new ForbiddenException('Credentials taken.');
-          if (error.code === "P2002")
-            throw new ForbiddenException("Username/Email/NIK already taken.");
+          if (error.code === 'P2002')
+            throw new ForbiddenException('Username/Email/NIK already taken.');
         }
 
         throw error;
@@ -123,7 +128,7 @@ export class UsersService {
   async updateById(
     id: string,
     dto: UpdateUserDto,
-    userId: string
+    userId: string,
   ): Promise<UserEntity> {
     let updateData = new UserEntity();
 
@@ -140,8 +145,8 @@ export class UsersService {
       })
       .catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === "P2002")
-            throw new ForbiddenException("Username/Email/NIK already taken.");
+          if (error.code === 'P2002')
+            throw new ForbiddenException('Username/Email/NIK already taken.');
         }
 
         throw error;
@@ -149,8 +154,6 @@ export class UsersService {
 
     return user;
   }
-
-
 
   async deleteById(id: string, userId: string) {
     const user = await this.db.user.update({
@@ -161,21 +164,20 @@ export class UsersService {
     return user;
   }
 
-
-  async updateUserRole(userId: string, userRole: UserRole): Promise<User> {
-    try {
-      return await this.db.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          role: userRole,
-        },
-      });
-    } catch (err) {
-      if (err?.code === "P2025") {
-        throw new NotFoundException(`Record ${userId} to update not found`);
-      }
-    }
-  }
+  // async updateUserRole(userId: string, userRole: UserRole): Promise<User> {
+  //   try {
+  //     return await this.db.user.update({
+  //       where: {
+  //         id: userId,
+  //       },
+  //       data: {
+  //         role: userRole,
+  //       },
+  //     });
+  //   } catch (err) {
+  //     if (err?.code === "P2025") {
+  //       throw new NotFoundException(`Record ${userId} to update not found`);
+  //     }
+  //   }
+  // }
 }

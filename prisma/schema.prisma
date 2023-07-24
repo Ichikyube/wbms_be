@@ -276,20 +276,26 @@ model User {
   division       String  @db.VarChar(30)
   position       String  @db.VarChar(30)
   phone          String? @db.VarChar(30)
+  address         String
+  birthDate      DateTime
+  profilePic     String
+  fileLocation   String
+  roleId         Int     
+  role        String  @db.VarChar(30)
+
   hashedPassword String  @db.VarChar(100)
   hashedRT       String? @db.VarChar(100)
-  //role           UserRole  @default(Staff) 
-  role_id         Int       @map("role_id")
-  UserRole       UserRole[]
+
   isEmailVerified Boolean @default(false)
   isLDAPUser      Boolean @default(true)
   isDisabled      Boolean @default(false)
+  isDeleted       Boolean  @default(false)
 
-  isDeleted    Boolean  @default(false)
   userCreated  String?  @db.Char(36)
   userModified String?  @db.Char(36)
   dtCreated    DateTime @default(now())
   dtModified   DateTime @updatedAt
+  roleModel         Role   @relation(fields: [roleId], references: [id])
 }
 
 enum BaseRole {
@@ -299,48 +305,60 @@ enum BaseRole {
   MillHead
   Administrator
 }
-model UserRole {
-  id      Int   @id @default(autoincrement())
-  user_id String @db.Char(36)
-  user    User? @relation(fields: [user_id], references: [id])
-  role_id Int
-  role    Role? @relation(fields: [role_id], references: [id])
-  created_at DateTime  @default(now())
-  update_at  DateTime? @updatedAt
-  @@map(name: "user_role")
-}
 
+  // userId      String @db.Char(36)
+  // user        User? @relation(fields: [userId], references: [id])
 model Role {
   id         Int       @id @default(autoincrement())
-  created_at DateTime  @default(now())
-  update_at  DateTime? @updatedAt
   name       String    @unique @db.VarChar(255)
   description String @db.VarChar(255)
-  UserRole    UserRole[]
+
   RolePermission      RolePermission[]
+
+  userCreated  String   @db.Char(36)
+  userModified String   @db.Char(36)
+  dtCreated    DateTime @default(now())
+  dtModified   DateTime @updatedAt
+  users        User[]
   @@map(name: "role")
 }
 
 model RolePermission {
   id          Int   @id @default(autoincrement())
-  role_id     Int
-  role        Role?  @relation(fields: [role_id], references: [id])
+  roleId      Int
+  role        Role?  @relation(fields: [roleId], references: [id])
   permission  Permission[]
-  created_at DateTime  @default(now())
-  update_at  DateTime? @updatedAt
-  @@map(name: "role_menu")
+
+  userModified String   @db.Char(36)
+  dtModified   DateTime @updatedAt
+}
+
+enum Action {
+  READ
+  WRITE
+  DELETE
+}
+
+enum Possession {
+  OWN
+  ANY
 }
 
 model Permission {
   id         Int       @id @default(autoincrement())
-  ptype      String    @db.VarChar(50)
-  pcode      String?
-  resource_id String    @db.Char(36)   
+  resource_id  String    @db.Char(36)   
+  actions      Json
+  attributes   String
+  possesion    String
+  role         String
   role_permission_id Int
   role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
-  @@map(name: "menu")
-}
 
+  userCreated  String   @db.Char(36)
+  userModified String   @db.Char(36)
+  dtCreated    DateTime @default(now())
+  dtModified   DateTime @updatedAt
+}
 
 model Product {
   id      String  @id @default(uuid()) @db.Char(36)

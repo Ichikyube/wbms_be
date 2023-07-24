@@ -1,5 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { UserRole } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsEnum,
@@ -7,7 +6,7 @@ import {
   IsPhoneNumber,
   IsString,
   Length,
-} from "class-validator";
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty() @IsString() @IsNotEmpty() username: string;
@@ -15,7 +14,8 @@ export class CreateUserDto {
   @ApiProperty() @IsString() @IsNotEmpty() nik: string;
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
-
+  @ApiProperty() @IsString() @IsNotEmpty() profilePic: string;
+  @ApiProperty() @IsString() @IsNotEmpty() fileLocation: string;
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -33,13 +33,13 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @Length(8, 20, {
-    message: "Panjang password minimal 8 karakter dan maksimal 20 karakter.",
+    message: 'Panjang password minimal 8 karakter dan maksimal 20 karakter.',
   })
   password: string;
 
-  @IsEnum(UserRole)
+  // @IsEnum(UserRole)
   @IsNotEmpty()
-  role?: UserRole;
+  roleId?: number;
 
   isLDAPUser: boolean;
 }

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
@@ -10,13 +19,15 @@ import { UseRoles } from 'nest-access-control';
 @ApiTags('Transport Vehicles')
 @Controller('api/transport-vehicle')
 export class TransportVehicleController {
-  constructor(private readonly transportVehicleService: TransportVehicleService) {}
+  constructor(
+    private readonly transportVehicleService: TransportVehicleService,
+  ) {}
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'carsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async getAll() {
@@ -27,10 +38,10 @@ export class TransportVehicleController {
         transportVehicle: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -49,9 +60,9 @@ export class TransportVehicleController {
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'carsData',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async getAllDeleted() {
@@ -62,10 +73,10 @@ export class TransportVehicleController {
         transportVehicle: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -84,9 +95,9 @@ export class TransportVehicleController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'carsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async getById(@Param('id') id: string) {
@@ -94,9 +105,9 @@ export class TransportVehicleController {
       status: true,
       message: '',
       data: {
-        transportVehicle: null
+        transportVehicle: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -114,9 +125,9 @@ export class TransportVehicleController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'car',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async searchFirst(@Body() query: any) {
@@ -127,10 +138,10 @@ export class TransportVehicleController {
         transportVehicle: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -151,9 +162,9 @@ export class TransportVehicleController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'carsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -164,10 +175,10 @@ export class TransportVehicleController {
         transportVehicle: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -186,9 +197,9 @@ export class TransportVehicleController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'car',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -199,14 +210,16 @@ export class TransportVehicleController {
         transportVehicle: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
-      const record = await this.transportVehicleService.searchFirstDeleted(query);
+      const record = await this.transportVehicleService.searchFirstDeleted(
+        query,
+      );
 
       if (record) {
         dataOut.data.transportVehicle.records.push(record);
@@ -223,9 +236,9 @@ export class TransportVehicleController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'carsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -236,14 +249,16 @@ export class TransportVehicleController {
         transportVehicle: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
-      const records = await this.transportVehicleService.searchManyDeleted(query);
+      const records = await this.transportVehicleService.searchManyDeleted(
+        query,
+      );
 
       dataOut.data.transportVehicle.records = records;
       dataOut.data.transportVehicle.totalRecords = records.length;
@@ -258,9 +273,9 @@ export class TransportVehicleController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'car',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async create(@Body() dto: CreateTransportVehicleDto, @Req() req: Request) {
@@ -268,9 +283,9 @@ export class TransportVehicleController {
       status: true,
       message: '',
       data: {
-        transportVehicle: null
+        transportVehicle: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -289,25 +304,33 @@ export class TransportVehicleController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'car',
+    action: 'update',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
-  async updateById(@Param('id') id: string, @Body() dto: UpdateTransportVehicleDto, @Req() req: Request) {
+  async updateById(
+    @Param('id') id: string,
+    @Body() dto: UpdateTransportVehicleDto,
+    @Req() req: Request,
+  ) {
     const dataOut = {
       status: true,
       message: '',
       data: {
-        transportVehicle: null
+        transportVehicle: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
       const userId = ''; //req.user['id'];
       console.log(id);
-      const record = await this.transportVehicleService.updateById(id, dto, userId);
+      const record = await this.transportVehicleService.updateById(
+        id,
+        dto,
+        userId,
+      );
 
       dataOut.data.transportVehicle = record;
     } catch (error) {
@@ -321,9 +344,9 @@ export class TransportVehicleController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'car',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
@@ -331,9 +354,9 @@ export class TransportVehicleController {
       status: true,
       message: '',
       data: {
-        transportVehicle: null
+        transportVehicle: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {

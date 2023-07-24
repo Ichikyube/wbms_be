@@ -6,7 +6,7 @@ import { AuthService } from "./auth.service";
 import { AtStrategy, JwtStrategy, RtStrategy } from "./strategies";
 import { UsersModule } from "src/users/users.module";
 import { LdapStrategy } from "./strategies/ldap.strategy";
-import { RolesService } from '../rbac/roles/roles.service';
+import { RolesService } from "./rbac/roles/roles.service";
 
 @Module({
   imports: [

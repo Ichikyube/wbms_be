@@ -16,9 +16,9 @@ export class BarcodeTypesController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'barcodeData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   getAll() {
     return this.customerTypesService.getAll();
@@ -26,9 +26,9 @@ export class BarcodeTypesController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'barcodeData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   searchMany(@Body() query: any) {
     return this.customerTypesService.searchMany(query);
@@ -36,9 +36,9 @@ export class BarcodeTypesController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'barcodeData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   searchFirst(@Body() query: any) {
     return this.customerTypesService.searchFirst(query);
@@ -46,9 +46,9 @@ export class BarcodeTypesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'barcode',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   getById(@Param('id') id: string) {
     return this.customerTypesService.getById(id);
@@ -56,9 +56,9 @@ export class BarcodeTypesController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'barcode',
+    action: 'create',
+    possession: 'any',
   })
   create(@Body() dto: any) {
     return this.customerTypesService.create(dto);
@@ -66,9 +66,9 @@ export class BarcodeTypesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'barcode',
+    action: 'update',
+    possession: 'any',
   })
   updateById(@Param('id') id: string, @Body() dto: any) {
     return this.customerTypesService.updateById(id, dto);
@@ -76,9 +76,9 @@ export class BarcodeTypesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'barcode',
+    action: 'delete',
+    possession: 'any',
   })
   deleteById(@Param('id') id: string) {
     return this.customerTypesService.deleteById(id);

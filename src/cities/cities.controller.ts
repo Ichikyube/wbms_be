@@ -23,9 +23,9 @@ export class CitiesController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'citiesData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async getAll() {
@@ -54,14 +54,13 @@ export class CitiesController {
     }
 
     return dataOut;
-
   }
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'citiesData',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async getAllDeleted() {
@@ -94,9 +93,9 @@ export class CitiesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'city',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async getById(@Param('id') id: string) {
@@ -124,9 +123,9 @@ export class CitiesController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'citiesData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async searchFirst(@Body() query: any) {
@@ -161,9 +160,9 @@ export class CitiesController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'citiesData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -196,9 +195,9 @@ export class CitiesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'citiesData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -235,7 +234,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'employeeData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -268,9 +267,9 @@ export class CitiesController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'city',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async create(@Body() dto: CreateCityDto, @Req() req: Request) {
@@ -299,9 +298,9 @@ export class CitiesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'city',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async updateById(
@@ -334,9 +333,9 @@ export class CitiesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'city',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

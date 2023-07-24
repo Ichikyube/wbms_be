@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { SitesService } from './sites.service';
 import { CreateSiteDto, UpdateSiteDto } from './dto';
 import { SiteEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Sites')
 @Controller('api/sites')
@@ -21,11 +22,6 @@ export class SitesController {
   constructor(private readonly sitesService: SitesService) {}
 
   @Get('sync-with-semai')
-  @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
-  })
   async syncWithSemai() {
     const dataOut = {
       status: true,
@@ -56,9 +52,9 @@ export class SitesController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'sitesData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAll() {
@@ -91,9 +87,9 @@ export class SitesController {
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'sitesData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAllDeleted() {
@@ -126,9 +122,9 @@ export class SitesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'site',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async getById(@Param('id') id: string) {
@@ -156,9 +152,9 @@ export class SitesController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'site',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirst(@Body() query: any) {
@@ -193,9 +189,9 @@ export class SitesController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'sitesData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -228,9 +224,9 @@ export class SitesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'site',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -266,8 +262,8 @@ export class SitesController {
   @Post('search-many-deleted')
   @UseRoles({
     resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -300,9 +296,9 @@ export class SitesController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'site',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async create(@Body() dto: CreateSiteDto, @Req() req: Request) {
@@ -331,9 +327,9 @@ export class SitesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'site',
+    action: 'update',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async updateById(
@@ -367,9 +363,9 @@ export class SitesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'site',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

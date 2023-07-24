@@ -13,7 +13,7 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { FilesService } from './files.service';
+import { FilesService, IFile } from './files.service';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
@@ -52,6 +52,14 @@ const imageFileFilter = (req, file, callback) => {
 })
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
+
+  // @UseInterceptors(FileInterceptor('file'))
+  // @Post()
+  // public async upload(@UploadedFile() file: IFile) {
+  //   return {
+  //     url: await this.filesService.upload(file),
+  //   };
+  // }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))

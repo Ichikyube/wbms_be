@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CustomerTypesService } from './customerTypes.service';
 import { CreateCustomerTypeDto, UpdateCustomerTypeDto } from './dto';
 import { CustomerTypeEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Customer Types')
 @Controller('api/customer-types')
@@ -21,6 +22,11 @@ export class CustomerTypesController {
   constructor(private customerTypesService: CustomerTypesService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'customerTypesData',
+    action: 'read',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -51,6 +57,11 @@ export class CustomerTypesController {
   }
 
   @Get('deleted')
+  @UseRoles({
+    resource: 'customerTypesData',
+    action: 'delete',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -81,6 +92,11 @@ export class CustomerTypesController {
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'customerType',
+    action: 'read',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -106,6 +122,11 @@ export class CustomerTypesController {
   }
 
   @Post('search-first')
+  @UseRoles({
+    resource: 'customerType',
+    action: 'read',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -138,6 +159,11 @@ export class CustomerTypesController {
   }
 
   @Post('search-many')
+  @UseRoles({
+    resource: 'customerTypesData',
+    action: 'read',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -168,6 +194,11 @@ export class CustomerTypesController {
   }
 
   @Post('search-first-deleted')
+  @UseRoles({
+    resource: 'customerType',
+    action: 'read',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -200,6 +231,11 @@ export class CustomerTypesController {
   }
 
   @Post('search-many-deleted')
+  @UseRoles({
+    resource: 'customerTypesData',
+    action: 'read',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -230,6 +266,11 @@ export class CustomerTypesController {
   }
 
   @Post()
+  @UseRoles({
+    resource: 'customerType',
+    action: 'create',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity })
   async create(@Body() dto: CreateCustomerTypeDto, @Req() req: Request) {
     const dataOut = {
@@ -256,6 +297,11 @@ export class CustomerTypesController {
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'customerType',
+    action: 'update',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity })
   async updateById(
     @Param('id') id: string,
@@ -291,6 +337,11 @@ export class CustomerTypesController {
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'customerType',
+    action: 'delete',
+    possession: 'any',
+  })
   @ApiCreatedResponse({ type: CustomerTypeEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

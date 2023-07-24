@@ -17,15 +17,20 @@ export class TransactionController {
   constructor(private transactionService: TransactionService) {}
 
   @Get('')
+  @UseRoles({
+    resource: 'transactionsData',
+    action: 'read',
+    possession: 'any',
+  })
   getAll() {
     return this.transactionService.getAll();
   }
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'transaction',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   getById(@Param('id') id: string) {
     return this.transactionService.getById(id);
@@ -33,9 +38,9 @@ export class TransactionController {
 
   @Post('open-create-qrcode-semai')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'transactionsData',
+    action: 'create',
+    possession: 'any',
   })
   openCreateByQrcodeSemai(@Body() body: any) {
     return this.transactionService.openCreateByQrcodeSemai(body);
@@ -43,9 +48,9 @@ export class TransactionController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'transactionsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   searchMany(@Body() query: any) {
     return this.transactionService.searchMany(query);
@@ -53,9 +58,9 @@ export class TransactionController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'transaction',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   searchFirst(@Body() query: any) {
     return this.transactionService.searchFirst(query);
@@ -63,9 +68,9 @@ export class TransactionController {
 
   @Get('search-qr')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'transaction',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   searchByQR(@Body() query: any) {
     return this.transactionService.searchByQR(query);
@@ -73,9 +78,9 @@ export class TransactionController {
 
   @Get('getByPlateNo')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'transaction',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   getByPlateNo(@Query() query: any) {
     return this.transactionService.getByPlateNo(query);
@@ -83,9 +88,9 @@ export class TransactionController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'transaction',
+    action: 'create',
+    possession: 'any',
   })
   create(@Body() dto: CreateTransactionDto) {
     return this.transactionService.create(dto);
@@ -93,9 +98,9 @@ export class TransactionController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'transaction',
+    action: 'update',
+    possession: 'any',
   })
   updateById(@Param('id') id: string, @Body() dto: UpdateTransactionDto) {
     return this.transactionService.updateById(id, dto);

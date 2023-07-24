@@ -23,9 +23,9 @@ export class CustomersController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customersData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
   async getAll() {
@@ -58,9 +58,9 @@ export class CustomersController {
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customersData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
   async getAllDeleted() {
@@ -93,9 +93,9 @@ export class CustomersController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customer',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity })
   async getById(@Param('id') id: string) {
@@ -123,9 +123,9 @@ export class CustomersController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customersData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity })
   async searchFirst(@Body() query: any) {
@@ -160,9 +160,9 @@ export class CustomersController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customersData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -195,9 +195,9 @@ export class CustomersController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customersData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -232,9 +232,9 @@ export class CustomersController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customersData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -267,9 +267,9 @@ export class CustomersController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customer',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity })
   async create(@Body() dto: CreateCustomerDto, @Req() req: Request) {
@@ -298,9 +298,9 @@ export class CustomersController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customer',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity })
   async updateById(
@@ -333,9 +333,9 @@ export class CustomersController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'customer',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: CustomerEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

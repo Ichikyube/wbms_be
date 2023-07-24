@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
-import { configureSwaggerDocs } from './configs/swagger';
+import SwaggerDocumentation from './configs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -37,9 +37,9 @@ async function bootstrap() {
 
   const prismaService = app.get(DbService);
   await prismaService.enableShutdownHooks(app);
-  configureSwaggerDocs(app, config);
-	// const swaggerDoc = new SwaggerDocumentation(app);
-	// swaggerDoc.serve();
+  // configureSwaggerDocs(app, config);
+  const swaggerDoc = new SwaggerDocumentation(app);
+  swaggerDoc.serve();
   await app.listen(WBMS_APP_PORT || 6001);
 }
 bootstrap();

@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { MillsService } from './mills.service';
 import { CreateMillDto, UpdateMillDto } from './dto';
 import { MillEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Mills')
 @Controller('api/mills')
@@ -22,9 +23,9 @@ export class MillsController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'millsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async getAll() {
@@ -57,9 +58,9 @@ export class MillsController {
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'millsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async getAllDeleted() {
@@ -92,9 +93,9 @@ export class MillsController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'mills',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async getById(@Param('id') id: string) {
@@ -122,9 +123,9 @@ export class MillsController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'mills',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async searchFirst(@Body() query: any) {
@@ -159,9 +160,9 @@ export class MillsController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'millsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -194,9 +195,9 @@ export class MillsController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'mills',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -231,9 +232,9 @@ export class MillsController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'millsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -266,9 +267,9 @@ export class MillsController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'millsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async create(@Body() dto: CreateMillDto, @Req() req: Request) {
@@ -297,9 +298,9 @@ export class MillsController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'millsData',
+    action: 'update',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async updateById(
@@ -333,9 +334,9 @@ export class MillsController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'millsData',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

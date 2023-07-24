@@ -11,6 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { SemaiService } from './semai.service';
 import { DecodeQrcodeDto, UpdateSemaiDto } from './dto';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Semai')
 @Controller('api/semai')

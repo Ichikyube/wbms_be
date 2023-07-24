@@ -4,7 +4,7 @@ import { DbService } from 'src/db/db.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from './entities';
 
-@Injectable()
+
 export class CitiesService {
   constructor(private db: DbService) {}
 

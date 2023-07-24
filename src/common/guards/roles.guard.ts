@@ -1,16 +1,25 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException, } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { User, UserRole } from "@prisma/client";
-import { Observable } from "rxjs";
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { User } from '@prisma/client';
+import { Observable } from 'rxjs';
+import { UserRole } from 'src/auth/rbac/roles/roles.type';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
-      "roles",
-      [context.getHandler(), context.getClass()]
+      'roles',
+      [context.getHandler(), context.getClass()],
     );
 
     if (!requiredRoles) {
@@ -23,14 +32,16 @@ export class RolesGuard implements CanActivate {
     if (!user || !user.role) {
       throw new UnauthorizedException('User or role undefined');
     }
-    const hasRole = () => requiredRoles.some((role) => user.role?.includes(role));
+    const hasRole = () =>
+      requiredRoles.some((role) => user.role?.includes(role));
     const canActivate = user && user.role && hasRole();
 
     if (!canActivate) {
-      throw new ForbiddenException(`User with roles ${user.role} does not have access to this route with roles ${requiredRoles}`,);
+      throw new ForbiddenException(
+        `User with roles ${user.role} does not have access to this route with roles ${requiredRoles}`,
+      );
     }
 
     return true;
-
   }
 }

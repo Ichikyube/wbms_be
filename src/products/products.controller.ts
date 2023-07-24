@@ -14,6 +14,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './dto';
 import { ProductEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Products')
 @Controller('api/products')

@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { DriverService } from './driver.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
 import { DriverEntity } from './entities';
+import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Drivers')
 @Controller('api/driver')
@@ -13,9 +23,9 @@ export class DriverController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'driverData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAll() {
@@ -26,10 +36,10 @@ export class DriverController {
         driver: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -48,9 +58,9 @@ export class DriverController {
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driverData',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAllDeleted() {
@@ -61,10 +71,10 @@ export class DriverController {
         driver: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -83,9 +93,9 @@ export class DriverController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'driver',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async getById(@Param('id') id: string) {
@@ -93,9 +103,9 @@ export class DriverController {
       status: true,
       message: '',
       data: {
-        driver: null
+        driver: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -113,9 +123,9 @@ export class DriverController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driver',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async searchFirst(@Body() query: any) {
@@ -126,10 +136,10 @@ export class DriverController {
         driver: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -150,9 +160,9 @@ export class DriverController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driverData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -163,10 +173,10 @@ export class DriverController {
         driver: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -185,9 +195,9 @@ export class DriverController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driver',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -198,10 +208,10 @@ export class DriverController {
         driver: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -222,9 +232,9 @@ export class DriverController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driverData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -235,10 +245,10 @@ export class DriverController {
         driver: {
           records: [],
           totalRecords: 0,
-          page: 0
-        }
+          page: 0,
+        },
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -257,9 +267,9 @@ export class DriverController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driver',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async create(@Body() dto: CreateDriverDto, @Req() req: Request) {
@@ -267,9 +277,9 @@ export class DriverController {
       status: true,
       message: '',
       data: {
-        driver: null
+        driver: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -288,19 +298,23 @@ export class DriverController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driver',
+    action: 'update',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity })
-  async updateById(@Param('id') id: string, @Body() dto: UpdateDriverDto, @Req() req: Request) {
+  async updateById(
+    @Param('id') id: string,
+    @Body() dto: UpdateDriverDto,
+    @Req() req: Request,
+  ) {
     const dataOut = {
       status: true,
       message: '',
       data: {
-        driver: null
+        driver: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
@@ -320,9 +334,9 @@ export class DriverController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'driver',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
@@ -330,9 +344,9 @@ export class DriverController {
       status: true,
       message: '',
       data: {
-        driver: null
+        driver: null,
       },
-      logs: {}
+      logs: {},
     };
 
     try {
