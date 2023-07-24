@@ -5,6 +5,26 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+    provider = "prisma-class-generator"
+    output   = "../src/generated/prisma-class"
+    dryRun                 = "false"
+    separateRelationFields = "true"
+    useUndefinedDefault    = "true"
+}
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/generated/nestjs-dto"
+  outputToNestJsResourceStructure = "false"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "false"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  fileNamingStyle                 = "camel"
+}
 datasource db {
   provider = "mysql"
   url      = env("WBMS_DB_URL")
@@ -273,15 +293,17 @@ model User {
   email          String  @unique @db.VarChar(50)
   nik            String  @unique @db.VarChar(30)
   name           String  @db.VarChar(50)
+  phone          String? @db.VarChar(30)
+  address        String
+  birthDate      DateTime
   division       String  @db.VarChar(30)
   position       String  @db.VarChar(30)
-  phone          String? @db.VarChar(30)
-  address         String
-  birthDate      DateTime
+
   profilePic     String
   fileLocation   String
+  
   roleId         Int     
-  role        String  @db.VarChar(30)
+  role           String  @db.VarChar(30)
 
   hashedPassword String  @db.VarChar(100)
   hashedRT       String? @db.VarChar(100)

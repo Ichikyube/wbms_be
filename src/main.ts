@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
-import SwaggerDocumentation from './configs/swagger';
+import SwaggerDocumentation from './configs/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

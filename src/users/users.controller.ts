@@ -10,6 +10,8 @@ import {
   Patch,
   HttpStatus,
   HttpCode,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -18,6 +20,9 @@ import { UsersService } from './users.service';
 import { AtGuard } from 'src/common/guards';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
+import { multerOptions } from 'src/configs/multer.config';
+import { FileInterceptor } from '@nestjs/platform-express';
+// import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
 @UseGuards(AtGuard)
@@ -205,13 +210,14 @@ export class UsersController {
   }
 
   @Post()
+  @UseInterceptors(FileInterceptor('file', multerOptions))
   @UseRoles({
     resource: 'user',
     action: 'create',
     possession: 'any',
   })
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateUserDto, @Req() req: Request) {
+  async create(@Body() dto: CreateUserDto, @UploadedFile() file, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -223,7 +229,7 @@ export class UsersController {
 
     try {
       const userId = req.user['id'];
-      const user = await this.usersService.create(dto, userId);
+      const user = await this.usersService.create(dto, file, userId);
 
       const { username, email, name, division, position, phone } = user;
 
