@@ -21,7 +21,7 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Provinces')
-@Controller('api/provinces')
+@Controller('provinces')
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
@@ -289,7 +289,8 @@ export class ProvincesController {
     };
 
     try {
-      const userId = req.user['id'];
+      // const userId = req.user['id'];
+      const userId = '';
       const record = await this.provincesService.create(dto, userId);
 
       dataOut.data.province = record;

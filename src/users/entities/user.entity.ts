@@ -2,16 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
 export class UserEntity implements User {
-  @ApiProperty() address: string;
-  @ApiProperty() birthDate: Date;
-  @ApiProperty() roleId: number;
-  @ApiProperty() profilePic: string;
-  @ApiProperty() fileLocation: string;
   @ApiProperty() id: string;
 
   @ApiProperty() username: string;
   @ApiProperty() email: string;
   @ApiProperty() nik: string;
+
+  @ApiProperty() address: string;
+  @ApiProperty() birthDate: Date;
+  @ApiProperty() roleId: number;
+  @ApiProperty() profilePic: string;
 
   @ApiProperty() name: string;
   @ApiProperty() division: string;

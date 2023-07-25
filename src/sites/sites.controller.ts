@@ -17,7 +17,7 @@ import { SiteEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Sites')
-@Controller('api/sites')
+@Controller('sites')
 export class SitesController {
   constructor(private readonly sitesService: SitesService) {}
 

@@ -13,3 +13,4 @@ export interface PermissionAction {
   Action: Possession;
 }
 // [action: string]: Possession;
+

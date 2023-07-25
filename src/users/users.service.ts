@@ -87,18 +87,21 @@ export class UsersService {
     return records;
   }
 
-  async create(dto: any, file: string, userId: string): Promise<UserEntity> {
+  async create(
+    dto: any,
+    file: Express.Multer.File,
+    userId: string,
+  ): Promise<UserEntity> {
     // generate the password hash
     const hashedPassword = await hash(dto.password);
-    const profilePicturePath = await this.saveProfilePicture(file);
 
+    const profilePicturePath = file.filename;
     const data = {
       username: dto.username,
       email: dto.email,
       nik: dto.nik,
       name: dto.name,
       profilePic: profilePicturePath,
-      fileLocation: dto.fileLocation,
       address: dto.address,
       birthDate: dto.birthDate,
       division: dto.division,
@@ -128,30 +131,33 @@ export class UsersService {
     return user;
   }
 
-  private async saveProfilePicture(file: MulterFile): Promise<string> {
-    const fileExt = path.extname(file.originalname);
-    const randomName = new Date().getTime().toString();
-    const newFileName = `${randomName}${fileExt}`;
+  // private async saveProfilePicture(file: Express.Multer.File): Promise<string> {
+  //   const fileExt = path.extname(file.originalname);
+  //   const randomName = new Date().getTime().toString();
+  //   const newFileName = `${randomName}${fileExt}`;
 
-    // Define the directory where the profile pictures will be stored
-    const uploadDirectory = path.join(__dirname, '../../uploads/profilePictures');
+  //   // Define the directory where the profile pictures will be stored
+  //   const uploadDirectory = path.join(
+  //     __dirname,
+  //     '../../uploads/profilePictures',
+  //   );
 
-    if (!fs.existsSync(uploadDirectory)) {
-      fs.mkdirSync(uploadDirectory, { recursive: true });
-    }
+  //   if (!fs.existsSync(uploadDirectory)) {
+  //     fs.mkdirSync(uploadDirectory, { recursive: true });
+  //   }
 
-    const filePath = path.join(uploadDirectory, newFileName);
+  //   const filePath = path.join(uploadDirectory, newFileName);
 
-    return new Promise((resolve, reject) => {
-      fs.writeFile(filePath, file.buffer, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(filePath);
-        }
-      });
-    });
-  }
+  //   return new Promise((resolve, reject) => {
+  //     fs.writeFile(filePath, file.buffer, (err) => {
+  //       if (err) {
+  //         reject(err);
+  //       } else {
+  //         resolve(filePath);
+  //       }
+  //     });
+  //   });
+  // }
 
   async updateById(
     id: string,

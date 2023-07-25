@@ -17,7 +17,7 @@ import { CityEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Cities')
-@Controller('api/cities')
+@Controller('cities')
 export class CitiesController {
   constructor(private citiesService: CitiesService) {}
 

@@ -12,7 +12,7 @@ import { CreateTransactionDto } from './dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { UseRoles } from 'nest-access-control';
 
-@Controller('api/transactions')
+@Controller('transactions')
 export class TransactionController {
   constructor(private transactionService: TransactionService) {}
 

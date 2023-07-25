@@ -37,7 +37,6 @@ async function bootstrap() {
 
   const prismaService = app.get(DbService);
   await prismaService.enableShutdownHooks(app);
-  // configureSwaggerDocs(app, config);
   const swaggerDoc = new SwaggerDocumentation(app);
   swaggerDoc.serve();
   await app.listen(WBMS_APP_PORT || 6001);

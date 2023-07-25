@@ -27,11 +27,15 @@ import { AtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
 import { ACGuard, AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AccessControlModule.forRoles(RBAC_POLICY),
+    MulterModule.register({
+      dest: './files/uploads', // specify the destination folder for uploaded files
+    }),
     DbModule,
     AuthModule,
     TransactionModule,
@@ -56,18 +60,18 @@ import { RBAC_POLICY } from './auth/rbac/rbac-policy';
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AtGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: ACGuard
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TimestampInterceptor,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AtGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ACGuard,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: TimestampInterceptor,
+    // },
   ],
 })
 export class AppModule {}

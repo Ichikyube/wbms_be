@@ -17,7 +17,7 @@ import { ProductGroupEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Product Groups')
-@Controller('api/product-groups')
+@Controller('product-groups')
 export class ProductGroupsController {
   constructor(private productGroupsService: ProductGroupsService) {}
 

@@ -22,7 +22,7 @@ import { UseRoles } from 'nest-access-control';
   action: 'read',
   possession: 'any',
 })
-@Controller('api/companies')
+@Controller('companies')
 export class CompaniesController {
   constructor(private companiesService: CompaniesService) {}
 

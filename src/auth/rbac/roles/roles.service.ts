@@ -1,30 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Role } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { RoleEntity } from './entities/roles.entity';
 
 @Injectable()
 export class RolesService {
   constructor(private readonly db: DbService) {}
 
-  async createRole(data: Prisma.RoleCreateInput): Promise<Role> {
-    return this.db.role.create({
-      data,
-    });
+  async createRole(data: CreateRoleDto): Promise<RoleEntity> {
+    const params = {
+      data: {
+        ...data,
+        userCreated: '',
+        userModified: '',
+      },
+    };
+    const record = await this.db.role.create(params);
+
+    return record;
   }
 
-// async createRole(name: string): Promise<Role> {
-//   const role = new Role();
-//   role.name = name;
-//   return await this.roleRepository.save(role);
-// }
-// async findByName(role: RoleEnum): Promise<Role | null> {
-//   return this.db.role.findUnique({
-//     where: {
-//       name: role,
-//     },
-//   });
-// }
-  async findRoleById(id: number): Promise<Role | null> {
+  async findRoleById(id: number): Promise<RoleEntity | null> {
     return this.db.role.findUnique({
       where: { id },
       include: {
@@ -34,20 +31,23 @@ export class RolesService {
     });
   }
 
-  async updateRole(id: number, data: Prisma.RoleUpdateInput): Promise<Role> {
+  async updateRole(
+    id: number,
+    data: Prisma.RoleUpdateInput,
+  ): Promise<RoleEntity> {
     return this.db.role.update({
       where: { id },
       data,
     });
   }
 
-  async deleteRole(id: number): Promise<Role> {
+  async deleteRole(id: number): Promise<RoleEntity> {
     return this.db.role.delete({
       where: { id },
     });
   }
 
-  async findAllRoles(): Promise<Role[]> {
+  async findAllRoles(): Promise<RoleEntity[]> {
     return this.db.role.findMany({
       include: {
         RolePermission: true,
@@ -56,7 +56,6 @@ export class RolesService {
     });
   }
 }
-
 
 // async findAllAsMap(): Promise<Map<string, Role>> {
 //   const entities = await this.db.role.findMany();

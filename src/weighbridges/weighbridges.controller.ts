@@ -17,7 +17,7 @@ import { WeighbridgeEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Weighbridges')
-@Controller('api/weighbridges')
+@Controller('weighbridges')
 export class WeighbridgesController {
   constructor(private weighbridgesService: WeighbridgesService) {}
 

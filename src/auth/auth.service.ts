@@ -20,9 +20,9 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async signup(dto: CreateUserDto): Promise<UserEntity> {
+  async signup(dto: CreateUserDto, file: Express.Multer.File): Promise<UserEntity> {
     const userId = '';
-    const user = await this.usersService.create(dto, userId);
+    const user = await this.usersService.create(dto, file, userId);
     const tokens = await this.signTokens({
       sub: user.id,
       username: user.username,

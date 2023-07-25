@@ -10,7 +10,7 @@ import {
 import { BarcodeTypesService } from './barcodeTypes.service';
 import { UseRoles } from 'nest-access-control';
 
-@Controller('api/barcodetypes')
+@Controller('barcodetypes')
 export class BarcodeTypesController {
   constructor(private customerTypesService: BarcodeTypesService) {}
 

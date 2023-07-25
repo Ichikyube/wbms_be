@@ -14,7 +14,7 @@ import { DecodeQrcodeDto, UpdateSemaiDto } from './dto';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Semai')
-@Controller('api/semai')
+@Controller('semai')
 export class SemaiController {
   constructor(private readonly semaiService: SemaiService) {}
   @Get('products')

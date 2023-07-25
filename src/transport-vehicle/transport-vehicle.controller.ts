@@ -17,7 +17,7 @@ import { TransportVehicleEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Transport Vehicles')
-@Controller('api/transport-vehicle')
+@Controller('transport-vehicle')
 export class TransportVehicleController {
   constructor(
     private readonly transportVehicleService: TransportVehicleService,

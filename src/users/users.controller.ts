@@ -13,7 +13,15 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 
 import { UsersService } from './users.service';
@@ -25,8 +33,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 // import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
-@UseGuards(AtGuard)
-@Controller('api/users')
+@Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -210,14 +217,29 @@ export class UsersController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file', multerOptions))
+  @UseInterceptors(FileInterceptor('image', { dest: './upload' }))
   @UseRoles({
     resource: 'user',
     action: 'create',
     possession: 'any',
   })
+  @ApiOperation({
+    summary: 'Create a user',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiCreatedResponse({ description: 'User has been successfully created' })
+  @ApiBadRequestResponse({
+    description: 'Some character error or type error',
+  })
+  @ApiForbiddenResponse({
+    description: 'User already exists',
+  })
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateUserDto, @UploadedFile() file, @Req() req: Request) {
+  async create(
+    @Body() dto: CreateUserDto,
+    @UploadedFile('image') file: Express.Multer.File,
+    @Req() req: Request,
+  ) {
     const dataOut = {
       status: true,
       message: '',
@@ -228,7 +250,8 @@ export class UsersController {
     };
 
     try {
-      const userId = req.user['id'];
+      const userId = ''; //req.user['id'];
+
       const user = await this.usersService.create(dto, file, userId);
 
       const { username, email, name, division, position, phone } = user;

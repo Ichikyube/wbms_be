@@ -17,7 +17,7 @@ import { StorageTankEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Storage Tanks')
-@Controller('api/storage-tanks')
+@Controller('storage-tanks')
 export class StorageTanksController {
   constructor(private storageTanksService: StorageTanksService) {}
 

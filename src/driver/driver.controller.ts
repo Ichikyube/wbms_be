@@ -17,7 +17,7 @@ import { DriverEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Drivers')
-@Controller('api/driver')
+@Controller('driver')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 

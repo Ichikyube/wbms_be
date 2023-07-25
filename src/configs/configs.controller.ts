@@ -10,7 +10,7 @@ import {
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 
-@Controller('api/configs')
+@Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 

@@ -17,7 +17,7 @@ import { CustomerEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
 
 @ApiTags('Customers')
-@Controller('api/customers')
+@Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}
 

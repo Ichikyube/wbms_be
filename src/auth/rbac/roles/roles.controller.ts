@@ -9,36 +9,60 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AtGuard } from 'src/common/guards';
-import { DbService } from 'src/db/db.service';
 import { RolesService } from './roles.service';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { RoleEntity } from './entities/roles.entity';
+import { CreateRoleDto } from './dto/create-role.dto';
 
+@ApiTags('Roles')
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  // @Get()
-  // getAllRoles() {
-  //   return this.rolesService.getAllRoles();
-  // }
+  @Get()
+  @ApiCreatedResponse({ type: RoleEntity })
+  getAllRoles() {
+    return this.rolesService.findAllRoles();
+  }
 
-  // @Get(':id')
-  // getRolesById(@Param() { id }) {
-  //   return this.rolesService.getProductById(id);
-  // }
+  @Get(':id')
+  getRoleById(@Param() { id }) {
+    return this.rolesService.findRoleById(id);
+  }
 
-  // @Post()
-  // @UseGuards(AtGuard)
-  // async createProduct(@Body() role) {
-  //   return this.rolesService.createRole(role);
-  // }
+  @Post()
+  @ApiCreatedResponse({ type: RoleEntity })
+  async createRole(@Body() role: CreateRoleDto) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        role: null,
+      },
+      logs: {},
+    };
 
-  // @Patch(':id')
-  // async updateProduct(@Param() { id }, @Body() params) {
-  //   return this.rolesService.updateRole(id, params);
-  // }
+    try {
+      const userId = ''; //req.user['id'];
+      const record = await this.rolesService.createRole(role);
 
-  // @Delete(':id')
-  // async deleteProduct(@Param() { id }) {
-  //   return this.rolesService.deleteRole(id);
-  // }
+      dataOut.data.role = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, reqBody: role, error };
+    }
+
+    return dataOut;
+  }
+
+  @Patch(':id')
+  async updateRole(@Param() { id }, @Body() params) {
+    return this.rolesService.updateRole(id, params);
+  }
+
+  @Delete(':id')
+  async deleteRole(@Param() { id }) {
+    return this.rolesService.deleteRole(id);
+  }
 }
