@@ -28,14 +28,14 @@ import { TimestampInterceptor } from './common/interceptors/timestamp.intercepto
 import { ACGuard, AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
 import { MulterModule } from '@nestjs/platform-express';
+import { multerOptions } from './configs/multer.config';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AccessControlModule.forRoles(RBAC_POLICY),
-    MulterModule.register({
-      dest: './files/uploads', // specify the destination folder for uploaded files
-    }),
+    MulterModule.register(multerOptions),
     DbModule,
     AuthModule,
     TransactionModule,
@@ -57,6 +57,7 @@ import { MulterModule } from '@nestjs/platform-express';
     SemaiModule,
     DriverModule,
     TransportVehicleModule,
+    FilesModule
   ],
   controllers: [],
   providers: [

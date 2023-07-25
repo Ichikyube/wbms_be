@@ -4,6 +4,7 @@ import { Role } from './roles/roles.type';
 
 export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 
+
 // prettier-ignore
 RBAC_POLICY
   .grant(Role.STAFF)
@@ -20,6 +21,8 @@ RBAC_POLICY
   .deny(Role.ADMIN)
     .read('managedEmployeeData')
 
+
+    
 // This is actually how the grants are maintained internally.
 let grantsObject = {
   admin: {

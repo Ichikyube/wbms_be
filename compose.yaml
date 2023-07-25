@@ -33,30 +33,6 @@ services:
       # - ./database/my_custom.cnf:/opt/bitnami/mariadb/conf/my_custom.cnf:ro
     networks:
       - armin-net
-  wbms_be:
-    image: almyra/wbms_bet:v1.1
-    depends_on:
-      - wbms-db
-    restart: always
-    ports:
-      - 6001:6001
-    build:
-      context: .
-    environment:
-      NODE_ENV: production
-      WBMS_APP_PORT: 6001
-      WBMS_DB_DOMAIN: "wbms-db"
-      WBMS_DB_PORT: "3306"
-      WBMS_DB_USER: "wbms_dbu"
-      WBMS_DB_PASSWORD: "3031323334"
-      WBMS_DB_NAME: "wbms"
-      WBMS_WB_PORT: "9001"
-      WBMS_WB_MIN_WEIGHT: 1
-      WBMS_WB_STABLE_PERIOD: 3000
-
-      WBMS_SEMAI_API_KEY: "lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso"
-    networks:
-      - armin-net
   wbms-phpmyadmin:
     image: phpmyadmin
     restart: always

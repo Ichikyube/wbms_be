@@ -42,6 +42,13 @@ model City {
   customers Customer[]
 }
 
+model Image {
+  id        Int      @id @default(autoincrement())
+  path      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Company {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0) //0: WBMS, 1: eDispatch
@@ -299,20 +306,10 @@ model User {
   roleModel         Role   @relation(fields: [roleId], references: [id])
 }
 
-enum BaseRole {
-  Staff
-  Supervisor
-  Manager
-  MillHead
-  Administrator
-}
-
 model Role {
   id         Int       @id @default(autoincrement())
   name       String    @unique @db.VarChar(255)
-  description String @db.VarChar(255)
-
-  RolePermission      RolePermission[]
+  Permission   RolePermission[]
 
   userCreated  String   @db.Char(36)
   userModified String   @db.Char(36)
@@ -323,12 +320,14 @@ model Role {
 }
 
 model RolePermission {
-  id          Int   @id @default(autoincrement())
-  roleId      Int
-  role        Role?  @relation(fields: [roleId], references: [id])
-  permission  Permission[]
-
+  id           Int       @id @default(autoincrement())
+  resource_id  Int 
+  Permission   Permission[]
+  roleId       Int
+  role         Role?  @relation(fields: [roleId], references: [id])
+  userCreated  String   @db.Char(36)
   userModified String   @db.Char(36)
+  dtCreated    DateTime @default(now())
   dtModified   DateTime @updatedAt
 }
 
@@ -343,16 +342,14 @@ enum Possession {
   ANY
 }
 
-model Permission {
-  id         Int       @id @default(autoincrement())
-  resource_id  String    @db.Char(36)   
-  actions      Json
+model Permission  {
+  id          String @id @default(uuid()) @db.Char(36)
+  action      Action
+  possesion   Possession
   attributes   String
-  possesion    String
-  role         String
   role_permission_id Int
   role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
-
+  
   userCreated  String   @db.Char(36)
   userModified String   @db.Char(36)
   dtCreated    DateTime @default(now())
