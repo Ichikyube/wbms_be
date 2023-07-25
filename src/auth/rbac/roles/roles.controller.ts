@@ -11,8 +11,8 @@ import {
 import { AtGuard } from 'src/common/guards';
 import { RolesService } from './roles.service';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { RoleEntity } from './entities/roles.entity';
 import { CreateRoleDto } from './dto/create-role.dto';
+import { RoleEntity } from 'src/entities/roles.entity';
 
 @ApiTags('Roles')
 @Controller('roles')

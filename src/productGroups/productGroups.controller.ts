@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { ProductGroupsService } from './productGroups.service';
 import { CreateProductGroupDto, UpdateProductGroupDto } from './dto';
-import { ProductGroupEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { ProductGroupEntity } from 'src/entities';
 
 @ApiTags('Product Groups')
 @Controller('product-groups')

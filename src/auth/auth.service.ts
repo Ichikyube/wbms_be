@@ -8,7 +8,7 @@ import { SigninDto } from './dto';
 import { Tokens } from './types';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/entities/user.entity';
 import { Response } from 'express';
 
 @Injectable()

@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { SitesService } from './sites.service';
 import { CreateSiteDto, UpdateSiteDto } from './dto';
-import { SiteEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { SiteEntity } from 'src/entities';
 
 @ApiTags('Sites')
 @Controller('sites')

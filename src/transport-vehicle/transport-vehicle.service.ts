@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateTransportVehicleDto, UpdateTransportVehicleDto } from './dto';
-import { TransportVehicleEntity } from './entities';
+import { TransportVehicleEntity } from 'src/entities';
 
 @Injectable()
 export class TransportVehicleService {

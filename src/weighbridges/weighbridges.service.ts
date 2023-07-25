@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
-import { WeighbridgeEntity } from './entities';
+import { WeighbridgeEntity } from 'src/entities';
 
 @Injectable()
 export class WeighbridgesService {

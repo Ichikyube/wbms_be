@@ -4,7 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { DbService } from "src/db/db.service";
 import { SemaiService } from "src/semai/semai.service";
 import { CreateSiteDto, UpdateSiteDto } from "./dto";
-import { SiteEntity } from "./entities/site.entity";
+import { SiteEntity } from "src/entities";
 
 @Injectable()
 export class SitesService {

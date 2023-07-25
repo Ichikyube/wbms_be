@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { MillsService } from './mills.service';
 import { CreateMillDto, UpdateMillDto } from './dto';
-import { MillEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { MillEntity } from 'src/entities';
 
 @ApiTags('Mills')
 @Controller('mills')

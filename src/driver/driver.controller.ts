@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { DriverService } from './driver.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
-import { DriverEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { DriverEntity } from 'src/entities';
 
 @ApiTags('Drivers')
 @Controller('driver')

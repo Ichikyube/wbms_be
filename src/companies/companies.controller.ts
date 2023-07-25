@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
-import { CompanyEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { CompanyEntity } from 'src/entities';
 
 @ApiTags('Companies')
 @UseRoles({

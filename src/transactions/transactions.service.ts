@@ -6,11 +6,8 @@ import * as moment from "moment";
 import { SemaiService } from "src/semai/semai.service";
 import { ConfigsService } from "src/configs/configs.service";
 
-import { CreateTransactionDto } from "./dto";
-
-import { DraftTransactionDto } from "./dto/draft-transaction.dto";
+import { CreateTransactionDto } from "./dto/manual-transaction.dto";
 import { QrcodeDto } from "src/semai/dto/qrcode.dt";
-import { TransactionEntity } from "./transaction.entity";
 
 @Injectable()
 export class TransactionService {
@@ -138,7 +135,7 @@ export class TransactionService {
         );
       }
 
-      const transaction: DraftTransactionDto = this.copyQrToTransaction(
+      const transaction: CreateTransactionDto = this.copyQrToTransaction(
         decodedQrcode,
         tType
       );
@@ -157,7 +154,7 @@ export class TransactionService {
       //     if (dtTransaction)
       //       throw new Error('Error: vStatus atau dStatus tidak valid.');
 
-      //     transaction = new DraftTransactionDto();
+      //     transaction = new CreateTransactionDto();
 
       //     transaction.tType = tType;
       //     transaction.bonTripNo = `P041${moment().format('YYMMDDHHmmss')}`; //moment().valueOf()
@@ -166,22 +163,22 @@ export class TransactionService {
 
       //   if (decodedQrcode.deliveryStatus == 15) {
       //     if (!dtTransaction) {
-      //       transaction = new DraftTransactionDto();
+      //       transaction = new CreateTransactionDto();
 
       //       transaction.tType = tType;
       //       transaction.bonTripNo = `P041${moment().format('YYMMDDHHmmss')}`; //moment().valueOf()
-      //     } else transaction = dtTransaction as DraftTransactionDto;
+      //     } else transaction = dtTransaction as CreateTransactionDto;
 
       //     transaction.progressStatus = 10;
       //   }
       // }
 
       // if (!dtTransaction) {
-      //   transaction = new DraftTransactionDto();
+      //   transaction = new CreateTransactionDto();
 
       //   transaction.tType = tType;
       //   transaction.bonTripNo = '';
-      // } else transaction = dtTransaction as DraftTransactionDto;
+      // } else transaction = dtTransaction as CreateTransactionDto;
 
       dataOut.data.transaction = transaction;
 
@@ -333,8 +330,8 @@ export class TransactionService {
     return dataOut;
   }
 
-  private copyQrToTransaction(dto: QrcodeDto, tType): DraftTransactionDto {
-    const transaction = new DraftTransactionDto();
+  private copyQrToTransaction(dto: QrcodeDto, tType): CreateTransactionDto {
+    const transaction = new CreateTransactionDto();
 
     transaction.tType = tType;
 

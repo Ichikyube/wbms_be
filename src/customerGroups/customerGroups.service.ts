@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateCustomerGroupDto, UpdateCustomerGroupDto } from './dto';
-import { CustomerGroupEntity } from './entities';
+import { CustomerGroupEntity } from 'src/entities';
 
 @Injectable()
 export class CustomerGroupsService {

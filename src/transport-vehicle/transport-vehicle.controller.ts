@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { TransportVehicleService } from './transport-vehicle.service';
 import { CreateTransportVehicleDto, UpdateTransportVehicleDto } from './dto';
-import { TransportVehicleEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { TransportVehicleEntity } from 'src/entities';
 
 @ApiTags('Transport Vehicles')
 @Controller('transport-vehicle')

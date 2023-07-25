@@ -30,7 +30,6 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
 import { multerOptions } from 'src/configs/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
 @Controller('users')
@@ -217,7 +216,7 @@ export class UsersController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('image', { dest: './upload' }))
+  @UseInterceptors(FileInterceptor('image', multerOptions))
   @UseRoles({
     resource: 'user',
     action: 'create',

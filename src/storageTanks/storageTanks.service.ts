@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateStorageTankDto, UpdateStorageTankDto } from './dto';
-import { StorageTankEntity } from './entities';
+import { StorageTankEntity } from 'src/entities';
 
 @Injectable()
 export class StorageTanksService {

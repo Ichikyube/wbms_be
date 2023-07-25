@@ -8,7 +8,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
-import { Permission, Prisma } from '@prisma/client';
+import { PermissionEntity } from 'src/entities/permission.entity';
 
 @Controller('permissions')
 export class PermissionsController {
@@ -24,7 +24,7 @@ export class PermissionsController {
   @Get(':id')
   async findPermissionById(
     @Param('id') id: number,
-  ): Promise<Permission | null> {
+  ): Promise<PermissionEntity | null> {
     return this.permissionsService.findPermissionById(id);
   }
 
@@ -32,17 +32,17 @@ export class PermissionsController {
   async updatePermission(
     @Param('id') id: number,
     @Body() data: any,
-  ): Promise<Permission> {
+  ): Promise<PermissionEntity> {
     return this.permissionsService.updatePermission(id, data);
   }
 
   @Delete(':id')
-  async deletePermission(@Param('id') id: number): Promise<Permission> {
+  async deletePermission(@Param('id') id: number): Promise<PermissionEntity> {
     return this.permissionsService.deletePermission(id);
   }
 
   @Get()
-  async findAllPermissions(): Promise<Permission[]> {
+  async findAllPermissions(): Promise<PermissionEntity[]> {
     return this.permissionsService.findAllPermissions();
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
-import { DriverEntity } from './entities';
+import { DriverEntity } from 'src/entities';
 
 @Injectable()
 export class DriverService {

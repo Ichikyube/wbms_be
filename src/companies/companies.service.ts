@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
-import { CompanyEntity } from './entities';
+import { CompanyEntity } from 'src/entities';
 
 @Injectable()
 export class CompaniesService {

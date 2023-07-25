@@ -8,9 +8,8 @@ import { hash } from 'argon2';
 
 import { DbService } from 'src/db/db.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { UserEntity } from './entities';
-import path from 'path';
-import fs from 'fs';
+import { UserEntity } from 'src/entities';
+
 @Injectable()
 export class UsersService {
   constructor(private db: DbService) {}
@@ -88,7 +87,7 @@ export class UsersService {
   }
 
   async create(
-    dto: any,
+    dto: CreateUserDto,
     file: Express.Multer.File,
     userId: string,
   ): Promise<UserEntity> {
@@ -109,7 +108,7 @@ export class UsersService {
       phone: dto.phone,
       hashedPassword: hashedPassword,
       role: dto.role,
-      roleModel: dto.roleModel,
+      roleId: dto.roleId,
       userCreated: userId,
       userModified: userId,
     };
@@ -130,34 +129,6 @@ export class UsersService {
 
     return user;
   }
-
-  // private async saveProfilePicture(file: Express.Multer.File): Promise<string> {
-  //   const fileExt = path.extname(file.originalname);
-  //   const randomName = new Date().getTime().toString();
-  //   const newFileName = `${randomName}${fileExt}`;
-
-  //   // Define the directory where the profile pictures will be stored
-  //   const uploadDirectory = path.join(
-  //     __dirname,
-  //     '../../uploads/profilePictures',
-  //   );
-
-  //   if (!fs.existsSync(uploadDirectory)) {
-  //     fs.mkdirSync(uploadDirectory, { recursive: true });
-  //   }
-
-  //   const filePath = path.join(uploadDirectory, newFileName);
-
-  //   return new Promise((resolve, reject) => {
-  //     fs.writeFile(filePath, file.buffer, (err) => {
-  //       if (err) {
-  //         reject(err);
-  //       } else {
-  //         resolve(filePath);
-  //       }
-  //     });
-  //   });
-  // }
 
   async updateById(
     id: string,

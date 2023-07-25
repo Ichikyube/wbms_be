@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { WeighbridgesService } from './weighbridges.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
-import { WeighbridgeEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { WeighbridgeEntity } from 'src/entities';
 
 @ApiTags('Weighbridges')
 @Controller('weighbridges')

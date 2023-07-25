@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { DbService } from 'src/db/db.service';
 import { CreateMillDto, UpdateMillDto } from './dto';
-import { MillEntity } from './entities';
+import { MillEntity } from 'src/entities';
+
 
 @Injectable()
 export class MillsService {

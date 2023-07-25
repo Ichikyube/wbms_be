@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 
 import { DbService } from "src/db/db.service";
 import { CreateProvinceDto, UpdateProvinceDto } from "./dto";
-import { ProvinceEntity } from "./entities";
+import { ProvinceEntity } from "src/entities";
+
 
 @Injectable()
 export class ProvincesService {

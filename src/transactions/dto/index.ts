@@ -1,1 +1,1 @@
-export * from './create-transaction.dto';
+export * from './barcode-transaction.dto';

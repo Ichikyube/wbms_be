@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { StorageTanksService } from './storageTanks.service';
 import { CreateStorageTankDto, UpdateStorageTankDto } from './dto';
-import { StorageTankEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { StorageTankEntity } from 'src/entities';
 
 @ApiTags('Storage Tanks')
 @Controller('storage-tanks')

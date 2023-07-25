@@ -13,8 +13,8 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { CustomerTypesService } from './customerTypes.service';
 import { CreateCustomerTypeDto, UpdateCustomerTypeDto } from './dto';
-import { CustomerTypeEntity } from './entities';
 import { UseRoles } from 'nest-access-control';
+import { CustomerTypeEntity } from 'src/entities';
 
 @ApiTags('Customer Types')
 @Controller('customer-types')
