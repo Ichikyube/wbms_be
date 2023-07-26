@@ -13,3 +13,4 @@ export class RoleEntity {
   dtModified?: Date;
   users?: UserEntity[];
 }
+

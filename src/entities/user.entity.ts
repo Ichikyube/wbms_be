@@ -11,7 +11,7 @@ export class UserEntity implements User {
   @ApiProperty() address: string;
   @ApiProperty() birthDate: Date;
   @ApiProperty() roleId: number;
-  @ApiProperty() profilePic: string;
+  @ApiProperty({ type: String }) profilePic: string;
 
   @ApiProperty() name: string;
   @ApiProperty() division: string;
