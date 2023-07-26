@@ -15,7 +15,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { multerOptions } from 'src/configs/multer.config';
+import { multerOptions } from 'src/settings/multer.config';
 import { FilesService } from './files.service';
 import { Request, Response } from 'express';
 @ApiTags('Files')

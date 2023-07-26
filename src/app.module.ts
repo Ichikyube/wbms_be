@@ -28,7 +28,7 @@ import { TimestampInterceptor } from './common/interceptors/timestamp.intercepto
 import { ACGuard, AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
 import { MulterModule } from '@nestjs/platform-express';
-import { multerOptions } from './configs/multer.config';
+import { multerOptions } from './settings/multer.config';
 import { FilesModule } from './files/files.module';
 
 @Module({

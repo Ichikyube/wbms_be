@@ -12,6 +12,7 @@ import {
   HttpCode,
   UploadedFile,
   UseInterceptors,
+  Res,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -22,13 +23,13 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 import { UsersService } from './users.service';
 import { AtGuard } from 'src/common/guards';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
-import { multerOptions } from 'src/configs/multer.config';
+import { multerOptions } from 'src/settings/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
@@ -73,6 +74,8 @@ export class UsersController {
     action: 'read',
     possession: 'any',
   })
+  @ApiOperation({ summary: 'Lists of users' })
+  @HttpCode(HttpStatus.OK)
   async getAll() {
     const dataOut = {
       status: true,
@@ -250,7 +253,7 @@ export class UsersController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['id'];
 
       const user = await this.usersService.create(dto, file, userId);
 

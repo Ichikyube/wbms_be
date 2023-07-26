@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { multerOptions } from 'src/configs/multer.config';
+import { multerOptions } from 'src/settings/multer.config';
 import { MulterModule } from '@nestjs/platform-express';
 
 @Module({

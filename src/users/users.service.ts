@@ -3,6 +3,8 @@ import {
   ForbiddenException,
   NotFoundException,
   BadRequestException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { hash } from 'argon2';
@@ -89,26 +91,18 @@ export class UsersService {
 
   async create(
     dto: CreateUserDto,
-    file: {
-      fieldname: string;
-      originalname: string;
-      encoding: string;
-      mimetype: string;
-      size: number;
-      destination: string;
-      filename: string;
-      path: string;
-      buffer: Buffer;
-    },
+    file: Express.Multer.File,
     userId: string,
   ): Promise<UserEntity> {
     // generate the password hash
-    console.log(file)
-    const hashedPassword = await hash(dto.password);
-    if (!file) {
-      throw new BadRequestException('No file uploaded.');
+    const { username } = dto;
+    let user = await this.db.user.findFirst({ where: { username } });
+    if (user) {
+      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
-    const profilePicturePath = file.filename;
+    const hashedPassword = await hash(dto.password);
+
+    dto.profilePic = file.filename;
     const data = {
       username: dto.username,
       email: dto.email,
@@ -127,7 +121,7 @@ export class UsersService {
       userModified: userId,
     };
     // save the new user in the db
-    const user = await this.db.user
+    user = await this.db.user
       .create({
         data,
       })
