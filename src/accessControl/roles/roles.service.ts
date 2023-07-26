@@ -23,19 +23,27 @@ export class RolesService {
     ]);
   }
 
-  async createRole(data: CreateRoleDto): Promise<RoleEntity> {
+  async createRole(createRoleDto: CreateRoleDto,  userId: string): Promise<any> {
+    const { name, rolePermission } = createRoleDto;
+
     let role = await this.db.role.findMany({
       where: {
         name: {
-          equals: data.name,
+          equals: createRoleDto.name,
         },
       },
     });
     if (!role) {
+      const roleData = { name };
+      const rolePermissionsData = rolePermission.map(permission => ({
+        resourceId: permission.resourceId,
+        permissions: permission.permissions,
+      }));
+  
       role = await this.db.role.create({
         data: {
           ...roleData,
-          rolePermissions: {
+          rolePermission: {
             createMany: {
               data: rolePermissionsData.map(permissionData => ({
                 ...permissionData,
@@ -47,6 +55,8 @@ export class RolesService {
               })),
             },
           },
+          userCreated: userId,
+          userModified: '',
         },
         include: {
           rolePermissions: {
@@ -57,21 +67,7 @@ export class RolesService {
         },
       });
     }
-
-
-    
-
     return role;
-    const params = {
-      data: {
-        ...data,
-        userCreated: '',
-        userModified: '',
-      },
-    };
-    const record = await this.db.role.create(params);
-
-    return record;
   }
 
   async findRoleById(id: number): Promise<RoleEntity | null> {

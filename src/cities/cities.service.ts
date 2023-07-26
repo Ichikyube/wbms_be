@@ -69,7 +69,7 @@ export class CitiesService {
       data: {
         ...dto,
         userCreated: userId,
-        userModified: userId,
+        userModified: '',
       },
     };
 

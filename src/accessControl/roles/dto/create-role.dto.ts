@@ -1,8 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RolePermissionEntity } from 'src/entities/role-permission.entity';
+import { ArrayNotEmpty, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { CreateRolePermissionDto } from 'src/generated/nestjs-dto/create-rolePermission.dto';
 
 export class CreateRoleDto {
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty({ type: String })
   name: string;
-  permissions?: RolePermissionEntity[];
+
+  @ValidateNested({ each: true })
+  @ArrayNotEmpty()
+  readonly rolePermission?: CreateRolePermissionDto[];
 }

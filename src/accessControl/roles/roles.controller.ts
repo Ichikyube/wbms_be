@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AtGuard } from 'src/common/guards';
 import { RolesService } from './roles.service';
@@ -32,7 +33,7 @@ export class RolesController {
 
   @Post()
   @ApiCreatedResponse({ type: RoleEntity })
-  async createRole(@Body() role: CreateRoleDto) {
+  async createRole(@Body(new ValidationPipe()) dto: CreateRoleDto) {
     const dataOut = {
       status: true,
       message: '',
@@ -44,13 +45,13 @@ export class RolesController {
 
     try {
       const userId = ''; //req.user['id'];
-      const record = await this.rolesService.createRole(role);
+      const record = await this.rolesService.createRole(dto, userId);
 
       dataOut.data.role = record;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, reqBody: role, error };
+      dataOut.logs = { ...dataOut.logs, reqBody: dto, error };
     }
 
     return dataOut;
