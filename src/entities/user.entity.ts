@@ -9,7 +9,8 @@ export class UserEntity implements User {
   @ApiProperty() nik: string;
 
   @ApiProperty() roleId: number;
-  @ApiProperty({ type: String }) profilePic: string;
+  @ApiProperty() role: string;
+  @ApiProperty() profilePic: string;
 
   @ApiProperty() name: string;
   @ApiProperty() division: string;
@@ -19,7 +20,6 @@ export class UserEntity implements User {
   @ApiProperty() hashedPassword: string;
   @ApiProperty() hashedRT: string | null;
 
-  @ApiProperty() role: string;
   @ApiProperty() isEmailVerified: boolean;
   @ApiProperty() isLDAPUser: boolean;
   @ApiProperty() isDisabled: boolean;

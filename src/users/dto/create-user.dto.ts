@@ -23,12 +23,6 @@ export class CreateUserDto {
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string = 'Bambang Tri';
 
-  @ApiProperty({
-    type: 'string',
-    format: 'binary',
-  })
-  file?: string;
-
   @ApiProperty()
   @IsString()
   division?: string;
@@ -42,12 +36,12 @@ export class CreateUserDto {
   phone?: string;
 
   // @IsEnum(UserRole)
-  @ApiProperty({ type: Number })
-  roleId?: number;
+  @ApiProperty()
+  roleId: number = 1;
 
   @ApiProperty({ type: String })
   role: string = 'staff';
 
-  @ApiProperty({ type: Boolean, default: true })
-  isLDAPUser: boolean;
+  @ApiProperty({ type: Boolean, default: false })
+  isLDAPUser: boolean = false;
 }

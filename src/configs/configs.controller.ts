@@ -9,8 +9,9 @@ import {
 } from '@nestjs/common';
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
+import { Role } from 'src/accessControl/roles/roles.type';
 
-// @UseRoles('admin')
+@UseRoles(Role.ADMIN)
 @Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}

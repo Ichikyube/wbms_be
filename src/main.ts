@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
-import SwaggerDocumentation from './configs/swagger.config';
+import SwaggerDocumentation from './settings/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,10 +23,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  // app.useStaticAssets(join(__dirname, '..', 'public'), {
-  //   index: false,
-  //   prefix: '/public',
-  // });
+
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({

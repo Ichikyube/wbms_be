@@ -1,0 +1,137 @@
+// create-role.dto.ts
+import { IsNotEmpty, IsString, ValidateNested, ArrayNotEmpty } from 'class-validator';
+
+class CreatePermissionDto {
+  @IsNotEmpty()
+  @IsString()
+  readonly onlyRead: string;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly canCreate: string;
+}
+
+class CreateRolePermissionDto {
+  @IsNotEmpty()
+  @IsString()
+  readonly resourceId: string;
+
+  @ValidateNested()
+  readonly permissions: CreatePermissionDto[];
+}
+
+export class CreateRoleDto {
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
+
+  @ValidateNested({ each: true })
+  @ArrayNotEmpty()
+  readonly rolePermissions: CreateRolePermissionDto[];
+}
+
+// roles.controller.ts
+import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
+import { RoleService } from './role.service';
+import { CreateRoleDto } from './create-role.dto';
+
+@Controller('roles')
+export class RolesController {
+  constructor(private readonly roleService: RoleService) {}
+
+  @Post()
+  async createRole(@Body(new ValidationPipe()) createRoleDto: CreateRoleDto) {
+    try {
+      const role = await this.roleService.createRoleWithPermissions(createRoleDto);
+      return { success: true, data: role };
+    } catch (error) {
+      return { success: false, message: 'Error creating role.', error };
+    }
+  }
+}
+
+// role.service.ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'path-to-your-prisma-service'; // Import your Prisma service
+import { CreateRoleDto } from './create-role.dto';
+
+@Injectable()
+export class RoleService {
+  constructor(private prisma: PrismaService) {} // Inject the Prisma service
+
+  async createRoleWithPermissions(createRoleDto: CreateRoleDto): Promise<any> {
+    const { name, rolePermissions } = createRoleDto;
+    const roleData = { name };
+    const rolePermissionsData = rolePermissions.map(permission => ({
+      resourceId: permission.resourceId,
+      permissions: permission.permissions,
+    }));
+
+    const role = await this.prisma.role.create({
+      data: {
+        ...roleData,
+        rolePermissions: {
+          createMany: {
+            data: rolePermissionsData.map(permissionData => ({
+              ...permissionData,
+              permissions: {
+                createMany: {
+                  data: permissionData.permissions,
+                },
+              },
+            })),
+          },
+        },
+      },
+      include: {
+        rolePermissions: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
+    });
+
+    return role;
+  }
+}
+
+let permission = [
+  'read:own',
+  'create:own',
+  'update:own',
+  'delete:own',
+  'read:any',
+  'create:any',
+  'update:any',
+  'delete:any'
+]
+let MainSite = ['Labanan','T30', 'PKS']
+
+    // model Permission  {
+    //   id          String @id @default(uuid()) @db.Char(36)
+    //   action      Action
+    //   possesion   Possession
+    //   attributes   String
+    //   role_permission_id Int
+    //   role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
+    
+    // role: {
+    //   resource: {action, attributes},
+    // let resource = {
+    //   storageTanks: ['read', 'write'],
+    //   mills: ['read'],
+    // };
+
+    //jika role belum ada, maka data yg dibutuhkan untuk membuat role adalah, jika selain nama ada data onlyRead maka rolePermission=[read:own] 
+    // atau FULL maka rolePermission=[  'read:own','create:own','update:own','delete:own',] lalu buat rolePermission berdasarkan MainSite
+    // if (!role) {
+
+    //   if (data.permissions)
+    //     params.data.permissions = await this.permissionService.findMany(
+    //       data.permissions,
+    //     );
+    //   role = await this.roleRepository.save(role);
+    // }
+
+    //jadi begini

@@ -31,46 +31,37 @@ export class RolesService {
         },
       },
     });
+    if (!role) {
+      role = await this.db.role.create({
+        data: {
+          ...roleData,
+          rolePermissions: {
+            createMany: {
+              data: rolePermissionsData.map(permissionData => ({
+                ...permissionData,
+                permissions: {
+                  createMany: {
+                    data: permissionData.permissions,
+                  },
+                },
+              })),
+            },
+          },
+        },
+        include: {
+          rolePermissions: {
+            include: {
+              permissions: true,
+            },
+          },
+        },
+      });
+    }
 
-let permission = [
-  'read:own',
-  'create:own',
-  'update:own',
-  'delete:own',
-  'read:any',
-  'create:any',
-  'update:any',
-  'delete:any'
-]
-let MainSite = ['Labanan','T30', 'PKS']
 
-    // model Permission  {
-    //   id          String @id @default(uuid()) @db.Char(36)
-    //   action      Action
-    //   possesion   Possession
-    //   attributes   String
-    //   role_permission_id Int
-    //   role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
     
-    // role: {
-    //   resource: {action, attributes},
-    // let resource = {
-    //   storageTanks: ['read', 'write'],
-    //   mills: ['read'],
-    // };
 
-    //jika role belum ada, maka data yg dibutuhkan untuk membuat role adalah, jika selain nama ada data onlyRead maka rolePermission=[read:own] 
-    // atau FULL maka rolePermission=[  'read:own','create:own','update:own','delete:own',] lalu buat rolePermission berdasarkan MainSite
-    // if (!role) {
-
-    //   if (data.permissions)
-    //     params.data.permissions = await this.permissionService.findMany(
-    //       data.permissions,
-    //     );
-    //   role = await this.roleRepository.save(role);
-    // }
-
-    //jadi begini
+    return role;
     const params = {
       data: {
         ...data,

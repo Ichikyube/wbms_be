@@ -31,11 +31,14 @@ import {
   AccessControlModule,
   RolesBuilder,
 } from 'nest-access-control';
-import { RBAC_POLICY } from './auth/rbac/rbac-policy';
+
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
-import { RolesModule } from './auth/rbac/roles/roles.module';
-import { DbService } from './db/db.service';
+import { RBAC_POLICY } from './accessControl/rbac-policy';
+// import { DbService } from './db/db.service';
+// import { RolesModule } from './accessControl/roles/roles.module';
+// import { RbacModule } from './accessControl/rbac.module';
+
 
 @Module({
   imports: [
@@ -44,36 +47,27 @@ import { DbService } from './db/db.service';
       rootPath: join(__dirname, '..', '..', 'upload'),
       serveRoot: '/img',
     }),
-    // AccessControlModule.forRoles(RBAC_POLICY),
+    AccessControlModule.forRoles(RBAC_POLICY),
     // AccessControlModule.forRootAsync({
-    //   imports: [SharedModule],
-    //   inject: [PrismaService],
-    //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
-    //     let roles = await db.role.findMany({
-    //       where: {}, include: {
-    //         grants: { include: { permisssion: true } }
-    //       }
-    //     }),
-    // AccessControlModule.forRootAsync({
-    //   imports: [SharedModule],
+    //   imports: [RolesModule],
     //   inject: [DbService],
     //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
-    //     let roles = await db.role.findMany({
-    //       where: {}, include: {
-    //         grants: { include: { permisssion: true } }
-    //       }
-    //     })
-    //     let result = roles.map(role => {
-    //       return role.grants.map(grant => {
-    //         let { resource, action, attributes } = grant.permisssion
-    //         return { role: role.name, resource, action, attributes }
-    //       })
-    //     })
-    //     if (result) {
-    //       let grants = []
-    //       result.forEach((grant) => grants = grants.concat(grant))
-    //       return new RolesBuilder(grants)
-    //     }
+    //     // let roles = await db.role.findMany({
+    //     //   where: {}, include: {
+    //     //     grants: { include: { permisssion: true } }
+    //     //   }
+    //     // })
+    //     // let result = roles.map(role => {
+    //     //   return role.grants.map(grant => {
+    //     //     let { resource, action, attributes } = grant.permisssion
+    //     //     return { role: role.name, resource, action, attributes }
+    //     //   })
+    //     // })
+    //     // if (result) {
+    //     //   let grants = []
+    //     //   result.forEach((grant) => grants = grants.concat(grant))
+    //     //   return new RolesBuilder(grants)
+    //     // }
     //     return new RolesBuilder([])
     //   }
     // }),
@@ -99,7 +93,6 @@ import { DbService } from './db/db.service';
     DriverModule,
     TransportVehicleModule,
     FilesModule,
-    RolesModule,
   ],
   controllers: [],
   providers: [

@@ -284,9 +284,9 @@ model User {
   division       String  @db.VarChar(30)
   position       String  @db.VarChar(30)
 
-  profilePic     String
+  profilePic     String  
   
-  roleId         Int     
+  roleId         Int     @default(0)  
   role           String  @db.VarChar(30)
 
   hashedPassword String  @db.VarChar(100)
@@ -319,9 +319,9 @@ model Role {
 
 model RolePermission {
   id           Int       @id @default(autoincrement())
-  resource_id  Int 
+  resource_id  Int       @default(0)
   permission   Permission[]
-  roleId       Int
+  roleId       Int    @default(0)
   role         Role?  @relation(fields: [roleId], references: [id])
   userCreated  String   @db.Char(36)
   userModified String   @db.Char(36)
@@ -372,7 +372,7 @@ model Permission  {
   action      Action
   possesion   Possession
   attributes   String
-  role_permission_id Int
+  role_permission_id Int @default(0)
   role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
   
   userCreated  String   @db.Char(36)

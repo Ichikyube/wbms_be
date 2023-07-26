@@ -228,6 +228,17 @@ export class UsersController {
     summary: 'Create a user',
   })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @ApiCreatedResponse({ description: 'User has been successfully created' })
   @ApiBadRequestResponse({
     description: 'Some character error or type error',
@@ -239,7 +250,7 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() dto: CreateUserDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File, @Req() req: Request
   ) {
     console.log(file);
     const dataOut = {
