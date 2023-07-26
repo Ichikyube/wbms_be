@@ -26,7 +26,11 @@ import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
 import { AtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
-import { ACGuard, AccessControlModule, RolesBuilder } from 'nest-access-control';
+import {
+  ACGuard,
+  AccessControlModule,
+  RolesBuilder,
+} from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
@@ -50,6 +54,29 @@ import { DbService } from './db/db.service';
     //         grants: { include: { permisssion: true } }
     //       }
     //     }),
+    // AccessControlModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   inject: [DbService],
+    //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
+    //     let roles = await db.role.findMany({
+    //       where: {}, include: {
+    //         grants: { include: { permisssion: true } }
+    //       }
+    //     })
+    //     let result = roles.map(role => {
+    //       return role.grants.map(grant => {
+    //         let { resource, action, attributes } = grant.permisssion
+    //         return { role: role.name, resource, action, attributes }
+    //       })
+    //     })
+    //     if (result) {
+    //       let grants = []
+    //       result.forEach((grant) => grants = grants.concat(grant))
+    //       return new RolesBuilder(grants)
+    //     }
+    //     return new RolesBuilder([])
+    //   }
+    // }),
     DbModule,
     AuthModule,
     TransactionModule,
