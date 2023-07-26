@@ -216,7 +216,7 @@ export class UsersController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('image', multerOptions))
+  @UseInterceptors(FileInterceptor('image'))
   @UseRoles({
     resource: 'user',
     action: 'create',
@@ -236,9 +236,10 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() dto: CreateUserDto,
-    @UploadedFile('image') file: Express.Multer.File,
+    @UploadedFile('image') file,
     @Req() req: Request,
   ) {
+    console.log(file)
     const dataOut = {
       status: true,
       message: '',

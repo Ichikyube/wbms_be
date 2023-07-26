@@ -1,11 +1,16 @@
-import { PermissionEntity } from './permission.entity';
-import { RoleEntity } from './roles.entity';
-
+import { ApiProperty } from '@nestjs/swagger';
 export class RolePermissionEntity {
+  @ApiProperty({ type: Number })
   id: number;
-  roleId: number | null;
-  role?: RoleEntity | null;
-  permission?: PermissionEntity[];
+
+  @ApiProperty({ type: Number })
+  resource_id: number;
+
+  @ApiProperty({ type: Number })
+  roleId: number;
+
+  userCreated: string;
   userModified: string;
+  dtCreated: Date;
   dtModified: Date;
 }

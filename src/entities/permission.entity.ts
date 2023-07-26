@@ -1,17 +1,27 @@
-import { Prisma } from '@prisma/client';
+import { Action, Possession } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 import { RolePermissionEntity } from './role-permission.entity';
 
 export class PermissionEntity {
-  id: number;
-  resource_id: string;
-  actions: Prisma.JsonValue;
+
+  @ApiProperty({ type: String })
+  id: string;
+
+  @ApiProperty({ enum: Action, enumName: 'Action' })
+  action: Action;
+
+  @ApiProperty({ enum: Possession, enumName: 'Possession' })
+  possesion: Possession;
+
+  @ApiProperty({ type: String })
   attributes: string;
-  possesion: string;
-  role: string;
+
+  @ApiProperty({ type: Number })
   role_permission_id: number;
-  role_permission?: RolePermissionEntity;
-  userCreated: string;
-  userModified: string;
-  dtCreated: Date;
-  dtModified: Date;
+
+  role_permission?: RolePermissionEntity ;
+  userCreated: string ;
+  userModified: string ;
+  dtCreated: Date ;
+  dtModified: Date ;
 }

@@ -5,7 +5,6 @@ import {
   Post,
   Req,
   Res,
-  Response,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -18,7 +17,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { multerOptions } from 'src/configs/multer.config';
 import { FilesService } from './files.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 @ApiTags('Files')
 @Controller({
   path: 'files',
@@ -43,8 +42,8 @@ export class FilesController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file, @Req() req: Request) {
-    return this.filesService.uploadImage(req.file);
+  async uploadFile(@UploadedFile() file) {
+    return await this.filesService.uploadImage(file);
   }
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -87,7 +86,7 @@ export class FilesController {
     return res.sendFile(image, { root: './files' });
   }
   @Get(':path')
-  download(@Param('path') path, @Response() response) {
+  download(@Param('path') path, @Res() response) {
     return response.sendFile(path, { root: './files' });
   }
 }

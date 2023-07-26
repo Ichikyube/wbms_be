@@ -25,7 +25,7 @@ export class RolesService {
     return this.db.role.findUnique({
       where: { id },
       include: {
-        RolePermission: true,
+        Permission: true,
         users: true,
       },
     });
@@ -50,7 +50,7 @@ export class RolesService {
   async findAllRoles(): Promise<RoleEntity[]> {
     return this.db.role.findMany({
       include: {
-        RolePermission: true,
+        Permission: true,
         users: true,
       },
     });

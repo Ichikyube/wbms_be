@@ -10,14 +10,14 @@ import { PermissionEntity } from 'src/entities/permission.entity';
 export class PermissionsService {
   constructor(private readonly db: DbService) {}
 
-  async findPermissionById(id: number): Promise<PermissionEntity | null> {
+  async findPermissionById(id: string): Promise<PermissionEntity | null> {
     return this.db.permission.findUnique({
       where: { id },
     });
   }
 
   async updatePermission(
-    id: number,
+    id: string,
     data: Prisma.PermissionUpdateInput & { object: PermissionAction },
   ): Promise<PermissionEntity> {
     return this.db.permission.update({
@@ -26,7 +26,7 @@ export class PermissionsService {
     });
   }
 
-  async deletePermission(id: number): Promise<PermissionEntity> {
+  async deletePermission(id: string): Promise<PermissionEntity> {
     return this.db.permission.delete({
       where: { id },
     });

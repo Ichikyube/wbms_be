@@ -2,6 +2,7 @@ import {
   Injectable,
   ForbiddenException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { hash } from 'argon2';
@@ -88,12 +89,25 @@ export class UsersService {
 
   async create(
     dto: CreateUserDto,
-    file: Express.Multer.File,
+    file: {
+      fieldname: string;
+      originalname: string;
+      encoding: string;
+      mimetype: string;
+      size: number;
+      destination: string;
+      filename: string;
+      path: string;
+      buffer: Buffer;
+    },
     userId: string,
   ): Promise<UserEntity> {
     // generate the password hash
+    console.log(file)
     const hashedPassword = await hash(dto.password);
-
+    if (!file) {
+      throw new BadRequestException('No file uploaded.');
+    }
     const profilePicturePath = file.filename;
     const data = {
       username: dto.username,

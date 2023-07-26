@@ -6,8 +6,7 @@ import { UserEntity } from './user.entity';
 export class RoleEntity {
   @ApiProperty() id: number;
   @ApiProperty() name: string;
-  @ApiProperty() description: string;
-  RolePermission?: RolePermissionEntity[];
+  Permission?: RolePermissionEntity[];
   userCreated?: string;
   userModified?: string;
   dtCreated?: Date;

@@ -24,8 +24,7 @@ export class FilesService {
   }): Promise<ImageEntity> {
     if (!file) {
       throw new BadRequestException('No file uploaded.');
-    }
-    console.log(file)
+    }    
     // Save the file path in the database using Prisma
     return await this.db.image.create({
         data: { path: file.filename },

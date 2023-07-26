@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { Request } from 'express';
 
 // Multer configuration
 export const multerConfig = {
@@ -46,7 +47,6 @@ export const multerOptions = {
     // Destination storage path details
     destination: (req: any, file: any, cb: any) => {
       const uploadPath = multerConfig.dest;
-      console.log(uploadPath);
       // Create folder if doesn't exist
       if (!existsSync(uploadPath)) {
         mkdirSync(uploadPath);
@@ -54,7 +54,7 @@ export const multerOptions = {
       cb(null, uploadPath);
     },
     // File modification details
-    filename: (req: any, file: any, cb: any) => {
+    filename: (req: Request, file: any, cb: any) => {
       const name = file.originalname.split('.')[0];
       const fileExtName = extname(file.originalname);
       const randomName = Array(4)

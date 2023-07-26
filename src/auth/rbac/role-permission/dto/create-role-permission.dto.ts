@@ -1,1 +1,3 @@
-export class CreateRolePermissionDto {}
+export class CreateRolePermissionDto {
+    resource_id: number;
+}

@@ -23,21 +23,21 @@ export class PermissionsController {
 
   @Get(':id')
   async findPermissionById(
-    @Param('id') id: number,
+    @Param('id') id: string,
   ): Promise<PermissionEntity | null> {
     return this.permissionsService.findPermissionById(id);
   }
 
   @Put(':id')
   async updatePermission(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() data: any,
   ): Promise<PermissionEntity> {
     return this.permissionsService.updatePermission(id, data);
   }
 
   @Delete(':id')
-  async deletePermission(@Param('id') id: number): Promise<PermissionEntity> {
+  async deletePermission(@Param('id') id: string): Promise<PermissionEntity> {
     return this.permissionsService.deletePermission(id);
   }
 
