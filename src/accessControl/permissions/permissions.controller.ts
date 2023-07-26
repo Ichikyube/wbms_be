@@ -9,17 +9,18 @@ import {
 } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { PermissionEntity } from 'src/entities/permission.entity';
+import { CreatePermissionDto } from './dto/create-permission.dto';
 
 @Controller('permissions')
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
-  // @Post()
-  // async createPermission(
-  //   @Body() data: Prisma.PermissionCreateInput,
-  // ): Promise<Permission> {
-  //   return this.permissionsService.createPermission(data);
-  // }
+  @Post()
+  async createPermission(
+    @Body() data: CreatePermissionDto,
+  ): Promise<PermissionEntity> {
+    return this.permissionsService.createPermission(data);
+  }
 
   @Get(':id')
   async findPermissionById(
