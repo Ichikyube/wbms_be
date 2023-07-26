@@ -8,9 +8,6 @@ import { RolePermissionService } from '../role-permission/role-permission.servic
 
 @Injectable()
 export class RolesService {
-
-
-
   constructor(
     private permissionService: PermissionsService,
     private rolePermissionService: RolePermissionService,
@@ -59,7 +56,7 @@ export class RolesService {
           userModified: '',
         },
         include: {
-          rolePermissions: {
+          rolePermission: {
             include: {
               permissions: true,
             },
@@ -74,7 +71,7 @@ export class RolesService {
     return this.db.role.findUnique({
       where: { id },
       include: {
-        Permission: true,
+        rolePermission: true,
         users: true,
       },
     });
@@ -99,90 +96,9 @@ export class RolesService {
   async findAllRoles(): Promise<RoleEntity[]> {
     return this.db.role.findMany({
       include: {
-        Permission: true,
+        rolePermission: true,
         users: true,
       },
     });
   }
 }
-
-// async findOne(id: number) {
-//   let role = await this.roleRepository.findOne({ id });
-//   if (!role) {
-//     throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
-//   }
-//   return role;
-// }
-
-// async update(updateRoleInput: UpdateRoleInput) {
-//   let role = await this.roleRepository.findOne({ id: updateRoleInput.id });
-//   if (!role) {
-//     throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
-//   }
-//   role.name = updateRoleInput.name;
-//   if (updateRoleInput.permissions)
-//     role.permissions = await this.permissionService.findMany(
-//       updateRoleInput.permissions,
-//     );
-//   return this.roleRepository.save(role);
-// }
-
-// async remove(id: number) {
-//   let role = await this.roleRepository.findOne({ id });
-//   if (!role) {
-//     throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
-//   }
-//   return await this.roleRepository.remove(role);
-// }
-
-// async getRolePermissions(id: number) {
-//   let user = await this.roleRepository.findOne({
-//     where: { id },
-//     relations: ['permissions'],
-//   });
-//   return user.permissions;
-// }
-// }
-
-// async findAllAsMap(): Promise<Map<string, Role>> {
-//   const entities = await this.db.role.findMany();
-
-//   const rolesMap: Map<string, Role> = new Map();
-//   entities.forEach((entity) => {
-//     rolesMap.set(entity.name, entity);
-//   });
-
-//   return rolesMap;
-// }
-
-// async findAll(query?: FindOptions): Promise<Array<User>> {
-//   this.logger.info('UsersService#findAll.call', query)
-
-//   const result: Array<User> = await this.repo.findAll(query)
-
-//   this.logger.info('UsersService#findAll.result', result)
-
-//   return result
-// }
-
-// async count(query?: FindOptions): Promise<number> {
-//   this.logger.info('UsersService#count.call', query)
-
-//   const result: number = await this.repo.count(query)
-
-//   this.logger.info('UsersService#count.result', result)
-
-//   return result
-// }
-
-// async create(userDto: UserDto): Promise<User> {
-//   this.logger.info('UsersService#create.call', userDto)
-
-//   const user = new User(userDto)
-
-//   const result = await user.save()
-
-//   this.logger.info('UsersService#create.result', result)
-
-//   return result
-// }

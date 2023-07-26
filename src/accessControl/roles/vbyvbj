@@ -26,3 +26,55 @@
     // }
 
     //jadi begini
+
+
+
+
+
+
+
+
+
+
+
+    
+// async update(updateRoleInput: UpdateRoleInput) {
+//   let role = await this.roleRepository.findOne({ id: updateRoleInput.id });
+//   if (!role) {
+//     throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
+//   }
+//   role.name = updateRoleInput.name;
+//   if (updateRoleInput.permissions)
+//     role.permissions = await this.permissionService.findMany(
+//       updateRoleInput.permissions,
+//     );
+//   return this.roleRepository.save(role);
+// }
+
+// async remove(id: number) {
+//   let role = await this.roleRepository.findOne({ id });
+//   if (!role) {
+//     throw new HttpException('Item does not exist!', HttpStatus.NOT_FOUND);
+//   }
+//   return await this.roleRepository.remove(role);
+// }
+
+// async getRolePermissions(id: number) {
+//   let user = await this.roleRepository.findOne({
+//     where: { id },
+//     relations: ['permissions'],
+//   });
+//   return user.permissions;
+// }
+// }
+
+// async findAllAsMap(): Promise<Map<string, Role>> {
+//   const entities = await this.db.role.findMany();
+
+//   const rolesMap: Map<string, Role> = new Map();
+//   entities.forEach((entity) => {
+//     rolesMap.set(entity.name, entity);
+//   });
+
+//   return rolesMap;
+// }

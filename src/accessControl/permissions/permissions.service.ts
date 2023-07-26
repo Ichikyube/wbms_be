@@ -5,10 +5,16 @@ import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { PermissionAction } from './permission.interface';
 import { PermissionEntity } from 'src/entities/permission.entity';
+import { CreatePermissionDto } from './dto/create-permission.dto';
 
 @Injectable()
 export class PermissionsService {
   constructor(private readonly db: DbService) {}
+
+  async createPermission(data: CreatePermissionDto): Promise<PermissionEntity | null> {
+    return this.db.permission.create({data});
+  }
+
 
   async findPermissionById(id: string): Promise<PermissionEntity | null> {
     return this.db.permission.findUnique({
