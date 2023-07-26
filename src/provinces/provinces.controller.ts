@@ -31,7 +31,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'provincesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAll() {
@@ -66,7 +66,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'provincesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAllDeleted() {
@@ -101,7 +101,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'province',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async getById(@Param('id') id: string) {
@@ -131,7 +131,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'provincesData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async searchFirst(@Body() query: any) {
@@ -168,7 +168,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'provincesData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -203,7 +203,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'province',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -240,7 +240,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'provincesData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -275,7 +275,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'province',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async create(@Body() dto: CreateProvinceDto, @Req() req: Request) {
@@ -307,7 +307,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'province',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async updateById(
@@ -343,7 +343,7 @@ export class ProvincesController {
   @UseRoles({
     resource: 'province',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

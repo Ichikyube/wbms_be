@@ -25,7 +25,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroupData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroupData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroup',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroupData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroupData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroupData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroupData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroup',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async create(@Body() dto: CreateCustomerGroupDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroup',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async updateById(
@@ -340,7 +340,7 @@ export class CustomerGroupsController {
   @UseRoles({
     resource: 'customersGroup',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

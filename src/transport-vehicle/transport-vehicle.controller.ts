@@ -27,7 +27,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'carsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async getAll() {
@@ -62,7 +62,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'carsData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async getAllDeleted() {
@@ -97,7 +97,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'carsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async getById(@Param('id') id: string) {
@@ -127,7 +127,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'car',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async searchFirst(@Body() query: any) {
@@ -164,7 +164,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'carsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -199,7 +199,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'car',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -238,7 +238,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'carsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -275,7 +275,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'car',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async create(@Body() dto: CreateTransportVehicleDto, @Req() req: Request) {
@@ -306,7 +306,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'car',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async updateById(
@@ -346,7 +346,7 @@ export class TransportVehicleController {
   @UseRoles({
     resource: 'car',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

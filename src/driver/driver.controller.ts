@@ -25,7 +25,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driverData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driverData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driver',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driver',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driverData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driver',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driverData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driver',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async create(@Body() dto: CreateDriverDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driver',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async updateById(
@@ -336,7 +336,7 @@ export class DriverController {
   @UseRoles({
     resource: 'driver',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: DriverEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

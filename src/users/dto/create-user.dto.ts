@@ -5,6 +5,7 @@ import {
   IsPhoneNumber,
   IsString,
   Length,
+  isBoolean,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -26,8 +27,7 @@ export class CreateUserDto {
     type: 'string',
     format: 'binary',
   })
-  @IsString()
-  profilePic?: Express.Multer.File;
+  file?: string;
 
   @ApiProperty()
   @IsString()
@@ -41,18 +41,6 @@ export class CreateUserDto {
   // @IsPhoneNumber('IN')
   phone?: string;
 
-  @ApiProperty({ type: String })
-  @IsString()
-  address?: string;
-
-  @ApiProperty({
-    type: 'date',
-    format: 'date',
-    pattern: 'YYYY-MM-DD',
-    example: '1995-07-01',
-  })
-  birthDate?: Date;
-
   // @IsEnum(UserRole)
   @ApiProperty({ type: Number })
   roleId?: number;
@@ -60,6 +48,6 @@ export class CreateUserDto {
   @ApiProperty({ type: String })
   role: string = 'staff';
 
-  @ApiProperty({ type: Boolean })
+  @ApiProperty({ type: Boolean, default: true })
   isLDAPUser: boolean;
 }

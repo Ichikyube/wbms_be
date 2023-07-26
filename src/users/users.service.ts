@@ -109,8 +109,6 @@ export class UsersService {
       nik: dto.nik,
       name: dto.name,
       profilePic: profilePicturePath,
-      address: dto.address,
-      birthDate: dto.birthDate,
       division: dto.division,
       position: dto.position,
       phone: dto.phone,

@@ -6,22 +6,18 @@ import { AuthService } from "./auth.service";
 import { AtStrategy, JwtStrategy, RtStrategy } from "./strategies";
 import { UsersModule } from "src/users/users.module";
 import { LdapStrategy } from "./strategies/ldap.strategy";
-import { RolesService } from "./rbac/roles/roles.service";
-import { RolePermissionModule } from './rbac/role-permission/role-permission.module';
-import { RolesModule } from "./rbac/roles/roles.module";
-import { PermissionsModule } from "./rbac/permissions/permissions.module";
+import { RbacModule } from './rbac/rbac.module';
+
 
 @Module({
   imports: [
     UsersModule,
     JwtModule.register({}),
     PassportModule.register({ defaultStrategy: "ldap" }),
-    RolesModule,
-    PermissionsModule,
-    RolePermissionModule,
+    RbacModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy, RolesService],
+  providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy],
   exports: [PassportModule],
 })
 export class AuthModule {}

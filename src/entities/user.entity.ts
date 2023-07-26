@@ -8,8 +8,6 @@ export class UserEntity implements User {
   @ApiProperty() email: string;
   @ApiProperty() nik: string;
 
-  @ApiProperty() address: string;
-  @ApiProperty() birthDate: Date;
   @ApiProperty() roleId: number;
   @ApiProperty({ type: String }) profilePic: string;
 

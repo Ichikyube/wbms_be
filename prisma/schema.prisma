@@ -281,8 +281,6 @@ model User {
   nik            String  @unique @db.VarChar(30)
   name           String  @db.VarChar(50)
   phone          String? @db.VarChar(30)
-  address        String
-  birthDate      DateTime  @db.Date
   division       String  @db.VarChar(30)
   position       String  @db.VarChar(30)
 
@@ -322,7 +320,7 @@ model Role {
 model RolePermission {
   id           Int       @id @default(autoincrement())
   resource_id  Int 
-  Permission   Permission[]
+  permission   Permission[]
   roleId       Int
   role         Role?  @relation(fields: [roleId], references: [id])
   userCreated  String   @db.Char(36)
@@ -331,10 +329,37 @@ model RolePermission {
   dtModified   DateTime @updatedAt
 }
 
+enum Resource {
+  barcodeTypes
+  cities
+  companies
+  configs
+  customerGroups
+  customers
+  customerType
+  driver
+  mills
+  products
+  ProductGroups
+  provinces
+  semai
+  sites
+  storageTanks
+  transactions
+  transportVehicles
+  users
+  weighbridges
+}
+
+enum MainSite {
+  PKS
+  T30
+  Labanan
+}
+
 enum Action {
-  READ
-  WRITE
-  DELETE
+  onlyRead
+  Full
 }
 
 enum Possession {

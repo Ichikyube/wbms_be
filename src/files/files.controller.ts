@@ -45,6 +45,7 @@ export class FilesController {
   async uploadFile(@UploadedFile() file) {
     return await this.filesService.uploadImage(file);
   }
+  
   @Post()
   @ApiConsumes('multipart/form-data')
   @ApiBody({

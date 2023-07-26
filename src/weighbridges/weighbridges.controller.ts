@@ -25,7 +25,7 @@ export class WeighbridgesController {
   @UseRoles({
     resource: 'weightBridgesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class WeighbridgesController {
   @UseRoles({
     resource: 'weightBridgesData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async getAllDeleted() {
@@ -93,9 +93,9 @@ export class WeighbridgesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class WeighbridgesController {
   @UseRoles({
     resource: 'weightBridgesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class WeighbridgesController {
   @UseRoles({
     resource: 'weightBridgesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -195,9 +195,9 @@ export class WeighbridgesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class WeighbridgesController {
   @UseRoles({
     resource: 'weightBridgesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -267,9 +267,9 @@ export class WeighbridgesController {
 
   @Post()
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async create(@Body() dto: CreateWeighbridgeDto, @Req() req: Request) {
@@ -298,9 +298,9 @@ export class WeighbridgesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async updateById(
@@ -334,9 +334,9 @@ export class WeighbridgesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

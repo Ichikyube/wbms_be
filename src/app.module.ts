@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
@@ -25,17 +26,57 @@ import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
 import { AtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
-import { ACGuard, AccessControlModule } from 'nest-access-control';
+import {
+  ACGuard,
+  AccessControlModule,
+  RolesBuilder,
+} from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
-import { MulterModule } from '@nestjs/platform-express';
-import { multerOptions } from './settings/multer.config';
 import { FilesModule } from './files/files.module';
+import { join } from 'path';
+import { RolesModule } from './auth/rbac/roles/roles.module';
+import { DbService } from './db/db.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    AccessControlModule.forRoles(RBAC_POLICY),
-    MulterModule.register(multerOptions),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'upload'),
+      serveRoot: '/img',
+    }),
+    // AccessControlModule.forRoles(RBAC_POLICY),
+    // AccessControlModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   inject: [PrismaService],
+    //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
+    //     let roles = await db.role.findMany({
+    //       where: {}, include: {
+    //         grants: { include: { permisssion: true } }
+    //       }
+    //     }),
+    // AccessControlModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   inject: [DbService],
+    //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
+    //     let roles = await db.role.findMany({
+    //       where: {}, include: {
+    //         grants: { include: { permisssion: true } }
+    //       }
+    //     })
+    //     let result = roles.map(role => {
+    //       return role.grants.map(grant => {
+    //         let { resource, action, attributes } = grant.permisssion
+    //         return { role: role.name, resource, action, attributes }
+    //       })
+    //     })
+    //     if (result) {
+    //       let grants = []
+    //       result.forEach((grant) => grants = grants.concat(grant))
+    //       return new RolesBuilder(grants)
+    //     }
+    //     return new RolesBuilder([])
+    //   }
+    // }),
     DbModule,
     AuthModule,
     TransactionModule,
@@ -57,22 +98,23 @@ import { FilesModule } from './files/files.module';
     SemaiModule,
     DriverModule,
     TransportVehicleModule,
-    FilesModule
+    FilesModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AtGuard,
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ACGuard,
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: TimestampInterceptor,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ACGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimestampInterceptor,
+    },
   ],
 })
 export class AppModule {}

@@ -10,6 +10,7 @@ import {
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 
+// @UseRoles('admin')
 @Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
@@ -18,7 +19,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'configsData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   getAll() {
     return this.configsService.getAll();
@@ -28,7 +29,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'configsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getEnv() {
     return this.configsService.getEnv();
@@ -38,7 +39,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'configsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchMany(@Body() query: any) {
     return this.configsService.searchMany(query);
@@ -48,7 +49,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'config',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchFirst(@Body() query: any) {
     return this.configsService.searchFirst(query);
@@ -58,7 +59,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'config',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getById(@Param('id') id: string) {
     return this.configsService.getById(id);
@@ -68,7 +69,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'config',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   create(@Body() dto: any) {
     return this.configsService.create(dto);
@@ -78,7 +79,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'config',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   updateById(@Param('id') id: string, @Body() dto: any) {
     return this.configsService.updateById(id, dto);
@@ -88,7 +89,7 @@ export class ConfigsController {
   @UseRoles({
     resource: 'config',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   deleteById(@Param('id') id: string) {
     return this.configsService.deleteById(id);

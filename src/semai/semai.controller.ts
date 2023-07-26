@@ -19,9 +19,9 @@ export class SemaiController {
   constructor(private readonly semaiService: SemaiService) {}
   @Get('products')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   products() {
     return this.semaiService.products();
@@ -29,9 +29,9 @@ export class SemaiController {
 
   @Get('sites')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   sites() {
     return this.semaiService.sites();
@@ -39,9 +39,9 @@ export class SemaiController {
 
   @Get('storage-tanks')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   storageTanks() {
     return this.semaiService.storageTanks();
@@ -54,9 +54,9 @@ export class SemaiController {
 
   @Get('transporters')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   transporters() {
     return this.semaiService.transporters();
@@ -64,9 +64,9 @@ export class SemaiController {
 
   @Get('vehicle-operators')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   vehicleOperators() {
     return this.semaiService.vehicleOperators();
@@ -74,9 +74,9 @@ export class SemaiController {
 
   @Post('decode-qrcode')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   decodeQrcode(@Body() dto: DecodeQrcodeDto) {
     return this.semaiService.decodeQrcode(dto);
@@ -84,9 +84,9 @@ export class SemaiController {
 
   @Post('dispatch-delivery')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   dispatchDelivery(@Body() dto: any) {
     return this.semaiService.dispatchDelivery(dto);
@@ -94,9 +94,9 @@ export class SemaiController {
 
   @Post('reject-delivery')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   rejectDelivery(@Body() dto: any) {
     return this.semaiService.rejectDelivery(dto);
@@ -104,9 +104,9 @@ export class SemaiController {
 
   @Post('close-delivery-as-accepted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   closeDeliveryAccepted(@Body() dto: any) {
     return this.semaiService.closeDeliveryCanceled(dto);
@@ -114,9 +114,9 @@ export class SemaiController {
 
   @Post('close-delivery-as-canceled')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   closeDeliveryCanceled(@Body() dto: any) {
     return this.semaiService.closeDeliveryCanceled(dto);
@@ -124,9 +124,9 @@ export class SemaiController {
 
   @Post('close-delivery-as-rejected')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   closeDeliveryRejected(@Body() dto: any) {
     return this.semaiService.closeDeliveryRejected(dto);
@@ -134,9 +134,9 @@ export class SemaiController {
 
   @Post('validate-dispatch-delivery')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   validateDispatchDelivery(@Body() dto: any) {
     return this.semaiService.validateDispatchDelivery(dto);
@@ -144,9 +144,9 @@ export class SemaiController {
 
   @Post('validate-unloading')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   validateUnloading(@Body() dto: any) {
     return this.semaiService.validateUnloading(dto);
@@ -154,9 +154,9 @@ export class SemaiController {
 
   @Post('encode-qrcode')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   encodeQrcode(@Body() dto: any) {
     return this.semaiService.encodeQrcode(dto);
