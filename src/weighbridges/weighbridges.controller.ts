@@ -93,7 +93,7 @@ export class WeighbridgesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'read',
     possession: 'any',
   })
@@ -195,7 +195,7 @@ export class WeighbridgesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'read',
     possession: 'any',
   })
@@ -267,7 +267,7 @@ export class WeighbridgesController {
 
   @Post()
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'create',
     possession: 'any',
   })
@@ -298,7 +298,7 @@ export class WeighbridgesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'update',
     possession: 'any',
   })
@@ -334,7 +334,7 @@ export class WeighbridgesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'weightData',
+    resource: 'weightBridgesData',
     action: 'delete',
     possession: 'any',
   })

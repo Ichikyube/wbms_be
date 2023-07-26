@@ -103,7 +103,7 @@ export class UsersService {
     userId: string,
   ): Promise<UserEntity> {
     // generate the password hash
-    console.log(file)
+    console.log(file);
     const hashedPassword = await hash(dto.password);
     if (!file) {
       throw new BadRequestException('No file uploaded.');
@@ -115,8 +115,6 @@ export class UsersService {
       nik: dto.nik,
       name: dto.name,
       profilePic: profilePicturePath,
-      address: dto.address,
-      birthDate: dto.birthDate,
       division: dto.division,
       position: dto.position,
       phone: dto.phone,

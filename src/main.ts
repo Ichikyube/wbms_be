@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
@@ -23,6 +23,10 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
+  // app.useStaticAssets(join(__dirname, '..', 'public'), {
+  //   index: false,
+  //   prefix: '/public',
+  // });
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({

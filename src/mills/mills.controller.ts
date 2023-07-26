@@ -93,7 +93,7 @@ export class MillsController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'mills',
+    resource: 'mill',
     action: 'read',
     possession: 'any',
   })
@@ -123,7 +123,7 @@ export class MillsController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'mills',
+    resource: 'mill',
     action: 'create',
     possession: 'any',
   })
@@ -195,7 +195,7 @@ export class MillsController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'mills',
+    resource: 'mill',
     action: 'create',
     possession: 'any',
   })
@@ -267,7 +267,7 @@ export class MillsController {
 
   @Post()
   @UseRoles({
-    resource: 'millsData',
+    resource: 'mill',
     action: 'create',
     possession: 'any',
   })
@@ -298,7 +298,7 @@ export class MillsController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'millsData',
+    resource: 'mill',
     action: 'update',
     possession: 'any',
   })
@@ -334,7 +334,7 @@ export class MillsController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'millsData',
+    resource: 'mill',
     action: 'delete',
     possession: 'any',
   })

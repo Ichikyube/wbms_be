@@ -19,7 +19,7 @@ export class SemaiController {
   constructor(private readonly semaiService: SemaiService) {}
   @Get('products')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -29,7 +29,7 @@ export class SemaiController {
 
   @Get('sites')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -39,7 +39,7 @@ export class SemaiController {
 
   @Get('storage-tanks')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -54,7 +54,7 @@ export class SemaiController {
 
   @Get('transporters')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -64,7 +64,7 @@ export class SemaiController {
 
   @Get('vehicle-operators')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -74,7 +74,7 @@ export class SemaiController {
 
   @Post('decode-qrcode')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -84,7 +84,7 @@ export class SemaiController {
 
   @Post('dispatch-delivery')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -94,7 +94,7 @@ export class SemaiController {
 
   @Post('reject-delivery')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -104,7 +104,7 @@ export class SemaiController {
 
   @Post('close-delivery-as-accepted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -114,7 +114,7 @@ export class SemaiController {
 
   @Post('close-delivery-as-canceled')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -124,7 +124,7 @@ export class SemaiController {
 
   @Post('close-delivery-as-rejected')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -134,7 +134,7 @@ export class SemaiController {
 
   @Post('validate-dispatch-delivery')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -144,7 +144,7 @@ export class SemaiController {
 
   @Post('validate-unloading')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })
@@ -154,7 +154,7 @@ export class SemaiController {
 
   @Post('encode-qrcode')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'semai',
     action: 'read',
     possession: 'any'
   })

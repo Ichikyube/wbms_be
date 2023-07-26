@@ -26,8 +26,7 @@ export class CreateUserDto {
     type: 'string',
     format: 'binary',
   })
-  @IsString()
-  profilePic?: Express.Multer.File;
+  file?: string;
 
   @ApiProperty()
   @IsString()
@@ -40,18 +39,6 @@ export class CreateUserDto {
   @ApiProperty({ required: false })
   // @IsPhoneNumber('IN')
   phone?: string;
-
-  @ApiProperty({ type: String })
-  @IsString()
-  address?: string;
-
-  @ApiProperty({
-    type: 'date',
-    format: 'date',
-    pattern: 'YYYY-MM-DD',
-    example: '1995-07-01',
-  })
-  birthDate?: Date;
 
   // @IsEnum(UserRole)
   @ApiProperty({ type: Number })

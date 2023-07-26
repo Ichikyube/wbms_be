@@ -281,8 +281,6 @@ model User {
   nik            String  @unique @db.VarChar(30)
   name           String  @db.VarChar(50)
   phone          String? @db.VarChar(30)
-  address        String
-  birthDate      DateTime  @db.Date
   division       String  @db.VarChar(30)
   position       String  @db.VarChar(30)
 
@@ -329,6 +327,19 @@ model RolePermission {
   userModified String   @db.Char(36)
   dtCreated    DateTime @default(now())
   dtModified   DateTime @updatedAt
+}
+
+enum Resource {
+  barcodeTypes
+  cities
+  companies
+  configs
+  customerGroup
+  customers
+  customerType
+  driver
+  users
+  weighbridges
 }
 
 enum Action {

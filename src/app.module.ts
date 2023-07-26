@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
@@ -27,15 +28,17 @@ import { AtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
 import { ACGuard, AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
-import { MulterModule } from '@nestjs/platform-express';
-import { multerOptions } from './configs/multer.config';
 import { FilesModule } from './files/files.module';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'upload'),
+      serveRoot: '/img',
+    }),
     AccessControlModule.forRoles(RBAC_POLICY),
-    MulterModule.register(multerOptions),
     DbModule,
     AuthModule,
     TransactionModule,
@@ -57,7 +60,7 @@ import { FilesModule } from './files/files.module';
     SemaiModule,
     DriverModule,
     TransportVehicleModule,
-    FilesModule
+    FilesModule,
   ],
   controllers: [],
   providers: [

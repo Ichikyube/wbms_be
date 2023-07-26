@@ -4,7 +4,6 @@ import { Role } from './roles/roles.type';
 
 export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 
-
 // prettier-ignore
 RBAC_POLICY
   .grant(Role.STAFF)
@@ -21,8 +20,6 @@ RBAC_POLICY
   .deny(Role.ADMIN)
     .read('managedEmployeeData')
 
-
-    
 // This is actually how the grants are maintained internally.
 let grantsObject = {
   admin: {
@@ -42,6 +39,42 @@ let grantsObject = {
     },
   },
 };
+
+let Resource = [
+  'barcodeData',
+  'barcode',
+  'citiesData',
+  'city',
+  'companiesData',
+  'company',
+  'configsData',
+  'config',
+  'customersGroupData',
+  'customersGroup',
+  'customersData',
+  'customer',
+  'customerTypesData',
+  'customerType',
+  'driverData',
+  'driver',
+  'millsData',
+  'mill',
+  'productGroupsData',
+  'productsData',
+  'provincesData',
+  'province',
+  'semai',
+  'sitesData',
+  'site',
+  'storageTanksData',
+  'storageTank',
+  'transactionsData',
+  'transaction',
+  'carsData',
+  'car',
+  'users',
+  'weightBridgesData',
+];
 
 // grant list fetched from DB (to be converted to a valid grants object, internally)
 let grantList = [
@@ -78,6 +111,3 @@ let grantList = [
 const ac = new AccessControl(grantList);
 // ac.setGrants(grantsObject);
 // console.log(ac.getGrants());
-
-// role: {
-//   resource: {action, attributes},

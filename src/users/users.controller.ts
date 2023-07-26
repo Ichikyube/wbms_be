@@ -216,7 +216,6 @@ export class UsersController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('image'))
   @UseRoles({
     resource: 'user',
     action: 'create',
@@ -233,13 +232,10 @@ export class UsersController {
   @ApiForbiddenResponse({
     description: 'User already exists',
   })
+  @UseInterceptors(FileInterceptor('file'))
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() dto: CreateUserDto,
-    @UploadedFile('image') file,
-    @Req() req: Request,
-  ) {
-    console.log(file)
+  async create(@Body() dto: CreateUserDto, @UploadedFile() file: Express.Multer.File) {
+    console.log(file);
     const dataOut = {
       status: true,
       message: '',

@@ -23,9 +23,9 @@ export class ProductGroupsController {
 
   @Get('')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'productGroupsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async getAll() {
@@ -58,9 +58,9 @@ export class ProductGroupsController {
 
   @Get('deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'productGroupsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async getAllDeleted() {
@@ -93,9 +93,9 @@ export class ProductGroupsController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'productGroupsData',
     action: 'read',
-    possession: 'any'
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async getById(@Param('id') id: string) {
@@ -123,9 +123,9 @@ export class ProductGroupsController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async searchFirst(@Body() query: any) {
@@ -160,9 +160,9 @@ export class ProductGroupsController {
 
   @Post('search-many')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -195,9 +195,9 @@ export class ProductGroupsController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -232,9 +232,9 @@ export class ProductGroupsController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -267,9 +267,9 @@ export class ProductGroupsController {
 
   @Post()
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'create',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async create(@Body() dto: CreateProductGroupDto, @Req() req: Request) {
@@ -298,9 +298,9 @@ export class ProductGroupsController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'update',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async updateById(
@@ -338,9 +338,9 @@ export class ProductGroupsController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'employeeData',
-    action: 'read',
-    possession: 'any'
+    resource: 'productGroupsData',
+    action: 'delete',
+    possession: 'any',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
