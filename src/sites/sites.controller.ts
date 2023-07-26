@@ -54,7 +54,7 @@ export class SitesController {
   @UseRoles({
     resource: 'sitesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAll() {
@@ -89,7 +89,7 @@ export class SitesController {
   @UseRoles({
     resource: 'sitesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAllDeleted() {
@@ -124,7 +124,7 @@ export class SitesController {
   @UseRoles({
     resource: 'site',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async getById(@Param('id') id: string) {
@@ -154,7 +154,7 @@ export class SitesController {
   @UseRoles({
     resource: 'site',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirst(@Body() query: any) {
@@ -191,7 +191,7 @@ export class SitesController {
   @UseRoles({
     resource: 'sitesData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -226,7 +226,7 @@ export class SitesController {
   @UseRoles({
     resource: 'site',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -263,7 +263,7 @@ export class SitesController {
   @UseRoles({
     resource: 'employeeData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -298,7 +298,7 @@ export class SitesController {
   @UseRoles({
     resource: 'site',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async create(@Body() dto: CreateSiteDto, @Req() req: Request) {
@@ -329,7 +329,7 @@ export class SitesController {
   @UseRoles({
     resource: 'site',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async updateById(
@@ -348,7 +348,6 @@ export class SitesController {
 
     try {
       const userId = ''; //req.user['id'];
-      console.log(id);
       const record = await this.sitesService.updateById(id, dto, userId);
 
       dataOut.data.site = record;
@@ -365,7 +364,7 @@ export class SitesController {
   @UseRoles({
     resource: 'site',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: SiteEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

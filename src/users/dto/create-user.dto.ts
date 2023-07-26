@@ -5,6 +5,7 @@ import {
   IsPhoneNumber,
   IsString,
   Length,
+  isBoolean,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -47,6 +48,6 @@ export class CreateUserDto {
   @ApiProperty({ type: String })
   role: string = 'staff';
 
-  @ApiProperty({ type: Boolean })
+  @ApiProperty({ type: Boolean, default: true })
   isLDAPUser: boolean;
 }

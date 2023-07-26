@@ -25,7 +25,7 @@ export class MillsController {
   @UseRoles({
     resource: 'millsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class MillsController {
   @UseRoles({
     resource: 'millsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class MillsController {
   @UseRoles({
     resource: 'mill',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class MillsController {
   @UseRoles({
     resource: 'mill',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class MillsController {
   @UseRoles({
     resource: 'millsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class MillsController {
   @UseRoles({
     resource: 'mill',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class MillsController {
   @UseRoles({
     resource: 'millsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class MillsController {
   @UseRoles({
     resource: 'mill',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async create(@Body() dto: CreateMillDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class MillsController {
   @UseRoles({
     resource: 'mill',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async updateById(
@@ -336,7 +336,7 @@ export class MillsController {
   @UseRoles({
     resource: 'mill',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: MillEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

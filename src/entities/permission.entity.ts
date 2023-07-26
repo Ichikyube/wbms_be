@@ -25,3 +25,16 @@ export class PermissionEntity {
   dtCreated: Date ;
   dtModified: Date ;
 }
+
+// export class PermissionEntity {
+//   id: string ;
+// action: Action ;
+// possesion: Possession ;
+// attributes: string ;
+// role_permission_id: number ;
+// role_permission?: RolePermissionEntity ;
+// userCreated: string ;
+// userModified: string ;
+// dtCreated: Date ;
+// dtModified: Date ;
+// }

@@ -18,7 +18,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcodeData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getAll() {
     return this.customerTypesService.getAll();
@@ -28,7 +28,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcodeData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchMany(@Body() query: any) {
     return this.customerTypesService.searchMany(query);
@@ -38,7 +38,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcodeData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchFirst(@Body() query: any) {
     return this.customerTypesService.searchFirst(query);
@@ -48,7 +48,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcode',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getById(@Param('id') id: string) {
     return this.customerTypesService.getById(id);
@@ -58,7 +58,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcode',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   create(@Body() dto: any) {
     return this.customerTypesService.create(dto);
@@ -68,7 +68,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcode',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   updateById(@Param('id') id: string, @Body() dto: any) {
     return this.customerTypesService.updateById(id, dto);
@@ -78,7 +78,7 @@ export class BarcodeTypesController {
   @UseRoles({
     resource: 'barcode',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   deleteById(@Param('id') id: string) {
     return this.customerTypesService.deleteById(id);

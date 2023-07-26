@@ -20,7 +20,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transactionsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getAll() {
     return this.transactionService.getAll();
@@ -30,7 +30,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transaction',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getById(@Param('id') id: string) {
     return this.transactionService.getById(id);
@@ -40,7 +40,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transactionsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   openCreateByQrcodeSemai(@Body() body: any) {
     return this.transactionService.openCreateByQrcodeSemai(body);
@@ -50,7 +50,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transactionsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchMany(@Body() query: any) {
     return this.transactionService.searchMany(query);
@@ -60,7 +60,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transaction',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchFirst(@Body() query: any) {
     return this.transactionService.searchFirst(query);
@@ -70,7 +70,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transaction',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchByQR(@Body() query: any) {
     return this.transactionService.searchByQR(query);
@@ -80,7 +80,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transaction',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   getByPlateNo(@Query() query: any) {
     return this.transactionService.getByPlateNo(query);
@@ -90,7 +90,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transaction',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   create(@Body() dto: CreateTransactionDto) {
     return this.transactionService.create(dto);
@@ -100,7 +100,7 @@ export class TransactionController {
   @UseRoles({
     resource: 'transaction',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   updateById(@Param('id') id: string, @Body() dto: UpdateTransactionDto) {
     return this.transactionService.updateById(id, dto);

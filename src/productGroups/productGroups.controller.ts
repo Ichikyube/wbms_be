@@ -25,7 +25,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async create(@Body() dto: CreateProductGroupDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async updateById(
@@ -340,7 +340,7 @@ export class ProductGroupsController {
   @UseRoles({
     resource: 'productGroupsData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductGroupEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

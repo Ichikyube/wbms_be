@@ -21,7 +21,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   products() {
     return this.semaiService.products();
@@ -31,7 +31,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   sites() {
     return this.semaiService.sites();
@@ -41,7 +41,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   storageTanks() {
     return this.semaiService.storageTanks();
@@ -56,7 +56,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   transporters() {
     return this.semaiService.transporters();
@@ -66,7 +66,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   vehicleOperators() {
     return this.semaiService.vehicleOperators();
@@ -76,7 +76,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   decodeQrcode(@Body() dto: DecodeQrcodeDto) {
     return this.semaiService.decodeQrcode(dto);
@@ -86,7 +86,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   dispatchDelivery(@Body() dto: any) {
     return this.semaiService.dispatchDelivery(dto);
@@ -96,7 +96,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   rejectDelivery(@Body() dto: any) {
     return this.semaiService.rejectDelivery(dto);
@@ -106,7 +106,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   closeDeliveryAccepted(@Body() dto: any) {
     return this.semaiService.closeDeliveryCanceled(dto);
@@ -116,7 +116,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   closeDeliveryCanceled(@Body() dto: any) {
     return this.semaiService.closeDeliveryCanceled(dto);
@@ -126,7 +126,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   closeDeliveryRejected(@Body() dto: any) {
     return this.semaiService.closeDeliveryRejected(dto);
@@ -136,7 +136,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   validateDispatchDelivery(@Body() dto: any) {
     return this.semaiService.validateDispatchDelivery(dto);
@@ -146,7 +146,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   validateUnloading(@Body() dto: any) {
     return this.semaiService.validateUnloading(dto);
@@ -156,7 +156,7 @@ export class SemaiController {
   @UseRoles({
     resource: 'semai',
     action: 'read',
-    possession: 'any'
+    possession: 'own',
   })
   encodeQrcode(@Body() dto: any) {
     return this.semaiService.encodeQrcode(dto);

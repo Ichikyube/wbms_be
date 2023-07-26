@@ -25,7 +25,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity })
   async create(@Body() dto: CreateProductDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity })
   async updateById(
@@ -336,7 +336,7 @@ export class ProductsController {
   @UseRoles({
     resource: 'productsData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: ProductEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

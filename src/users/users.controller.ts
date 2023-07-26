@@ -37,11 +37,11 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('iam')
-  @UseRoles({
-    resource: 'user',
-    action: 'read',
-    possession: 'own',
-  })
+  // @UseRoles({
+  //   resource: 'user',
+  //   action: 'read',
+  //   possession: 'own',
+  // })
   async getIAM(@Req() req: Request) {
     const dataOut = {
       status: true,
@@ -71,7 +71,7 @@ export class UsersController {
   @UseRoles({
     resource: 'usersData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   async getAll() {
     const dataOut = {
@@ -105,7 +105,7 @@ export class UsersController {
   @UseRoles({
     resource: 'usersData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   async getAllDeleted() {
     const dataOut = {
@@ -133,11 +133,11 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'user',
-    action: 'delete',
-    possession: 'any',
-  })
+  // @UseRoles({
+  //   resource: 'user',
+  //   action: 'delete',
+  //   possession: 'own',
+  // })
   async getById(@Param('id') userId: string) {
     const dataOut = {
       status: true,
@@ -176,31 +176,31 @@ export class UsersController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'user',
-    action: 'read',
-    possession: 'any',
-  })
+  // @UseRoles({
+  //   resource: 'user',
+  //   action: 'read',
+  //   possession: 'own',
+  // })
   searchFirst(@Body() query: any) {
     return this.usersService.searchFirst(query);
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'read',
-    possession: 'any',
-  })
+  // @UseRoles({
+  //   resource: 'usersData',
+  //   action: 'read',
+  //   possession: 'own',
+  // })
   searchMany(@Body() query: any) {
     return this.usersService.searchMany(query);
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'user',
-    action: 'read',
-    possession: 'any',
-  })
+  // @UseRoles({
+  //   resource: 'user',
+  //   action: 'read',
+  //   possession: 'own',
+  // })
   searchFirstDeleted(@Body() query: any) {
     return this.usersService.searchFirstDeleted(query);
   }
@@ -209,7 +209,7 @@ export class UsersController {
   @UseRoles({
     resource: 'usersData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   searchDeleted(@Body() query: any) {
     return this.usersService.searchManyDeleted(query);
@@ -219,7 +219,7 @@ export class UsersController {
   @UseRoles({
     resource: 'user',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiOperation({
     summary: 'Create a user',
@@ -234,7 +234,10 @@ export class UsersController {
   })
   @UseInterceptors(FileInterceptor('file'))
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateUserDto, @UploadedFile() file: Express.Multer.File) {
+  async create(
+    @Body() dto: CreateUserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     console.log(file);
     const dataOut = {
       status: true,

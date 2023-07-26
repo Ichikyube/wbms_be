@@ -26,10 +26,12 @@ import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
 import { AtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
-import { ACGuard, AccessControlModule } from 'nest-access-control';
+import { ACGuard, AccessControlModule, RolesBuilder } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac/rbac-policy';
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
+import { RolesModule } from './auth/rbac/roles/roles.module';
+import { DbService } from './db/db.service';
 
 @Module({
   imports: [
@@ -38,7 +40,16 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', '..', 'upload'),
       serveRoot: '/img',
     }),
-    AccessControlModule.forRoles(RBAC_POLICY),
+    // AccessControlModule.forRoles(RBAC_POLICY),
+    // AccessControlModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   inject: [PrismaService],
+    //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
+    //     let roles = await db.role.findMany({
+    //       where: {}, include: {
+    //         grants: { include: { permisssion: true } }
+    //       }
+    //     }),
     DbModule,
     AuthModule,
     TransactionModule,
@@ -61,6 +72,7 @@ import { join } from 'path';
     DriverModule,
     TransportVehicleModule,
     FilesModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [

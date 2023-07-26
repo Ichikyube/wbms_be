@@ -20,7 +20,7 @@ import { CompanyEntity } from 'src/entities';
 @UseRoles({
   resource: 'employeeData',
   action: 'read',
-  possession: 'any',
+  possession: 'own',
 })
 @Controller('companies')
 export class CompaniesController {
@@ -30,7 +30,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'companiesData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async getAll() {
@@ -66,7 +66,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'companiesData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async getAllDeleted() {
@@ -101,7 +101,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'company',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity })
   async getById(@Param('id') id: string) {
@@ -131,7 +131,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'companiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity })
   async searchFirst(@Body() query: any) {
@@ -168,7 +168,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'companiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -203,7 +203,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'company',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -240,7 +240,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'companiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -275,7 +275,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'company',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity })
   async create(@Body() dto: CreateCompanyDto, @Req() req: Request) {
@@ -306,7 +306,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'company',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity })
   async updateById(
@@ -341,7 +341,7 @@ export class CompaniesController {
   @UseRoles({
     resource: 'company',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CompanyEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

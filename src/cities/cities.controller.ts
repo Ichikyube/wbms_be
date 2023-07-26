@@ -25,7 +25,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'citiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'citiesData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'city',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'citiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'citiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'citiesData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'employeeData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'city',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async create(@Body() dto: CreateCityDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'city',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async updateById(
@@ -335,7 +335,7 @@ export class CitiesController {
   @UseRoles({
     resource: 'city',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

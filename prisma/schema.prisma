@@ -320,7 +320,7 @@ model Role {
 model RolePermission {
   id           Int       @id @default(autoincrement())
   resource_id  Int 
-  Permission   Permission[]
+  permission   Permission[]
   roleId       Int
   role         Role?  @relation(fields: [roleId], references: [id])
   userCreated  String   @db.Char(36)
@@ -334,18 +334,32 @@ enum Resource {
   cities
   companies
   configs
-  customerGroup
+  customerGroups
   customers
   customerType
   driver
+  mills
+  products
+  ProductGroups
+  provinces
+  semai
+  sites
+  storageTanks
+  transactions
+  transportVehicles
   users
   weighbridges
 }
 
+enum MainSite {
+  PKS
+  T30
+  Labanan
+}
+
 enum Action {
-  READ
-  WRITE
-  DELETE
+  onlyRead
+  Full
 }
 
 enum Possession {

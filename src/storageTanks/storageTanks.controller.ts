@@ -25,7 +25,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTanksData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async getAll() {
@@ -60,7 +60,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTanksData',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async getAllDeleted() {
@@ -95,7 +95,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTank',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async getById(@Param('id') id: string) {
@@ -125,7 +125,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTank',
     action: 'create',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async searchFirst(@Body() query: any) {
@@ -162,7 +162,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTanksData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async searchMany(@Body() query: any) {
@@ -197,7 +197,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTank',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async searchFirstDeleted(@Body() query: any) {
@@ -234,7 +234,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTanksData',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
@@ -269,7 +269,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTank',
     action: 'read',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async create(@Body() dto: CreateStorageTankDto, @Req() req: Request) {
@@ -300,7 +300,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTank',
     action: 'update',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async updateById(
@@ -336,7 +336,7 @@ export class StorageTanksController {
   @UseRoles({
     resource: 'storageTank',
     action: 'delete',
-    possession: 'any',
+    possession: 'own',
   })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
