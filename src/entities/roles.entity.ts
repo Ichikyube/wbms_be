@@ -8,7 +8,7 @@ export class RoleEntity {
   @ApiProperty() Permission?: RolePermissionEntity[];
   userCreated?: string;
   userModified?: string;
-  dtCreated?: Date;
+  dtCreated: Date;
   dtModified?: Date;
   users?: UserEntity[];
 }

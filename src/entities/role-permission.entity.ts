@@ -12,8 +12,8 @@ export class RolePermissionEntity {
   @ApiProperty({ type: Number })
   roleId: number  | null;
   role?: RoleEntity  | null;
-  userCreated: string;
-  userModified: string;
+  userCreated?: string;
+  userModified?: string;
   dtCreated: Date;
-  dtModified: Date;
+  dtModified?: Date;
 }

@@ -11,7 +11,7 @@ import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 import { Role } from 'src/accessControl/roles/roles.type';
 
-@UseRoles(Role.ADMIN)
+// @UseRoles(Role.ADMIN)
 @Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}

@@ -136,11 +136,11 @@ export class UsersController {
   }
 
   @Get(':id')
-  // @UseRoles({
-  //   resource: 'user',
-  //   action: 'delete',
-  //   possession: 'own',
-  // })
+  @UseRoles({
+    resource: 'user',
+    action: 'delete',
+    possession: 'own',
+  })
   async getById(@Param('id') userId: string) {
     const dataOut = {
       status: true,
@@ -179,31 +179,31 @@ export class UsersController {
   }
 
   @Post('search-first')
-  // @UseRoles({
-  //   resource: 'user',
-  //   action: 'read',
-  //   possession: 'own',
-  // })
+  @UseRoles({
+    resource: 'user',
+    action: 'read',
+    possession: 'own',
+  })
   searchFirst(@Body() query: any) {
     return this.usersService.searchFirst(query);
   }
 
   @Post('search-many')
-  // @UseRoles({
-  //   resource: 'usersData',
-  //   action: 'read',
-  //   possession: 'own',
-  // })
+  @UseRoles({
+    resource: 'usersData',
+    action: 'read',
+    possession: 'own',
+  })
   searchMany(@Body() query: any) {
     return this.usersService.searchMany(query);
   }
 
   @Post('search-first-deleted')
-  // @UseRoles({
-  //   resource: 'user',
-  //   action: 'read',
-  //   possession: 'own',
-  // })
+  @UseRoles({
+    resource: 'user',
+    action: 'read',
+    possession: 'own',
+  })
   searchFirstDeleted(@Body() query: any) {
     return this.usersService.searchFirstDeleted(query);
   }
@@ -228,17 +228,6 @@ export class UsersController {
     summary: 'Create a user',
   })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
   @ApiCreatedResponse({ description: 'User has been successfully created' })
   @ApiBadRequestResponse({
     description: 'Some character error or type error',
@@ -250,9 +239,9 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() dto: CreateUserDto,
-    @UploadedFile() file: Express.Multer.File, @Req() req: Request
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
   ) {
-    console.log(file);
     const dataOut = {
       status: true,
       message: '',
@@ -263,7 +252,7 @@ export class UsersController {
     };
 
     try {
-      const userId = req.user['id'];
+      const userId = ''; //req.user['id'];
 
       const user = await this.usersService.create(dto, file, userId);
 

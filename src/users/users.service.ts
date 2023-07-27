@@ -102,8 +102,6 @@ export class UsersService {
     }
     const hashedPassword = await hash(dto.password);
 
-    // dto.profilePic = file.filename;
-    
     // save the new user in the db
     user = await this.db.user
       .create({
@@ -112,11 +110,12 @@ export class UsersService {
           email: dto.email,
           nik: dto.nik,
           name: dto.name,
-          profilePic:file.filename,
+          profilePic: file.filename,
           division: dto.division,
           position: dto.position,
           phone: dto.phone,
           hashedPassword: hashedPassword,
+          roleId: dto.roleId,
           role: dto.role,
           userCreated: userId,
           userModified: userId,
@@ -125,8 +124,8 @@ export class UsersService {
       .catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           // if (error.code === 'P2002') throw new ForbiddenException('Credentials taken.');
-          if (error.code === "P2002")
-            throw new ForbiddenException("Username/Email/NIK already taken.");
+          if (error.code === 'P2002')
+            throw new ForbiddenException('Username/Email/NIK already taken.');
         }
 
         throw error;

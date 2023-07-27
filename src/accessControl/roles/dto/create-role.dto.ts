@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ArrayNotEmpty, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { CreateRolePermissionDto } from 'src/generated/nestjs-dto/create-rolePermission.dto';
+import { CreateRolePermissionDto } from 'src/accessControl/role-permission/dto/create-role-permission.dto';
 
 export class CreateRoleDto {
   @IsNotEmpty()

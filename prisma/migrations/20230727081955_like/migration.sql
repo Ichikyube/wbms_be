@@ -26,6 +26,16 @@ CREATE TABLE `City` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Image` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `path` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Company` (
     `id` CHAR(36) NOT NULL,
     `refType` INTEGER NOT NULL DEFAULT 0,
@@ -220,12 +230,10 @@ CREATE TABLE `User` (
     `nik` VARCHAR(30) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `phone` VARCHAR(30) NULL,
-    `address` VARCHAR(191) NOT NULL,
-    `birthDate` DATE NOT NULL,
     `division` VARCHAR(30) NOT NULL,
     `position` VARCHAR(30) NOT NULL,
     `profilePic` VARCHAR(191) NOT NULL,
-    `roleId` INTEGER NOT NULL,
+    `roleId` INTEGER NULL,
     `role` VARCHAR(30) NOT NULL,
     `hashedPassword` VARCHAR(100) NOT NULL,
     `hashedRT` VARCHAR(100) NULL,
@@ -236,7 +244,7 @@ CREATE TABLE `User` (
     `userCreated` CHAR(36) NULL,
     `userModified` CHAR(36) NULL,
     `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `dtModified` DATETIME(3) NOT NULL,
+    `dtModified` DATETIME(3) NULL,
 
     UNIQUE INDEX `User_username_key`(`username`),
     UNIQUE INDEX `User_email_key`(`email`),
@@ -245,42 +253,42 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `role` (
+CREATE TABLE `Role` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `userCreated` CHAR(36) NOT NULL,
-    `userModified` CHAR(36) NOT NULL,
+    `userCreated` CHAR(36) NULL,
+    `userModified` CHAR(36) NULL,
     `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `dtModified` DATETIME(3) NOT NULL,
+    `dtModified` DATETIME(3) NULL,
 
-    UNIQUE INDEX `role_name_key`(`name`),
+    UNIQUE INDEX `Role_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `RolePermission` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `roleId` INTEGER NOT NULL,
-    `userModified` CHAR(36) NOT NULL,
-    `dtModified` DATETIME(3) NOT NULL,
+    `resource` CHAR(36) NOT NULL,
+    `roleId` INTEGER NULL DEFAULT 0,
+    `userCreated` CHAR(36) NULL,
+    `userModified` CHAR(36) NULL,
+    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `dtModified` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Permission` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `resource_id` CHAR(36) NOT NULL,
-    `actions` JSON NOT NULL,
+    `id` CHAR(36) NOT NULL,
+    `action` ENUM('onlyRead', 'Full') NOT NULL,
+    `possesion` ENUM('OWN', 'ANY') NOT NULL,
     `attributes` VARCHAR(191) NOT NULL,
-    `possesion` VARCHAR(191) NOT NULL,
-    `role` VARCHAR(191) NOT NULL,
-    `role_permission_id` INTEGER NOT NULL,
-    `userCreated` CHAR(36) NOT NULL,
-    `userModified` CHAR(36) NOT NULL,
+    `role_permission_id` INTEGER NOT NULL DEFAULT 0,
+    `userCreated` CHAR(36) NULL,
+    `userModified` CHAR(36) NULL,
     `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `dtModified` DATETIME(3) NOT NULL,
+    `dtModified` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -551,10 +559,10 @@ ALTER TABLE `Weighbridge` ADD CONSTRAINT `Weighbridge_siteId_fkey` FOREIGN KEY (
 ALTER TABLE `Config` ADD CONSTRAINT `Config_id_fkey` FOREIGN KEY (`id`) REFERENCES `Site`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RolePermission` ADD CONSTRAINT `RolePermission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RolePermission` ADD CONSTRAINT `RolePermission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Permission` ADD CONSTRAINT `Permission_role_permission_id_fkey` FOREIGN KEY (`role_permission_id`) REFERENCES `RolePermission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

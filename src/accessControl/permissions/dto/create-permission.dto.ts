@@ -1,21 +1,39 @@
+import { Prisma } from '@prisma/client';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
-import {Prisma, Action,Possession} from '@prisma/client'
-import { IsNotEmpty, IsString } from 'class-validator';
-import {ApiProperty} from '@nestjs/swagger'
+enum action {
+  onlyRead = 'onlyRead',
+  Full = 'Full',
+}
 
+export enum possession {
+  OWN = 'OWN',
+  ANY = 'ANY',
+}
 
 export class CreatePermissionDto {
-    @IsNotEmpty()
-    @IsString()
-    @ApiProperty({ enum: Action})
-    action: Action;
-    @IsNotEmpty()
-    @IsString()
-    @ApiProperty({ enum: Possession})
-    possesion: Possession;
-    @IsNotEmpty()
-    @IsString()
-    attributes: string;
-    userCreated: string;
-    userModified: string;
+  @IsNotEmpty()
+  // @IsEnum(action)
+  @IsString()
+  @ApiProperty() //{ enum: action }
+  action: action;
+
+  @IsNotEmpty()
+  // @IsEnum(possession)
+  @IsString()
+  @ApiProperty()
+  possesion: possession;
+  @IsNotEmpty()
+  @IsString()
+  attributes: string;
 }
+// export const action = {
+//         MONDAY: 'Monday',
+//         TUESDAY: 'Tuesday',
+//         WEDNESDAY: 'Wednesday',
+//         THURSDAY: 'Thursday',
+//         FRIDAY: 'Friday',
+//         SATURDAY: 'Saturday',
+//         SUNDAY: 'Sunday'
+// } as const;

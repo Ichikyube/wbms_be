@@ -35,10 +35,10 @@ import {
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
 import { RBAC_POLICY } from './accessControl/rbac-policy';
+import { RolesModule } from './accessControl/roles/roles.module';
 // import { DbService } from './db/db.service';
 // import { RolesModule } from './accessControl/roles/roles.module';
 // import { RbacModule } from './accessControl/rbac.module';
-
 
 @Module({
   imports: [
@@ -85,6 +85,7 @@ import { RBAC_POLICY } from './accessControl/rbac-policy';
     WeighbridgesModule,
     ConfigsModule,
     UsersModule,
+    RolesModule,
     ProductsModule,
     StorageTanksModule,
     ProductGroupsModule,
@@ -96,18 +97,18 @@ import { RBAC_POLICY } from './accessControl/rbac-policy';
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AtGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: ACGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TimestampInterceptor,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AtGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ACGuard,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: TimestampInterceptor,
+    // },
   ],
 })
 export class AppModule {}

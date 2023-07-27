@@ -286,9 +286,8 @@ model User {
 
   profilePic     String  
   
-  roleId         Int     @default(0)  
+  roleId         Int?     
   role           String  @db.VarChar(30)
-
   hashedPassword String  @db.VarChar(100)
   hashedRT       String? @db.VarChar(100)
 
@@ -300,8 +299,8 @@ model User {
   userCreated  String?  @db.Char(36)
   userModified String?  @db.Char(36)
   dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
-  roleModel         Role   @relation(fields: [roleId], references: [id])
+  dtModified   DateTime? @updatedAt
+  userRole     Role?   @relation(fields: [roleId], references: [id])
 }
 
 model Role {
@@ -309,24 +308,23 @@ model Role {
   name         String    @unique @db.VarChar(255)
   rolePermission   RolePermission[]
 
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
   dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  dtModified   DateTime? @updatedAt
   users        User[]
-  @@map(name: "role")
 }
 
 model RolePermission {
   id           Int       @id @default(autoincrement())
-  resourceId  Int       @default(0)
+  resource     String    @db.Char(36)
   permissions   Permission[]
-  roleId       Int    @default(0)
+  roleId       Int?    @default(0)
   role         Role?  @relation(fields: [roleId], references: [id])
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
   dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  dtModified   DateTime? @updatedAt
 }
 
 enum Resource {
@@ -369,16 +367,16 @@ enum Possession {
 
 model Permission  {
   id          String @id @default(uuid()) @db.Char(36)
-  action      Action
-  possesion   Possession
+  action      String
+  possesion   String
   attributes   String
   role_permission_id Int @default(0)
-  role_permission RolePermission   @relation(fields: [role_permission_id], references: [id])
+  role_permission RolePermission?   @relation(fields: [role_permission_id], references: [id])
   
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
   dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  dtModified   DateTime? @updatedAt
 }
 
 model Product {

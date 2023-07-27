@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsInt,
   IsNotEmpty,
   IsPhoneNumber,
   IsString,
   Length,
   isBoolean,
+  isNumber,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -23,6 +25,12 @@ export class CreateUserDto {
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string = 'Bambang Tri';
 
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+  })
+  file: Express.Multer.File;
+
   @ApiProperty()
   @IsString()
   division?: string;
@@ -37,7 +45,9 @@ export class CreateUserDto {
 
   // @IsEnum(UserRole)
   @ApiProperty()
-  roleId: number = 1;
+  @IsNotEmpty()
+  @IsInt()
+  readonly roleId: number;
 
   @ApiProperty({ type: String })
   role: string = 'staff';

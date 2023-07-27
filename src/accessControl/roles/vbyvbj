@@ -28,7 +28,56 @@
     //jadi begini
 
 
-
+const permissions = await this.db.permission.create({
+      data: {
+        action: 'onlyRead',
+        attributes: '*',
+        possesion: 'ANY',
+        userCreated: 'T',
+        userModified: 't',
+      },
+    });
+    const rolePermissione = await this.db.rolePermission.create({
+      data: {
+        resource: 5,
+        permissions: {
+          create: [
+            {
+              action: 'onlyRead',
+              attributes: '*',
+              possesion: 'ANY',
+              userCreated: 'T',
+              userModified: 't',
+            },
+          ],
+        },
+        userCreated: 'string',
+        userModified: 'string',
+      },
+    });
+    const roles = await this.db.role.create({
+      data: {
+        name,
+        rolePermission: {
+          create: [
+            {
+              resourceId: 5,
+              permissions: {
+                create: [
+                  {
+                    action: 'onlyRead',
+                    attributes: '*',
+                    possesion: 'ANY',
+                    userCreated: 'T',
+                    userModified: 't',
+                  },
+                ],
+              },
+            }
+          ]
+        },
+      }
+    })
 
 
 

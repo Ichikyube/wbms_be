@@ -8,3 +8,5 @@ https://shpota.com/2022/07/16/role-based-authorization-with-jwt-using-nestjs.htm
 
 uber-eats-clone github
 https://wanago.io/2021/11/15/api-nestjs-authorization-roles-claims/
+https://github.com/limon636/nestjs-dynamic-access-control/tree/main
+https://github.com/limon636/nestjs-role-base-access-control

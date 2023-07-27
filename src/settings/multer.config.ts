@@ -17,17 +17,21 @@ export const multerOptions = {
     fileSize: +process.env.MAX_FILE_SIZE,
   },
   // Check the mimetypes to allow for upload
-  fileFilter: (req: any, file: {
-    fieldname: string;
-    originalname: string;
-    encoding: string;
-    mimetype: string;
-    size: number;
-    destination: string;
-    filename: string;
-    path: string;
-    buffer: Buffer;
-  }, cb: any) => {
+  fileFilter: (
+    req: any,
+    file: {
+      fieldname: string;
+      originalname: string;
+      encoding: string;
+      mimetype: string;
+      size: number;
+      destination: string;
+      filename: string;
+      path: string;
+      buffer: Buffer;
+    },
+    cb: any,
+  ) => {
     if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
       // Allow storage of file
       cb(null, true);

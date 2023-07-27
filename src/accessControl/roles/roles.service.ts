@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma, Role } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -15,40 +15,41 @@ export class RolesService {
   ) {}
 
   getRoles(): Promise<string[]> {
-    return Promise.resolve([
-      'my-custom-role',
-    ]);
+    return Promise.resolve(['my-custom-role']);
   }
 
-  async createRole(createRoleDto: CreateRoleDto,  userId: string): Promise<any> {
+  async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
     const { name, rolePermission } = createRoleDto;
 
-    let role = await this.db.role.findMany({
+    let role = await this.db.role.findFirst({
       where: {
         name: {
           equals: createRoleDto.name,
         },
       },
     });
-    if (!role) {
-      const roleData = { name };
-      const rolePermissionsData = rolePermission.map(permission => ({
-        resourceId: permission.resourceId,
-        permissions: permission.permissions,
-      }));
-  
-      role = await this.db.role.create({
+    if (role) {
+      throw new HttpException('Rolee already exists', HttpStatus.BAD_REQUEST);
+    }
+    const rolePermissionsData = rolePermission.map((permission) => ({
+      resource: permission.resource,
+      permissions: permission.permissions,
+    }));
+    try {
+      const newRole = await this.db.role.create({
         data: {
-          ...roleData,
+          name,
           rolePermission: {
             createMany: {
-              data: rolePermissionsData.map(permissionData => ({
-                ...permissionData,
+              data: rolePermissionsData.map((permissionData) => ({
+                resource: permissionData.resource,
                 permissions: {
                   createMany: {
-                    data: permissionData.permissions,
+                    data: { ...permissionData.permissions },
                   },
                 },
+                userCreated: userId,
+                userModified: '',
               })),
             },
           },
@@ -63,8 +64,14 @@ export class RolesService {
           },
         },
       });
+
+      return newRole;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log('Missing properties:', e.meta.target); // e.meta.target contains the missing properties
+      }
+      throw e;
     }
-    return role;
   }
 
   async findRoleById(id: number): Promise<RoleEntity | null> {
