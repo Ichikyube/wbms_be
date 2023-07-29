@@ -23,7 +23,9 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build the tagged Docker image
-      run: docker build . --file Dockerfile --tag almyra/wbms_tbe:${{steps.vars.outputs.tag}}
+      run: docker build . --file Dockerfile --tag wbms_tbe:${{steps.vars.outputs.tag}}
+    - name: Tag the Docker image
+      run: docker tag wbms_tbe almyra/wbms_tbe:${{steps.vars.outputs.tag}}
     - name: Push the tagged Docker image
       run: docker push almyra/wbms_tbe:${{steps.vars.outputs.tag}}
     - name: Build the Docker image
