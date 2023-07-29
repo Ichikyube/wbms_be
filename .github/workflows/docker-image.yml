@@ -15,13 +15,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag wbms_tbe:$(date +%s)
+      run: docker build . --file Dockerfile --tag wbms_tbe:latest
+    - name: Tag the Docker image
+      run: docker tag wbms_tbe:latest almyra/wbms_tbe:latest
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Push to DockerHub
-      run: docker push almyra/wbms_tbe:$(date +%s)
+      run: docker push almyra/wbms_tbe:latest
     - name: Update version
-      run: echo "::set-env name=DOCKER_IMAGE_VERSION::$(date +%s)
+      run: echo "::set-env name=DOCKER_IMAGE_VERSION::latest
