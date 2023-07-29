@@ -23,14 +23,13 @@ jobs:
         echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
         echo "Tag name from github.ref_name: ${{  github.ref_name }}"
     - name: Build the tagged Docker image
-      run: docker build . --file Dockerfile --tag wbms_tbe:$(date +'%Y-%m-%d')
-    - name: Tag the Docker image
-      run: docker tag wbms_tbe almyra/wbms_tbe:$(date +'%Y-%m-%d')
-    - name: Push the tagged Docker image
-      run: docker push almyra/wbms_tbe:$(date +'%Y-%m-%d')
-    - name: Build the Docker image
       run: docker build . --file Dockerfile --tag wbms_tbe
     - name: Tag the Docker image
       run: docker tag wbms_tbe almyra/wbms_tbe:latest
     - name: Push to DockerHub
       run: docker push almyra/wbms_tbe:latest
+    - name: Tag the Docker image
+      run: docker tag wbms_tbe almyra/wbms_tbe:$(date +'%Y-%m-%d')
+    - name: Push the tagged Docker image
+      run: docker push almyra/wbms_tbe:$(date +'%Y-%m-%d')
+
