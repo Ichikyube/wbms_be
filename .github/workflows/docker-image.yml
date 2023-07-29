@@ -21,9 +21,9 @@ jobs:
     - name: Build the tagged Docker image
       run: docker build . --file Dockerfile --tag wbms_tbe:${{ github.event.release.tag_name }}
     - name: Tag the Docker image
-      run: docker tag wbms_tbe almyra/wbms_tbe:${{steps.vars.outputs.tag}}
+      run: docker tag wbms_tbe almyra/wbms_tbe:${{ github.event.release.tag_name }}
     - name: Push the tagged Docker image
-      run: docker push almyra/wbms_tbe:${{steps.vars.outputs.tag}}
+      run: docker push almyra/wbms_tbe:${{ github.event.release.tag_name }}
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag wbms_tbe
     - name: Tag the Docker image
