@@ -23,7 +23,20 @@ docker run --name my-openldap-container --detach osixia/openldap:1.4.0
         value: $((${{ secrets.MINOR }}+1))
         repository: EriksonGM/MasterReport
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
-
+- uses: actions/checkout@v1
+        - name: Login to DockerHub Registry
+          run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+        - name: Get the version
+          id: vars
+          run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+        - name: Build the tagged Docker image
+          run: docker build . --file Dockerfile --tag pjlamb12/angular-cli:${{steps.vars.outputs.tag}}
+        - name: Push the tagged Docker image
+          run: docker push pjlamb12/angular-cli:${{steps.vars.outputs.tag}}
+        - name: Build the latest Docker image
+          run: docker build . --file Dockerfile --tag pjlamb12/angular-cli:latest
+        - name: Push the latest Docker image
+          run: docker push pjlamb12/angular-cli:latest
 import {
     Body,
     Controller,

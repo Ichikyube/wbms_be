@@ -14,16 +14,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag wbms_tbe:latest
-    - name: Tag the Docker image
-      run: docker tag wbms_tbe:latest almyra/wbms_tbe:latest
+    - name: Get the version
+      id: vars
+      run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build the tagged Docker image
+      run: docker build . --file Dockerfile --tag almyra/wbms_tbe:${{steps.vars.outputs.tag}}
+    - name: Push the tagged Docker image
+      run: docker push almyra/wbms_tbe:${{steps.vars.outputs.tag}}
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag wbms_tbe
+    - name: Tag the Docker image
+      run: docker tag wbms_tbe almyra/wbms_tbe:latest
     - name: Push to DockerHub
       run: docker push almyra/wbms_tbe:latest
-    - name: Update version
-      run: echo "::set-env name=DOCKER_IMAGE_VERSION::latest
