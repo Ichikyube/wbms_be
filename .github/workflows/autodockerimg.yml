@@ -1,0 +1,24 @@
+name: 'WBMS_TBE'
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-docker-image:${{ github.sha }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Push to DockerHub
+      run: docker push my-docker-image:${{ github.sha }}
+    - name: Update version
+      run: echo "::set-env name=DOCKER_IMAGE_VERSION::${{ github.sha }}"

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { ArrayNotEmpty, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { CreateRolePermissionDto } from 'src/accessControl/role-permission/dto/create-role-permission.dto';
+import { CreatePermissionDto } from 'src/accessControl/roles/dto/create-permission.dto';
 
 export class CreateRoleDto {
   @IsNotEmpty()
@@ -10,5 +11,6 @@ export class CreateRoleDto {
 
   @ValidateNested({ each: true })
   @ArrayNotEmpty()
-  readonly rolePermission?: CreateRolePermissionDto[];
+  @Type(() => CreatePermissionDto)
+  readonly rolePermission?: CreatePermissionDto[];
 }

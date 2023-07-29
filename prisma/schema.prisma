@@ -276,17 +276,17 @@ model Config {
 model User {
   id String @id @default(uuid()) @db.Char(36)
 
-  username       String  @unique @db.VarChar(30)
-  email          String  @unique @db.VarChar(50)
-  nik            String  @unique @db.VarChar(30)
-  name           String  @db.VarChar(50)
-  phone          String? @db.VarChar(30)
-  division       String  @db.VarChar(30)
-  position       String  @db.VarChar(30)
+  username String  @unique @db.VarChar(30)
+  email    String  @unique @db.VarChar(50)
+  nik      String  @unique @db.VarChar(30)
+  name     String  @db.VarChar(50)
+  phone    String? @db.VarChar(30)
+  division String  @db.VarChar(30)
+  position String  @db.VarChar(30)
 
-  profilePic     String  
-  
-  roleId         Int?     
+  profilePic String
+
+  roleId         Int?
   role           String  @db.VarChar(30)
   hashedPassword String  @db.VarChar(100)
   hashedRT       String? @db.VarChar(100)
@@ -294,90 +294,77 @@ model User {
   isEmailVerified Boolean @default(false)
   isLDAPUser      Boolean @default(true)
   isDisabled      Boolean @default(false)
-  isDeleted       Boolean  @default(false)
+  isDeleted       Boolean @default(false)
 
-  userCreated  String?  @db.Char(36)
-  userModified String?  @db.Char(36)
-  dtCreated    DateTime @default(now())
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
+  dtCreated    DateTime  @default(now())
   dtModified   DateTime? @updatedAt
-  userRole     Role?   @relation(fields: [roleId], references: [id])
+  userRole     Role?     @relation(fields: [roleId], references: [id])
 }
 
 model Role {
-  id           Int       @id @default(autoincrement())
-  name         String    @unique @db.VarChar(255)
-  rolePermission   RolePermission[]
-
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime? @updatedAt
-  users        User[]
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @db.VarChar(255)
+  permissions Permission[]
+  users       User[]
 }
 
-model RolePermission {
-  id           Int       @id @default(autoincrement())
-  resource     String    @db.Char(36)
-  permissions   Permission[]
-  roleId       Int?    @default(0)
-  role         Role?  @relation(fields: [roleId], references: [id])
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime? @updatedAt
+model Permission {
+  id       String  @id @default(uuid()) @db.Char(36)
+  resource String  @db.Char(36)
+  grants   Grant[]
+  roleId   Int     @default(0)
+  role     Role    @relation(fields: [roleId], references: [id])
 }
 
-enum Resource {
-  barcodeTypes
-  cities
-  companies
-  configs
-  customerGroups
-  customers
-  customerType
-  driver
-  mills
-  products
-  ProductGroups
-  provinces
-  semai
-  sites
-  storageTanks
-  transactions
-  transportVehicles
-  users
-  weighbridges
-}
-
-enum MainSite {
-  PKS
-  T30
-  Labanan
-}
-
-enum Action {
-  onlyRead
-  Full
-}
-
-enum Possession {
-  OWN
-  ANY
-}
-
-model Permission  {
-  id          String @id @default(uuid()) @db.Char(36)
-  action      String
-  possesion   String
+model Grant {
+  id           String     @id @default(uuid()) @db.Char(36)
+  action       String
+  possesion    String
   attributes   String
-  role_permission_id Int @default(0)
-  role_permission RolePermission?   @relation(fields: [role_permission_id], references: [id])
-  
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime? @updatedAt
+  PermissionId String     @db.Char(36)
+  Permission   Permission @relation(fields: [PermissionId], references: [id])
+
 }
+
+// enum Resource {
+//   barcodeTypes
+//   cities
+//   companies
+//   configs
+//   customerGroups
+//   customers
+//   customerType
+//   driver
+//   mills
+//   products
+//   ProductGroups
+//   provinces
+//   semai
+//   sites
+//   storageTanks
+//   transactions
+//   transportVehicles
+//   users
+//   weighbridges
+// }
+
+// enum MainSite {
+//   PKS
+//   T30
+//   Labanan
+// }
+
+// enum Action {
+//   onlyRead
+//   Full
+// }
+
+// enum Possession {
+//   OWN
+//   ANY
+// }
 
 model Product {
   id      String  @id @default(uuid()) @db.Char(36)
@@ -462,21 +449,20 @@ model Driver {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0)
   refId   String? @db.VarChar(50)
-  codeSap      String  @db.VarChar(50)
-  
+  codeSap String  @db.VarChar(50)
+
   companyId    String? @db.Char(36)
   companyRefId String? @db.VarChar(50)
   companyName  String  @db.VarChar(50)
 
-  nik       String    @unique @db.VarChar(30)
-  name      String    @db.VarChar(50)
-  address   String?   @db.VarChar(250)
-  email     String?   @db.VarChar(30)
-  phone     String?   @db.VarChar(30)
+  nik     String  @unique @db.VarChar(30)
+  name    String  @db.VarChar(50)
+  address String? @db.VarChar(250)
+  email   String? @db.VarChar(30)
+  phone   String? @db.VarChar(30)
 
   licenseNo String?   @db.VarChar(30)
   licenseED DateTime?
-
 
   isDeleted    Boolean  @default(false)
   userCreated  String   @db.Char(36)
@@ -492,7 +478,7 @@ model TransportVehicle {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0)
   refId   String? @db.VarChar(50)
-  codeSap     String  @db.VarChar(50)
+  codeSap String  @db.VarChar(50)
 
   companyId    String? @db.Char(36)
   companyRefId String? @db.VarChar(50)

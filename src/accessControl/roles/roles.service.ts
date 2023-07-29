@@ -1,16 +1,14 @@
+import { permission } from './roles.type';
+import { possession } from './dto/create-grant.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma, Role } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
-import { PermissionsService } from '../permissions/permissions.service';
-import { RolePermissionService } from '../role-permission/role-permission.service';
 
 @Injectable()
 export class RolesService {
   constructor(
-    private permissionService: PermissionsService,
-    private rolePermissionService: RolePermissionService,
     private db: DbService,
   ) {}
 
@@ -29,42 +27,34 @@ export class RolesService {
       },
     });
     if (role) {
-      throw new HttpException('Rolee already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
     }
     const rolePermissionsData = rolePermission.map((permission) => ({
       resource: permission.resource,
-      permissions: permission.permissions,
+      permissions: permission.grants,
     }));
     try {
       const newRole = await this.db.role.create({
         data: {
           name,
-          rolePermission: {
-            createMany: {
-              data: rolePermissionsData.map((permissionData) => ({
-                resource: permissionData.resource,
-                permissions: {
-                  createMany: {
-                    data: { ...permissionData.permissions },
-                  },
-                },
-                userCreated: userId,
-                userModified: '',
-              })),
-            },
-          },
-          userCreated: userId,
-          userModified: '',
-        },
-        include: {
-          rolePermission: {
-            include: {
-              permissions: true,
-            },
-          },
         },
       });
-
+      for(let i =0; i < rolePermissionsData.length; i++) {
+        await this.db.permission.create({
+          data: {
+              roleId: newRole.id,
+              resource: rolePermissionsData[i].resource,
+              grants: {
+                createMany: {
+                  data: rolePermissionsData[i].permissions,
+                },
+              },
+              },
+              include: {
+                grants: true,
+              },
+        })
+      }
       return newRole;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -78,7 +68,7 @@ export class RolesService {
     return this.db.role.findUnique({
       where: { id },
       include: {
-        rolePermission: true,
+        permissions: true,
         users: true,
       },
     });
@@ -103,7 +93,7 @@ export class RolesService {
   async findAllRoles(): Promise<RoleEntity[]> {
     return this.db.role.findMany({
       include: {
-        rolePermission: true,
+        permissions: true,
         users: true,
       },
     });

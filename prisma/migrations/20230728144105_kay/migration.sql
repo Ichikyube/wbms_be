@@ -256,39 +256,27 @@ CREATE TABLE `User` (
 CREATE TABLE `Role` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `userCreated` CHAR(36) NULL,
-    `userModified` CHAR(36) NULL,
-    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `dtModified` DATETIME(3) NULL,
 
     UNIQUE INDEX `Role_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `RolePermission` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Permission` (
+    `id` CHAR(36) NOT NULL,
     `resource` CHAR(36) NOT NULL,
-    `roleId` INTEGER NULL DEFAULT 0,
-    `userCreated` CHAR(36) NULL,
-    `userModified` CHAR(36) NULL,
-    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `dtModified` DATETIME(3) NULL,
+    `roleId` INTEGER NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Permission` (
+CREATE TABLE `Grant` (
     `id` CHAR(36) NOT NULL,
-    `action` ENUM('onlyRead', 'Full') NOT NULL,
-    `possesion` ENUM('OWN', 'ANY') NOT NULL,
+    `action` VARCHAR(191) NOT NULL,
+    `possesion` VARCHAR(191) NOT NULL,
     `attributes` VARCHAR(191) NOT NULL,
-    `role_permission_id` INTEGER NOT NULL DEFAULT 0,
-    `userCreated` CHAR(36) NULL,
-    `userModified` CHAR(36) NULL,
-    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `dtModified` DATETIME(3) NULL,
+    `PermissionId` CHAR(36) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -562,10 +550,10 @@ ALTER TABLE `Config` ADD CONSTRAINT `Config_id_fkey` FOREIGN KEY (`id`) REFERENC
 ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RolePermission` ADD CONSTRAINT `RolePermission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Permission` ADD CONSTRAINT `Permission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Permission` ADD CONSTRAINT `Permission_role_permission_id_fkey` FOREIGN KEY (`role_permission_id`) REFERENCES `RolePermission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Grant` ADD CONSTRAINT `Grant_PermissionId_fkey` FOREIGN KEY (`PermissionId`) REFERENCES `Permission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `StorageTank` ADD CONSTRAINT `StorageTank_siteId_fkey` FOREIGN KEY (`siteId`) REFERENCES `Site`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

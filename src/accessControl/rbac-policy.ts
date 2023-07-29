@@ -13,7 +13,6 @@ export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 //     .updateAny('video', ['title'])  // explicitly defined attributes
 //     .deleteAny('video');
 
-// prettier-ignore
 RBAC_POLICY
   .grant(Role.STAFF1)
     .readOwn('employeeData')
@@ -47,6 +46,21 @@ let grantsObject = {
     },
   },
 };
+// const ac = new AccessControl(grantList);
+// ac.setGrants(grantsObject);
+// console.log(ac.getGrants());
+
+// const permission = ac.can('user').createOwn('video');
+// console.log(permission.granted);    // —> true
+// console.log(permission.attributes); // —> ['*'] (all attributes)
+
+// permission = ac.can('admin').updateAny('video');
+// console.log(permission.granted);    // —> true
+// console.log(permission.attributes); // —> ['title']
+// ac.grant('admin').readAny('video', ['*']);
+// ac.grant('user').readOwn('video', ['*', '!id']);
+// ac.grant('user').readOwn('account', ['*', '!record.id']);
+
 
 // grant list fetched from DB (to be converted to a valid grants object, internally)
 // let grantList = [
@@ -80,41 +94,26 @@ let grantsObject = {
 //   },
 //   { role: 'user', resource: 'video', action: 'delete:own', attributes: '*' },
 // ];
-// const ac = new AccessControl(grantList);
-// // ac.setGrants(grantsObject);
-// // console.log(ac.getGrants());
-
-// // const permission = ac.can('user').createOwn('video');
-// // console.log(permission.granted);    // —> true
-// // console.log(permission.attributes); // —> ['*'] (all attributes)
-
-// // permission = ac.can('admin').updateAny('video');
-// // console.log(permission.granted);    // —> true
-// // console.log(permission.attributes); // —> ['title']
-// // ac.grant('admin').readAny('video', ['*']);
-// // ac.grant('user').readOwn('video', ['*', '!id']);
-// // ac.grant('user').readOwn('account', ['*', '!record.id']);
 
 
-
-// // // This is actually how the grants are maintained internally.
-// // let grantsObject = {
-// //   admin: {
-// //       video: {
-// //           'create:any': ['*', '!views'],
-// //           'read:any': ['*'],
-// //           'update:any': ['*', '!views'],
-// //           'delete:any': ['*']
-// //       }
-// //   },
-// //   user: {
-// //       video: {
-// //           'create:own': ['*', '!rating', '!views'],
-// //           'read:own': ['*'],
-// //           'update:own': ['*', '!rating', '!views'],
-// //           'delete:own': ['*']
-// //       }
-// //   }
-// // };
-// // const ac = new AccessControl(grantsObject);
+// // This is actually how the grants are maintained internally.
+// let grantsObject = {
+//   admin: {
+//       video: {
+//           'create:any': ['*', '!views'],
+//           'read:any': ['*'],
+//           'update:any': ['*', '!views'],
+//           'delete:any': ['*']
+//       }
+//   },
+//   user: {
+//       video: {
+//           'create:own': ['*', '!rating', '!views'],
+//           'read:own': ['*'],
+//           'update:own': ['*', '!rating', '!views'],
+//           'delete:own': ['*']
+//       }
+//   }
+// };
+// const ac = new AccessControl(grantsObject);
 
