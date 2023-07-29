@@ -18,20 +18,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Set env
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-    - name: Test
-      run: |
-        echo $RELEASE_VERSION
-        echo ${{ env.RELEASE_VERSION }}
-    - name: Get the version
-      id: vars
-      run: echo ::set-output name=tag::$(echo $RELEASE_VERSION)
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build the tagged Docker image
-      run: docker build . --file Dockerfile --tag wbms_tbe:${{steps.vars.outputs.tag}}
+      run: docker build . --file Dockerfile --tag wbms_tbe:${{ github.event.release.tag_name }}
     - name: Tag the Docker image
       run: docker tag wbms_tbe almyra/wbms_tbe:${{steps.vars.outputs.tag}}
     - name: Push the tagged Docker image

@@ -2,15 +2,36 @@ docker image on almyra/wbms_bet:v1.1
 Easiest way to set up LDAP for dev testing
 LDAP Authentication in nestjs
 How to create mock LDAP server for nestjs project
-https://docs.docker.com/docker-hub/builds/
-https://docs.github.com/en/actions/quickstart
+
+LDAP-Auth
+Transaction
+Config
 
 
-docker tag local-image:tagname new-repo:tagname
-docker push new-repo:tagname
 # Example of running OpenLDAP in a Docker container
 docker run --name my-openldap-container --detach osixia/openldap:1.4.0
+    - name: Test
+      run: |
+        echo $RELEASE_VERSION
+        echo ${{ env.RELEASE_VERSION }}
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Get the version
+      id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Build the tagged Docker image
+      if: ${{ github.event.release }}
+      run: docker build . --file Dockerfile --tag wbms_tbe:${{steps.vars.outputs.tag}}
       run: docker build . --file src/MasterReport.UI/Dockerfile --tag eriksongm/master-report:${{ secrets.MAJOR }}.${{ secrets.MINOR }}
     -
       name: Push to DockerHub
@@ -23,20 +44,10 @@ docker run --name my-openldap-container --detach osixia/openldap:1.4.0
         value: $((${{ secrets.MINOR }}+1))
         repository: EriksonGM/MasterReport
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
-- uses: actions/checkout@v1
-        - name: Login to DockerHub Registry
-          run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-        - name: Get the version
-          id: vars
-          run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
-        - name: Build the tagged Docker image
-          run: docker build . --file Dockerfile --tag pjlamb12/angular-cli:${{steps.vars.outputs.tag}}
-        - name: Push the tagged Docker image
-          run: docker push pjlamb12/angular-cli:${{steps.vars.outputs.tag}}
-        - name: Build the latest Docker image
-          run: docker build . --file Dockerfile --tag pjlamb12/angular-cli:latest
-        - name: Push the latest Docker image
-          run: docker push pjlamb12/angular-cli:latest
+timestamp=$(date +%Y%m%d%H%M%S)
+$(git rev-parse --short HEAD)
+$(docker images | awk '(\$1 == "your/project") {print \$2 += .01; exit}')
+
 import {
     Body,
     Controller,

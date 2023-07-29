@@ -1,7 +1,5 @@
-import { permission } from './roles.type';
-import { possession } from './dto/create-grant.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma, Role } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
@@ -11,10 +9,6 @@ export class RolesService {
   constructor(
     private db: DbService,
   ) {}
-
-  getRoles(): Promise<string[]> {
-    return Promise.resolve(['my-custom-role']);
-  }
 
   async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
     const { name, rolePermission } = createRoleDto;
@@ -90,7 +84,7 @@ export class RolesService {
     });
   }
 
-  async findAllRoles(): Promise<RoleEntity[]> {
+  async getRoles(): Promise<RoleEntity[]> {
     return this.db.role.findMany({
       include: {
         permissions: true,

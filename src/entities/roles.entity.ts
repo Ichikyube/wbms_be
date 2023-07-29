@@ -1,4 +1,4 @@
-import { RolePermissionEntity } from './role-permission.entity';
+import { RolePermissionEntity } from './permission.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
 

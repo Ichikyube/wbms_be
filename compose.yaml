@@ -44,8 +44,7 @@ services:
       - armin-net
 
   wbms-backend:
-    build:
-      context: .
+    image: almyra/wbms_tbe:latest
     depends_on:
       - wbms-db
     restart: always

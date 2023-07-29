@@ -1,8 +1,8 @@
 export * from './city.entity';
 import { UserEntity } from './user.entity';
 import { RoleEntity } from './roles.entity';
+import { GrantEntity } from './grant.entity';
 import { PermissionEntity } from './permission.entity';
-import { RolePermissionEntity } from './role-permission.entity';
 import { ProductEntity } from './product.entity';
 import { DriverEntity } from './driver.entity';
 import { CustomerTypeEntity } from './customerType.entity';
@@ -24,7 +24,7 @@ import { WeighbridgeEntity } from './weighbridge.entity';
 const entities = [
     RoleEntity,
     PermissionEntity,
-    RolePermissionEntity,
+    GrantEntity,
     CityEntity, 
     CompanyEntity, 
     CustomerEntity, 

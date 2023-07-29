@@ -1,19 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import { Type } from 'class-transformer';
+import { ArrayNotEmpty, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { GrantEntity } from './grant.entity';
 export class PermissionEntity {
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty({ type: String })
-  id: string;
+  resource: string;
+  @ValidateNested({ each: true })
+  @ArrayNotEmpty()
+  @Type(() => GrantEntity)
+  readonly grants?: GrantEntity[];
 
-  @ApiProperty() //{ enum: Action, enumName: 'Action' }
-  action: string;
-
-  @ApiProperty() //{ enum: Possession, enumName: 'Possession' }
-  possesion: string;
-
-  @ApiProperty({ type: String })
-  attributes: string;
-
-  // @ApiProperty({ type: String })
-  // role_permission_id: string;
-  
 }
+
+
