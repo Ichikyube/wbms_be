@@ -1,68 +1,55 @@
-# syntax=docker/dockerfile:1
+FROM node:lts-alpine3.17 as builder
+# Create app directory
+WORKDIR /wbms_backend
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/engine/reference/builder/
+# Copy application dependency manifests to the container image.
+# A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
+# Copying this first prevents re-running npm install on every code change.
+# COPY package.json ./
+# COPY package-lock.json ./
+# COPY tsconfig.json ./
+COPY --chown=node:node package*.json ./
 
-ARG NODE_VERSION=18
+# In order to run `npm run build` we need access to the Nest CLI which is a dev dependency.
+# Install app dependencies using the `npm ci` command instead of `npm install`
+RUN npm ci install
 
-################################################################################
-# Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine as base
+# Bundle app source
+COPY --chown=node:node .env.production ./.env
+COPY --chown=node:node . .
 
-# Set working directory for all build stages.
-WORKDIR /wbms_be
+RUN npx prisma generate 
 
-
-################################################################################
-# Create a stage for installing production dependecies.
-FROM base as deps
-
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage bind mounts to package.json and package-lock.json to avoid having to copy them
-# into this layer.
-RUN npm ci --omit=dev
-
-################################################################################
-# Create a stage for building the application.
-FROM deps as build
-
-# Download additional development dependencies before building, as some projects require
-# "devDependencies" to be installed to build. If you don't need this, remove this step.
-RUN npm ci
-
-# Copy the environment variable
-COPY .env.production ./.env
-# Copy the rest of the source files into the image.
-COPY . .
-# Run the build script.
-RUN npx prisma generate
+# Run the build command which creates the production bundle
 RUN npm run build
 
-################################################################################
-# Create a new stage to run the application with minimal runtime dependencies
-# where the necessary files are copied from the build stage.
-FROM base as final
 
-# Use production node environment by default.
+# Set NODE_ENV environment variable
 ENV NODE_ENV production
 
-# Copy package.json so that package manager commands can be used.
-COPY package.json .
+# Running `npm ci` removes the existing node_modules directory and passing in --only=production ensures that only the production dependencies are installed. This ensures that the node_modules directory is as optimized as possible
+RUN npm ci --only=production && npm cache clean --force
 
-# Copy the production dependencies without dev dependencies to save some space from the deps stage
-# and also the built application from the build stage into the image.
-COPY --from=deps /wbms_be/node_modules ./node_modules
+# Use the node user from the image (instead of the root user)
+USER node
 
-COPY --from=build /wbms_be/dist ./dist
-COPY --from=build /wbms_be/prisma ./prisma
-COPY --from=build /wbms_be/.env.production ./.env
-# Copy generated prisma client from 
-COPY --from=build /wbms_be/node_modules/.prisma/client  ./node_modules/.prisma/client
-RUN npx prisma generate
-# Expose the port that the application listens on.
+
+# production environment
+FROM node:lts-alpine3.17 as production
+# Create app directory
+WORKDIR /wbms_backend
+
+# Set NODE_ENV environment variable
+ENV NODE_ENV production
+
+# Copy the bundled code from the build stage to the production image
+COPY --chown=node:node --from=builder /wbms_backend/node_modules ./node_modules
+COPY --chown=node:node --from=builder /wbms_backend/dist ./dist
+COPY --chown=node:node --from=builder /wbms_backend/cert ./cert
+COPY --chown=node:node --from=builder /wbms_backend/.env.production ./.env
+
+# Expose port
 EXPOSE 6001
 
-# Run the application.
-CMD npm run start:prod
+# Start the server using the production build
+CMD ["node", "dist/main.js"]
