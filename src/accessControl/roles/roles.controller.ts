@@ -23,7 +23,7 @@ export class RolesController {
   @Get()
   @ApiCreatedResponse({ type: RoleEntity })
   getAllRoles() {
-    return this.rolesService.findAllRoles();
+    return this.rolesService.getRoles();
   }
 
   @Get(':id')
