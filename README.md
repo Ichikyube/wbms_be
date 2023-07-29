@@ -23,11 +23,7 @@ docker run --name my-openldap-container --detach osixia/openldap:1.4.0
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
 
     - name: Build the tagged Docker image
       if: ${{ github.event.release }}
