@@ -31,21 +31,26 @@ jobs:
       #   context: .
       #   file: Dockerfile 
       #   tags: wbms_tbe
-    - name: Build Docker image
-      run:
-        docker buildx create --use
-        docker buildx build --file Dockerfile --tag wbms_tbe .
+    # - name: Build Docker image
+    #   run:
+    #     docker buildx create --use
+    #     docker buildx build --file Dockerfile --tag wbms_tbe .
     - name: Login to DockerHub
       uses: docker/login-action@v2 
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Tag the Docker image
-      run: docker tag wbms_tbe almyra/wbms_tbe:latest
-    - name: Push to DockerHub
-      run: docker push almyra/wbms_tbe:latest
-    - name: Tag the Docker image
-      run: docker tag wbms_tbe almyra/wbms_tbe:$(date +'%Y-%m-%d')
-    - name: Push the tagged Docker image
-      run: docker push almyra/wbms_tbe:$(date +'%Y-%m-%d')
-
+    # - name: Tag the Docker image
+    #   run: docker tag wbms_tbe almyra/wbms_tbe:latest
+    # - name: Push to DockerHub
+    #   run: docker push almyra/wbms_tbe:latest
+    # - name: Tag the Docker image
+    #   run: docker tag wbms_tbe almyra/wbms_tbe:$(date +'%Y-%m-%d')
+    # - name: Push the tagged Docker image
+    #   run: docker push almyra/wbms_tbe:$(date +'%Y-%m-%d')
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2  # Builds and pushes Docker images
+      with:
+        context: .
+        push: true
+        tags: almyra/wbms_tbe:latest  # Replace 'user/app' with your Docker Hub username and image name
