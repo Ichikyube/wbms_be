@@ -41,9 +41,9 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Tag the Docker image
-      run: docker tag wbms_tbe wbms_tbe:latest
+      run: docker tag wbms_tbe almyra/wbms_tbe:latest
     - name: Push to DockerHub
-      run: docker push wbms_tbe:latest
+      run: docker push almyra/wbms_tbe:latest
     - name: Tag the Docker image
       run: docker tag wbms_tbe almyra/wbms_tbe:$(date +'%Y-%m-%d')
     - name: Push the tagged Docker image
