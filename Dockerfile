@@ -62,6 +62,7 @@ COPY --from=deps /wbms_be/node_modules ./node_modules
 
 COPY --from=build /wbms_be/dist ./dist
 COPY --from=build /wbms_be/prisma ./prisma
+COPY --from=build /wbms_backend/cert ./cert
 COPY --from=build /wbms_be/.env.production ./.env
 # Copy generated prisma client from 
 COPY --from=build /wbms_be/node_modules/.prisma/client  ./node_modules/.prisma/client
