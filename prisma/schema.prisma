@@ -348,7 +348,7 @@ model Permission {
   
   userCreated  String?   @db.Char(36)
   userModified String?   @db.Char(36)
-  dtCreated    DateTime @default(now())
+  dtCreated    DateTime  @default(now())
   dtModified   DateTime? @updatedAt
 }
 

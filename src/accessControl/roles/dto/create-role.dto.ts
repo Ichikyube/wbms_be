@@ -12,5 +12,5 @@ export class CreateRoleDto {
   @ValidateNested({ each: true })
   @ArrayNotEmpty()
   @Type(() => PermissionEntity)
-  readonly rolePermission?: PermissionEntity[];
+  readonly permissions?: PermissionEntity[];
 }

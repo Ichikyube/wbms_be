@@ -1,11 +1,8 @@
-import { possession } from './../../entities/grant.entity';
-import { map } from 'rxjs/operators';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
-import { permission } from './types/roles.type';
 import { RolesBuilder } from 'nest-access-control';
 const fs = require('fs');
 
@@ -17,7 +14,7 @@ export class RolesService {
 
   async getRoles(): Promise<any[]> {
     const roles = await this.db.role.findMany({
-        where: {},
+        // where: {},
         include: {
           permissions: {
             include: {
@@ -32,13 +29,14 @@ export class RolesService {
 
   async updateAC() {
     const roles = await this.getRoles();
-    console.log(this.mapToGrantsObject(roles))
+    //console.log(this.mapToGrantsObject(roles))
     const ac = JSON.stringify(roles);
     fs.writeFileSync('./rbac-policy.json', ac);
   }
  
   async generateAC(): Promise<RolesBuilder> {
     const roles = await this.getRoles();
+    console.log(roles)
     let result = roles.map(role => {
       return role.permissions.map(permission => {
         let { action, possession, attributes } = permission.grant
@@ -49,6 +47,9 @@ export class RolesService {
     if (result) {
       let grants = []
       result.forEach((grant) => grants = grants.concat(grant))
+
+      const ac = JSON.stringify(roles);
+      fs.writeFileSync('./rbac-policy.json', ac);
       return new RolesBuilder(grants)
     }
     return new RolesBuilder([])
@@ -75,7 +76,7 @@ export class RolesService {
   }
  
   async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
-    const { name, rolePermission } = createRoleDto;
+    const { name, permissions } = createRoleDto;
 
     let role = await this.db.role.findFirst({
       where: {
@@ -87,7 +88,7 @@ export class RolesService {
     if (role) {
       throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
     }
-    const rolePermissionsData = rolePermission.map((permission) => ({
+    const permissionsData = permissions.map((permission) => ({
       resource: permission.resource,
       permissions: permission.grants,
     }));
@@ -99,14 +100,14 @@ export class RolesService {
           userModified: '',
         },
       });
-      for(let i =0; i < rolePermissionsData.length; i++) {
+      for(let i =0; i < permissionsData.length; i++) {
         await this.db.permission.create({
           data: {
               roleId: newRole.id,
-              resource: rolePermissionsData[i].resource,
+              resource: permissionsData[i].resource,
               grants: {
                 createMany: {
-                  data: rolePermissionsData[i].permissions,
+                  data: permissionsData[i].permissions,
                 },
               },
               userCreated: userId,
@@ -117,8 +118,8 @@ export class RolesService {
             },
         })
       }
-      await this.updateAC();
-
+      const mo = await this.generateAC();
+      console.log(mo)
       return newRole;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

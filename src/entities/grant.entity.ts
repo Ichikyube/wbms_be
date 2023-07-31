@@ -13,9 +13,6 @@ export enum possession {
   ANY = 'ANY',
 }
 export class GrantEntity {
-  @ApiProperty({ type: String })
-  id: string;
-  
   @IsNotEmpty()
   @IsEnum(action)
   @IsString()
