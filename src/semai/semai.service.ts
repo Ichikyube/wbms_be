@@ -7,6 +7,7 @@ import * as https from 'https';
 import { DbService } from 'src/db/db.service';
 import { DecodeQrcodeDto } from './dto/decode-qrcode.dto';
 import { UpdateSemaiDto } from './dto/update-semai.dto';
+import { resolve } from 'path';
 
 @Injectable()
 export class SemaiService {
@@ -14,14 +15,16 @@ export class SemaiService {
 
   WBMS_SEMAI_API_URL = this.config.get('WBMS_SEMAI_API_URL');
   WBMS_SEMAI_API_KEY = this.config.get('WBMS_SEMAI_API_KEY');
+  WBMS_CERT_DIR = __dirname + this.config.get('WBMS_SEMAI_CERT_DIRNAME');
   WBMS_SEMAI_CERT = this.config.get('WBMS_SEMAI_CERT');
   WBMS_SEMAI_KEY = this.config.get('WBMS_SEMAI_KEY');
-
+  
   httpsAgent = new https.Agent({
-    cert: fs.readFileSync(this.WBMS_SEMAI_CERT),
-    key: fs.readFileSync(this.WBMS_SEMAI_KEY),
+    cert: fs.readFileSync(resolve(this.WBMS_CERT_DIR, this.WBMS_SEMAI_CERT)),
+    key: fs.readFileSync(resolve(this.WBMS_CERT_DIR, this.WBMS_SEMAI_KEY)),
   });
 
+  // httpsAgent: this.httpsAgent,
   api = axios.create({
     baseURL: `${this.WBMS_SEMAI_API_URL}/`,
     httpsAgent: this.httpsAgent,
