@@ -1,3 +1,4 @@
+import { possession } from './../../entities/grant.entity';
 import { map } from 'rxjs/operators';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
@@ -5,6 +6,7 @@ import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
 import { permission } from './roles.type';
+import { RolesBuilder } from 'nest-access-control';
 const fs = require('fs');
 
 @Injectable()
@@ -15,6 +17,7 @@ export class RolesService {
 
   async getRoles(): Promise<any[]> {
     const roles = await this.db.role.findMany({
+        where: {},
         include: {
           permissions: {
             include: {
@@ -29,10 +32,28 @@ export class RolesService {
 
   async updateAC() {
     const roles = await this.getRoles();
+    console.log(this.mapToGrantsObject(roles))
     const ac = JSON.stringify(roles);
     fs.writeFileSync('./src/accessControl/rbac-policy.json', ac);
   }
-
+ 
+  async generateAC(): Promise<RolesBuilder> {
+    const roles = await this.getRoles();
+    let result = roles.map(role => {
+      return role.permissions.map(permission => {
+        let { action, possession, attributes } = permission.grant
+        let resource =role.permission.resource
+        return { role: role.name, resource, action, possession, attributes }
+      })
+    })
+    if (result) {
+      let grants = []
+      result.forEach((grant) => grants = grants.concat(grant))
+      return new RolesBuilder(grants)
+    }
+    return new RolesBuilder([])
+  }
+  
   async mapToGrantsObject(jsonData) {
     if (typeof jsonData === "object" && !Array.isArray(jsonData)) {
       const result = {};
@@ -52,39 +73,7 @@ export class RolesService {
       return jsonData;
     }
   }
-  
-  async generateAC() {
-    const roles = await this.getRoles();
-    
-    // Create an empty object to store the mapped values
-    const grantsObject = this.mapToGrantsObject(roles);
-    // Map the JSON values to create the new object
-    // Object.keys(roles).forEach((role) => {
-    //   role.name:
-    //   const mappedValue = roles[role]; // Keep the original value or modify it as needed
-    //   grantsObject[role] = mappedValue;
-    // });
-
-    console.log(grantsObject);
-    // const grantsObject = roles.map((role) => {
-    //   return {
-    //     [role.name]: role.permissions.map(permission => {
-    //       [permission.resource]:  permission.map(grant=> {
-    //         return [grant.action]:[grant.possesion]: 
-          
-    //       })
-    //       })
-          
-    //       // [permission.resource]:{
-    //       //   [permission.grants.map((grant) => grant.name)]: true
-    //       // }),
-    //       // grants: role.permissions.map((permission) =>
-    //       //   permission.grants.map((grant) => grant.name),
-          
-        
-    //   };
-    // });
-  }
+ 
   async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
     const { name, rolePermission } = createRoleDto;
 

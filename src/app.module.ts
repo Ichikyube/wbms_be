@@ -51,25 +51,7 @@ import { RolesModule } from './accessControl/roles/roles.module';
     // AccessControlModule.forRootAsync({
     //   imports: [RolesModule],
     //   inject: [DbService],
-    //   useFactory: async (db: DbService): Promise<RolesBuilder> => {
-        // let roles = await db.role.findMany({
-        //   where: {}, include: {
-        //     grants: { include: { permisssion: true } }
-        //   }
-        // })
-        // let result = roles.map(role => {
-        //   return role.grants.map(grant => {
-        //     let { resource, action, attributes } = grant.permisssion
-        //     return { role: role.name, resource, action, attributes }
-        //   })
-        // })
-        // if (result) {
-        //   let grants = []
-        //   result.forEach((grant) => grants = grants.concat(grant))
-        //   return new RolesBuilder(grants)
-        // }
-    //     return new RolesBuilder([])
-    //   }
+    //   useFactory: generateAC()
     // }),
     DbModule,
     AuthModule,
