@@ -32,16 +32,16 @@ jobs:
       #   file: Dockerfile 
       #   tags: wbms_tbe
     - name: Build Docker image
-      run: |
+      run:
         docker buildx create --use
-        docker buildx build --file Dockerfile --tag almyra/wbms_tbe: .
+        docker buildx build --file Dockerfile --tag wbms_tbe .
     - name: Login to DockerHub
       uses: docker/login-action@v2 
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    # - name: Tag the Docker image
-    #   run: docker tag wbms_tbe almyra/wbms_tbe:latest
+    - name: Tag the Docker image
+      run: docker tag wbms_tbe almyra/wbms_tbe:latest
     - name: Push to DockerHub
       run: docker push almyra/wbms_tbe:latest
     - name: Tag the Docker image
