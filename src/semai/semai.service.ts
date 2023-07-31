@@ -22,7 +22,6 @@ export class SemaiService {
     key: fs.readFileSync(this.WBMS_SEMAI_KEY),
   });
 
-  // httpsAgent: this.httpsAgent,
   api = axios.create({
     baseURL: `${this.WBMS_SEMAI_API_URL}/`,
     httpsAgent: this.httpsAgent,
