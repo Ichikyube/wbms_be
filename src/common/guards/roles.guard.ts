@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { User } from '@prisma/client';
 import { Observable } from 'rxjs';
-import { UserRole } from 'src/accessControl/roles/roles.type';
+import { UserRole } from 'src/accessControl/roles/types/roles.type';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

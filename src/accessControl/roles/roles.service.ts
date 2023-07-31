@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
-import { permission } from './roles.type';
+import { permission } from './types/roles.type';
 import { RolesBuilder } from 'nest-access-control';
 const fs = require('fs');
 
@@ -34,7 +34,7 @@ export class RolesService {
     const roles = await this.getRoles();
     console.log(this.mapToGrantsObject(roles))
     const ac = JSON.stringify(roles);
-    fs.writeFileSync('./src/accessControl/rbac-policy.json', ac);
+    fs.writeFileSync('./rbac-policy.json', ac);
   }
  
   async generateAC(): Promise<RolesBuilder> {

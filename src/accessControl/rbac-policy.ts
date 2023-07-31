@@ -1,6 +1,6 @@
 import { RolesBuilder } from 'nest-access-control';
 import { AccessControl } from 'accesscontrol';
-import { BaseRole } from './roles/roles.type';
+import { BaseRole } from './roles/types/roles.type';
 
 export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 

@@ -1,4 +1,4 @@
-import { permission } from './../accessControl/roles/roles.type';
+import { permission } from '../accessControl/roles/types/roles.type';
 import { ApiProperty } from '@nestjs/swagger';
 import { PermissionEntity } from './permission.entity';
 

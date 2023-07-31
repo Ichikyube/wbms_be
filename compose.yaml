@@ -9,72 +9,72 @@
 # https://github.com/docker/awesome-compose
 version: '3.8'
 services:
-  watchtower:
-    image: containrrr/watchtower:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    # command: --interval 43200
-    # environment:
-    #   - WATCHTOWER_POLL_INTERVAL=43200
-  openldap:
-    image: osixia/openldap:latest
-    container_name: openldap
-    hostname: ldap.wbms.dsn #ldap://0.0.0.0:1389
-    ports:
-      - "389:389"
-      - "636:636"
-    environment:
-      LDAP_ORGANISATION: wbms-dsn
-      LDAP_DOMAIN: wbms.dsn
-      LDAP_BASE_DN: dc=wbms,dc=dsn
-      LDAP_TLS_CRT_FILENAME: server.crt
-      LDAP_TLS_KEY_FILENAME: server.key
-      LDAP_TLS_CA_CRT_FILENAME: wbms.dsn.ca.crt
-      LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
-      LDAP_ADMIN_BIND: cn=admin,dc=wbms,dc=dsn
-      LDAP_ADMIN_USERNAME: admin
-      LDAP_ADMIN_PASSWORD: admin
-      LDAP_CONFIG_PASSWORD: config
-      LDAP_READONLY_USER: true
-      LDAP_READONLY_USER_USERNAME: user
-      LDAP_READONLY_USER_PASSWORD: watcher
-      LDAP_RFC2307BIS_SCHEMA: true
-      LDAP_REMOVE_CONFIG_AFTER_SETUP: true
-      LDAP_TLS: false # Set to "true" for TLS/SSL support (recommended for production)
-      LDAP_TLS_VERIFY_CLIENT: never
-      LDAP_DEBUG: true
-    volumes:
-      - ../armin/storage/certificates:/certs
-      - ../armin/storage/ldap_db:/var/lib/ldap
-      - ../armin/storage/ldap_config:/etc/ldap/slapd.d
-    networks:
-      - armin-net
-  openldap-ui:
-    image: wheelybird/ldap-user-manager:v1.5
-    container_name: openldap-ui
-    environment:
-      LDAP_URI: ldap://ldap.wbms.dsn
-      LDAP_DOMAIN: wbms.dsn
-      LDAP_BASE_DN: dc=wbms,dc=dsn
-      LDAP_REQUIRE_STARTTLS: FALSE
-      LDAP_ADMINS_GROUP: admins
-      LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
-      LDAP_ADMIN_BIND: cn=admin,dc=wbms,dc=dsn
-      LDAP_ADMIN_USERNAME: admin
-      LDAP_ADMIN_PASSWORD: admin
-      LDAP_IGNORE_CERT_ERRORS: true
-      EMAIL_DOMAIN: dsn.co.id
-      NO_HTTPS: TRUE
-      LDAP_DEBUG: true
-      PASSWORD_HASH: SSHA
-      SERVER_HOSTNAME: openldap
-      LDAP_SERVER: openldap:389
-    depends_on:
-      - openldap
-    ports:
-      - 18080:80
-    networks:
-      - armin-net
+  # watchtower:
+  #   image: containrrr/watchtower:latest
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   # command: --interval 43200
+  #   # environment:
+  #   #   - WATCHTOWER_POLL_INTERVAL=43200
+  # openldap:
+  #   image: osixia/openldap:latest
+  #   container_name: openldap
+  #   hostname: ldap.wbms.dsn #ldap://0.0.0.0:1389
+  #   ports:
+  #     - "389:389"
+  #     - "636:636"
+  #   environment:
+  #     LDAP_ORGANISATION: wbms-dsn
+  #     LDAP_DOMAIN: wbms.dsn
+  #     LDAP_BASE_DN: dc=wbms,dc=dsn
+  #     LDAP_TLS_CRT_FILENAME: server.crt
+  #     LDAP_TLS_KEY_FILENAME: server.key
+  #     LDAP_TLS_CA_CRT_FILENAME: wbms.dsn.ca.crt
+  #     LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
+  #     LDAP_ADMIN_BIND: cn=admin,dc=wbms,dc=dsn
+  #     LDAP_ADMIN_USERNAME: admin
+  #     LDAP_ADMIN_PASSWORD: admin
+  #     LDAP_CONFIG_PASSWORD: config
+  #     LDAP_READONLY_USER: true
+  #     LDAP_READONLY_USER_USERNAME: user
+  #     LDAP_READONLY_USER_PASSWORD: watcher
+  #     LDAP_RFC2307BIS_SCHEMA: true
+  #     LDAP_REMOVE_CONFIG_AFTER_SETUP: true
+  #     LDAP_TLS: false # Set to "true" for TLS/SSL support (recommended for production)
+  #     LDAP_TLS_VERIFY_CLIENT: never
+  #     LDAP_DEBUG: true
+  #   volumes:
+  #     - ../armin/storage/certificates:/certs
+  #     - ../armin/storage/ldap_db:/var/lib/ldap
+  #     - ../armin/storage/ldap_config:/etc/ldap/slapd.d
+  #   networks:
+  #     - armin-net
+  # openldap-ui:
+  #   image: wheelybird/ldap-user-manager:v1.5
+  #   container_name: openldap-ui
+  #   environment:
+  #     LDAP_URI: ldap://ldap.wbms.dsn
+  #     LDAP_DOMAIN: wbms.dsn
+  #     LDAP_BASE_DN: dc=wbms,dc=dsn
+  #     LDAP_REQUIRE_STARTTLS: FALSE
+  #     LDAP_ADMINS_GROUP: admins
+  #     LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
+  #     LDAP_ADMIN_BIND: cn=admin,dc=wbms,dc=dsn
+  #     LDAP_ADMIN_USERNAME: admin
+  #     LDAP_ADMIN_PASSWORD: admin
+  #     LDAP_IGNORE_CERT_ERRORS: true
+  #     EMAIL_DOMAIN: dsn.co.id
+  #     NO_HTTPS: TRUE
+  #     LDAP_DEBUG: true
+  #     PASSWORD_HASH: SSHA
+  #     SERVER_HOSTNAME: openldap
+  #     LDAP_SERVER: openldap:389
+  #   depends_on:
+  #     - openldap
+  #   ports:
+  #     - 18080:80
+  #   networks:
+  #     - armin-net
   wbms-db:
     image: 'bitnami/mariadb'
     restart: always
@@ -109,38 +109,38 @@ services:
     networks:
       - armin-net
 
-  wbms-backend:
-    image: almyra/wbms_tbe:latest
-    depends_on:
-      - wbms-db
-    restart: always
-    ports:
-      - 6001:6001
+  # wbms-backend:
+  #   image: almyra/wbms_tbe:latest
+  #   depends_on:
+  #     - wbms-db
+  #   restart: always
+  #   ports:
+  #     - 6001:6001
 
-    environment:
-      WBMS_APP_PORT: '6001'
+  #   environment:
+  #     WBMS_APP_PORT: '6001'
 
-      WBMS_DB_DOMAIN: 'wbms-db'
-      WBMS_DB_PORT: '3306'
-      WBMS_DB_USER: 'wbms_dbu'
-      WBMS_DB_PASSWORD: '3031323334'
-      WBMS_DB_NAME: 'wbms'
+  #     WBMS_DB_DOMAIN: 'wbms-db'
+  #     WBMS_DB_PORT: '3306'
+  #     WBMS_DB_USER: 'wbms_dbu'
+  #     WBMS_DB_PASSWORD: '3031323334'
+  #     WBMS_DB_NAME: 'wbms'
 
-      # 1: PKS, 2: T30, 3: BULKING
-      WBMS_SITE_TYPE: '1'
+  #     # 1: PKS, 2: T30, 3: BULKING
+  #     WBMS_SITE_TYPE: '1'
 
-      WBMS_WB_PORT: '9001'
-      WBMS_WB_MIN_WEIGHT: 1
-      WBMS_WB_STABLE_PERIOD: 3000
+  #     WBMS_WB_PORT: '9001'
+  #     WBMS_WB_MIN_WEIGHT: 1
+  #     WBMS_WB_STABLE_PERIOD: 3000
 
-      WBMS_SEMAI_API_KEY: 'lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso'
-      # WBMS_SEMAI_API_URL: "http://host.docker.internal:14080/external-channel"
-      WBMS_SEMAI_API_URL: 'https://dispatch-api-dev.semaigroup.com/external-channel'
-      WBMS_SEMAI_CERT: './cert/pks4.wb.cert.pem'
-      WBMS_SEMAI_KEY: './cert/pks4.wb.key.pem'
+  #     WBMS_SEMAI_API_KEY: 'lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso'
+  #     # WBMS_SEMAI_API_URL: "http://host.docker.internal:14080/external-channel"
+  #     WBMS_SEMAI_API_URL: 'https://dispatch-api-dev.semaigroup.com/external-channel'
+  #     WBMS_SEMAI_CERT: './cert/pks4.wb.cert.pem'
+  #     WBMS_SEMAI_KEY: './cert/pks4.wb.key.pem'
 
-    networks:
-      - armin-net
+  #   networks:
+  #     - armin-net
 networks:
   armin-net:
     driver: bridge
