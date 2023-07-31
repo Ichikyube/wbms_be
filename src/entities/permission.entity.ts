@@ -11,7 +11,6 @@ export class PermissionEntity {
   @ArrayNotEmpty()
   @Type(() => GrantEntity)
   readonly grants?: GrantEntity[];
-
 }
 
 

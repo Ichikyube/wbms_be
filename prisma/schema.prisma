@@ -252,27 +252,51 @@ model Weighbridge {
   site Site @relation(fields: [siteId], references: [id])
 }
 
+// model Config {
+//   id String @id @db.Char(36) // ini site_id
+
+//   minWeight    Float  @default(0)
+//   imageFolder  String @db.VarChar(250)
+//   fileFolder   String @db.VarChar(250)
+//   millHeadCode String @db.VarChar(50)
+//   millHeadName String @db.VarChar(50)
+//   approval1    String @db.VarChar(50)
+//   approval2    String @db.VarChar(50)
+//   notes        String @db.VarChar(500)
+
+//   isDeleted    Boolean  @default(false)
+//   userCreated  String   @db.Char(36)
+//   userModified String   @db.Char(36)
+//   dtCreated    DateTime @default(now())
+//   dtModified   DateTime @updatedAt
+//   siteId       String   @db.Char(36)
+//   site         Site     @relation(fields: [siteId], references: [id])
+// }
+
+enum ConfigType {
+  boolean
+  string
+  number
+  bigint
+  array
+  object
+}
 model Config {
   id String @id @db.Char(36) // ini site_id
 
-  minWeight    Float  @default(0)
-  imageFolder  String @db.VarChar(250)
-  fileFolder   String @db.VarChar(250)
-  millHeadCode String @db.VarChar(50)
-  millHeadName String @db.VarChar(50)
-  approval1    String @db.VarChar(50)
-  approval2    String @db.VarChar(50)
-  notes        String @db.VarChar(500)
-
+  name         String  @unique @db.VarChar(30)
+  type         ConfigType @default(number)
+  Status       Boolean
+  activeStart  DateTime
+  activeEnd    DateTime
   isDeleted    Boolean  @default(false)
   userCreated  String   @db.Char(36)
   userModified String   @db.Char(36)
   dtCreated    DateTime @default(now())
   dtModified   DateTime @updatedAt
-
-  site Site @relation(fields: [id], references: [id])
+  siteId       String   @db.Char(36)
+  site         Site[]   
 }
-
 model User {
   id String @id @default(uuid()) @db.Char(36)
 
@@ -307,6 +331,11 @@ model Role {
   id          Int          @id @default(autoincrement())
   name        String       @unique @db.VarChar(255)
   permissions Permission[]
+
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
+  dtCreated    DateTime  @default(now())
+  dtModified   DateTime? @updatedAt
   users       User[]
 }
 
@@ -316,6 +345,11 @@ model Permission {
   grants   Grant[]
   roleId   Int     @default(0)
   role     Role    @relation(fields: [roleId], references: [id])
+  
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
+  dtCreated    DateTime @default(now())
+  dtModified   DateTime? @updatedAt
 }
 
 model Grant {
@@ -325,46 +359,50 @@ model Grant {
   attributes   String
   PermissionId String     @db.Char(36)
   Permission   Permission @relation(fields: [PermissionId], references: [id])
-
+  
+  userCreated  String?   @db.Char(36)
+  userModified String?   @db.Char(36)
+  dtCreated    DateTime @default(now())
+  dtModified   DateTime? @updatedAt
 }
 
-// enum Resource {
-//   barcodeTypes
-//   cities
-//   companies
-//   configs
-//   customerGroups
-//   customers
-//   customerType
-//   driver
-//   mills
-//   products
-//   ProductGroups
-//   provinces
-//   semai
-//   sites
-//   storageTanks
-//   transactions
-//   transportVehicles
-//   users
-//   weighbridges
-// }
+enum Resource {
+  barcodeTypes
+  cities
+  companies
+  configs
+  customerGroups
+  customers
+  customerType
+  driver
+  mills
+  products
+  ProductGroups
+  provinces
+  semai
+  sites
+  storageTanks
+  transactions
+  transportVehicles
+  users
+  weighbridges
+}
 
-// enum MainSite {
-//   PKS
-//   T30
-//   Labanan
-// }
+enum MainSite {
+  PKS
+  T30
+  Labanan
+}
 
-// enum Action {
-//   onlyRead
-//   Full
-// }
+enum Action {
+  onlyRead
+  Full
+}
 
-// enum Possession {
-//   OWN
-//   ANY
-// }
+enum Possession {
+  OWN
+  ANY
+}
 
 model Product {
   id      String  @id @default(uuid()) @db.Char(36)

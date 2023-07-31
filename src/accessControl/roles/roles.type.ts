@@ -1,4 +1,4 @@
-export let Role = {
+export const BaseRole = {
   STAFF1: 'Staff_Labanan',
   STAFF2: 'Staff_PKS',
   STAFF3: 'Staff_T30',
@@ -6,9 +6,10 @@ export let Role = {
   MANAGER: 'Manager',
   MILL_HEAD: 'Mill Head',
   ADMIN: 'Administrator',
-};
-export type UserRole = (typeof Role)[keyof typeof Role];
-export let permission = [
+} as const;
+export type UserRole = (typeof BaseRole)[keyof typeof BaseRole];
+
+export const permission = [
   'read:own',
   'create:own',
   'update:own',
@@ -17,7 +18,8 @@ export let permission = [
   'create:any',
   'update:any',
   'delete:any'
-]
-export let MainSite = ['Labanan','T30', 'PKS']
+] as const;
+
+export const MainSite = ['Labanan','T30', 'PKS'] as const;
 
 

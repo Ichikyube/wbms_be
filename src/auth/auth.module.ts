@@ -11,10 +11,14 @@ import { LdapStrategy } from "./strategies/ldap.strategy";
   imports: [
     UsersModule,
     JwtModule.register({}),
+    // PassportModule,
     PassportModule.register({ defaultStrategy: "ldap" }),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy],
-  exports: [PassportModule],
+  // exports: [PassportModule],
+  exports: [
+		PassportModule.register({ defaultStrategy: 'ldap' }),
+	],
 })
 export class AuthModule {}

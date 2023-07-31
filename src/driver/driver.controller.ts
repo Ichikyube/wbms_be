@@ -93,7 +93,7 @@ export class DriverController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'driver',
+    resource: 'driverData',
     action: 'read',
     possession: 'own',
   })
@@ -123,7 +123,7 @@ export class DriverController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'driver',
+    resource: 'driverData',
     action: 'create',
     possession: 'own',
   })
@@ -195,7 +195,7 @@ export class DriverController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'driver',
+    resource: 'driverData',
     action: 'create',
     possession: 'own',
   })
@@ -298,7 +298,7 @@ export class DriverController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'driver',
+    resource: 'driverData',
     action: 'update',
     possession: 'own',
   })
@@ -334,7 +334,7 @@ export class DriverController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'driver',
+    resource: 'driverData',
     action: 'delete',
     possession: 'own',
   })

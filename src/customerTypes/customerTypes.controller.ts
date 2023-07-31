@@ -93,7 +93,7 @@ export class CustomerTypesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'customerType',
+    resource: 'customerTypesData',
     action: 'read',
     possession: 'own',
   })
@@ -123,7 +123,7 @@ export class CustomerTypesController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'customerType',
+    resource: 'customerTypesData',
     action: 'read',
     possession: 'own',
   })
@@ -195,7 +195,7 @@ export class CustomerTypesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'customerType',
+    resource: 'customerTypesData',
     action: 'read',
     possession: 'own',
   })
@@ -267,7 +267,7 @@ export class CustomerTypesController {
 
   @Post()
   @UseRoles({
-    resource: 'customerType',
+    resource: 'customerTypesData',
     action: 'create',
     possession: 'own',
   })
@@ -298,7 +298,7 @@ export class CustomerTypesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'customerType',
+    resource: 'customerTypesData',
     action: 'update',
     possession: 'own',
   })
@@ -338,7 +338,7 @@ export class CustomerTypesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'customerType',
+    resource: 'customerTypesData',
     action: 'delete',
     possession: 'own',
   })

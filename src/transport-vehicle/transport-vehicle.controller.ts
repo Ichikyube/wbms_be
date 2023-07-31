@@ -125,7 +125,7 @@ export class TransportVehicleController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'car',
+    resource: 'carsData',
     action: 'read',
     possession: 'own',
   })
@@ -197,7 +197,7 @@ export class TransportVehicleController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'car',
+    resource: 'carsData',
     action: 'read',
     possession: 'own',
   })
@@ -273,7 +273,7 @@ export class TransportVehicleController {
 
   @Post()
   @UseRoles({
-    resource: 'car',
+    resource: 'carsData',
     action: 'read',
     possession: 'own',
   })
@@ -304,7 +304,7 @@ export class TransportVehicleController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'car',
+    resource: 'carsData',
     action: 'update',
     possession: 'own',
   })
@@ -344,7 +344,7 @@ export class TransportVehicleController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'car',
+    resource: 'carsData',
     action: 'delete',
     possession: 'own',
   })

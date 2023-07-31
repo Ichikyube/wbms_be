@@ -23,7 +23,7 @@ jobs:
         echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
         echo "Tag name from github.ref_name: ${{  github.ref_name }}"
     - name: Build the tagged Docker image
-      run: docker build . --file Dockerfile --tag wbms_tbe
+      run: docker build . --pull --file Dockerfile --tag wbms_tbe
     - name: Tag the Docker image
       run: docker tag wbms_tbe almyra/wbms_tbe:latest
     - name: Login to DockerHub

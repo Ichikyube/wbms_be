@@ -1,25 +1,56 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import Strategy = require("passport-ldapauth");
-
+import * as Strategy from 'passport-ldapauth';
+import { Request } from 'express';
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, "ldap") {
   constructor() {
-    super({
-      server: {
-        url: "ldap://your-ldap-server-url", // Replace with your LDAP server URL
-        bindDN: "cn=admin,dc=example,dc=com", // Replace with the bind DN (Distinguished Name)
-        bindCredentials: "your-bind-password", // Replace with the bind password
-        searchBase: "ou=users,dc=example,dc=com", // Replace with the search base
-        searchFilter: "(uid={{username}})", // Replace with the search filter
-      },
-    });
+		super({
+			passReqToCallback: true,
+			server: {
+				url: process.env.LDAP_HOST,
+				bindDN: process.env.LDAP_DN,
+				bindCredentials: process.env.LDAP_PASSWORD,
+				searchBase: process.env.LDAP_BASE_DN,
+				searchFilter: process.env.LDAP_SEARCH_FILTER,
+			},
+		}, async (req: Request, user: any, done) => {
+			req.user = user;
+			return done(null, user);
+		});
   }
 
-  async validate(user: any) {
+  async validate(user: any, done: Function): Promise<any> {
     if (!user) {
-      throw new UnauthorizedException();
+      done(new UnauthorizedException(), false);
     }
-    return user;
+    done(null, user);
   }
 }
+
+// Example POST:
+// curl --request POST \
+//   --url http://localhost:3000/ldap \
+//   --header 'Content-Type: application/json' \
+//   --data '{
+// 	"username": "gauss",
+// 	"password": "password"
+// }'
+// 
+// ==============================================
+// 
+// Example response:
+// {
+// 	"dn": "uid=gauss,dc=example,dc=com",
+// 	"controls": [],
+// 	"objectClass": [
+// 		"inetOrgPerson",
+// 		"organizationalPerson",
+// 		"person",
+// 		"top"
+// 	],
+// 	"cn": "Carl Friedrich Gauss",
+// 	"sn": "Gauss",
+// 	"uid": "gauss",
+// 	"mail": "gauss@ldap.forumsys.com"
+// }

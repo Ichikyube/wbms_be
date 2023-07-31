@@ -99,7 +99,7 @@ export class ProvincesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'province',
+    resource: 'provincesData',
     action: 'read',
     possession: 'own',
   })
@@ -201,7 +201,7 @@ export class ProvincesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'province',
+    resource: 'provincesData',
     action: 'create',
     possession: 'own',
   })
@@ -273,7 +273,7 @@ export class ProvincesController {
 
   @Post()
   @UseRoles({
-    resource: 'province',
+    resource: 'provincesData',
     action: 'create',
     possession: 'own',
   })
@@ -305,7 +305,7 @@ export class ProvincesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'province',
+    resource: 'provincesData',
     action: 'update',
     possession: 'own',
   })
@@ -341,7 +341,7 @@ export class ProvincesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'province',
+    resource: 'provincesData',
     action: 'delete',
     possession: 'own',
   })

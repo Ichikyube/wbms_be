@@ -28,6 +28,7 @@ import {
 import { AuthService } from './auth.service';
 import { AtGuard, RtGuard } from 'src/common/guards';
 import { SigninDto, SignupDto } from './dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -173,6 +174,13 @@ export class AuthController {
 
     return dataOut;
   }
+
+	@UseGuards(AuthGuard('ldap'))
+	@Post('ldap')
+	ldapLogin(@Req() req) {
+		// passport.authenticate('ldap', { session: false });
+		return req.user;
+	}
 
   @Post('signout')
   @UseGuards(AtGuard)

@@ -93,7 +93,7 @@ export class CustomerGroupsController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'customersGroup',
+    resource: 'customersGroupData',
     action: 'read',
     possession: 'own',
   })
@@ -267,7 +267,7 @@ export class CustomerGroupsController {
 
   @Post()
   @UseRoles({
-    resource: 'customersGroup',
+    resource: 'customersGroupData',
     action: 'create',
     possession: 'own',
   })
@@ -298,7 +298,7 @@ export class CustomerGroupsController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'customersGroup',
+    resource: 'customersGroupData',
     action: 'update',
     possession: 'own',
   })
@@ -338,7 +338,7 @@ export class CustomerGroupsController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'customersGroup',
+    resource: 'customersGroupData',
     action: 'delete',
     possession: 'own',
   })

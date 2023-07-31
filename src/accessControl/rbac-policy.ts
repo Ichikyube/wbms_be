@@ -1,31 +1,8 @@
 import { RolesBuilder } from 'nest-access-control';
 import { AccessControl } from 'accesscontrol';
-import { Role } from './roles/roles.type';
+import { BaseRole } from './roles/roles.type';
 
 export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
-// const ac = new AccessControl();
-// ac.grant('user')                    // define new or modify existing role. also takes an array.
-//     .createOwn('video')             // equivalent to .createOwn('video', ['*'])
-//     .deleteOwn('video')
-//     .readAny('video')
-//   .grant('admin')                   // switch to another role without breaking the chain
-//     .extend('user')                 // inherit role capabilities. also takes an array
-//     .updateAny('video', ['title'])  // explicitly defined attributes
-//     .deleteAny('video');
-
-RBAC_POLICY
-  .grant(Role.STAFF1)
-    .readOwn('employeeData')
-  .grant(Role.ADMIN)
-    .read('employeeData')
-    .update('employeeData')
-    .delete('employeeData')
-  .grant(Role.MANAGER)
-    .extend(Role.ADMIN)
-    .read('managedEmployeeData')
-    .read('employeeDetails')
-  .deny(Role.SUPERVISOR)
-    .read('managedEmployeeData')
 
 // This is actually how the grants are maintained internally.
 let grantsObject = {
@@ -46,7 +23,7 @@ let grantsObject = {
     },
   },
 };
-// const ac = new AccessControl(grantList);
+const ac = new AccessControl(grantsObject);
 // ac.setGrants(grantsObject);
 // console.log(ac.getGrants());
 
@@ -96,24 +73,4 @@ let grantsObject = {
 // ];
 
 
-// // This is actually how the grants are maintained internally.
-// let grantsObject = {
-//   admin: {
-//       video: {
-//           'create:any': ['*', '!views'],
-//           'read:any': ['*'],
-//           'update:any': ['*', '!views'],
-//           'delete:any': ['*']
-//       }
-//   },
-//   user: {
-//       video: {
-//           'create:own': ['*', '!rating', '!views'],
-//           'read:own': ['*'],
-//           'update:own': ['*', '!rating', '!views'],
-//           'delete:own': ['*']
-//       }
-//   }
-// };
-// const ac = new AccessControl(grantsObject);
-
+// //

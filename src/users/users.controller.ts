@@ -38,11 +38,6 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('iam')
-  // @UseRoles({
-  //   resource: 'user',
-  //   action: 'read',
-  //   possession: 'own',
-  // })
   async getIAM(@Req() req: Request) {
     const dataOut = {
       status: true,
@@ -137,7 +132,7 @@ export class UsersController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'user',
+    resource: 'usersData',
     action: 'delete',
     possession: 'own',
   })
@@ -180,7 +175,7 @@ export class UsersController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'user',
+    resource: 'usersData',
     action: 'read',
     possession: 'own',
   })
@@ -200,7 +195,7 @@ export class UsersController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'user',
+    resource: 'usersData',
     action: 'read',
     possession: 'own',
   })
@@ -220,7 +215,7 @@ export class UsersController {
 
   @Post()
   @UseRoles({
-    resource: 'user',
+    resource: 'usersData',
     action: 'create',
     possession: 'own',
   })
@@ -270,7 +265,7 @@ export class UsersController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'user',
+    resource: 'usersData',
     action: 'update',
     possession: 'own',
   })
@@ -306,7 +301,7 @@ export class UsersController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'user',
+    resource: 'usersData',
     action: 'delete',
     possession: 'own',
   })

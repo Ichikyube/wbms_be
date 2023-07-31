@@ -46,7 +46,7 @@ export class BarcodeTypesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'barcode',
+    resource: 'barcodeData',
     action: 'read',
     possession: 'own',
   })
@@ -56,7 +56,7 @@ export class BarcodeTypesController {
 
   @Post()
   @UseRoles({
-    resource: 'barcode',
+    resource: 'barcodeData',
     action: 'create',
     possession: 'own',
   })
@@ -66,7 +66,7 @@ export class BarcodeTypesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'barcode',
+    resource: 'barcodeData',
     action: 'update',
     possession: 'own',
   })
@@ -76,7 +76,7 @@ export class BarcodeTypesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'barcode',
+    resource: 'barcodeData',
     action: 'delete',
     possession: 'own',
   })

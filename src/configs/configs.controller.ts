@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
-import { Role } from 'src/accessControl/roles/roles.type';
+import { BaseRole } from 'src/accessControl/roles/roles.type';
 
 // @UseRoles(Role.ADMIN)
 @Controller('configs')

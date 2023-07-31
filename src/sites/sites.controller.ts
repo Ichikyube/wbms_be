@@ -22,6 +22,11 @@ export class SitesController {
   constructor(private readonly sitesService: SitesService) {}
 
   @Get('sync-with-semai')
+  @UseRoles({
+    resource: 'sitesData',
+    action: 'read',
+    possession: 'own',
+  })
   async syncWithSemai() {
     const dataOut = {
       status: true,
@@ -122,7 +127,7 @@ export class SitesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'site',
+    resource: 'sitesData',
     action: 'read',
     possession: 'own',
   })
@@ -152,7 +157,7 @@ export class SitesController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'site',
+    resource: 'sitesData',
     action: 'create',
     possession: 'own',
   })
@@ -224,7 +229,7 @@ export class SitesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'site',
+    resource: 'sitesData',
     action: 'create',
     possession: 'own',
   })
@@ -261,7 +266,7 @@ export class SitesController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'sitesData',
     action: 'create',
     possession: 'own',
   })
@@ -296,7 +301,7 @@ export class SitesController {
 
   @Post()
   @UseRoles({
-    resource: 'site',
+    resource: 'sitesData',
     action: 'create',
     possession: 'own',
   })
@@ -327,7 +332,7 @@ export class SitesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'site',
+    resource: 'sitesData',
     action: 'update',
     possession: 'own',
   })
@@ -362,7 +367,7 @@ export class SitesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'site',
+    resource: 'sitesData',
     action: 'delete',
     possession: 'own',
   })

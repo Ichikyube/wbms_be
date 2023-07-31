@@ -28,7 +28,7 @@ export class TransactionController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'transaction',
+    resource: 'transactionsData',
     action: 'read',
     possession: 'own',
   })
@@ -58,7 +58,7 @@ export class TransactionController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'transaction',
+    resource: 'transactionsData',
     action: 'read',
     possession: 'own',
   })
@@ -68,7 +68,7 @@ export class TransactionController {
 
   @Get('search-qr')
   @UseRoles({
-    resource: 'transaction',
+    resource: 'transactionsData',
     action: 'read',
     possession: 'own',
   })
@@ -78,7 +78,7 @@ export class TransactionController {
 
   @Get('getByPlateNo')
   @UseRoles({
-    resource: 'transaction',
+    resource: 'transactionsData',
     action: 'read',
     possession: 'own',
   })
@@ -88,7 +88,7 @@ export class TransactionController {
 
   @Post()
   @UseRoles({
-    resource: 'transaction',
+    resource: 'transactionsData',
     action: 'create',
     possession: 'own',
   })
@@ -98,7 +98,7 @@ export class TransactionController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'transaction',
+    resource: 'transactionsData',
     action: 'update',
     possession: 'own',
   })

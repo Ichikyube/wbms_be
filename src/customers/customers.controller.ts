@@ -93,7 +93,7 @@ export class CustomersController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'customer',
+    resource: 'customersData',
     action: 'read',
     possession: 'own',
   })
@@ -267,7 +267,7 @@ export class CustomersController {
 
   @Post()
   @UseRoles({
-    resource: 'customer',
+    resource: 'customersData',
     action: 'read',
     possession: 'own',
   })
@@ -298,7 +298,7 @@ export class CustomersController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'customer',
+    resource: 'customersData',
     action: 'read',
     possession: 'own',
   })
@@ -333,7 +333,7 @@ export class CustomersController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'customer',
+    resource: 'customersData',
     action: 'read',
     possession: 'own',
   })

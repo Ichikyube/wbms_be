@@ -93,7 +93,7 @@ export class CitiesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'city',
+    resource: 'citiesData',
     action: 'read',
     possession: 'own',
   })
@@ -232,7 +232,7 @@ export class CitiesController {
 
   @Post('search-many-deleted')
   @UseRoles({
-    resource: 'employeeData',
+    resource: 'citiesData',
     action: 'read',
     possession: 'own',
   })
@@ -267,7 +267,7 @@ export class CitiesController {
 
   @Post()
   @UseRoles({
-    resource: 'city',
+    resource: 'citiesData',
     action: 'read',
     possession: 'own',
   })
@@ -298,7 +298,7 @@ export class CitiesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'city',
+    resource: 'citiesData',
     action: 'read',
     possession: 'own',
   })
@@ -333,7 +333,7 @@ export class CitiesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'city',
+    resource: 'citiesData',
     action: 'read',
     possession: 'own',
   })

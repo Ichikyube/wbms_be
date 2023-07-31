@@ -93,7 +93,7 @@ export class StorageTanksController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'storageTank',
+    resource: 'storageTanksData',
     action: 'read',
     possession: 'own',
   })
@@ -123,7 +123,7 @@ export class StorageTanksController {
 
   @Post('search-first')
   @UseRoles({
-    resource: 'storageTank',
+    resource: 'storageTanksData',
     action: 'create',
     possession: 'own',
   })
@@ -195,7 +195,7 @@ export class StorageTanksController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'storageTank',
+    resource: 'storageTanksData',
     action: 'read',
     possession: 'own',
   })
@@ -267,7 +267,7 @@ export class StorageTanksController {
 
   @Post()
   @UseRoles({
-    resource: 'storageTank',
+    resource: 'storageTanksData',
     action: 'read',
     possession: 'own',
   })
@@ -298,7 +298,7 @@ export class StorageTanksController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'storageTank',
+    resource: 'storageTanksData',
     action: 'update',
     possession: 'own',
   })
@@ -334,7 +334,7 @@ export class StorageTanksController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'storageTank',
+    resource: 'storageTanksData',
     action: 'delete',
     possession: 'own',
   })

@@ -18,7 +18,7 @@ import { CompanyEntity } from 'src/entities';
 
 @ApiTags('Companies')
 @UseRoles({
-  resource: 'employeeData',
+  resource: 'companiesData',
   action: 'read',
   possession: 'own',
 })
@@ -99,7 +99,7 @@ export class CompaniesController {
 
   @Get(':id')
   @UseRoles({
-    resource: 'company',
+    resource: 'companiesData',
     action: 'read',
     possession: 'own',
   })
@@ -201,7 +201,7 @@ export class CompaniesController {
 
   @Post('search-first-deleted')
   @UseRoles({
-    resource: 'company',
+    resource: 'companiesData',
     action: 'read',
     possession: 'own',
   })
@@ -273,7 +273,7 @@ export class CompaniesController {
 
   @Post()
   @UseRoles({
-    resource: 'company',
+    resource: 'companiesData',
     action: 'create',
     possession: 'own',
   })
@@ -304,7 +304,7 @@ export class CompaniesController {
 
   @Patch(':id')
   @UseRoles({
-    resource: 'company',
+    resource: 'companiesData',
     action: 'update',
     possession: 'own',
   })
@@ -339,7 +339,7 @@ export class CompaniesController {
 
   @Delete(':id')
   @UseRoles({
-    resource: 'company',
+    resource: 'companiesData',
     action: 'delete',
     possession: 'own',
   })
