@@ -52,6 +52,6 @@ export class CreateUserDto {
   @ApiProperty({ type: String })
   role: string = 'staff';
 
-  @ApiProperty({ type: Boolean, default: false })
-  isLDAPUser: boolean = false;
+  @ApiProperty({ type: Boolean })
+  isLDAPUser: boolean;
 }

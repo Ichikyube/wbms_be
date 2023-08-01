@@ -99,10 +99,7 @@ export class RolesService {
         },
       });
       console.log(permissionsData)
-      const createdPermission = await Promise.all(
-      permissionsData.map(async (permission) => {
-        
-        // const grantsData = 
+      permissionsData.forEach( async (permission) => {
         await this.db.permission.create({
           data: {
               role: {
@@ -136,9 +133,8 @@ export class RolesService {
             },
         })
       })
-      );
       await this.updateAC();
-      return {newRole, createdPermission};
+      return newRole;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         console.log('Missing properties:', e.meta.target); // e.meta.target contains the missing properties
