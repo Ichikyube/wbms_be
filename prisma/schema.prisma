@@ -366,7 +366,7 @@ model Grant {
   dtModified   DateTime? @updatedAt
 }
 model Attribute {
-  id      String      @id @default(uuid()) @db.Char(36)
+  id      String     @id @default(uuid()) @db.Char(36)
   attr    String     
   grantId String     @db.Char(36)
   grant   Grant      @relation(fields: [grantId], references: [id])
