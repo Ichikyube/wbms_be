@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { permission } from './types/roles.type';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
@@ -34,9 +35,9 @@ export class RolesService {
 
   async updateAC() {
     const roles = await this.getRoles();
-    // const ac = JSON.stringify(roles);
     const parsedAc = await this.parseData(roles)
-    await fs.writeFileSync('./rbac-policy.json', parsedAc);
+    const ac = JSON.stringify(parsedAc);
+    await fs.writeFileSync('./rbac-policy.json', ac);
   }
  
   async parseData(data) {
@@ -57,7 +58,8 @@ export class RolesService {
           for (const grant of grants) {
             const { action, possession, attributes } = grant;
             const grantKey = `${action}:${possession}`;
-            resourcePermissions[grantKey] = attributes;
+            console.log(attributes)
+            resourcePermissions[grantKey] = attributes.map(attribute => attribute.attr);
           }
     
           rolePermissions[resource] = resourcePermissions;
