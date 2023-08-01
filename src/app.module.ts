@@ -34,7 +34,6 @@ import {
 
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
-import { RBAC_POLICY } from './accessControl/rbac-policy';
 import { RolesModule } from './accessControl/roles/roles.module';
 // import { DbService } from './db/db.service';
 // import { RolesModule } from './accessControl/roles/roles.module';

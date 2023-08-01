@@ -6,6 +6,21 @@ How to create mock LDAP server for nestjs project
 LDAP-Auth
 Transaction
 Config
+var ldapstrategy = require('passport-ldapauth');
+
+// connect to LDAP server
+
+var OPTS = {
+
+  server: {
+    url: "LDAP://ldap.forumsys.com:389",     //LDAP URL 
+    bindDN: "CN=adminAccount,DC=forumsys",      //Admin BaseDN details   
+    bindCredentials: AdminCredentials,                  
+    searchBase: "dc=forumsys",       //search base
+    searchFilter: "(|(sAMAccountName={{username}})(employeeID={{username}}))",
+    timeLimit: 3000,
+  }
+}
 
   async generateAC(): Promise<RolesBuilder> {
     const roles = await this.getRoles();

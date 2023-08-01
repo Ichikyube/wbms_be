@@ -14,8 +14,23 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     # command: --interval 43200
-    # environment:
-    #   - WATCHTOWER_POLL_INTERVAL=43200
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=43200
+    networks:
+      - armin-net
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    entrypoint: redis-server --appendonly yes --requirepass $REDIS_PASSWORD --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - 6379:6379
+    volumes:
+      - $DOCKERDIR/appdata/redis/data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - armin-net
   openldap:
     image: osixia/openldap:latest
     container_name: openldap

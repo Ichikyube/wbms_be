@@ -14,6 +14,8 @@ import { RolesService } from './roles.service';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
+import { UpdateRoleAliasRequest } from 'aws-sdk/clients/iot';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @ApiTags('Roles')
 @Controller('roles')
@@ -58,7 +60,8 @@ export class RolesController {
   }
 
   @Patch(':id')
-  async updateRole(@Param() { id }, @Body() params) {
+  @ApiCreatedResponse({ type: RoleEntity })
+  async updateRole(@Param() { id }, @Body(new ValidationPipe()) params: UpdateRoleDto) {
     return this.rolesService.updateRole(id, params);
   }
 

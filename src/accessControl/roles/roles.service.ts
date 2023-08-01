@@ -7,6 +7,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
 import { RolesBuilder } from 'nest-access-control';
 import { action } from 'src/entities/grant.entity';
+import { UpdateRoleDto } from './dto/update-role.dto';
 const fs = require('fs');
 
 @Injectable()
@@ -33,11 +34,60 @@ export class RolesService {
     return roles;
   }
 
+  async getRoleByName(name: string): Promise<RoleEntity | null> {
+    return this.db.role.findUnique({
+      where: { name },
+    });
+  }
+
+  async getRoleById(id: number): Promise<RoleEntity | null> {
+    return this.db.role.findUnique({
+      where: { id },
+    });
+  }
+
+  async getRoleByUserId(userId: string): Promise<RoleEntity | null> {
+    const user = await this.db.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      return null;
+    }
+    return this.db.role.findUnique({
+      where: { id: user.roleId },
+    });
+  }
+  
   async updateAC() {
     const roles = await this.getRoles();
     const parsedAc = await this.parseData(roles)
     const ac = JSON.stringify(parsedAc);
     await fs.writeFileSync('./rbac-policy.json', ac);
+    // This is actually how the grants are maintained internally.
+
+    // const ac = new AccessControl(grantsObject);
+    // ac.setGrants(grantsObject);
+    // console.log(ac.getGrants());
+    // let grantsObject = {
+    //   admin: {
+    //     video: {
+    //       'create:any': ['*', '!views'],
+    //       'read:any': ['*'],
+    //       'update:any': ['*', '!views'],
+    //       'delete:any': ['*'],
+    //     },
+    //   },
+    //   user: {
+    //     video: {
+    //       'create:own': ['*', '!rating', '!views'],
+    //       'read:own': ['*'],
+    //       'update:own': ['*', '!rating', '!views'],
+    //       'delete:own': ['*'],
+    //     },
+    //   },
+    // };
+    // const ac = new AccessControl(grantsObject);
+    
   }
  
   async parseData(data) {
@@ -162,21 +212,86 @@ export class RolesService {
     });
   }
 
-  async updateRole(id: number, data: Prisma.RoleUpdateInput): Promise<RoleEntity> {
-    const editRole = await this.db.role.update({
-      where: { id },
-      data,
-      include: {
-        permissions: {
-          include: {
-            grants: true,
-          }
-        }
+  async updateRole(roleId: number, updatedRole: UpdateRoleDto): Promise<RoleEntity> {
+
+    try {
+      const existingRole = await this.db.role.findUnique({
+        where: { id: roleId },
+        include: { permissions: { include: { grants: true } } },
+      });
+  
+      if (!existingRole) {
+        throw new Error(`Role with ID ${roleId} not found.`);
       }
-    });
-    await this.updateAC();
-    return editRole;
+  
+      // Update the role details
+      await this.db.role.update({
+        where: { id: roleId },
+        data: {
+          name: updatedRole.name,
+          // Update other role properties if needed
+        },
+      });
+  
+      // Update or create permissions with their grants
+      const updatedPermissions = updatedRole.permissions.map((permission) => {
+        const existingPermission = existingRole.permissions.find((p) => p.id === permission.id);
+  
+        return {
+          create: {
+            resource: permission.resource,
+            roleId: roleId,
+            grants: {
+              createMany: {
+                data: permission.grants.map((grant) => ({
+                  action: grant.action,
+                  possession: grant.possession,
+                  attributes: grant.attributes,
+                })),
+              },
+            },
+          },
+          update: {
+            resource: permission.resource,
+            grants: {
+              updateMany: permission.grants.map((grant) => ({
+                where: { id: grant.id },
+                data: {
+                  action: grant.action,
+                  possession: grant.possession,
+                  attributes: grant.attributes,
+                },
+              })),
+            },
+          },
+          where: { id: permission.id },
+        };
+      });
+  
+      await this.db.permission.upsertMany({
+        where: updatedRole.permissions.map((permission) => ({ id: permission.id })),
+        update: {
+          resource: { set: undefined },
+          grants: { deleteMany: {} },
+        },
+        create: updatedPermissions,
+      });
+  
+      // Fetch the updated role with permissions and grants
+      const updatedRoleWithPermissions = await this.db.role.findUnique({
+        where: { id: roleId },
+        include: { permissions: { include: { grants: true } } },
+      });
+      await this.updateAC();
+    // return editRole;
+      return updatedRoleWithPermissions;
+    } catch (error) {
+      console.error('Error updating role:', error);
+      throw new Error('An error occurred while updating the role');
+    }
+
   }
+
   async deleteRole(id: number): Promise<RoleEntity> {
     return this.db.role.delete({
       where: { id },
@@ -201,28 +316,4 @@ export class RolesService {
     });
   }
 
-  async getRoleByName(name: string): Promise<RoleEntity | null> {
-    return this.db.role.findUnique({
-      where: { name },
-    });
-  }
-
-  async getRoleById(id: number): Promise<RoleEntity | null> {
-    return this.db.role.findUnique({
-      where: { id },
-    });
-  }
-
-  async getRoleByUserId(userId: string): Promise<RoleEntity | null> {
-    const user = await this.db.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user) {
-      return null;
-    }
-    return this.db.role.findUnique({
-      where: { id: user.roleId },
-    });
-  }
-  
 }
