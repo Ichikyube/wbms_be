@@ -1,3 +1,4 @@
+import { permission } from './types/roles.type';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
@@ -33,35 +34,41 @@ export class RolesService {
 
   async updateAC() {
     const roles = await this.getRoles();
-    
     // const ac = JSON.stringify(roles);
     const parsedAc = await this.parseData(roles)
-    fs.writeFileSync('./rbac-policy.json', parsedAc);
+    await fs.writeFileSync('./rbac-policy.json', parsedAc);
   }
  
   async parseData(data) {
     const result = {};
-  
-    for (const permission of data.permissions) {
-      const resource = permission.resource;
+    for (const item of data) {
+      const role = item.name;
+      const permissions = item.permissions; 
       const rolePermissions = {};
-  
-      for (const grant of permission.grants) {
-        const action = grant.action.toLowerCase();
-        const possession = grant.possession.toLowerCase();
-        const key = `${action}:${possession}`;
-  
-        if (!rolePermissions[key]) {
-          rolePermissions[key] = [];
-        }
-  
-        rolePermissions[key] = rolePermissions[key].concat(grant.attributes);
+      if(Object.keys(permissions).length === 0) {
+        result[role] = rolePermissions;
+        continue;
       }
-  
-      result[resource] = rolePermissions;
+      if(Object.keys(permissions).length > 0) {
+        for (const permission of permissions) {
+          const { resource, grants } = permission;
+          const resourcePermissions = {};
+    
+          for (const grant of grants) {
+            const { action, possession, attributes } = grant;
+            const grantKey = `${action}:${possession}`;
+            resourcePermissions[grantKey] = attributes;
+          }
+    
+          rolePermissions[resource] = resourcePermissions;
+        }
+      }
+
+      result[role] = rolePermissions;
     }
   
     return result;
+  
   }
 
   async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
