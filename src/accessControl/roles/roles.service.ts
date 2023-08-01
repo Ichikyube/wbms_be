@@ -84,6 +84,7 @@ export class RolesService {
     if (role) {
       throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
     }
+
     const permissionsData = permissions.map((permission) => ({
       resource: permission.resource,
       grants: permission.grants,
@@ -98,21 +99,29 @@ export class RolesService {
         },
       });
       console.log(permissionsData)
-      for(let i =0; i < permissionsData.length; i++) {
+      const createdPermission = await Promise.all(
+      permissionsData.map(async (permission) => {
+        
         // const grantsData = 
         await this.db.permission.create({
           data: {
-              roleId: newRole.id,
-              resource: permissionsData[i].resource,
+              role: {
+                connect: {
+                  id: newRole.id,
+                },
+              },
+              resource: permission.resource,
               grants: {
-                create: permissionsData[i].grants.map(({ action, possession, attributes }) => ({
+                create: permission.grants.map(({ action, possession, attributes }) => ({
                   action,
                   possession,
                   attributes: {
                     create: attributes.map(({attr}) => ({
                         attr,
                       }))
-                  }
+                  },
+                  userCreated: userId,
+                  userModified: '',
                 })),
               },
               userCreated: userId,
@@ -126,9 +135,10 @@ export class RolesService {
               },
             },
         })
-      }
+      })
+      );
       await this.updateAC();
-      return newRole;
+      return {newRole, createdPermission};
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         console.log('Missing properties:', e.meta.target); // e.meta.target contains the missing properties
