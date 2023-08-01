@@ -19,17 +19,7 @@ export const multerOptions = {
   // Check the mimetypes to allow for upload
   fileFilter: (
     req: any,
-    file: {
-      fieldname: string;
-      originalname: string;
-      encoding: string;
-      mimetype: string;
-      size: number;
-      destination: string;
-      filename: string;
-      path: string;
-      buffer: Buffer;
-    },
+    file: Express.Multer.File,
     cb: any,
   ) => {
     if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
