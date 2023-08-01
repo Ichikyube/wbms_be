@@ -27,18 +27,6 @@ const ac = new AccessControl(grantsObject);
 // ac.setGrants(grantsObject);
 // console.log(ac.getGrants());
 
-// const permission = ac.can('user').createOwn('video');
-// console.log(permission.granted);    // —> true
-// console.log(permission.attributes); // —> ['*'] (all attributes)
-
-// permission = ac.can('admin').updateAny('video');
-// console.log(permission.granted);    // —> true
-// console.log(permission.attributes); // —> ['title']
-// ac.grant('admin').readAny('video', ['*']);
-// ac.grant('user').readOwn('video', ['*', '!id']);
-// ac.grant('user').readOwn('account', ['*', '!record.id']);
-
-
 // grant list fetched from DB (to be converted to a valid grants object, internally)
 // let grantList = [
 //   {

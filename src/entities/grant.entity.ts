@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsEnum, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { AttributeEntity } from './attribute.entity';
+import { Type } from 'class-transformer';
 
 export enum action {
   Read = 'read',
@@ -9,24 +11,25 @@ export enum action {
 }
 
 export enum possession {
-  OWN = 'OWN',
-  ANY = 'ANY',
+  OWN = 'own',
+  ANY = 'any',
 }
 export class GrantEntity {
   @IsNotEmpty()
-  @IsEnum(action)
+  // @IsEnum(action)
   @IsString()
-  @ApiProperty({ enum: action, enumName: 'Action' }) //
+  @ApiProperty({ enum: action }) //
   action: string;
 
   @IsNotEmpty()
-  @IsEnum(possession)
+  // @IsEnum(possession)
   @IsString()
-  @ApiProperty({ enum: possession, enumName: 'Possession' }) //
-  possesion: string;
+  @ApiProperty({ enum: possession }) //
+  possession: string;
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ type: String })
-  attributes: string;
+  @ValidateNested({ each: true })
+  @ArrayNotEmpty()
+  @Type(() => AttributeEntity)
+  attributes: AttributeEntity[];
 }

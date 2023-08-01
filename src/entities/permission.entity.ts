@@ -7,6 +7,7 @@ export class PermissionEntity {
   @IsString()
   @ApiProperty({ type: String })
   resource: string;
+  
   @ValidateNested({ each: true })
   @ArrayNotEmpty()
   @Type(() => GrantEntity)

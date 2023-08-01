@@ -9,72 +9,70 @@
 # https://github.com/docker/awesome-compose
 version: '3.8'
 services:
-  # watchtower:
-  #   image: containrrr/watchtower:latest
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   # command: --interval 43200
-  #   # environment:
-  #   #   - WATCHTOWER_POLL_INTERVAL=43200
-  # openldap:
-  #   image: osixia/openldap:latest
-  #   container_name: openldap
-  #   hostname: ldap.wbms.dsn #ldap://0.0.0.0:1389
-  #   ports:
-  #     - "389:389"
-  #     - "636:636"
-  #   environment:
-  #     LDAP_ORGANISATION: wbms-dsn
-  #     LDAP_DOMAIN: wbms.dsn
-  #     LDAP_BASE_DN: dc=wbms,dc=dsn
-  #     LDAP_TLS_CRT_FILENAME: server.crt
-  #     LDAP_TLS_KEY_FILENAME: server.key
-  #     LDAP_TLS_CA_CRT_FILENAME: wbms.dsn.ca.crt
-  #     LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
-  #     LDAP_ADMIN_BIND: cn=admin,dc=wbms,dc=dsn
-  #     LDAP_ADMIN_USERNAME: admin
-  #     LDAP_ADMIN_PASSWORD: admin
-  #     LDAP_CONFIG_PASSWORD: config
-  #     LDAP_READONLY_USER: true
-  #     LDAP_READONLY_USER_USERNAME: user
-  #     LDAP_READONLY_USER_PASSWORD: watcher
-  #     LDAP_RFC2307BIS_SCHEMA: true
-  #     LDAP_REMOVE_CONFIG_AFTER_SETUP: true
-  #     LDAP_TLS: false # Set to "true" for TLS/SSL support (recommended for production)
-  #     LDAP_TLS_VERIFY_CLIENT: never
-  #     LDAP_DEBUG: true
-  #   volumes:
-  #     - ../armin/storage/certificates:/certs
-  #     - ../armin/storage/ldap_db:/var/lib/ldap
-  #     - ../armin/storage/ldap_config:/etc/ldap/slapd.d
-  #   networks:
-  #     - armin-net
-  # openldap-ui:
-  #   image: wheelybird/ldap-user-manager:v1.5
-  #   container_name: openldap-ui
-  #   environment:
-  #     LDAP_URI: ldap://ldap.wbms.dsn
-  #     LDAP_DOMAIN: wbms.dsn
-  #     LDAP_BASE_DN: dc=wbms,dc=dsn
-  #     LDAP_REQUIRE_STARTTLS: FALSE
-  #     LDAP_ADMINS_GROUP: admins
-  #     LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
-  #     LDAP_ADMIN_BIND: cn=admin,dc=wbms,dc=dsn
-  #     LDAP_ADMIN_USERNAME: admin
-  #     LDAP_ADMIN_PASSWORD: admin
-  #     LDAP_IGNORE_CERT_ERRORS: true
-  #     EMAIL_DOMAIN: dsn.co.id
-  #     NO_HTTPS: TRUE
-  #     LDAP_DEBUG: true
-  #     PASSWORD_HASH: SSHA
-  #     SERVER_HOSTNAME: openldap
-  #     LDAP_SERVER: openldap:389
-  #   depends_on:
-  #     - openldap
-  #   ports:
-  #     - 18080:80
-  #   networks:
-  #     - armin-net
+  watchtower:
+    image: containrrr/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # command: --interval 43200
+    # environment:
+    #   - WATCHTOWER_POLL_INTERVAL=43200
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    hostname: openldap #ldap://0.0.0.0:1389
+    ports:
+      - "389:389"
+      - "636:636"
+    environment:
+      LDAP_ORGANISATION: wbms-dsn
+      LDAP_DOMAIN: wbms.dsn
+      LDAP_BASE_DN: dc=wbms,dc=dsn
+      LDAP_TLS_CRT_FILENAME: server.crt
+      LDAP_TLS_KEY_FILENAME: server.key
+      LDAP_TLS_CA_CRT_FILENAME: wbms.dsn.ca.crt
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: config
+      LDAP_READONLY_USER: true
+      LDAP_READONLY_USER_USERNAME: user
+      LDAP_READONLY_USER_PASSWORD: watcher
+      LDAP_RFC2307BIS_SCHEMA: true
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: true
+      
+      LDAP_TLS_VERIFY_CLIENT: never
+      LDAP_DEBUG: true
+    volumes:
+      - ../armin/ldap/certificates:/container/service/slapd/assets/certs
+      - ../armin/ldap/slapd/database:/var/lib/ldap
+      - ../armin/ldap/slapd/config:/etc/ldap/slapd.d
+      - ../armin/ldap/slapd/schema:/etc/ldap/schema
+    networks:
+      - armin-net
+  openldap-ui:
+    image: wheelybird/ldap-user-manager:v1.5
+    container_name: openldap-ui
+    environment:
+      LDAP_URI: ldap://openldap
+      LDAP_BASE_DN: dc=wbms,dc=dsn
+      LDAP_REQUIRE_STARTTLS: false
+      LDAP_ADMINS_GROUP: admins
+      LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
+      LDAP_ADMIN_BIND_PWD: admin
+      LDAP_USER_OU: tino
+      LDAP_GROUP_OU: armin
+      LDAP_IGNORE_CERT_ERRORS: true
+      FORCE_RFC2307BIS: true 
+      NO_HTTPS: TRUE
+      LDAP_DEBUG: true
+      
+      PASSWORD_HASH: SSHA
+      SERVER_HOSTNAME: wbms.dsn
+    depends_on:
+      - openldap
+    ports:
+      - 18080:80
+    networks:
+      - armin-net
   wbms-db:
     image: 'bitnami/mariadb'
     restart: always

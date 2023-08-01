@@ -205,20 +205,19 @@ CREATE TABLE `Weighbridge` (
 -- CreateTable
 CREATE TABLE `Config` (
     `id` CHAR(36) NOT NULL,
-    `minWeight` DOUBLE NOT NULL DEFAULT 0,
-    `imageFolder` VARCHAR(250) NOT NULL,
-    `fileFolder` VARCHAR(250) NOT NULL,
-    `millHeadCode` VARCHAR(50) NOT NULL,
-    `millHeadName` VARCHAR(50) NOT NULL,
-    `approval1` VARCHAR(50) NOT NULL,
-    `approval2` VARCHAR(50) NOT NULL,
-    `notes` VARCHAR(500) NOT NULL,
+    `name` VARCHAR(30) NOT NULL,
+    `type` ENUM('boolean', 'string', 'number', 'bigint', 'array', 'object') NOT NULL DEFAULT 'number',
+    `Status` BOOLEAN NOT NULL,
+    `activeStart` DATETIME(3) NOT NULL,
+    `activeEnd` DATETIME(3) NOT NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,
     `userCreated` CHAR(36) NOT NULL,
     `userModified` CHAR(36) NOT NULL,
     `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `dtModified` DATETIME(3) NOT NULL,
+    `siteId` CHAR(36) NOT NULL,
 
+    UNIQUE INDEX `Config_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -256,6 +255,10 @@ CREATE TABLE `User` (
 CREATE TABLE `Role` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
+    `userCreated` CHAR(36) NULL,
+    `userModified` CHAR(36) NULL,
+    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `dtModified` DATETIME(3) NULL,
 
     UNIQUE INDEX `Role_name_key`(`name`),
     PRIMARY KEY (`id`)
@@ -266,6 +269,10 @@ CREATE TABLE `Permission` (
     `id` CHAR(36) NOT NULL,
     `resource` CHAR(36) NOT NULL,
     `roleId` INTEGER NOT NULL DEFAULT 0,
+    `userCreated` CHAR(36) NULL,
+    `userModified` CHAR(36) NULL,
+    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `dtModified` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -274,11 +281,22 @@ CREATE TABLE `Permission` (
 CREATE TABLE `Grant` (
     `id` CHAR(36) NOT NULL,
     `action` VARCHAR(191) NOT NULL,
-    `possesion` VARCHAR(191) NOT NULL,
-    `attributes` VARCHAR(191) NOT NULL,
-    `PermissionId` CHAR(36) NOT NULL,
+    `possession` VARCHAR(191) NOT NULL,
+    `permissionId` CHAR(36) NOT NULL,
+    `userCreated` CHAR(36) NULL,
+    `userModified` CHAR(36) NULL,
+    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `dtModified` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Attribute` (
+    `attr` VARCHAR(191) NOT NULL,
+    `grantId` CHAR(36) NOT NULL,
+
+    UNIQUE INDEX `Attribute_attr_key`(`attr`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -513,6 +531,15 @@ CREATE TABLE `Transaction` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `_ConfigToSite` (
+    `A` CHAR(36) NOT NULL,
+    `B` CHAR(36) NOT NULL,
+
+    UNIQUE INDEX `_ConfigToSite_AB_unique`(`A`, `B`),
+    INDEX `_ConfigToSite_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `City` ADD CONSTRAINT `City_provinceId_fkey` FOREIGN KEY (`provinceId`) REFERENCES `Province`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -544,16 +571,16 @@ ALTER TABLE `Mill` ADD CONSTRAINT `Mill_companyId_fkey` FOREIGN KEY (`companyId`
 ALTER TABLE `Weighbridge` ADD CONSTRAINT `Weighbridge_siteId_fkey` FOREIGN KEY (`siteId`) REFERENCES `Site`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Config` ADD CONSTRAINT `Config_id_fkey` FOREIGN KEY (`id`) REFERENCES `Site`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Permission` ADD CONSTRAINT `Permission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Grant` ADD CONSTRAINT `Grant_PermissionId_fkey` FOREIGN KEY (`PermissionId`) REFERENCES `Permission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Grant` ADD CONSTRAINT `Grant_permissionId_fkey` FOREIGN KEY (`permissionId`) REFERENCES `Permission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Attribute` ADD CONSTRAINT `Attribute_grantId_fkey` FOREIGN KEY (`grantId`) REFERENCES `Grant`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `StorageTank` ADD CONSTRAINT `StorageTank_siteId_fkey` FOREIGN KEY (`siteId`) REFERENCES `Site`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -593,3 +620,9 @@ ALTER TABLE `Transaction` ADD CONSTRAINT `Transaction_originSourceStorageTankId_
 
 -- AddForeignKey
 ALTER TABLE `Transaction` ADD CONSTRAINT `Transaction_destinationSinkStorageTankId_fkey` FOREIGN KEY (`destinationSinkStorageTankId`) REFERENCES `StorageTank`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ConfigToSite` ADD CONSTRAINT `_ConfigToSite_A_fkey` FOREIGN KEY (`A`) REFERENCES `Config`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_ConfigToSite` ADD CONSTRAINT `_ConfigToSite_B_fkey` FOREIGN KEY (`B`) REFERENCES `Site`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

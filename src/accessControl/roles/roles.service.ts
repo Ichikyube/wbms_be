@@ -4,6 +4,7 @@ import { DbService } from 'src/db/db.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
 import { RolesBuilder } from 'nest-access-control';
+import { action } from 'src/entities/grant.entity';
 const fs = require('fs');
 
 @Injectable()
@@ -14,11 +15,14 @@ export class RolesService {
 
   async getRoles(): Promise<any[]> {
     const roles = await this.db.role.findMany({
-        // where: {},
         include: {
           permissions: {
             include: {
-              grants: true,
+              grants: {
+                include: {
+                  attributes: true,
+                },
+              }
             },
           },
         },
@@ -29,60 +33,52 @@ export class RolesService {
 
   async updateAC() {
     const roles = await this.getRoles();
-    //console.log(this.mapToGrantsObject(roles))
-    const ac = JSON.stringify(roles);
-    fs.writeFileSync('./rbac-policy.json', ac);
+    
+    // const ac = JSON.stringify(roles);
+    const parsedAc = await this.parseData(roles)
+    fs.writeFileSync('./rbac-policy.json', parsedAc);
   }
  
-  async generateAC(): Promise<RolesBuilder> {
-    const roles = await this.getRoles();
-    console.log(roles)
-    let result = roles.map(role => {
-      return role.permissions.map(permission => {
-        let { action, possession, attributes } = permission.grant
-        let resource =role.permission.resource
-        return { role: role.name, resource, action, possession, attributes }
-      })
-    })
-    if (result) {
-      let grants = []
-      result.forEach((grant) => grants = grants.concat(grant))
-
-      const ac = JSON.stringify(roles);
-      fs.writeFileSync('./rbac-policy.json', ac);
-      return new RolesBuilder(grants)
-    }
-    return new RolesBuilder([])
-  }
+  async parseData(data) {
+    const result = {};
   
-  async mapToGrantsObject(jsonData) {
-    if (typeof jsonData === "object" && !Array.isArray(jsonData)) {
-      const result = {};
-      for (const [key, value] of Object.entries(jsonData)) {
-        result[key] = this.mapToGrantsObject(value);
+    for (const permission of data.permissions) {
+      const resource = permission.resource;
+      const rolePermissions = {};
+  
+      for (const grant of permission.grants) {
+        const action = grant.action.toLowerCase();
+        const possession = grant.possession.toLowerCase();
+        const key = `${action}:${possession}`;
+  
+        if (!rolePermissions[key]) {
+          rolePermissions[key] = [];
+        }
+  
+        rolePermissions[key] = rolePermissions[key].concat(grant.attributes);
       }
-      return result;
-    } else if (Array.isArray(jsonData)) {
-      const permissions = jsonData.map(permission => {
-        const action = permission.action;
-        const possession = permission.possession;
-        const attributes = permission.attributes.join(",");
-        return `${action}:${possession}:${attributes}`;
-      });
-      return { permissions };
-    } else {
-      return jsonData;
+  
+      result[resource] = rolePermissions;
     }
+  
+    return result;
   }
- 
+
   async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
     const { name, permissions } = createRoleDto;
 
-    let role = await this.db.role.findFirst({
-      where: {
-        name: {
-          equals: createRoleDto.name,
-        },
+    let role = await this.db.role.findUnique({
+      where: { name },
+      include: { 
+        permissions: { 
+          include: {
+            grants: { 
+              include: { 
+                attributes: true,
+              } 
+            },
+          },
+        }
       },
     });
     if (role) {
@@ -90,8 +86,9 @@ export class RolesService {
     }
     const permissionsData = permissions.map((permission) => ({
       resource: permission.resource,
-      permissions: permission.grants,
+      grants: permission.grants,
     }));
+
     try {
       const newRole = await this.db.role.create({
         data: {
@@ -100,26 +97,37 @@ export class RolesService {
           userModified: '',
         },
       });
+      console.log(permissionsData)
       for(let i =0; i < permissionsData.length; i++) {
+        // const grantsData = 
         await this.db.permission.create({
           data: {
               roleId: newRole.id,
               resource: permissionsData[i].resource,
               grants: {
-                createMany: {
-                  data: permissionsData[i].permissions,
-                },
+                create: permissionsData[i].grants.map(({ action, possession, attributes }) => ({
+                  action,
+                  possession,
+                  attributes: {
+                    create: attributes.map(({attr}) => ({
+                        attr,
+                      }))
+                  }
+                })),
               },
               userCreated: userId,
               userModified: '',
             },
             include: {
-              grants: true,
+              grants: {
+                include: {
+                  attributes: true,
+                }
+              },
             },
         })
       }
-      const mo = await this.generateAC();
-      console.log(mo)
+      await this.updateAC();
       return newRole;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

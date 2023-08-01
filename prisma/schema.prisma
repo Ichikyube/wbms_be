@@ -355,17 +355,22 @@ model Permission {
 model Grant {
   id           String     @id @default(uuid()) @db.Char(36)
   action       String
-  possesion    String
-  attributes   String
-  PermissionId String     @db.Char(36)
-  Permission   Permission @relation(fields: [PermissionId], references: [id])
+  possession    String
+  attributes   Attribute[]
+  permissionId String     @db.Char(36)
+  permission   Permission @relation(fields: [permissionId], references: [id])
   
   userCreated  String?   @db.Char(36)
   userModified String?   @db.Char(36)
   dtCreated    DateTime @default(now())
   dtModified   DateTime? @updatedAt
 }
-
+model Attribute {
+  id      String      @id @default(uuid()) @db.Char(36)
+  attr    String     
+  grantId String     @db.Char(36)
+  grant   Grant      @relation(fields: [grantId], references: [id])
+}
 enum Resource {
   barcodeTypes
   cities
