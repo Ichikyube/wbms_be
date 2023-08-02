@@ -101,7 +101,7 @@ export class UsersService {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
     const hashedPassword = await hash(dto.password);
-
+    const role = await this.db.role.findUnique({ where: { id: dto.roleId } });
     // save the new user in the db
     user = await this.db.user
       .create({
@@ -116,6 +116,7 @@ export class UsersService {
           phone: dto.phone,
           hashedPassword: hashedPassword,
           roleId: dto.roleId,
+          role: role.name,
           userCreated: userId,
           userModified: userId,
         },

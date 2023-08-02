@@ -10,7 +10,7 @@ export class UserEntity implements User {
   @ApiProperty() nik: string;
 
   @ApiProperty() roleId: number;
-  // @ApiProperty() role: RoleEntity;
+  @ApiProperty() role: string;
 
   @ApiProperty() profilePic: string;
 

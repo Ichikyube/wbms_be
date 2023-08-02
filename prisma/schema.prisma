@@ -311,6 +311,7 @@ model User {
   profilePic String
 
   roleId         Int?
+  role           String  @db.VarChar(36)
   hashedPassword String  @db.VarChar(100)
   hashedRT       String? @db.VarChar(100)
 
@@ -323,7 +324,7 @@ model User {
   userModified String?   @db.Char(36)
   dtCreated    DateTime  @default(now())
   dtModified   DateTime? @updatedAt
-  role         Role?     @relation(fields: [roleId], references: [id])
+  userRole         Role?     @relation(fields: [roleId], references: [id])
 }
 
 model Role {

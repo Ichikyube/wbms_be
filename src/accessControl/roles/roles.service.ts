@@ -212,83 +212,83 @@ export class RolesService {
     });
   }
 
-  async updateRole(roleId: number, updatedRole: UpdateRoleDto): Promise<RoleEntity> {
-
-    try {
-      const existingRole = await this.db.role.findUnique({
-        where: { id: roleId },
-        include: { permissions: { include: { grants: true } } },
-      });
+  async updateRole(roleId: number, updatedRole: UpdateRoleDto): Promise<any> {
+    return ;
+    // try {
+    //   const existingRole = await this.db.role.findUnique({
+    //     where: { id: roleId },
+    //     include: { permissions: { include: { grants: true } } },
+    //   });
   
-      if (!existingRole) {
-        throw new Error(`Role with ID ${roleId} not found.`);
-      }
+    //   if (!existingRole) {
+    //     throw new Error(`Role with ID ${roleId} not found.`);
+    //   }
   
-      // Update the role details
-      await this.db.role.update({
-        where: { id: roleId },
-        data: {
-          name: updatedRole.name,
-          // Update other role properties if needed
-        },
-      });
+    //   // Update the role details
+    //   await this.db.role.update({
+    //     where: { id: roleId },
+    //     data: {
+    //       name: updatedRole.name,
+    //       // Update other role properties if needed
+    //     },
+    //   });
   
-      // Update or create permissions with their grants
-      const updatedPermissions = updatedRole.permissions.map((permission) => {
-        const existingPermission = existingRole.permissions.find((p) => p.id === permission.id);
+    //   // Update or create permissions with their grants
+    //   const updatedPermissions = updatedRole.permissions.map((permission) => {
+    //     const existingPermission = existingRole.permissions.find((p) => p.id === permission.id);
   
-        return {
-          create: {
-            resource: permission.resource,
-            roleId: roleId,
-            grants: {
-              createMany: {
-                data: permission.grants.map((grant) => ({
-                  action: grant.action,
-                  possession: grant.possession,
-                  attributes: grant.attributes,
-                })),
-              },
-            },
-          },
-          update: {
-            resource: permission.resource,
-            grants: {
-              updateMany: permission.grants.map((grant) => ({
-                where: { id: grant.id },
-                data: {
-                  action: grant.action,
-                  possession: grant.possession,
-                  attributes: grant.attributes,
-                },
-              })),
-            },
-          },
-          where: { id: permission.id },
-        };
-      });
+    //     return {
+    //       create: {
+    //         resource: permission.resource,
+    //         roleId: roleId,
+    //         grants: {
+    //           createMany: {
+    //             data: permission.grants.map((grant) => ({
+    //               action: grant.action,
+    //               possession: grant.possession,
+    //               attributes: grant.attributes,
+    //             })),
+    //           },
+    //         },
+    //       },
+    //       update: {
+    //         resource: permission.resource,
+    //         grants: {
+    //           updateMany: permission.grants.map((grant) => ({
+    //             where: { id: grant.id },
+    //             data: {
+    //               action: grant.action,
+    //               possession: grant.possession,
+    //               attributes: grant.attributes,
+    //             },
+    //           })),
+    //         },
+    //       },
+    //       where: { id: permission.id },
+    //     };
+    //   });
   
-      await this.db.permission.upsertMany({
-        where: updatedRole.permissions.map((permission) => ({ id: permission.id })),
-        update: {
-          resource: { set: undefined },
-          grants: { deleteMany: {} },
-        },
-        create: updatedPermissions,
-      });
+    //   await this.db.permission.upsertMany({
+    //     where: updatedRole.permissions.map((permission) => ({ id: permission.id })),
+    //     update: {
+    //       resource: { set: undefined },
+    //       grants: { deleteMany: {} },
+    //     },
+    //     create: updatedPermissions,
+    //   });
   
-      // Fetch the updated role with permissions and grants
-      const updatedRoleWithPermissions = await this.db.role.findUnique({
-        where: { id: roleId },
-        include: { permissions: { include: { grants: true } } },
-      });
-      await this.updateAC();
-    // return editRole;
-      return updatedRoleWithPermissions;
-    } catch (error) {
-      console.error('Error updating role:', error);
-      throw new Error('An error occurred while updating the role');
-    }
+    //   // Fetch the updated role with permissions and grants
+    //   const updatedRoleWithPermissions = await this.db.role.findUnique({
+    //     where: { id: roleId },
+    //     include: { permissions: { include: { grants: true } } },
+    //   });
+    //   await this.updateAC();
+    // // return editRole;
+    //   return updatedRoleWithPermissions;
+    // } catch (error) {
+    //   console.error('Error updating role:', error);
+    //   throw new Error('An error occurred while updating the role');
+    // }
 
   }
 
