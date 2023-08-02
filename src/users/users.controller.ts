@@ -262,7 +262,35 @@ export class UsersController {
 
     return dataOut;
   }
+  
+  async updateUserRole(
+    @Param('id') userId: string,
+    @Param('id') roleId: number,
+    @Req() req: Request,
+  ) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        user: null,
+      },
+      logs: {},
+    };
 
+    try {
+      const user = await this.usersService.updateUserRole(userId, roleId);
+
+      const { username, email, name, division, position, phone } = user;
+
+      dataOut.data.user = { username, email, name, division, position, phone };
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, reqBody: roleId, error };
+    }
+
+    return dataOut;
+  }
   @Patch(':id')
   @UseRoles({
     resource: 'usersData',
@@ -284,7 +312,6 @@ export class UsersController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
       const user = await this.usersService.updateById(userId, dto, userId);
 
       const { username, email, name, division, position, phone } = user;

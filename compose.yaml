@@ -155,7 +155,8 @@ services:
       LDAP_PASSWORD: 'admin'
       LDAP_BASE_DN: 'dc=wbms,dc=dsn'
       LDAP_SEARCH_FILTER: '(uid={{username}})(email=*@foo.com))'
-
+    volumes:
+      - ../armin/server/upload:/upload
     networks:
       - armin-net
 networks:

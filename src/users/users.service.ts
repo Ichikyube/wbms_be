@@ -164,6 +164,23 @@ export class UsersService {
     return user;
   }
 
+  async updateUserRole(userId: string, roleId: number): Promise<UserEntity> {
+    try {
+      return await this.db.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          roleId,
+        },
+      });
+    } catch (err) {
+      if (err?.code === "P2025") {
+        throw new NotFoundException(`Record ${userId} to update not found`);
+      }
+    }
+  }
+  
   async deleteById(id: string, userId: string) {
     const user = await this.db.user.update({
       where: { id },
@@ -173,20 +190,4 @@ export class UsersService {
     return user;
   }
 
-  // async updateUserRole(userId: string, userRole: UserRole): Promise<User> {
-  //   try {
-  //     return await this.db.user.update({
-  //       where: {
-  //         id: userId,
-  //       },
-  //       data: {
-  //         role: userRole,
-  //       },
-  //     });
-  //   } catch (err) {
-  //     if (err?.code === "P2025") {
-  //       throw new NotFoundException(`Record ${userId} to update not found`);
-  //     }
-  //   }
-  // }
 }
