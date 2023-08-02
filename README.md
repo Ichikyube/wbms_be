@@ -9,7 +9,10 @@ Config
 var ldapstrategy = require('passport-ldapauth');
 
 // connect to LDAP server
-
+Prepare a bootstrap file. Create a bootstrap file ldif that contains all the needed data that need to be imported to the LDAP server once it’s started.
+Add the bootstrap file under the following path inside the custom Docker image /container/service/sldap/assets/config/bootstrap/ldif/.
+Build the Docker image.
+Deploy LDAP server using the custom Docker image.
 var OPTS = {
 
   server: {

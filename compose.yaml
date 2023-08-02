@@ -22,11 +22,11 @@ services:
     container_name: redis
     image: redis:latest
     restart: always
-    entrypoint: redis-server --appendonly yes --requirepass $REDIS_PASSWORD --maxmemory 512mb --maxmemory-policy allkeys-lru
+    entrypoint: redis-server --appendonly yes --requirepass wbmsapp --maxmemory 512mb --maxmemory-policy allkeys-lru
     ports:
       - 6379:6379
     volumes:
-      - $DOCKERDIR/appdata/redis/data:/data
+      - ../armin/redis/data:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:
@@ -36,8 +36,8 @@ services:
     container_name: openldap
     hostname: openldap #ldap://0.0.0.0:1389
     ports:
-      - "389:389"
-      - "636:636"
+      - '389:389'
+      - '636:636'
     environment:
       LDAP_ORGANISATION: wbms-dsn
       LDAP_DOMAIN: wbms.dsn
@@ -53,14 +53,12 @@ services:
       LDAP_READONLY_USER_PASSWORD: watcher
       LDAP_RFC2307BIS_SCHEMA: true
       LDAP_REMOVE_CONFIG_AFTER_SETUP: true
-      
+
       LDAP_TLS_VERIFY_CLIENT: never
-      LDAP_DEBUG: true
     volumes:
-      - ../armin/ldap/certificates:/container/service/slapd/assets/certs
-      - ../armin/ldap/slapd/database:/var/lib/ldap
+      - ../armin/ldap/slapd/certificates:/container/service/slapd/assets/certs
+      - ../armin/ldap/slapd/database:/var/lib/ldaph
       - ../armin/ldap/slapd/config:/etc/ldap/slapd.d
-      - ../armin/ldap/slapd/schema:/etc/ldap/schema
     networks:
       - armin-net
   openldap-ui:
@@ -73,13 +71,12 @@ services:
       LDAP_ADMINS_GROUP: admins
       LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
       LDAP_ADMIN_BIND_PWD: admin
-      LDAP_USER_OU: tino
-      LDAP_GROUP_OU: armin
+      LDAP_USER_OU: Users
+      LDAP_GROUP_OU: Groups
       LDAP_IGNORE_CERT_ERRORS: true
-      FORCE_RFC2307BIS: true 
+      # FORCE_RFC2307BIS: true
       NO_HTTPS: TRUE
-      LDAP_DEBUG: true
-      
+
       PASSWORD_HASH: SSHA
       SERVER_HOSTNAME: wbms.dsn
     depends_on:
@@ -164,6 +161,6 @@ services:
 networks:
   armin-net:
     driver: bridge
-volumes:
-  ldap-data:
-  ldap-config:
+# volumes:
+#   ldap-data:
+#   ldap-config:

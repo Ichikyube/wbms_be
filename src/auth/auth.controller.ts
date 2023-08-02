@@ -127,6 +127,7 @@ export class AuthController {
 
   @Post('signin')
   @UseGuards()
+  @UseGuards(AuthGuard('ldapauth'))
   @ApiOperation({
     summary: 'User login API',
   })

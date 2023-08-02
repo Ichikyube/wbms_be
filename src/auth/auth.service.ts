@@ -22,7 +22,10 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async signup(dto: CreateUserDto, file: Express.Multer.File): Promise<UserEntity> {
+  async signup(
+    dto: CreateUserDto,
+    file: Express.Multer.File,
+  ): Promise<UserEntity> {
     const userId = '';
     const user = await this.usersService.create(dto, file, userId);
     const tokens = await this.signTokens({
@@ -115,7 +118,7 @@ export class AuthService {
       });
     });
   }
-  
+
   async fakeLdapAuth(username: string, password: string) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -130,45 +133,34 @@ export class AuthService {
   async ldapSignin(
     user: any,
     req: Request,
-    res: Response, 
+    res: Response,
     next: NextFunction,
   ): Promise<{ tokens: Tokens; user: any }> {
     // find the user by username
-    const userLdap = await this.db.user.findFirst({
-      where: {
-        OR: [
-          { username: user.username },
-          { email: user.email },
-          { nik: user.nik },
-          { nik: user.nik },
-        ],
+    const userLdap = await this.db.user.findUnique({
+      where: { username: user.username, isLDAPUser: true },
+    });
+    passport.authenticate('ldapauth', { session: false }, (err, user, info) => {
+      var error = err || info;
+
+      if (error) {
+        return res.send({
+          status: 500,
+          data: error,
+        });
       }
-      // { name: user.name },
-      // { role: user.role },
-      // { hashedPassword: user.hashedPassword },
-      // { id: user.id },
-    })
-      passport.authenticate('ldapauth', {session: false}, (err, user, info) => { 
-        var error = err || info;
-    
-        if (error){
-          return res.send({
-            status: 500,
-            data: error
-          });
-        }       
-        if (!user) {
-          return res.send({
-            status: 404,
-            data: "User Not Found"
-          });
-        } else {
-          return  res.send({
-            status: 200,
-            data: user
-          });
-        }
-      })(req, res, next);
+      if (!user) {
+        return res.send({
+          status: 404,
+          data: 'User Not Found',
+        });
+      } else {
+        return res.send({
+          status: 200,
+          data: user,
+        });
+      }
+    })(req, res, next);
     // using access_token and refresh_token now, not just single jwt
     // return this.signToken(user.id, user.username, user.role);
     const tokens = await this.signTokens({
@@ -176,7 +168,7 @@ export class AuthService {
       username: user.username,
       role: user.role,
     });
-      return { tokens, user };
+    return { tokens, user };
   }
 
   async getIAM(id: string): Promise<UserEntity> {

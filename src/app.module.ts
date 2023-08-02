@@ -38,12 +38,13 @@ import { RolesModule } from './accessControl/roles/roles.module';
 // import { DbService } from './db/db.service';
 // import { RolesModule } from './accessControl/roles/roles.module';
 // import { RbacModule } from './accessControl/rbac.module';
+// import { RedisConfigService } from './settings/redis-config/redis-config.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'upload'),
+      rootPath: join(__dirname, '..', 'upload'),
       serveRoot: '/img',
     }),
     // AccessControlModule.forRoles(RBAC_POLICY),
@@ -90,6 +91,7 @@ import { RolesModule } from './accessControl/roles/roles.module';
     //   provide: APP_INTERCEPTOR,
     //   useClass: TimestampInterceptor,
     // },
+    // RedisConfigService
   ],
 })
 export class AppModule {}
