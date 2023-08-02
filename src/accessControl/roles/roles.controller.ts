@@ -60,9 +60,32 @@ export class RolesController {
   }
 
   @Patch(':id')
-  @ApiCreatedResponse({ type: RoleEntity })
-  async updateRole(@Param() { id }, @Body(new ValidationPipe()) params: UpdateRoleDto) {
-    return this.rolesService.updateRole(id, params);
+  @ApiCreatedResponse()
+  async updateRole(
+    @Param() { id },
+    @Body(new ValidationPipe()) params: UpdateRoleDto,
+  ) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        role: null,
+      },
+      logs: {},
+    };
+
+    try {
+      const userId = ''; //req.user['id'];
+      const record = await this.rolesService.updateRole(userId, id, params);
+
+      dataOut.data.role = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, reqBody: params, error };
+    }
+
+    return dataOut;
   }
 
   @Delete(':id')

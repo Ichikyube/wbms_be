@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsEnum, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { AttributeEntity } from './attribute.entity';
 import { Type } from 'class-transformer';
 
@@ -32,4 +38,10 @@ export class GrantEntity {
   @ArrayNotEmpty()
   @Type(() => AttributeEntity)
   attributes: AttributeEntity[];
+  id?: any;
+
+  userCreated?: string;
+  userModified?: string;
+  dtCreated?: Date;
+  dtModified?: Date;
 }

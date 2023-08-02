@@ -343,7 +343,7 @@ model Permission {
   id       String  @id @default(uuid()) @db.Char(36)
   resource String  @db.Char(36)
   grants   Grant[]
-  roleId   Int     @default(0)
+  roleId   Int    
   role     Role    @relation(fields: [roleId], references: [id])
   
   userCreated  String?   @db.Char(36)

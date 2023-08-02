@@ -233,7 +233,7 @@ CREATE TABLE `User` (
     `position` VARCHAR(30) NOT NULL,
     `profilePic` VARCHAR(191) NOT NULL,
     `roleId` INTEGER NULL,
-    `role` VARCHAR(30) NOT NULL,
+    `role` VARCHAR(36) NOT NULL,
     `hashedPassword` VARCHAR(100) NOT NULL,
     `hashedRT` VARCHAR(100) NULL,
     `isEmailVerified` BOOLEAN NOT NULL DEFAULT false,
@@ -268,7 +268,7 @@ CREATE TABLE `Role` (
 CREATE TABLE `Permission` (
     `id` CHAR(36) NOT NULL,
     `resource` CHAR(36) NOT NULL,
-    `roleId` INTEGER NOT NULL DEFAULT 0,
+    `roleId` INTEGER NOT NULL,
     `userCreated` CHAR(36) NULL,
     `userModified` CHAR(36) NULL,
     `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -293,10 +293,11 @@ CREATE TABLE `Grant` (
 
 -- CreateTable
 CREATE TABLE `Attribute` (
+    `id` CHAR(36) NOT NULL,
     `attr` VARCHAR(191) NOT NULL,
     `grantId` CHAR(36) NOT NULL,
 
-    UNIQUE INDEX `Attribute_attr_key`(`attr`)
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
