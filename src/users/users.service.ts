@@ -116,7 +116,6 @@ export class UsersService {
           phone: dto.phone,
           hashedPassword: hashedPassword,
           roleId: dto.roleId,
-          role: dto.role,
           userCreated: userId,
           userModified: userId,
         },

@@ -9,6 +9,7 @@ import {
   isBoolean,
   isNumber,
 } from 'class-validator';
+import { RoleEntity } from 'src/entities/roles.entity';
 
 export class CreateUserDto {
   @ApiProperty() @IsString() @IsNotEmpty() username: string = 'Jhonny';
@@ -47,10 +48,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsInt()
-  readonly roleId: number;
-
-  @ApiProperty({ type: String })
-  role: string = 'staff';
+  readonly roleId: number
 
   @ApiProperty({ type: Boolean })
   isLDAPUser: boolean;
