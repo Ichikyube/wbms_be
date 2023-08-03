@@ -6,7 +6,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { hash } from 'argon2';
 
 import { DbService } from 'src/db/db.service';
@@ -143,15 +143,29 @@ export class UsersService {
     let updateData = new UserEntity();
 
     if (dto.password) updateData.hashedPassword = await hash(dto.password);
-
     delete dto.password;
+    let filteredDto: Partial<UserEntity> = {};
 
-    updateData = {
-      ...updateData,
-      ...dto,
-      profilePic: file.filename,
-      userModified: userId,
-    };
+    for (const prop in dto) {
+      if (dto[prop]) {
+        filteredDto[prop] = dto[prop];
+      }
+    }
+    console.log(filteredDto);
+    if (file) {
+      updateData = {
+        ...updateData,
+        ...filteredDto,
+        profilePic: file.filename,
+        userModified: userId,
+      };
+    } else {
+      updateData = {
+        ...updateData,
+        ...filteredDto,
+        userModified: userId,
+      };
+    }
 
     const user = await this.db.user
       .update({
