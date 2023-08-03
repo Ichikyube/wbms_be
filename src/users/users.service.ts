@@ -137,6 +137,7 @@ export class UsersService {
   async updateById(
     id: string,
     dto: UpdateUserDto,
+    file: Express.Multer.File,
     userId: string,
   ): Promise<UserEntity> {
     let updateData = new UserEntity();
@@ -145,7 +146,12 @@ export class UsersService {
 
     delete dto.password;
 
-    updateData = { ...updateData, ...dto, userModified: userId };
+    updateData = {
+      ...updateData,
+      ...dto,
+      profilePic: file.filename,
+      userModified: userId,
+    };
 
     const user = await this.db.user
       .update({
@@ -175,12 +181,12 @@ export class UsersService {
         },
       });
     } catch (err) {
-      if (err?.code === "P2025") {
+      if (err?.code === 'P2025') {
         throw new NotFoundException(`Record ${userId} to update not found`);
       }
     }
   }
-  
+
   async deleteById(id: string, userId: string) {
     const user = await this.db.user.update({
       where: { id },
@@ -189,5 +195,4 @@ export class UsersService {
 
     return user;
   }
-
 }

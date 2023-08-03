@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsEmail,
   IsInt,
   IsNotEmpty,
   IsPhoneNumber,
   IsString,
   Length,
-  isBoolean,
-  isNumber,
 } from 'class-validator';
 import { RoleEntity } from 'src/entities/roles.entity';
 
@@ -50,6 +49,5 @@ export class CreateUserDto {
   @IsInt()
   readonly roleId: number
 
-  @ApiProperty({ type: Boolean })
-  isLDAPUser: boolean;
+  @ApiProperty({ type: Boolean }) @IsBoolean() isLDAPUser: boolean;
 }

@@ -20,6 +20,7 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -297,9 +298,19 @@ export class UsersController {
     action: 'update',
     possession: 'own',
   })
+  @ApiOperation({
+    summary: 'Update a user',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({ description: 'User has been successfully updated' })
+  @ApiBadRequestResponse({
+    description: 'Some character error or type error',
+  })
+  @UseInterceptors(FileInterceptor('file'))
   async updateById(
     @Param('id') userId: string,
     @Body() dto: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
     const dataOut = {
@@ -312,7 +323,7 @@ export class UsersController {
     };
 
     try {
-      const user = await this.usersService.updateById(userId, dto, userId);
+      const user = await this.usersService.updateById(userId, dto, file, userId);
 
       const { username, email, name, division, position, phone } = user;
 
