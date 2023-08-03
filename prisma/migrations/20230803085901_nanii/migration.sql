@@ -232,7 +232,7 @@ CREATE TABLE `User` (
     `division` VARCHAR(30) NOT NULL,
     `position` VARCHAR(30) NOT NULL,
     `profilePic` VARCHAR(191) NOT NULL,
-    `roleId` INTEGER NULL,
+    `roleId` INTEGER NOT NULL,
     `role` VARCHAR(36) NOT NULL,
     `hashedPassword` VARCHAR(100) NOT NULL,
     `hashedRT` VARCHAR(100) NULL,
@@ -572,7 +572,7 @@ ALTER TABLE `Mill` ADD CONSTRAINT `Mill_companyId_fkey` FOREIGN KEY (`companyId`
 ALTER TABLE `Weighbridge` ADD CONSTRAINT `Weighbridge_siteId_fkey` FOREIGN KEY (`siteId`) REFERENCES `Site`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Permission` ADD CONSTRAINT `Permission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

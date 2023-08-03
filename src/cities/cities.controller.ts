@@ -268,7 +268,7 @@ export class CitiesController {
   @Post()
   @UseRoles({
     resource: 'citiesData',
-    action: 'read',
+    action: 'create',
     possession: 'own',
   })
   @ApiCreatedResponse({ type: CityEntity })
@@ -285,7 +285,7 @@ export class CitiesController {
     try {
       const userId = ''; //req.user['id'];
       const record = await this.citiesService.create(dto, userId);
-
+      console.log(record);
       dataOut.data.city = record;
     } catch (error) {
       dataOut.status = false;

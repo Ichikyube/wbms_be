@@ -4,10 +4,24 @@ import { DbService } from 'src/db/db.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from 'src/entities';
 
-
+@Injectable()
 export class CitiesService {
   constructor(private db: DbService) {}
 
+  async create(dto: CreateCityDto, userId: string): Promise<CityEntity> {
+    const params = {
+      data: {
+        name: dto.name,
+        province: { connect: { id: dto.provinceId } },
+        userCreated: userId,
+        userModified: '',
+      },
+    };
+    console.log(params);
+    const record = await this.db.city.create(params);
+    console.log(record);
+    return record;
+  }
   async getAll(): Promise<CityEntity[]> {
     const records = await this.db.city.findMany({
       where: { isDeleted: false },
@@ -64,25 +78,11 @@ export class CitiesService {
     return records;
   }
 
-  async create(dto: CreateCityDto, userId: string): Promise<CityEntity> {
-    const params = {
-      data: {
-        ...dto,
-        userCreated: userId,
-        userModified: '',
-      },
-    };
-
-    const record = await this.db.city.create(params);
-
-    return record;
-  }
-
   async updateById(
     id: string,
     dto: UpdateCityDto,
     userId: string,
-  ): Promise<CityEntity> {
+  ): Promise<any> {
     const params = {
       where: { id },
       data: { ...dto, userModified: userId },
