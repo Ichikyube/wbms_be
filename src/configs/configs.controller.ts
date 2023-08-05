@@ -10,7 +10,9 @@ import {
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 import { BaseRole } from 'src/accessControl/roles/types/roles.type';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Customer Types')
 // @UseRoles(Role.ADMIN)
 @Controller('configs')
 export class ConfigsController {

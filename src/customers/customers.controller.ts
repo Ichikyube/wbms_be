@@ -56,6 +56,16 @@ export class CustomersController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.customersService.getAttributes();;
+  }
+
   @Get('deleted')
   @UseRoles({
     resource: 'customersData',

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
 import { DriverEntity } from 'src/entities';
+import { Prisma, PrismaClient, Driver } from '@prisma/client';
 
 @Injectable()
 export class DriverService {
@@ -10,15 +11,25 @@ export class DriverService {
 
   async getAll(): Promise<DriverEntity[]> {
     const records = await this.db.driver.findMany({
-      where: { isDeleted: false }
+      where: { isDeleted: false },
     });
 
     return records;
   }
 
+
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'Driver',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
+
   async getAllDeleted(): Promise<DriverEntity[]> {
     const records = await this.db.driver.findMany({
-      where: { isDeleted: true }
+      where: { isDeleted: true },
     });
 
     return records;
@@ -26,7 +37,7 @@ export class DriverService {
 
   async getById(id: string): Promise<DriverEntity> {
     const record = await this.db.driver.findUnique({
-      where: { id }
+      where: { id },
     });
 
     return record;
@@ -69,8 +80,8 @@ export class DriverService {
       data: {
         ...dto,
         userCreated: userId,
-        userModified: userId
-      }
+        userModified: userId,
+      },
     };
 
     const record = await this.db.driver.create(params);
@@ -78,10 +89,14 @@ export class DriverService {
     return record;
   }
 
-  async updateById(id: string, dto: UpdateDriverDto, userId: string): Promise<DriverEntity> {
+  async updateById(
+    id: string,
+    dto: UpdateDriverDto,
+    userId: string,
+  ): Promise<DriverEntity> {
     const params = {
       where: { id },
-      data: { ...dto, userModified: userId }
+      data: { ...dto, userModified: userId },
     };
 
     const record = await this.db.driver.update(params);
@@ -92,7 +107,7 @@ export class DriverService {
   async deleteById(id: string, userId: string): Promise<DriverEntity> {
     const params = {
       where: { id },
-      data: { isDeleted: true, userModified: userId }
+      data: { isDeleted: true, userModified: userId },
     };
 
     const record = await this.db.driver.update(params);

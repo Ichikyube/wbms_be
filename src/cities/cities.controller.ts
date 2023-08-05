@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { CitiesService } from './cities.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
@@ -27,7 +27,7 @@ export class CitiesController {
     action: 'read',
     possession: 'own',
   })
-  @ApiCreatedResponse({ type: CityEntity, isArray: true })
+  @ApiOkResponse({ type: CityEntity, isArray: true })
   async getAll() {
     const dataOut = {
       status: true,
@@ -54,6 +54,16 @@ export class CitiesController {
     }
 
     return dataOut;
+  }
+
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.citiesService.getAttributes();;
   }
 
   @Get('deleted')

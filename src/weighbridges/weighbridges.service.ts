@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
 import { WeighbridgeEntity } from 'src/entities';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class WeighbridgesService {
@@ -14,6 +15,15 @@ export class WeighbridgesService {
     });
 
     return records;
+  }
+
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'Weighbridge',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
   }
 
   async getAllDeleted(): Promise<WeighbridgeEntity[]> {

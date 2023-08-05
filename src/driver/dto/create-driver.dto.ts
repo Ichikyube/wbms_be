@@ -14,5 +14,5 @@ export class CreateDriverDto {
   @ApiProperty({ required: false }) @IsString() @IsOptional() phone?: string;
 
   @ApiProperty({ required: false }) @IsString() @IsOptional() licenseNo?: string;
-  @ApiProperty({ required: false }) @IsString() @IsOptional() licenseED?: Date;
+  @ApiProperty({ required: false }) @IsOptional() licenseED?: Date;
 }

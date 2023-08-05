@@ -56,6 +56,16 @@ export class MillsController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.millsService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'millsData',

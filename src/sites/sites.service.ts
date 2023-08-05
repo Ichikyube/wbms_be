@@ -5,6 +5,7 @@ import { DbService } from "src/db/db.service";
 import { SemaiService } from "src/semai/semai.service";
 import { CreateSiteDto, UpdateSiteDto } from "./dto";
 import { SiteEntity } from "src/entities";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class SitesService {
@@ -21,7 +22,15 @@ export class SitesService {
 
     return records;
   }
-
+  
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'Site',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
   async getAllDeleted(): Promise<SiteEntity[]> {
     const records = await this.db.site.findMany({
       where: { isDeleted: true },

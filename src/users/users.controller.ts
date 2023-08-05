@@ -30,7 +30,6 @@ import { UsersService } from './users.service';
 import { AtGuard } from 'src/common/guards';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
-import { multerOptions } from 'src/settings/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
@@ -100,6 +99,16 @@ export class UsersController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.usersService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'usersData',

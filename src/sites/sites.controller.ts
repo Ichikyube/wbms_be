@@ -90,6 +90,16 @@ export class SitesController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.sitesService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'sitesData',

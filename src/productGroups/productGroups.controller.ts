@@ -56,6 +56,16 @@ export class ProductGroupsController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.productGroupsService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'productGroupsData',

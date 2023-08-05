@@ -62,6 +62,16 @@ export class CompaniesController {
     return this.companiesService.getAll();
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.companiesService.getAttributes();;
+  }
+
   @Get('deleted')
   @UseRoles({
     resource: 'companiesData',

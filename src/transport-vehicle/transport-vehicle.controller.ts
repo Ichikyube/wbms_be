@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { TransportVehicleService } from './transport-vehicle.service';
 import { CreateTransportVehicleDto, UpdateTransportVehicleDto } from './dto';
@@ -29,7 +29,7 @@ export class TransportVehicleController {
     action: 'read',
     possession: 'own',
   })
-  @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
+  @ApiOkResponse({ type: TransportVehicleEntity, isArray: true })
   async getAll() {
     const dataOut = {
       status: true,
@@ -58,6 +58,16 @@ export class TransportVehicleController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.transportVehicleService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'carsData',

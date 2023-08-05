@@ -12,6 +12,7 @@ import { PermissionEntity } from 'src/entities/permission.entity';
 import { AttributeEntity } from 'src/entities/attribute.entity';
 const fs = require('fs');
 
+
 @Injectable()
 export class RolesService {
   constructor(private db: DbService) {}
@@ -58,35 +59,13 @@ export class RolesService {
     });
   }
 
-  async updateAC() {
+  async updateAC(): Promise<RolesBuilder> {
     const roles = await this.getRoles();
-    const parsedAc = await this.parseData(roles);
-    const ac = JSON.stringify(parsedAc);
+    const grants = await this.parseData(roles);
+    const ac = JSON.stringify(grants);
     await fs.writeFileSync('./rbac-policy.json', ac);
-    // This is actually how the grants are maintained internally.
 
-    // const ac = new AccessControl(grantsObject);
-    // ac.setGrants(grantsObject);
-    // console.log(ac.getGrants());
-    // let grantsObject = {
-    //   admin: {
-    //     video: {
-    //       'create:any': ['*', '!views'],
-    //       'read:any': ['*'],
-    //       'update:any': ['*', '!views'],
-    //       'delete:any': ['*'],
-    //     },
-    //   },
-    //   user: {
-    //     video: {
-    //       'create:own': ['*', '!rating', '!views'],
-    //       'read:own': ['*'],
-    //       'update:own': ['*', '!rating', '!views'],
-    //       'delete:own': ['*'],
-    //     },
-    //   },
-    // };
-    // const ac = new AccessControl(grantsObject);
+    return new RolesBuilder(grants)
   }
 
   async parseData(data) {

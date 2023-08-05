@@ -6,3 +6,4 @@ import { UserRole } from 'src/accessControl/roles/types/roles.type';
 
 export const Roles = (...roles: UserRole[]) =>
   applyDecorators(SetMetadata('roles', roles), UseGuards(AtGuard, RolesGuard));
+

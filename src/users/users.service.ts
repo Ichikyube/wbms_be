@@ -38,8 +38,16 @@ export class UsersService {
       // select: { id: true, email: true },
       where: { isDeleted: false },
     });
-
     return records;
+  }
+  
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'User',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
   }
 
   async getAllDeleted(): Promise<UserEntity[]> {

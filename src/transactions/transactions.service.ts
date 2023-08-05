@@ -1,13 +1,14 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { DbService } from "src/db/db.service";
-import * as moment from "moment";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { DbService } from 'src/db/db.service';
+import * as moment from 'moment';
 
-import { SemaiService } from "src/semai/semai.service";
-import { ConfigsService } from "src/configs/configs.service";
+import { SemaiService } from 'src/semai/semai.service';
+import { ConfigsService } from 'src/configs/configs.service';
 
-import { CreateTransactionDto } from "./dto/manual-transaction.dto";
-import { QrcodeDto } from "src/semai/dto/qrcode.dt";
+import { CreateTransactionDto } from './dto/manual-transaction.dto';
+import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TransactionService {
@@ -15,13 +16,13 @@ export class TransactionService {
     private db: DbService,
     private config: ConfigService,
     private semaiAPI: SemaiService,
-    private configWbms: ConfigsService
+    private configWbms: ConfigsService,
   ) {}
 
   async getAll() {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       page: 0,
       totalRecords: 0,
       records: {},
@@ -40,10 +41,18 @@ export class TransactionService {
     return dataOut;
   }
 
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'Transaction',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
   async searchMany(query: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       page: 0,
       totalRecords: 0,
       records: {},
@@ -68,7 +77,7 @@ export class TransactionService {
   async searchFirst(query: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       record: {},
       logs: {},
     };
@@ -91,11 +100,11 @@ export class TransactionService {
   async openCreateByQrcodeSemai(body: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       data: {
         transaction: {},
-        tType: "",
-        urlPath: "",
+        tType: '',
+        urlPath: '',
       },
       logs: {},
     };
@@ -131,13 +140,13 @@ export class TransactionService {
           ];
       } catch (error) {
         throw new Error(
-          "Backend: Vehicle Operation Status atau Delivery Status tidak valid."
+          'Backend: Vehicle Operation Status atau Delivery Status tidak valid.',
         );
       }
 
       const transaction: CreateTransactionDto = this.copyQrToTransaction(
         decodedQrcode,
-        tType
+        tType,
       );
 
       const dtTransaction = await this.searchFirst({
@@ -146,7 +155,7 @@ export class TransactionService {
           progressStatus: { not: 15 },
           tType,
         },
-        orderBy: { bonTripNo: "desc" },
+        orderBy: { bonTripNo: 'desc' },
       }).then((res) => res.record);
 
       // if (decodedQrcode.vehicleOperationStatus == 1) {
@@ -195,7 +204,7 @@ export class TransactionService {
   async searchByQR(query: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       data: {},
       logs: {},
     };
@@ -218,14 +227,14 @@ export class TransactionService {
   async getByPlateNo(query: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       page: 0,
       totalRecords: 0,
       record: {},
       logs: {},
     };
 
-    const { key, sort = "asc" } = query;
+    const { key, sort = 'asc' } = query;
 
     try {
       const record = await this.db.transaction.findFirst({
@@ -246,7 +255,7 @@ export class TransactionService {
   async getById(id: string) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       page: 0,
       totalRecords: 0,
       record: {},
@@ -271,7 +280,7 @@ export class TransactionService {
   async create(createTransactionDto: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       page: 0,
       totalRecords: 0,
       record: {},
@@ -279,7 +288,7 @@ export class TransactionService {
     };
 
     try {
-      console.log("create new data:");
+      console.log('create new data:');
       console.log(createTransactionDto);
       // const product
       // const transporter
@@ -305,7 +314,7 @@ export class TransactionService {
   async updateById(id: string, dto: any) {
     const dataOut = {
       status: true,
-      message: "",
+      message: '',
       page: 0,
       totalRecords: 0,
       record: {},
@@ -315,7 +324,7 @@ export class TransactionService {
     try {
       const record = await this.db.transaction.update({
         where: { id },
-        data: { ...dto, userModified: "" },
+        data: { ...dto, userModified: '' },
       });
 
       dataOut.record = record;

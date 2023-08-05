@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
 import { CompanyEntity } from 'src/entities';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CompaniesService {
@@ -16,6 +17,14 @@ export class CompaniesService {
     return records;
   }
 
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'Company',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
   async getAllDeleted(): Promise<CompanyEntity[]> {
     const records = await this.db.company.findMany({
       where: { isDeleted: true },

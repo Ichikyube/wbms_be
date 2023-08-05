@@ -56,6 +56,16 @@ export class StorageTanksController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.storageTanksService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'storageTanksData',

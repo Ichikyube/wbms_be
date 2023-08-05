@@ -20,7 +20,7 @@ export class DbService
           url: config.get("WBMS_DB_URL"),
         },
       },
-    });
+    }); 
   }
 
   async onModuleInit() {

@@ -1,3 +1,53 @@
+# Create a new organization
+dn: dc=wbms,dc=dsn
+objectClass: dcObject
+objectClass: organization
+dc: wbms
+o: My Organization
+description: The wbms organization
+
+# Create role for the directory manager
+dn: cn=Manager,dc=wbms,dc=dsn
+objectClass: organizationalRole
+cn: Manager
+description: Directory Manager
+
+# Create unit for groups
+dn: ou=groups,dc=wbms,dc=dsn
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+description: Organizational unit for user groups
+
+# Create unit for people
+dn: ou=people,dc=wbms,dc=dsn
+objectClass: top
+objectClass: organizationalUnit
+ou: people
+description: Organizational unit for user accounts
+
+# Create a test user in the people unit
+dn: uid=test,ou=people,dc=wbms,dc=dsn
+objectClass: top
+objectClass: person
+objectClass: posixAccount
+uid: test
+cn: Test User
+sn: Test
+uidNumber: 10001
+gidNumber: 100
+homeDirectory: /home/test
+loginShell: /bin/bash
+
+# Creating ops group in the groups unit
+dn: cn=ops,ou=armin,dc=wbms,dc=dsn
+objectClass: top
+objectClass: posixGroup
+objectClass: groupOfMembers
+cn: ops
+gidNumber: 10001
+description: Operations Group
+
 dn: cn=developer,dc=shihadeh,dc=intern
 changetype: add
 objectclass: inetOrgPerson

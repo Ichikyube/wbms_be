@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from 'src/entities';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CitiesService {
@@ -22,9 +23,22 @@ export class CitiesService {
     console.log(record);
     return record;
   }
+
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'City',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
+
   async getAll(): Promise<CityEntity[]> {
     const records = await this.db.city.findMany({
       where: { isDeleted: false },
+      include: {
+        province: true,
+      },
     });
 
     return records;

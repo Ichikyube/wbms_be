@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { WeighbridgesService } from './weighbridges.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
@@ -27,7 +27,7 @@ export class WeighbridgesController {
     action: 'read',
     possession: 'own',
   })
-  @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
+  @ApiOkResponse({ type: WeighbridgeEntity, isArray: true })
   async getAll() {
     const dataOut = {
       status: true,

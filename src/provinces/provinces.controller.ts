@@ -25,8 +25,7 @@ import { ProvinceEntity } from 'src/entities';
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
-  // @Roles(UserRole.Administrator)
-  // @UseGuards(RolesGuard)
+  // @Roles("Administrator")
   @Get('')
   @UseRoles({
     resource: 'provincesData',
@@ -62,6 +61,16 @@ export class ProvincesController {
     return dataOut;
   }
 
+  @Get('attr')
+  @UseRoles({
+    resource: 'citiesData',
+    action: 'read',
+    possession: 'own',
+  })
+  async getAttributes() {
+    return await this.provincesService.getAttributes();;
+  }
+  
   @Get('deleted')
   @UseRoles({
     resource: 'provincesData',

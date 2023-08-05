@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 
 @Injectable()
@@ -29,7 +30,15 @@ export class BarcodeTypesService {
 
     return dataOut;
   }
-
+  
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'BarcodeType',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
   async getAllDeleted() {
     const dataOut = {
       status: true,

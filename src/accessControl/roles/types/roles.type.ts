@@ -2,9 +2,6 @@ export const BaseRole = {
   STAFF1: 'Staff_Labanan',
   STAFF2: 'Staff_PKS',
   STAFF3: 'Staff_T30',
-  SUPERVISOR: 'Supervisor',
-  MANAGER: 'Manager',
-  MILL_HEAD: 'Mill Head',
   ADMIN: 'Administrator',
 } as const;
 export type UserRole = (typeof BaseRole)[keyof typeof BaseRole];
@@ -17,9 +14,7 @@ export const permission = [
   'read:any',
   'create:any',
   'update:any',
-  'delete:any'
+  'delete:any',
 ] as const;
 
-export const MainSite = ['Labanan','T30', 'PKS'] as const;
-
-
+export const MainSite = ['Labanan', 'T30', 'PKS'] as const;
