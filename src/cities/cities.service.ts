@@ -9,7 +9,10 @@ import { Observable, from, map } from 'rxjs';
 
 @Injectable()
 export class CitiesService {
-  constructor(private db: DbService, private readonly sseGateway: SseGateway,) {}
+  constructor(
+    private db: DbService,
+    private readonly sseGateway: SseGateway,
+  ) {}
 
   async create(dto: CreateCityDto, userId: string): Promise<CityEntity> {
     const params = {
@@ -31,7 +34,7 @@ export class CitiesService {
     const attr = await modelFields.map((modelField) => modelField.name);
     return attr;
   }
-  
+
   // async updateView():Promise<Observable<CityEntity[]>>{
   //   const records = await this.db.city.findMany({
   //     where: { isDeleted: false },
@@ -40,14 +43,13 @@ export class CitiesService {
   //     },
   //   });
   //   await this.sseGateway.emitUpdateToClients(records);
-    
 
   //   return from(records).pipe(
   //     map((city) => {
   //       return city;
   //     }),
   //   );
-  
+
   // }
 
   async getAll(): Promise<CityEntity[]> {
@@ -122,11 +124,16 @@ export class CitiesService {
     dto: UpdateCityDto,
     userId: string,
   ): Promise<any> {
+    const { name, provinceId } = dto;
     const params = {
       where: { id },
-      data: { ...dto, userModified: userId },
+      data: {
+        name,
+        province: { connect: { id: provinceId } },
+        userModified: userId,
+      },
     };
-
+    console.log(params);
     const record = await this.db.city.update(params);
 
     return record;

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
-import { CreateConfigDto } from './dto/Create-Config.dto';
+import { CreateConfigDto } from './dto/create-config.dto';
 
 @Injectable()
 export class ConfigsService {
@@ -100,7 +100,6 @@ export class ConfigsService {
     };
 
     const record = await this.db.config.create(params);
-
 
     return record;
   }
