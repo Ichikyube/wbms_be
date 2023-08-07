@@ -10,7 +10,7 @@ import {
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateConfigDto } from './dto/Create-Config.dto';
+import { CreateConfigDto } from './dto/create-config.dto';
 
 @ApiTags('Configs')
 @Controller('configs')
