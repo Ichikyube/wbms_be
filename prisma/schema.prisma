@@ -278,6 +278,7 @@ enum ConfigType {
 enum Status {
   ACTIVE
   DISABLED
+  PENDING
 }
 
 model Config {
@@ -294,7 +295,6 @@ model Config {
   userModified String   @db.Char(36)
   dtCreated    DateTime @default(now())
   dtModified   DateTime @updatedAt
-  siteId       String   @db.Char(36)
   site         Site[]   
 }
 
