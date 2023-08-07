@@ -198,6 +198,16 @@ services:
       - ../armin/server/upload:/wbms_be/upload
     networks:
       - armin-net
+
+  wbms-fo:
+    image: 'almyra/wbms_fe:latest'
+    restart: always
+    ports:
+      - 8000:3000
+
+    networks:
+      - armin-net
+
 networks:
   armin-net:
     driver: bridge
