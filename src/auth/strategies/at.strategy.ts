@@ -30,21 +30,6 @@ export class AtStrategy extends PassportStrategy(Strategy, "jwt-access") {
   }
 
   async validate(payload: JwtPayload) {
-    // ini seharusnya diawal aja, ditaro di payload,
-    // karena kl seperti ini costnya setiap panggil api akan call db process
-    // process audit trail bisa disini
-    // console.log(payload);
-    // const user = await this.db.user.findFirst({
-    //   where: { id: payload.sub, hashedRT: { not: null } },
-    //   select: {
-    //     id: true,
-    //     username: true,
-    //     email: true,
-    //     role: true,
-    //   },
-    // });
-
-    // return user;
     return payload;
   }
 }

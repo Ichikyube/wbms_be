@@ -35,10 +35,10 @@ import {
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
 import { RolesModule } from './accessControl/roles/roles.module';
-// import { DbService } from './db/db.service';
-// import { RolesModule } from './accessControl/roles/roles.module';
-// import { RbacModule } from './accessControl/rbac.module';
-// import { RedisConfigService } from './settings/redis-config/redis-config.service';
+import { RbacModule } from './accessControl/rbac.module';
+import { RolesService } from './accessControl/roles/roles.service';
+import { SseGateway } from './sse/sse.gateway';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -47,11 +47,12 @@ import { RolesModule } from './accessControl/roles/roles.module';
       rootPath: join(__dirname, '..', 'upload'),
       serveRoot: '/img',
     }),
-    // AccessControlModule.forRoles(RBAC_POLICY),
     // AccessControlModule.forRootAsync({
     //   imports: [RolesModule],
-    //   inject: [DbService],
-    //   useFactory: generateAC()
+    //   inject: [RolesService],
+    //   useFactory: async (roleService: RolesService): Promise<RolesBuilder> => {
+    //     return new RolesBuilder(await roleService.getRoles());
+    //   },
     // }),
     DbModule,
     AuthModule,
@@ -77,7 +78,7 @@ import { RolesModule } from './accessControl/roles/roles.module';
     TransportVehicleModule,
     FilesModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     // {
     //   provide: APP_GUARD,
@@ -87,11 +88,11 @@ import { RolesModule } from './accessControl/roles/roles.module';
     //   provide: APP_GUARD,
     //   useClass: ACGuard,
     // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: TimestampInterceptor,
-    // },
-    // RedisConfigService
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimestampInterceptor,
+    },
+    SseGateway,
   ],
 })
 export class AppModule {}

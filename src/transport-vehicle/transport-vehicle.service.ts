@@ -11,7 +11,12 @@ export class TransportVehicleService {
 
   async getAll(): Promise<TransportVehicleEntity[]> {
     const records = await this.db.transportVehicle.findMany({
-      where: { isDeleted: false }
+      where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+      ],
     });
 
     return records;

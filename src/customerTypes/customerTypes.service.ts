@@ -12,6 +12,14 @@ export class CustomerTypesService {
   async getAll(): Promise<CustomerTypeEntity[]> {
     const records = await this.db.customerType.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

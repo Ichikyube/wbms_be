@@ -37,6 +37,14 @@ export class UsersService {
     const records = await this.db.user.findMany({
       // select: { id: true, email: true },
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
     return records;
   }

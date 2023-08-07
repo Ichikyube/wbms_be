@@ -12,6 +12,14 @@ export class ProductsService {
   async getAll(): Promise<ProductEntity[]> {
     const records = await this.db.product.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

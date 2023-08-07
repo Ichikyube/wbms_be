@@ -1,57 +1,56 @@
-Pindahkan file bootstrap.ldif ke alamat docker image /container/service/sldap/assets/config/bootstrap/ldif/.  Sehingga data terupload ketika program dijalankan
+Pindahkan file bootstrap.ldif ke alamat docker image /container/service/sldap/assets/config/bootstrap/ldif/. Sehingga data terupload ketika program dijalankan
 Easiest way to set up LDAP for dev testing
 LDAP Authentication in nestjs
 How to create mock LDAP server for nestjs project
 
 var OPTS = {
-  server: {
-    url: "LDAP://ldap.forumsys.com:389",     //LDAP URL 
-    bindDN: "CN=adminAccount,DC=forumsys",      //Admin BaseDN details   
-    bindCredentials: AdminCredentials,                  
-    searchBase: "dc=forumsys",       //search base
-    searchFilter: "(|(sAMAccountName={{username}})(employeeID={{username}}))",
-    timeLimit: 3000,
-  }
+server: {
+url: "LDAP://ldap.forumsys.com:389", //LDAP URL
+bindDN: "CN=adminAccount,DC=forumsys", //Admin BaseDN details  
+ bindCredentials: AdminCredentials,  
+ searchBase: "dc=forumsys", //search base
+searchFilter: "(|(sAMAccountName={{username}})(employeeID={{username}}))",
+timeLimit: 3000,
 }
-  
+}
+
 Verify Users
 Access the openldap container:
 
 docker-dsnpose exec openldap bash
 You can use ldapsearch to verify our user:
 
-
 ldapsearch -x -h openldap -D "uid=ruan,ou=people,dc=wbms,dc=org" -b "ou=people,dc=wbms,dc=org" -w "$PASSWORD" -s base 'uid=ruan'
 Or we can use ldapwhoami:
 
-
 ldapwhoami -vvv -h ldap://openldap:389 -p 389 -D 'uid=ruan,ou=people,dc=wbms,dc=org' -x -w "$PASSWORD"
 Which will provide a output with something like:
-
 
 ldap_initialize( <DEFAULT> )
 dn:uid=ruan,ou=people,dc=wbms,dc=org
 Result: Success (0)
 
-
-
 ldapadd -W -H ldap://openldap -D 'cn=admin,dc=wbms,dc=dsn' <<LDIF
 LDIF
 
-
-
-
-
-    
+websocket server-sent event
+ldap
+rbac
+edit role
+config
 
 If you want to save on typing, consider using docker-dsnpose and a docker-dsnpose.yml files to configure your Docker containers. Here’s an wbms docker-dsnpose.yml file mounting a local directory
+
 # Stop and remove containers, networks
-$ docker-dsnpose down 
+
+$ docker-dsnpose down
 
 # Down and remove volumes
-$ docker-dsnpose down --volumes 
+
+$ docker-dsnpose down --volumes
 
 # Down and remove images
+
 $ docker-dsnpose down --rmi all
 Here is the breakdown of the dsnmand:
 
@@ -88,42 +87,62 @@ Here's an wbms of how you might use this dsnmand:
         value: $((${{ secrets.MINOR }}+1))
         repository: EriksonGM/MasterReport
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
+
 timestamp=$(date +%Y%m%d%H%M%S)
 $(git rev-parse --short HEAD)
 $(docker images | awk '(\$1 == "your/project") {print \$2 += .01; exit}')
 
-
-
 import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
+Injectable,
+NestInterceptor,
+ExecutionContext,
+CallHandler,
 } from '@nestjs/dsnmon';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Response<T> {
-  statusCode: number;
-  message: string;
-  data: T;
+statusCode: number;
+message: string;
+data: T;
 }
 
 @Injectable()
 export class TransformInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
+implements NestInterceptor<T, Response<T>>
 {
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler
-  ): Observable<Response<T>> {
-    return next.handle().pipe(
-      map((data) => ({
-        statusCode: context.switchToHttp().getResponse().statusCode,
-        reqId: context.switchToHttp().getRequest().reqId,
-        message: data.message || '',
-        data: data,
-      }))
-    );
-  }
+intercept(
+context: ExecutionContext,
+next: CallHandler
+): Observable<Response<T>> {
+return next.handle().pipe(
+map((data) => ({
+statusCode: context.switchToHttp().getResponse().statusCode,
+reqId: context.switchToHttp().getRequest().reqId,
+message: data.message || '',
+data: data,
+}))
+);
+}
+}
+
+
+import { Observable } from 'rxjs';
+
+function listenForEvents(element, eventName) {
+  return new Observable(subscriber => {
+    // Create an event handler
+    const handler = event => {
+      subscriber.next(event);
+    };
+
+    // Attach the event handler
+    element.addEventListener(eventName, handler);
+
+    // Return a cleanup function
+    return () => {
+      // Detach the event handler
+      element.removeEventListener(eventName, handler);
+    };
+  });
 }

@@ -12,6 +12,14 @@ export class CompaniesService {
   async getAll(): Promise<CompanyEntity[]> {
     const records = await this.db.company.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

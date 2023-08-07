@@ -3,9 +3,9 @@ import {
   Injectable,
   OnModuleDestroy,
   OnModuleInit,
-} from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PrismaClient } from "@prisma/client";
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class DbService
@@ -17,10 +17,10 @@ export class DbService
     super({
       datasources: {
         db: {
-          url: config.get("WBMS_DB_URL"),
+          url: config.get('WBMS_DB_URL'),
         },
       },
-    }); 
+    });
   }
 
   async onModuleInit() {
@@ -32,9 +32,8 @@ export class DbService
   }
 
   async enableShutdownHooks(app: INestApplication) {
-    //   this.$on('beforeExit', async () => {
-    //     await app.close();
-    //   });
-    // }
+      process.on('beforeExit', async () => {
+        await app.close();
+      });
   }
 }

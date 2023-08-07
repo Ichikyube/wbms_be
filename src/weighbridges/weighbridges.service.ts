@@ -12,6 +12,14 @@ export class WeighbridgesService {
   async getAll(): Promise<WeighbridgeEntity[]> {
     const records = await this.db.weighbridge.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

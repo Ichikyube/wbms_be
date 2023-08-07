@@ -13,6 +13,14 @@ export class ProvincesService {
   async getAll(): Promise<ProvinceEntity[]> {
     const records = await this.db.province.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

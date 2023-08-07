@@ -18,6 +18,14 @@ export class SitesService {
   async getAll(): Promise<SiteEntity[]> {
     const records = await this.db.site.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

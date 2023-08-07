@@ -4,10 +4,12 @@ import { DbService } from 'src/db/db.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from 'src/entities';
 import { Prisma } from '@prisma/client';
+import { SseGateway } from 'src/sse/sse.gateway';
+import { Observable, from, map } from 'rxjs';
 
 @Injectable()
 export class CitiesService {
-  constructor(private db: DbService) {}
+  constructor(private db: DbService, private readonly sseGateway: SseGateway,) {}
 
   async create(dto: CreateCityDto, userId: string): Promise<CityEntity> {
     const params = {
@@ -18,9 +20,7 @@ export class CitiesService {
         userModified: '',
       },
     };
-    console.log(params);
     const record = await this.db.city.create(params);
-    console.log(record);
     return record;
   }
 
@@ -29,9 +29,26 @@ export class CitiesService {
       (model) => model.name === 'City',
     ).fields;
     const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
     return attr;
   }
+  
+  // async updateView():Promise<Observable<CityEntity[]>>{
+  //   const records = await this.db.city.findMany({
+  //     where: { isDeleted: false },
+  //     include: {
+  //       province: true,
+  //     },
+  //   });
+  //   await this.sseGateway.emitUpdateToClients(records);
+    
+
+  //   return from(records).pipe(
+  //     map((city) => {
+  //       return city;
+  //     }),
+  //   );
+  
+  // }
 
   async getAll(): Promise<CityEntity[]> {
     const records = await this.db.city.findMany({
@@ -39,6 +56,14 @@ export class CitiesService {
       include: {
         province: true,
       },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

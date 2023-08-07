@@ -9,6 +9,18 @@ datasource db {
   provider = "mysql"
   url      = env("WBMS_DB_URL")
 }
+// generator nestjsDto {
+// provider = "prisma-generator-nestjs-dto"
+// output = "../src/gen"
+// outputToNestJsResourceStructure = "true"
+// }
+// generator prismaClassGenerator {
+//   provider               = "prisma-class-generator"
+//   output                 = "../src/_gen/prisma-class"
+//   dryRun                 = "false"
+//   separateRelationFields = "false"
+//   useUndefinedDefault    = "true"
+// }
 
 model Province {
   id String @id @default(uuid()) @db.Char(36)
@@ -263,13 +275,19 @@ enum ConfigType {
   object
 }
 
+enum Status {
+  ACTIVE
+  DISABLED
+}
+
 model Config {
-  id String @id @db.Char(36) // ini site_id
+  id String    @id @default(uuid()) @db.Char(36) // ini site_id
 
   name         String  @unique @db.VarChar(30)
-  type         ConfigType @default(number)
-  Status       Boolean
-  activeStart  DateTime
+  type         ConfigType?
+  value        String?  @db.VarChar(36)
+  status       Status  
+  activeStart  DateTime 
   activeEnd    DateTime
   isDeleted    Boolean  @default(false)
   userCreated  String   @db.Char(36)
@@ -279,8 +297,9 @@ model Config {
   siteId       String   @db.Char(36)
   site         Site[]   
 }
+
 model User {
-  id String @id @default(uuid()) @db.Char(36)
+  id      String @id @default(uuid()) @db.Char(36)
 
   username String  @unique @db.VarChar(30)
   email    String  @unique @db.VarChar(50)

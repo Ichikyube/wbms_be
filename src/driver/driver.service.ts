@@ -12,6 +12,14 @@ export class DriverService {
   async getAll(): Promise<DriverEntity[]> {
     const records = await this.db.driver.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

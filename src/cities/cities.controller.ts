@@ -7,20 +7,28 @@ import {
   Patch,
   Delete,
   Req,
+  Sse,
+  Res,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { CitiesService } from './cities.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { UseRoles } from 'nest-access-control';
 import { CityEntity } from 'src/entities';
+import { Observable } from 'rxjs';
 
 @ApiTags('Cities')
 @Controller('cities')
 export class CitiesController {
   constructor(private citiesService: CitiesService) {}
 
+  // @Sse('city')
+  // async updateCities(@Res() res: Response): Promise<Observable<any>> {
+  //   await this.citiesService.handleDatabaseUpdate();
+  //   return ({ message: 'Update triggered' });
+  // }
   @Get('')
   @UseRoles({
     resource: 'citiesData',
@@ -63,7 +71,7 @@ export class CitiesController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.citiesService.getAttributes();;
+    return await this.citiesService.getAttributes();
   }
 
   @Get('deleted')

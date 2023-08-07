@@ -13,6 +13,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Res,
+  Sse,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -31,6 +32,7 @@ import { AtGuard } from 'src/common/guards';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Observable, interval, map } from 'rxjs';
 
 @ApiTags('Users')
 @Controller('users')
@@ -59,10 +61,15 @@ export class UsersController {
       dataOut.message = error.message;
       dataOut.logs = { ...dataOut.logs, error };
     }
-
     return dataOut;
   }
 
+  @Sse('sse')
+  sse(): Observable<MessageEvent> {
+    return interval(1000).pipe(
+      map((_) => ({ data: { hello: 'world' } }) as MessageEvent),
+    );
+  }
   @Get()
   @UseRoles({
     resource: 'usersData',
@@ -106,9 +113,9 @@ export class UsersController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.usersService.getAttributes();;
+    return await this.usersService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'usersData',
@@ -272,7 +279,7 @@ export class UsersController {
 
     return dataOut;
   }
-  
+
   async updateUserRole(
     @Param('id') userId: string,
     @Param('id') roleId: number,
@@ -332,7 +339,12 @@ export class UsersController {
     };
 
     try {
-      const user = await this.usersService.updateById(userId, dto, file, userId);
+      const user = await this.usersService.updateById(
+        userId,
+        dto,
+        file,
+        userId,
+      );
 
       const { username, email, name, division, position, phone } = user;
 

@@ -1,10 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
+import { Prisma } from '@prisma/client';
+import { CreateConfigDto } from './dto/Create-Config.dto';
 
 @Injectable()
 export class ConfigsService {
-  constructor(private db: DbService, private config: ConfigService) {}
+  constructor(
+    private db: DbService,
+    private config: ConfigService,
+  ) {}
+
+  async getAttributes() {
+    const modelFields = await Prisma.dmmf.datamodel.models.find(
+      (model) => model.name === 'Config',
+    ).fields;
+    const attr = await modelFields.map((modelField) => modelField.name);
+    console.log(attr);
+    return attr;
+  }
 
   async getEnv() {
     const dataOut = {
@@ -36,189 +50,80 @@ export class ConfigsService {
   }
 
   async getAll() {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      records: {},
-      logs: {},
-    };
+    const records = await this.db.config.findMany({
+      where: { isDeleted: false },
+      orderBy: [
+        {
+          name: 'desc',
+        },
+      ],
+    });
 
-    try {
-      const records = await this.db.config.findMany({
-        where: { isDeleted: false },
-      });
-
-      dataOut.records = records;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return records;
   }
 
   async searchMany(query: any) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      records: {},
-      logs: {},
-    };
-
-    try {
-      const records = await this.db.config.findMany({
+    const records = await this.db.config.findMany({
+      where: {
         ...query,
         isDeleted: false,
-      });
+      },
+    });
 
-      dataOut.records = records;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return records;
   }
 
   async searchFirst(query: any) {
-    const dataOut = {
-      status: true,
-      message: '',
-      record: {},
-      logs: {},
-    };
+    const record = await this.db.config.findFirst({
+      ...query,
+      isDeleted: false,
+    });
 
-    try {
-      const record = await this.db.config.findFirst({
-        ...query,
-        isDeleted: false,
-      });
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return record;
   }
 
   async getById(id: string) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
-    };
+    const record = await this.db.config.findUnique({
+      where: { id },
+    });
 
-    try {
-      const record = await this.db.config.findUnique({
-        where: { id },
-      });
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return record;
   }
 
-  async create(dto: any) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
+  async create(dto: CreateConfigDto) {
+    const params = {
+      data: {
+        ...dto,
+        userCreated: '',
+        userModified: '',
+      },
     };
 
-    try {
-      const params = {
-        data: {
-          ...dto,
-          userCreated: '',
-          userModified: '',
-        },
-      };
+    const record = await this.db.config.create(params);
 
-      const record = await this.db.config.create(params);
 
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return record;
   }
 
   async updateById(id: string, dto: any) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
+    const params = {
+      where: { id },
+      data: { ...dto, userModified: '' },
     };
 
-    try {
-      const params = {
-        where: { id },
-        data: { ...dto, userModified: '' },
-      };
+    const record = await this.db.config.update(params);
 
-      const record = await this.db.config.update(params);
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return record;
   }
 
   async deleteById(id: string) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
+    const params = {
+      where: { id },
+      data: { isDeleted: true, userModified: '' },
     };
+    const record = await this.db.config.update(params);
 
-    try {
-      const params = {
-        where: { id },
-        data: { isDeleted: true, userModified: '' },
-      };
-      const record = await this.db.config.update(params);
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
+    return record;
   }
 
   WbTransactionUrlMapping() {

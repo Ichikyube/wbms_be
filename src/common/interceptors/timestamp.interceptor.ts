@@ -20,7 +20,7 @@ export class TimestampInterceptor implements NestInterceptor {
       }),
     );
   }
-
+  
   private updateTimestamps(entity: any, userId: number) {
     if (!entity.userCreated) {
       entity.userCreated = userId;

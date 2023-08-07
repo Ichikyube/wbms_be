@@ -206,8 +206,9 @@ CREATE TABLE `Weighbridge` (
 CREATE TABLE `Config` (
     `id` CHAR(36) NOT NULL,
     `name` VARCHAR(30) NOT NULL,
-    `type` ENUM('boolean', 'string', 'number', 'bigint', 'array', 'object') NOT NULL DEFAULT 'number',
-    `Status` BOOLEAN NOT NULL,
+    `type` ENUM('boolean', 'string', 'number', 'bigint', 'array', 'object') NULL,
+    `value` VARCHAR(36) NULL,
+    `status` ENUM('ACTIVE', 'DISABLED') NOT NULL,
     `activeStart` DATETIME(3) NOT NULL,
     `activeEnd` DATETIME(3) NOT NULL,
     `isDeleted` BOOLEAN NOT NULL DEFAULT false,

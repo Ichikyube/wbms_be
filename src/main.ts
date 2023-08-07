@@ -8,6 +8,9 @@ import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
 import SwaggerDocumentation from './settings/swagger.config';
 import { join } from 'path';
+import { Prisma } from '@prisma/client';
+
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -42,6 +45,12 @@ async function bootstrap() {
   const swaggerDoc = new SwaggerDocumentation(app);
   swaggerDoc.serve();
   await app.listen(WBMS_APP_PORT || 6001);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+ 
 }
 bootstrap();
 

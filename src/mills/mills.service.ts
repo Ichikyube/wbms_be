@@ -12,6 +12,14 @@ export class MillsService {
   async getAll(): Promise<MillEntity[]> {
     const records = await this.db.mill.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

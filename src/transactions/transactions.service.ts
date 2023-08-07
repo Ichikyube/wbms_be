@@ -30,7 +30,13 @@ export class TransactionService {
     };
 
     try {
-      const records = await this.db.transaction.findMany();
+      const records = await this.db.transaction.findMany({
+        orderBy: [
+          {
+            dtCreated: 'desc',
+          },
+        ],
+      });
       dataOut.records = records;
     } catch (error) {
       dataOut.status = false;

@@ -13,6 +13,14 @@ export class ProductGroupsService {
   async getAll(): Promise<ProductGroupEntity[]> {
     const records = await this.db.productGroup.findMany({
       where: { isDeleted: false },
+      orderBy: [
+        {
+          dtCreated: 'desc',
+        },
+        {
+          name: 'desc',
+        },
+      ],
     });
 
     return records;

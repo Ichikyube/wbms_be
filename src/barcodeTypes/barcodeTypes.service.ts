@@ -19,6 +19,14 @@ export class BarcodeTypesService {
     try {
       const records = await this.db.barcodeType.findMany({
         where: { isDeleted: false },
+        orderBy: [
+          {
+            dtCreated: 'desc',
+          },
+          {
+            name: 'desc',
+          },
+        ],
       });
 
       dataOut.records = records;

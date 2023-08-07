@@ -6,11 +6,19 @@ import { AuthService } from './auth.service';
 import { AtStrategy, JwtStrategy, RtStrategy } from './strategies';
 import { UsersModule } from 'src/users/users.module';
 import { LdapStrategy } from './strategies/ldap.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({}),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('WBMS_JWT_KEY'),
+        signOptions: { expiresIn: '60s' },
+      }),
+      inject: [ConfigService],
+    }),
     // PassportModule,
     PassportModule.register({ defaultStrategy: 'ldapAuth' }),
   ],
