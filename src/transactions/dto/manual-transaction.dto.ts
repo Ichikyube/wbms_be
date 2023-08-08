@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
-
 
 export class CreateTransactionDto {
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  tType = 1;
+  tType: number;
 
   bonTripNo?: string;
   vehicleStatus: number;
@@ -66,7 +65,6 @@ export class CreateTransactionDto {
   currentSeal3?: string;
   currentSeal4?: string;
 
-
   rspoUniqueNumber?: string;
   isccUniqueNumber?: string;
 
@@ -112,4 +110,3 @@ export class CreateTransactionDto {
 
   jsonData: QrcodeDto;
 }
-

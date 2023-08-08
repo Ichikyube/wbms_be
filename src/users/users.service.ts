@@ -48,7 +48,7 @@ export class UsersService {
     });
     return records;
   }
-  
+
   async getAttributes() {
     const modelFields = await Prisma.dmmf.datamodel.models.find(
       (model) => model.name === 'User',
@@ -111,30 +111,43 @@ export class UsersService {
     userId: string,
   ): Promise<UserEntity> {
     // generate the password hash
-    const { username } = dto;
+    const { username, name } = dto;
+    console.log(name);
     let user = await this.db.user.findFirst({ where: { username } });
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
     const hashedPassword = await hash(dto.password);
     const role = await this.db.role.findUnique({ where: { id: dto.roleId } });
+    if (!role) {
+      await this.db.role.upsert({
+        where: { id: dto.roleId },
+        update: {},
+        create: {
+          name: 'Test User',
+        },
+      });
+      // throw new HttpException('Role not found', HttpStatus.BAD_REQUEST);
+    }
     // save the new user in the db
+    let userRole = role?.name ? role.name : 'user';
     user = await this.db.user
       .create({
         data: {
-          username: dto.username,
+          username: username,
           email: dto.email,
           nik: dto.nik,
-          name: dto.name,
+          name: name,
           profilePic: file.filename,
           division: dto.division,
           position: dto.position,
           phone: dto.phone,
           hashedPassword: hashedPassword,
           roleId: dto.roleId,
-          role: role.name,
+          role: userRole,
           userCreated: userId,
-          userModified: userId,
+          userModified: '',
+          isLDAPUser: dto.isLDAPUser,
         },
       })
       .catch((error) => {

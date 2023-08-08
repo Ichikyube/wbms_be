@@ -23,7 +23,7 @@ export class CreateUserDto {
   })
   password: string = '12345678';
 
-  @ApiProperty() @IsString() @IsNotEmpty() name: string = 'Bambang Tri';
+  @ApiProperty() @IsString() @IsNotEmpty() name: string;
 
   @ApiProperty({
     type: 'string',
@@ -47,7 +47,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsInt()
-  readonly roleId: number
+  readonly roleId: number;
 
   @ApiProperty({ type: Boolean }) @IsBoolean() isLDAPUser: boolean;
 }
