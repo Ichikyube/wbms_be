@@ -1,3 +1,19 @@
+Todo
+backend
+ldap(sso(Single-SignOn)),
+config
+inject Admin IT, Admin System ke role
+Buat superAdmin(AdminIT)
+Transaction
+
+
+
+frontend
+role,
+auth
+role,
+
+
 Pindahkan file bootstrap.ldif ke alamat docker image /container/service/sldap/assets/config/bootstrap/ldif/. Sehingga data terupload ketika program dijalankan
 Easiest way to set up LDAP for dev testing
 LDAP Authentication in nestjs

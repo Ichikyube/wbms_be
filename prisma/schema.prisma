@@ -27,72 +27,74 @@ model Province {
 
   name String @db.VarChar(30)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false) @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   cities City[]
+  @@map("provinces")
 }
 
 model City {
   id         String @id @default(uuid()) @db.Char(36)
-  provinceId String @db.Char(36)
+  provinceId String @db.Char(36) @map("province_id")
 
   name String @db.VarChar(30)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   province Province @relation(fields: [provinceId], references: [id])
 
   sites     Site[]
   customers Customer[]
+  @@map("cities")
 }
 
 
 model Image {
-  id        Int      @id @default(autoincrement())
+  id        String  @id @default(uuid()) @db.Char(36)
   path      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 }
 
 model Company {
   id      String  @id @default(uuid()) @db.Char(36)
-  refType Int     @default(0) //0: WBMS, 1: eDispatch
-  refId   String? @db.VarChar(50)
+  refType Int     @default(0) @map("ref_type")//0: WBMS, 1: eDispatch
+  refId   String? @db.VarChar(50) @map("ref_id")
 
   code         String  @db.VarChar(50)
-  codeSap      String? @db.VarChar(50)
+  codeSap      String? @db.VarChar(50)  @map("code_sap")
   name         String  @db.VarChar(50)
-  shortName    String? @db.VarChar(50)
+  shortName    String? @db.VarChar(50)  @map("short_name")
   address      String? @db.VarChar(250)
-  addressExt   String? @db.VarChar(250)
-  postalCode   String? @db.VarChar(10)
+  addressExt   String? @db.VarChar(250) @map("address_ext")
+  postalCode   String? @db.VarChar(10) @map("postal_code")
   country      String? @db.VarChar(30)
   province     String? @db.VarChar(30)
   city         String? @db.VarChar(30)
   phone        String? @db.VarChar(30)
   url          String? @db.VarChar(100)
-  contactName  String? @db.VarChar(50)
-  contactEmail String? @db.VarChar(30)
-  contactPhone String? @db.VarChar(30)
+  contactName  String? @db.VarChar(50) @map("contact_name")
+  contactEmail String? @db.VarChar(30) @map("contact_email")
+  contactPhone String? @db.VarChar(30) @map("contact_phone")
 
-  isMillOperator Boolean @default(false)
-  isTransporter  Boolean @default(false)
-  isSiteOperator Boolean @default(false)
-  isEstate       Boolean @default(false)
+  isMillOperator Boolean @default(false) @map("is_mill_operator")
+  isTransporter  Boolean @default(false)  @map("is_transporter")
+  isSiteOperator Boolean @default(false)  @map("is_site_operator")
+  isEstate       Boolean @default(false) @map("is_estate")
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   sites             Site[]
   transportVehicles TransportVehicle[]
@@ -100,108 +102,112 @@ model Company {
   Driver            Driver[]
   Transaction       Transaction[]
   StorageTank       StorageTank[]
+  @@map("companies")
 }
 
 model Customer {
   id              String @id @default(uuid()) @db.Char(36)
-  customerTypeId  String @db.Char(36)
-  customerGroupId String @db.Char(36)
-  cityId          String @db.Char(36)
+  customerTypeId  String @db.Char(36) @map("customer_type_id")
+  customerGroupId String @db.Char(36) @map("customer_group_id")
+  cityId          String @db.Char(36) @map("city_id")
   // barcodeTypeId   String? @db.Char(36)
 
   code         String  @db.VarChar(50)
-  codeSap      String? @db.VarChar(50)
+  codeSap      String? @db.VarChar(50) @map("code_sap")
   name         String  @db.VarChar(50)
-  shortName    String? @db.VarChar(50)
+  shortName    String? @db.VarChar(50) @map("short_name")
   address      String? @db.VarChar(250)
-  addressExt   String? @db.VarChar(250)
-  postalCode   String? @db.VarChar(10)
+  addressExt   String? @db.VarChar(250) @map("Address_ext")
+  postalCode   String? @db.VarChar(10)  @map("postal_code")
   phone        String? @db.VarChar(30)
   url          String? @db.VarChar(100)
-  contactName  String? @db.VarChar(50)
-  contactEmail String? @db.VarChar(30)
-  contactPhone String? @db.VarChar(30)
+  contactName  String? @db.VarChar(50) @map("contact_name")
+  contactEmail String? @db.VarChar(30) @map("contact_email")
+  contactPhone String? @db.VarChar(30) @map("contact_phone")
   sortasi      Float? //Decimal
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   customerType  CustomerType  @relation(fields: [customerTypeId], references: [id])
   customerGroup CustomerGroup @relation(fields: [customerGroupId], references: [id])
   city          City          @relation(fields: [cityId], references: [id])
   // barcodeType   BarcodeType?   @relation(fields: [barcodeTypeId], references: [id])
+  @@map("customers")
 }
 
 model CustomerType {
   id String @id @default(uuid()) @db.Char(36)
 
   name        String  @db.VarChar(50)
-  shortDesc   String? @db.VarChar(100)
+  shortDesc   String? @db.VarChar(100) @map("short_description")
   description String? @db.VarChar(500)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   customers Customer[]
+  @@map("customer_types")
 }
 
 model CustomerGroup {
   id String @id @default(uuid()) @db.Char(36)
 
   name        String  @db.VarChar(50)
-  shortDesc   String? @db.VarChar(100)
+  shortDesc   String? @db.VarChar(100) @map("short_description")
   description String? @db.VarChar(500)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   customers Customer[]
+  @@map("customer_groups")
 }
 
 model BarcodeType {
   id String @id @default(uuid()) @db.Char(36)
 
   name        String  @db.VarChar(50)
-  shortDesc   String? @db.VarChar(100)
+  shortDesc   String? @db.VarChar(100) @map("short_description")
   description String? @db.VarChar(500)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
-
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
+  @@map("barcode_types")
   // customers Customer[]
 }
 
 model Site {
   id      String  @id @default(uuid()) @db.Char(36)
-  refType Int     @default(0)
-  refId   String? @db.VarChar(50)
+  refType Int     @default(0)  @map("ref_type")
+  refId   String? @db.VarChar(50) @map("ref_id")
 
-  sourceSiteId    String? @db.Char(36)
-  sourceSiteRefId String? @db.VarChar(50)
-  sourceSiteName  String? @db.VarChar(50)
+  sourceSiteId    String? @db.Char(36) @map("source_site_id")
+  sourceSiteRefId String? @db.VarChar(50) @map("source_site_ref_id")
+  sourceSiteName  String? @db.VarChar(50) @map("source_site_name")
 
-  companyId    String? @db.Char(36)
-  companyRefId String? @db.VarChar(50)
-  companyName  String  @db.VarChar(50)
+  companyId    String? @db.Char(36)  @map("company_id")
+  companyRefId String? @db.VarChar(50) @map("company_ref_id")
+  companyName  String  @db.VarChar(50) @map("company_name")
 
-  cityId String? @db.Char(36)
+  cityId String? @db.Char(36) @map("city_id")
 
   code        String  @db.VarChar(50)
-  codeSap     String? @db.VarChar(50)
+  codeSap     String? @db.VarChar(50)   @map("code_sap")
   name        String  @db.VarChar(50)
-  shortName   String? @db.VarChar(50)
+  shortName   String? @db.VarChar(50) @map("short_name")
   description String? @db.VarChar(500)
 
   latitude         Float?
@@ -210,11 +216,11 @@ model Site {
 
   isMill Boolean @default(false)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.VarChar(36)
-  userModified String   @db.VarChar(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.VarChar(36)  @map("user_created")
+  userModified String   @db.VarChar(36) @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   sourceSite Site?    @relation("source_of_this_site", fields: [sourceSiteId], references: [id])
   company    Company? @relation(fields: [companyId], references: [id])
@@ -223,46 +229,49 @@ model Site {
   storageTanks StorageTank[]
   weighbridges Weighbridge[]
   mills        Mill[]
-  config       Config[]
 
   destinationSites Site[] @relation("source_of_this_site")
 
   originSiteTransactions      Transaction[] @relation("transactionOriginSite")
   destinationSiteTransactions Transaction[] @relation("transactionDestinationSite")
+  configs     Config[]
+  @@map("sites")
 }
 
 model Mill {
   id        String @id @default(uuid()) @db.Char(36)
-  siteId    String @db.Char(36)
-  companyId String @db.Char(36)
+  siteId    String @db.Char(36) @map("site_id")
+  companyId String @db.Char(36)  @map("company_id")
 
   code String @db.VarChar(50)
   name String @db.VarChar(50)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)   @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   site    Site    @relation(fields: [siteId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
+  @@map("mills")
 }
 
 model Weighbridge {
   id     String @id @default(uuid()) @db.Char(36)
-  siteId String @db.Char(36)
+  siteId String @db.Char(36) @map("site_id")
 
   code String @db.VarChar(50)
   name String @db.VarChar(50)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   site Site @relation(fields: [siteId], references: [id])
+  @@map("weighbridges")
 }
 
 
@@ -279,23 +288,28 @@ enum Status {
   ACTIVE
   DISABLED
   PENDING
+  APPROVED
+  REJECTED
 }
 
 model Config {
-  id String    @id @default(uuid()) @db.Char(36) // ini site_id
-
-  name         String  @unique @db.VarChar(30)
+  id String    @id @default(uuid()) @db.Char(36)
+  name         String  @unique @db.VarChar(36)
+  description  String   @db.VarChar(255)
   type         ConfigType?
   value        String?  @db.VarChar(36)
+  lvlOfApprvl  Int      @map("level_of_approval")
+
   status       Status  
-  activeStart  DateTime 
-  activeEnd    DateTime
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
-  site         Site[]   
+  start        DateTime 
+  end          DateTime
+  sites        Site[]
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
+  @@map("configuration")
 }
 
 model User {
@@ -311,21 +325,22 @@ model User {
 
   profilePic String
 
-  roleId         Int
+  roleId         Int @map("role_id")
   role           String  @db.VarChar(36)
-  hashedPassword String  @db.VarChar(100)
-  hashedRT       String? @db.VarChar(100)
+  hashedPassword String  @db.VarChar(100) @map("hashed_password")
+  hashedRT       String? @db.VarChar(100) @map("hashed_rt")
 
-  isEmailVerified Boolean @default(false)
-  isLDAPUser      Boolean @default(true)
-  isDisabled      Boolean @default(false)
-  isDeleted       Boolean @default(false)
+  isEmailVerified Boolean @default(false) @map("is_email_verified")
+  isLDAPUser      Boolean @default(true) @map("is_ldap_user")
+  isDisabled      Boolean @default(false) @map("is_disabled")
+  isDeleted       Boolean @default(false)  @map("is_deleted")
 
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime  @default(now())
-  dtModified   DateTime? @updatedAt
+  userCreated  String   @db.VarChar(36)  @map("user_created")
+  userModified String   @db.VarChar(36) @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
   userRole         Role?     @relation(fields: [roleId], references: [id])
+  @@map("users")
 }
 
 model Role {
@@ -333,24 +348,26 @@ model Role {
   name        String       @unique @db.VarChar(255)
   permissions Permission[]
 
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime  @default(now())
-  dtModified   DateTime? @updatedAt
+  userCreated  String   @db.VarChar(36)  @map("user_created")
+  userModified String   @db.VarChar(36) @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
   users       User[]
+  @@map("roles")
 }
 
 model Permission {
   id       String  @id @default(uuid()) @db.Char(36)
   resource String  @db.Char(36)
   grants   Grant[]
-  roleId   Int    
+  roleId   Int    @map("role_id")
   role     Role    @relation(fields: [roleId], references: [id])
   
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime  @default(now())
-  dtModified   DateTime? @updatedAt
+  userCreated  String   @db.VarChar(36)  @map("user_created")
+  userModified String   @db.VarChar(36)  @map("user_modified")
+  dtCreated    DateTime @default(now())  @map("date_created")
+  dtModified   DateTime @updatedAt       @map("date_modified")
+  @@map("permissions")
 }
 
 model Grant {
@@ -358,20 +375,23 @@ model Grant {
   action       String
   possession    String
   attributes   Attribute[]
-  permissionId String     @db.Char(36)
+  permissionId String     @db.Char(36) @map("permission_id")
   permission   Permission @relation(fields: [permissionId], references: [id])
   
-  userCreated  String?   @db.Char(36)
-  userModified String?   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime? @updatedAt
+  userCreated  String   @db.VarChar(36)  @map("user_created")
+  userModified String   @db.VarChar(36) @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
+  @@map("grants")
 }
 model Attribute {
   id      String     @id @default(uuid()) @db.Char(36)
   attr    String     
-  grantId String     @db.Char(36)
+  grantId String     @db.Char(36) @map("grant_id")
   grant   Grant      @relation(fields: [grantId], references: [id])
+  @@map("attributes")
 }
+
 enum Resource {
   barcodeTypes
   cities
@@ -403,74 +423,76 @@ enum MainSite {
 
 model Product {
   id      String  @id @default(uuid()) @db.Char(36)
-  refType Int     @default(0)
-  refId   String? @db.VarChar(50)
+  refType Int     @default(0)  @map("ref_type")
+  refId   String? @db.VarChar(50) @map("ref_id")
 
   productGroupName String?
 
   code          String  @db.VarChar(50)
-  codeSap       String? @db.VarChar(50)
+  codeSap       String? @db.VarChar(50)   @map("code_sap")
   name          String  @db.VarChar(50)
-  shortName     String? @db.VarChar(50)
+  shortName     String? @db.VarChar(50) @map("short_name")
   description   String? @db.VarChar(500)
   certification String? @db.VarChar(100)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   storageTanks      StorageTank[]
   transactions      Transaction[]
   transportVehicles TransportVehicle[]
+  @@map("products")
 }
 
 model ProductGroup {
   id String @id @default(uuid()) @db.Char(36)
 
   name        String  @db.VarChar(50)
-  shortDesc   String? @db.VarChar(100)
+  shortDesc   String? @db.VarChar(100) @map("short_description")
   description String? @db.VarChar(500)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
+  @@map("product_groups")
 }
 
 model StorageTank {
   id      String  @id @default(uuid()) @db.Char(36)
-  refType Int     @default(0)
-  refId   String? @db.VarChar(50)
+  refType Int     @default(0)  @map("ref_type")
+  refId   String? @db.VarChar(50) @map("ref_id")
 
-  siteId    String? @db.Char(36)
-  siteRefId String? @db.VarChar(50)
-  siteName  String  @db.VarChar(50)
+  siteId    String? @db.Char(36) @map("site_id")
+  siteRefId String? @db.VarChar(50) @map("site_ref_id")
+  siteName  String  @db.VarChar(50) @map("site_name")
 
-  stockOwnerId    String? @db.Char(36)
-  stockOwnerRefId String? @db.VarChar(50)
-  stockOwnerName  String? @db.VarChar(50)
+  stockOwnerId    String? @db.Char(36) @map("stock_owner_id")
+  stockOwnerRefId String? @db.VarChar(50) @map("stock_owner_ref_id")
+  stockOwnerName  String? @db.VarChar(50) @map("stock_owner_name")
 
-  productId    String? @db.Char(36)
-  productRefId String? @db.VarChar(50)
-  productName  String? @db.VarChar(50)
+  productId    String? @db.Char(36) @map("product_id")
+  productRefId String? @db.VarChar(50) @map("product_ref_id")
+  productName  String? @db.VarChar(50) @map("product_name")
 
   code        String  @db.VarChar(50)
-  codeSap     String  @db.VarChar(50)
+  codeSap     String  @db.VarChar(50)   @map("code_sap")
   name        String  @db.VarChar(50)
-  shortName   String? @db.VarChar(50)
+  shortName   String? @db.VarChar(50) @map("short_name")
   description String? @db.VarChar(500)
   capacity    Float?
   height      Float?
   sccModel    Int     @default(0)
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   site       Site?    @relation(fields: [siteId], references: [id])
   stockOwner Company? @relation(fields: [stockOwnerId], references: [id])
@@ -478,17 +500,18 @@ model StorageTank {
 
   originSourceStorageTankTransactions    Transaction[] @relation("transactionOriginStorageTank")
   destinationSinkStorageTankTransactions Transaction[] @relation("transactionDestinationStorageTank")
+  @@map("storage_tanks")
 }
 
 model Driver {
   id      String  @id @default(uuid()) @db.Char(36)
-  refType Int     @default(0)
-  refId   String? @db.VarChar(50)
-  codeSap String  @db.VarChar(50)
+  refType Int     @default(0)  @map("ref_type")
+  refId   String? @db.VarChar(50) @map("ref_id")
+  codeSap String  @db.VarChar(50)   @map("code_sap")
 
-  companyId    String? @db.Char(36)
-  companyRefId String? @db.VarChar(50)
-  companyName  String  @db.VarChar(50)
+  companyId    String? @db.Char(36) @map("company_id")
+  companyRefId String? @db.VarChar(50) @map("company_ref_id")
+  companyName  String  @db.VarChar(50) @map("company_name")
 
   nik     String  @unique @db.VarChar(30)
   name    String  @db.VarChar(50)
@@ -496,183 +519,185 @@ model Driver {
   email   String? @db.VarChar(30)
   phone   String? @db.VarChar(30)
 
-  licenseNo String?   @db.VarChar(30)
-  licenseED DateTime?
+  licenseNo String?   @db.VarChar(30) @map("license_no")
+  licenseED DateTime? @map("license_ed")
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   company      Company?      @relation(fields: [companyId], references: [id])
   transactions Transaction[]
+  @@map("drivers")
 }
 
 model TransportVehicle {
   id      String  @id @default(uuid()) @db.Char(36)
-  refType Int     @default(0)
-  refId   String? @db.VarChar(50)
-  codeSap String  @db.VarChar(50)
+  refType Int     @default(0)  @map("ref_type")
+  refId   String? @db.VarChar(50) @map("ref_id")
+  codeSap String  @db.VarChar(50) @map("code_sap")
 
-  companyId    String? @db.Char(36)
-  companyRefId String? @db.VarChar(50)
-  companyName  String  @db.VarChar(50)
+  companyId    String? @db.Char(36)  @map("company_id")
+  companyRefId String? @db.VarChar(50) @map("company_ref_id")
+  companyName  String  @db.VarChar(50) @map("company_name")
 
-  productId    String? @db.Char(36)
-  productRefId String? @db.VarChar(50)
-  productName  String  @db.VarChar(50)
-  productCode  String  @db.VarChar(50)
+  productId    String? @db.Char(36) @map("product_id")
+  productRefId String? @db.VarChar(50) @map("product_ref_id")
+  productName  String  @db.VarChar(50) @map("product_name")
+  productCode  String  @db.VarChar(50) @map("product_code")
 
-  plateNo  String  @db.VarChar(10)
+  plateNo  String  @db.VarChar(10) @map("plate_no")
   capacity Float?
   brand    String? @db.VarChar(30)
   model    String? @db.VarChar(30)
-  sccModel Int     @default(0)
+  sccModel Int     @default(0) @map("scc_model")
   notes    String? @db.VarChar(1000)
 
-  licenseED DateTime?
-  keurED    DateTime?
+  licenseED DateTime? @map("license_ed")
+  keurED    DateTime? @map("keur_ed")
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.Char(36)  @map("user_created")
+  userModified String   @db.Char(36)  @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   company Company? @relation(fields: [companyId], references: [id])
   product Product? @relation(fields: [productId], references: [id])
+  @@map("transportation_vehicles")
 }
 
 model Transaction {
   id    String @id @default(uuid()) @db.Char(36)
-  tType Int    @default(1)
+  tType Int    @default(1) @map("transaction_type")
 
-  bonTripNo      String? @db.Char(16)
-  vehicleStatus  Int     @default(0)
-  deliveryStatus Int     @default(0)
-  progressStatus Int     @default(0)
+  bonTripNo      String? @db.Char(16) @map("bon_trip_no")
+  vehicleStatus  Int     @default(0) @map("vehicle_status")
+  deliveryStatus Int     @default(0) @map("delivery_status")
+  progressStatus Int     @default(0) @map("progress_status")
 
-  deliveryOrderId String?   @db.Char(36)
-  deliveryOrderNo String?   @db.VarChar(50)
-  deliveryDate    DateTime?
+  deliveryOrderId String?   @db.Char(36) @map("delivery_order_id")
+  deliveryOrderNo String?   @db.VarChar(50) @map("delivery_order_no")
+  deliveryDate    DateTime? @map("delivery_date")
 
-  productId   String? @db.Char(36)
-  productCode String? @db.VarChar(30)
-  productName String? @db.VarChar(50)
+  productId   String? @db.Char(36) @map("product_id")
+  productCode String? @db.VarChar(30) @map("product_code")
+  productName String? @db.VarChar(50) @map("product_name")
 
-  rspoSccModel     Int     @default(0)
-  rspoUniqueNumber String? @db.VarChar(50)
-  isccSccModel     Int     @default(0)
-  isccUniqueNumber String? @db.VarChar(50)
-  isccGhgValue     Float   @default(0)
-  isccEeeValue     Float   @default(0)
+  rspoSccModel     Int     @default(0) @map("rspo_scc_model")
+  rspoUniqueNumber String? @db.VarChar(50) @map("rspo_unique_number")
+  isccSccModel     Int     @default(0) @map("iscc_scc_model")
+  isccUniqueNumber String? @db.VarChar(50) @map("iscc_unique_number")
+  isccGhgValue     Float   @default(0) @map("iscc_ghg_value")
+  isccEeeValue     Float   @default(0) @map("iscc_eee_value")
 
-  transporterId               String? @db.Char(36)
-  transporterCompanyCode      String? @db.VarChar(30)
-  transporterCompanyName      String? @db.VarChar(50)
-  transporterCompanyShortName String? @db.VarChar(30)
+  transporterId               String? @db.Char(36) @map("transporter_id")
+  transporterCompanyCode      String? @db.VarChar(30) @map("transporter_company_code")
+  transporterCompanyName      String? @db.VarChar(50) @map("transporter_company_name")
+  transporterCompanyShortName String? @db.VarChar(30) @map("transporter_company_short_name")
 
-  driverId        String? @db.Char(36)
-  driverNik       String? @db.VarChar(30)
-  driverName      String? @db.VarChar(50)
-  driverLicenseNo String? @db.VarChar(30)
+  driverId        String? @db.Char(36) @map("driver_id")
+  driverNik       String? @db.VarChar(30) @map("driver_nik")
+  driverName      String? @db.VarChar(50) @map("driver_name")
+  driverLicenseNo String? @db.VarChar(30) @map("driver_license_no")
 
-  transportVehicleId          String? @db.Char(36)
-  transportVehiclePlateNo     String? @db.VarChar(10)
-  transportVehicleProductCode String? @db.VarChar(30)
-  transportVehicleProductName String? @db.VarChar(50)
-  transportVehicleSccModel    Int     @default(0)
+  transportVehicleId          String? @db.Char(36) @map("transport_vehicle_id")
+  transportVehiclePlateNo     String? @db.VarChar(10) @map("transport_vehicle_plate_no")
+  transportVehicleProductCode String? @db.VarChar(30) @map("transport_vehicle_product_code")
+  transportVehicleProductName String? @db.VarChar(50) @map("transport_vehicle_product_name")
+  transportVehicleSccModel    Int?     @default(0) @map("transport_vehicle_scc_model")
 
-  originSiteId   String? @db.Char(36)
-  originSiteCode String? @db.VarChar(30)
-  originSiteName String? @db.VarChar(50)
+  originSiteId   String? @db.Char(36) @map("origin_site_id")
+  originSiteCode String? @db.VarChar(30) @map("origin_site_code")
+  originSiteName String? @db.VarChar(50) @map("origin_site_name")
 
-  originSourceStorageTankId   String? @db.Char(36)
-  originSourceStorageTankCode String? @db.VarChar(30)
-  originSourceStorageTankName String? @db.VarChar(50)
+  originSourceStorageTankId   String? @db.Char(36) @map("origin_source_storage_tank_id")
+  originSourceStorageTankCode String? @db.VarChar(30) @map("origin_source_storage_tank_code")
+  originSourceStorageTankName String? @db.VarChar(50) @map("origin_source_storage_tank_name")
 
-  destinationSiteId   String? @db.Char(36)
-  destinationSiteCode String? @db.VarChar(30)
-  destinationSiteName String? @db.VarChar(50)
+  destinationSiteId   String? @db.Char(36) @map("destination_site_id")
+  destinationSiteCode String? @db.VarChar(30) @map("destination_site_code")
+  destinationSiteName String? @db.VarChar(50) @map("destination_site_name")
 
-  destinationSinkStorageTankId   String? @db.Char(36)
-  destinationSinkStorageTankCode String? @db.VarChar(30)
-  destinationSinkStorageTankName String? @db.VarChar(50)
+  destinationSinkStorageTankId   String? @db.Char(36) @map("destination_sink_storage_tank_id")
+  destinationSinkStorageTankCode String? @db.VarChar(30) @map("destination_sink_storage_tank_code")
+  destinationSinkStorageTankName String? @db.VarChar(50) @map("destination_sink_storage_tank_name")
 
-  originFfaPercentage   Float @default(0)
-  originMoistPercentage Float @default(0)
-  originDirtPercentage  Float @default(0)
+  originFfaPercentage   Float @default(0) @map("origin_ffa_percentage")
+  originMoistPercentage Float @default(0) @map("origin_moist_percentage")
+  originDirtPercentage  Float @default(0) @map("origin_dirt_percentage")
 
-  originWeighInKg           Float     @default(0)
-  originWeighInRemark       String?   @db.VarChar(500)
-  originWeighInOperatorName String?   @db.VarChar(50)
-  originWeighInTimestamp    DateTime?
+  originWeighInKg           Float     @default(0) @map("origin_weigh_in_kg")
+  originWeighInRemark       String?   @db.VarChar(500) @map("origin_weigh_in_remark")
+  originWeighInOperatorName String?   @db.VarChar(50) @map("origin_weigh_in_operator_name")
+  originWeighInTimestamp    DateTime? @map("origin_weigh_in_timestamp")
 
-  originWeighOutKg           Float     @default(0)
-  originWeighOutRemark       String?   @db.VarChar(500)
-  originWeighOutOperatorName String?   @db.VarChar(50)
-  originWeighOutTimestamp    DateTime?
+  originWeighOutKg           Float     @default(0) @map("origin_weigh_out_kg")
+  originWeighOutRemark       String?   @db.VarChar(500) @map("origin_weigh_out_remark")
+  originWeighOutOperatorName String?   @db.VarChar(50) @map("origin_weigh_out_operator_name")
+  originWeighOutTimestamp    DateTime? @map("origin_weigh_out_timestamp")
 
-  potonganWajib Float @default(0)
-  potonganLain  Float @default(0)
+  potonganWajib Float @default(0) @map("potongan_wajib")
+  potonganLain  Float @default(0) @map("potongan_lain")
 
-  destinationWeighInKg           Float     @default(0)
-  destinationWeighInRemark       String?   @db.VarChar(500)
-  destinationWeighInOperatorName String?   @db.VarChar(50)
-  destinationWeighInTimestamp    DateTime?
+  destinationWeighInKg           Float     @default(0) @map("destination_weigh_in_kg")
+  destinationWeighInRemark       String?   @db.VarChar(500) @map("destination_weigh_in_remark")
+  destinationWeighInOperatorName String?   @db.VarChar(50) @map("destination_weigh_in_operator_name")
+  destinationWeighInTimestamp    DateTime? @map("destination_weigh_in_timestamp")
 
-  destinationWeighOutKg           Float     @default(0)
-  destinationWeighOutRemark       String?   @db.VarChar(500)
-  destinationWeighOutOperatorName String?   @db.VarChar(50)
-  destinationWeighOutTimestamp    DateTime?
+  destinationWeighOutKg           Float     @default(0) @map("destination_weigh_out_kg")
+  destinationWeighOutRemark       String?   @db.VarChar(500) @map("destination_weigh_out_remark")
+  destinationWeighOutOperatorName String?   @db.VarChar(50) @map("destination_weigh_out_operator_name")
+  destinationWeighOutTimestamp    DateTime? @map("destination_weigh_out_timestamp")
 
-  returnWeighInKg           Float     @default(0)
-  returnWeighInRemark       String?   @db.VarChar(500)
-  returnWeighInOperatorName String?   @db.VarChar(50)
-  returnWeighInTimestamp    DateTime?
+  returnWeighInKg           Float     @default(0) @map("return_weigh_in_kg")
+  returnWeighInRemark       String?   @db.VarChar(500) @map("return_weigh_in_remark")
+  returnWeighInOperatorName String?   @db.VarChar(50) @map("return_weigh_in_operator_name")
+  returnWeighInTimestamp    DateTime? @map("return_weigh_in_timestamp")
 
-  returnWeighOutKg           Float     @default(0)
-  returnWeighOutRemark       String?   @db.VarChar(500)
-  returnWeighOutOperatorName String?   @db.VarChar(50)
-  returnWeighOutTimestamp    DateTime?
+  returnWeighOutKg           Float     @default(0) @map("return_weigh_out_kg")
+  returnWeighOutRemark       String?   @db.VarChar(500) @map("return_weigh_out_remark")
+  returnWeighOutOperatorName String?   @db.VarChar(50) @map("return_weigh_out_operator_name")
+  returnWeighOutTimestamp    DateTime? @map("return_weigh_out_timestamp")
 
-  currentSeal1 String? @db.VarChar(30)
-  currentSeal2 String? @db.VarChar(30)
-  currentSeal3 String? @db.VarChar(30)
-  currentSeal4 String? @db.VarChar(30)
+  currentSeal1 String? @db.VarChar(30) @map("current_seal_1")
+  currentSeal2 String? @db.VarChar(30) @map("current_seal_2")
+  currentSeal3 String? @db.VarChar(30) @map("current_seal_3")
+  currentSeal4 String? @db.VarChar(30) @map("current_seal_4")
 
-  loadedSeal1         String?   @db.VarChar(30)
-  loadedSeal2         String?   @db.VarChar(30)
-  loadedSeal3         String?   @db.VarChar(30)
-  loadedSeal4         String?   @db.VarChar(30)
-  loadingRemark       String?   @db.VarChar(500)
-  loadingOperatorName String?   @db.VarChar(50)
-  loadingTimestamp    DateTime?
+  loadedSeal1         String?   @db.VarChar(30) @map("loaded_seal_1")
+  loadedSeal2         String?   @db.VarChar(30) @map("loaded_seal_2")
+  loadedSeal3         String?   @db.VarChar(30) @map("loaded_seal_3")
+  loadedSeal4         String?   @db.VarChar(30) @map("loaded_seal_4")
+  loadingRemark       String?   @db.VarChar(500) @map("loading_remark")
+  loadingOperatorName String?   @db.VarChar(50) @map("loading_operator_name")
+  loadingTimestamp    DateTime? @map("loading_timestamp")
 
-  unloadedSeal1         String?   @db.VarChar(30)
-  unloadedSeal2         String?   @db.VarChar(30)
-  unloadedSeal3         String?   @db.VarChar(30)
-  unloadedSeal4         String?   @db.VarChar(30)
-  unloadingRemark       String?   @db.VarChar(500)
-  unloadingOperatorName String?   @db.VarChar(50)
-  unloadingTimestamp    DateTime?
+  unloadedSeal1         String?   @db.VarChar(30) @map("unloaded_seal_1")
+  unloadedSeal2         String?   @db.VarChar(30) @map("unloaded_seal_2")
+  unloadedSeal3         String?   @db.VarChar(30) @map("unloaded_seal_3")
+  unloadedSeal4         String?   @db.VarChar(30) @map("unloaded_seal_4")
+  unloadingRemark       String?   @db.VarChar(500) @map("unloading_remark")
+  unloadingOperatorName String?   @db.VarChar(50) @map("unloading_operator_name")
+  unloadingTimestamp    DateTime? @map("unloading_timestamp")
 
-  returnUnloadedSeal1         String?   @db.VarChar(30)
-  returnUnloadedSeal2         String?   @db.VarChar(30)
-  returnUnloadedSeal3         String?   @db.VarChar(30)
-  returnUnloadedSeal4         String?   @db.VarChar(30)
-  returnUnloadingRemark       String?   @db.VarChar(500)
-  returnUnloadingOperatorName String?   @db.VarChar(50)
-  returnUnloadingTimestamp    DateTime?
+  returnUnloadedSeal1         String?   @db.VarChar(30) @map("return_unloaded_seal_1")
+  returnUnloadedSeal2         String?   @db.VarChar(30) @map("return_unloaded_seal_2")
+  returnUnloadedSeal3         String?   @db.VarChar(30) @map("return_unloaded_seal_3")
+  returnUnloadedSeal4         String?   @db.VarChar(30) @map("return_unloaded_seal_4")
+  returnUnloadingRemark       String?   @db.VarChar(500) @map("return_unloading_remark")
+  returnUnloadingOperatorName String?   @db.VarChar(50) @map("return_unloading_operator_name")
+  returnUnloadingTimestamp    DateTime? @map("return_unloading_timestamp")
 
   jsonData Json?
 
-  isDeleted    Boolean  @default(false)
-  userCreated  String   @db.Char(36)
-  userModified String   @db.Char(36)
-  dtCreated    DateTime @default(now())
-  dtModified   DateTime @updatedAt
+  isDeleted    Boolean  @default(false)  @map("is_deleted")
+  userCreated  String   @db.VarChar(36)  @map("user_created")
+  userModified String   @db.VarChar(36) @map("user_modified")
+  dtCreated    DateTime @default(now()) @map("date_created")
+  dtModified   DateTime @updatedAt  @map("date_modified")
 
   product     Product? @relation(fields: [productId], references: [id])
   transporter Company? @relation(fields: [transporterId], references: [id])
@@ -683,4 +708,5 @@ model Transaction {
 
   originSourceStorageTank    StorageTank? @relation("transactionOriginStorageTank", fields: [originSourceStorageTankId], references: [id])
   destinationSinkStorageTank StorageTank? @relation("transactionDestinationStorageTank", fields: [destinationSinkStorageTankId], references: [id])
+  @@map("transactions")
 }

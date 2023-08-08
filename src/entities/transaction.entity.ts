@@ -3,7 +3,7 @@ import { Prisma, Transaction } from "@prisma/client";
 import { IsString, IsNotEmpty } from "class-validator";
 import { QrcodeDto } from "src/semai/dto/qrcode.dt";
 
-export class TransactionEntity implements Transaction {
+export class TransactionEntity  {
   id: string;
   tType: number;
   bonTripNo: string;

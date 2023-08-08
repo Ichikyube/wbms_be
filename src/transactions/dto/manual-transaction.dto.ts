@@ -105,8 +105,17 @@ export class CreateTransactionDto {
   returnUnloadingRemark?: string;
   returnUnloadingOperatorName?: string;
   returnUnloadingTimestamp?: Date;
-  userCreated: string;
-  userModified: string;
 
-  jsonData: QrcodeDto;
+  // jsonData: QrcodeDto;
+  rspoSccModel: number;
+  isccSccModel: number;
+  isccGhgValue: number;
+  isccEeeValue: number;
+  originSiteId: string;
+  destinationSiteId: string;
+  originFfaPercentage: number;
+  originMoistPercentage: number;
+  originDirtPercentage: number;
+  destinationWeighInKg: number;
+  destinationWeighOutKg: number;
 }

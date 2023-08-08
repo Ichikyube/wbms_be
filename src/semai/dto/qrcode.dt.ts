@@ -131,4 +131,5 @@ export class QrcodeDto {
   externalRefNo?: string;
   externalRefNo2?: string;
   signature?: string;
+  jsonData: any;
 }

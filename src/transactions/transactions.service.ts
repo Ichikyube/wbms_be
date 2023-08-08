@@ -9,6 +9,7 @@ import { ConfigsService } from 'src/configs/configs.service';
 import { CreateTransactionDto } from './dto/manual-transaction.dto';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
 import { Prisma } from '@prisma/client';
+import { TransactionEntity } from 'src/entities';
 
 @Injectable()
 export class TransactionService {
@@ -283,7 +284,7 @@ export class TransactionService {
     return dataOut;
   }
 
-  async create(createTransactionDto: any) {
+  async create(createTransactionDto: CreateTransactionDto) {
     const dataOut = {
       status: true,
       message: '',
@@ -303,10 +304,18 @@ export class TransactionService {
       // const destinationSite
       // const originSourceStorageTank
       // const destinationSinkStorageTank
-      const record = await this.db.transaction.create(createTransactionDto);
+      const record = await this.db.transaction.create({
+        data: createTransactionDto,
+      });
 
       dataOut.record = record;
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log('Missing properties:', error.meta.target); // e.meta.target contains the missing properties
+      }
+      if (error instanceof Prisma.PrismaClientValidationError) {
+        console.log('Missing properties:', error.message); // e.meta.target contains the missing properties
+      }
       dataOut.status = false;
       dataOut.message = error.message;
       dataOut.logs = { error };
@@ -346,7 +355,7 @@ export class TransactionService {
   }
 
   private copyQrToTransaction(dto: QrcodeDto, tType): CreateTransactionDto {
-    const transaction = new CreateTransactionDto();
+    const transaction = new TransactionEntity();
 
     transaction.tType = tType;
 
@@ -409,7 +418,7 @@ export class TransactionService {
     transaction.currentSeal3 = dto.currentSeal3;
     transaction.currentSeal4 = dto.currentSeal4;
 
-    transaction.jsonData = dto;
+    transaction.jsonData = dto.jsonData;
 
     return transaction;
   }
