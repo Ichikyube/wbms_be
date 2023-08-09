@@ -8,62 +8,62 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   tType: number;
 
-  @ApiProperty()bonTripNo?: string;
-  @ApiProperty()vehicleStatus: number;
-  @ApiProperty()deliveryStatus: number;
-  @ApiProperty()progressStatus: number;
+  @ApiProperty() bonTripNo?: string;
+  @ApiProperty() vehicleStatus: number;
+  @ApiProperty() deliveryStatus: number;
+  @ApiProperty() progressStatus: number;
 
-  @ApiProperty()deliveryOrderId?: string;
-  @ApiProperty()deliveryOrderNo?: string;
-  @ApiProperty()deliveryDate?: Date;
+  @ApiProperty() deliveryOrderId?: string;
+  @ApiProperty() deliveryOrderNo?: string;
+  @ApiProperty() deliveryDate?: Date;
 
-  @ApiProperty()productId?: string;
-  @ApiProperty()productCode?: string;
-  @ApiProperty()productName?: string;
+  @ApiProperty() productId?: string;
+  @ApiProperty() productCode?: string;
+  @ApiProperty() productName?: string;
 
-  @ApiProperty()transporterId?: string;
-  @ApiProperty()transporterCompanyCode?: string;
-  @ApiProperty()transporterCompanyName?: string;
-  @ApiProperty()transporterCompanyShortName?: string;
+  @ApiProperty() transporterId?: string;
+  @ApiProperty() transporterCompanyCode?: string;
+  @ApiProperty() transporterCompanyName?: string;
+  @ApiProperty() transporterCompanyShortName?: string;
 
-  @ApiProperty()driverId?: string;
-  @ApiProperty()driverNik?: string;
-  @ApiProperty()driverName?: string;
-  @ApiProperty()driverLicenseNo?: string;
+  @ApiProperty() driverId?: string;
+  @ApiProperty() driverNik?: string;
+  @ApiProperty() driverName?: string;
+  @ApiProperty() driverLicenseNo?: string;
 
-  @ApiProperty()transportVehicleId?: string;
-  @ApiProperty()transportVehiclePlateNo?: string;
-  @ApiProperty()transportVehicleProductCode?: string;
-  @ApiProperty()transportVehicleProductName?: string;
-  @ApiProperty()transportVehicleSccModel?: number;
+  @ApiProperty() transportVehicleId?: string;
+  @ApiProperty() transportVehiclePlateNo?: string;
+  @ApiProperty() transportVehicleProductCode?: string;
+  @ApiProperty() transportVehicleProductName?: string;
+  @ApiProperty() transportVehicleSccModel?: number;
 
-  @ApiProperty()originWeighInKg: number;
-  @ApiProperty()originWeighInRemark?: string;
-  @ApiProperty()originWeighInOperatorName?: string;
-  @ApiProperty()originWeighInTimestamp?: Date;
+  @ApiProperty() originWeighInKg: number;
+  @ApiProperty() originWeighInRemark?: string;
+  @ApiProperty() originWeighInOperatorName?: string;
+  @ApiProperty() originWeighInTimestamp?: Date;
 
-  @ApiProperty()originWeighOutKg: number;
-  @ApiProperty()originWeighOutRemark?: string;
-  @ApiProperty()originWeighOutOperatorName?: string;
-  @ApiProperty()originWeighOutTimestamp?: Date;
+  @ApiProperty() originWeighOutKg: number;
+  @ApiProperty() originWeighOutRemark?: string;
+  @ApiProperty() originWeighOutOperatorName?: string;
+  @ApiProperty() originWeighOutTimestamp?: Date;
 
-  @ApiProperty()potonganWajib: number;
-  @ApiProperty()potonganLain: number;
+  @ApiProperty() potonganWajib: number;
+  @ApiProperty() potonganLain: number;
 
-  @ApiProperty()returnWeighInKg: number;
-  @ApiProperty()returnWeighInRemark?: string;
-  @ApiProperty()returnWeighInOperatorName?: string;
-  @ApiProperty()returnWeighInTimestamp?: Date;
+  @ApiProperty() returnWeighInKg: number;
+  @ApiProperty() returnWeighInRemark?: string;
+  @ApiProperty() returnWeighInOperatorName?: string;
+  @ApiProperty() returnWeighInTimestamp?: Date;
 
-  @ApiProperty()returnWeighOutKg: number;
-  @ApiProperty()returnWeighOutRemark?: string;
-  @ApiProperty()returnWeighOutOperatorName?: string;
-  @ApiProperty()returnWeighOutTimestamp?: Date;
+  @ApiProperty() returnWeighOutKg: number;
+  @ApiProperty() returnWeighOutRemark?: string;
+  @ApiProperty() returnWeighOutOperatorName?: string;
+  @ApiProperty() returnWeighOutTimestamp?: Date;
 
-  @ApiProperty()currentSeal1?: string;
-  @ApiProperty()currentSeal2?: string;
-  @ApiProperty()currentSeal3?: string;
-  @ApiProperty()currentSeal4?: string;
+  @ApiProperty() currentSeal1?: string;
+  @ApiProperty() currentSeal2?: string;
+  @ApiProperty() currentSeal3?: string;
+  @ApiProperty() currentSeal4?: string;
 
   @ApiProperty() rspoUniqueNumber?: string;
   @ApiProperty() isccUniqueNumber?: string;
@@ -71,8 +71,8 @@ export class CreateTransactionDto {
   @ApiProperty() originSiteCode?: string;
   @ApiProperty() originSiteName?: string;
   @ApiProperty() originSourceStorageTankCode?: string;
-  @ApiProperty()originSourceStorageTankName?: string;
-  @ApiProperty()destinationSiteCode?: string;
+  @ApiProperty() originSourceStorageTankName?: string;
+  @ApiProperty() destinationSiteCode?: string;
   @ApiProperty() destinationSiteName?: string;
   @ApiProperty() destinationSinkStorageTankCode?: string;
   @ApiProperty() destinationSinkStorageTankName?: string;
