@@ -149,7 +149,7 @@ export class ConfigsController {
     action: 'read',
     possession: 'own',
   })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: number) {
     const dataOut = {
       status: true,
       message: '',
@@ -211,7 +211,7 @@ export class ConfigsController {
     action: 'update',
     possession: 'own',
   })
-  async updateById(@Param('id') id: string, @Body() dto: any) {
+  async updateById(@Param('id') id: number, @Body() dto: any) {
     const dataOut = {
       status: true,
       message: '',
@@ -242,7 +242,7 @@ export class ConfigsController {
     action: 'delete',
     possession: 'own',
   })
-  async deleteById(@Param('id') id: string) {
+  async deleteById(@Param('id') id: number) {
     const dataOut = {
       status: true,
       message: '',

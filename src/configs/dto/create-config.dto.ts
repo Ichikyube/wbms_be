@@ -8,11 +8,14 @@ export class CreateConfigDto {
   @ApiProperty()
   name: string;
 
+  @ApiProperty({ type: String })
+  description: string = undefined;
+
   @IsString()
   @IsOptional()
   @ApiProperty()
   value?: string;
-  
+
   @IsString()
   @IsOptional()
   @ApiProperty()
@@ -23,21 +26,21 @@ export class CreateConfigDto {
   @ApiProperty()
   type?: ConfigType;
 
+  @ApiProperty({ type: Number })
+  lvlOfApprvl: number = undefined;
+
   @IsNotEmpty()
   @ApiProperty()
   status: Status;
 
-  @IsNotEmpty()
-  @ApiProperty()
-  activeStart: Date;
+  @ApiProperty({ type: Date })
+  start?: Date;
 
-  @IsNotEmpty()
-  @ApiProperty()
-  activeEnd: Date;
+  @ApiProperty({ type: Date })
+  end?: Date;
 
   // @IsString()
   // @IsNotEmpty()
   // @ApiProperty()
   // siteId: string;
 }
-

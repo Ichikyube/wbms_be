@@ -234,7 +234,7 @@ model Site {
 
   originSiteTransactions      Transaction[] @relation("transactionOriginSite")
   destinationSiteTransactions Transaction[] @relation("transactionDestinationSite")
-  configs     Config[]
+  // configs     Config[]
   @@map("sites")
 }
 
@@ -313,9 +313,9 @@ model Config {
   lvlOfApprvl  Int      @map("level_of_approval")
 
   status       Status  
-  start        DateTime 
-  end          DateTime
-  sites        Site[]
+  start        DateTime? 
+  end          DateTime?
+  // sites        Site[]
   isDeleted    Boolean  @default(false)  @map("is_deleted")
   userCreated  String?   @db.Char(36)  @map("user_created")
   userModified String?   @db.Char(36)  @map("user_modified")

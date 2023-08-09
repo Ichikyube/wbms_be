@@ -82,7 +82,7 @@ export class ConfigsService {
     return record;
   }
 
-  async getById(id: string) {
+  async getById(id: number) {
     const record = await this.db.config.findUnique({
       where: { id },
     });
@@ -104,7 +104,7 @@ export class ConfigsService {
     return record;
   }
 
-  async updateById(id: string, dto: any) {
+  async updateById(id: number, dto: any) {
     const params = {
       where: { id },
       data: { ...dto, userModified: '' },
@@ -115,7 +115,7 @@ export class ConfigsService {
     return record;
   }
 
-  async deleteById(id: string) {
+  async deleteById(id: number) {
     const params = {
       where: { id },
       data: { isDeleted: true, userModified: '' },
