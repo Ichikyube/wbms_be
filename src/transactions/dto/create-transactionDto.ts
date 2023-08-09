@@ -8,114 +8,114 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   tType: number;
 
-  bonTripNo?: string;
-  vehicleStatus: number;
-  deliveryStatus: number;
-  progressStatus: number;
+  @ApiProperty()bonTripNo?: string;
+  @ApiProperty()vehicleStatus: number;
+  @ApiProperty()deliveryStatus: number;
+  @ApiProperty()progressStatus: number;
 
-  deliveryOrderId?: string;
-  deliveryOrderNo?: string;
-  deliveryDate?: Date;
+  @ApiProperty()deliveryOrderId?: string;
+  @ApiProperty()deliveryOrderNo?: string;
+  @ApiProperty()deliveryDate?: Date;
 
-  productId?: string;
-  productCode?: string;
-  productName?: string;
+  @ApiProperty()productId?: string;
+  @ApiProperty()productCode?: string;
+  @ApiProperty()productName?: string;
 
-  transporterId?: string;
-  transporterCompanyCode?: string;
-  transporterCompanyName?: string;
-  transporterCompanyShortName?: string;
+  @ApiProperty()transporterId?: string;
+  @ApiProperty()transporterCompanyCode?: string;
+  @ApiProperty()transporterCompanyName?: string;
+  @ApiProperty()transporterCompanyShortName?: string;
 
-  driverId?: string;
-  driverNik?: string;
-  driverName?: string;
-  driverLicenseNo?: string;
+  @ApiProperty()driverId?: string;
+  @ApiProperty()driverNik?: string;
+  @ApiProperty()driverName?: string;
+  @ApiProperty()driverLicenseNo?: string;
 
-  transportVehicleId?: string;
-  transportVehiclePlateNo?: string;
-  transportVehicleProductCode?: string;
-  transportVehicleProductName?: string;
-  transportVehicleSccModel?: number;
+  @ApiProperty()transportVehicleId?: string;
+  @ApiProperty()transportVehiclePlateNo?: string;
+  @ApiProperty()transportVehicleProductCode?: string;
+  @ApiProperty()transportVehicleProductName?: string;
+  @ApiProperty()transportVehicleSccModel?: number;
 
-  originWeighInKg: number;
-  originWeighInRemark?: string;
-  originWeighInOperatorName?: string;
-  originWeighInTimestamp?: Date;
+  @ApiProperty()originWeighInKg: number;
+  @ApiProperty()originWeighInRemark?: string;
+  @ApiProperty()originWeighInOperatorName?: string;
+  @ApiProperty()originWeighInTimestamp?: Date;
 
-  originWeighOutKg: number;
-  originWeighOutRemark?: string;
-  originWeighOutOperatorName?: string;
-  originWeighOutTimestamp?: Date;
+  @ApiProperty()originWeighOutKg: number;
+  @ApiProperty()originWeighOutRemark?: string;
+  @ApiProperty()originWeighOutOperatorName?: string;
+  @ApiProperty()originWeighOutTimestamp?: Date;
 
-  potonganWajib: number;
-  potonganLain: number;
+  @ApiProperty()potonganWajib: number;
+  @ApiProperty()potonganLain: number;
 
-  returnWeighInKg: number;
-  returnWeighInRemark?: string;
-  returnWeighInOperatorName?: string;
-  returnWeighInTimestamp?: Date;
+  @ApiProperty()returnWeighInKg: number;
+  @ApiProperty()returnWeighInRemark?: string;
+  @ApiProperty()returnWeighInOperatorName?: string;
+  @ApiProperty()returnWeighInTimestamp?: Date;
 
-  returnWeighOutKg: number;
-  returnWeighOutRemark?: string;
-  returnWeighOutOperatorName?: string;
-  returnWeighOutTimestamp?: Date;
+  @ApiProperty()returnWeighOutKg: number;
+  @ApiProperty()returnWeighOutRemark?: string;
+  @ApiProperty()returnWeighOutOperatorName?: string;
+  @ApiProperty()returnWeighOutTimestamp?: Date;
 
-  currentSeal1?: string;
-  currentSeal2?: string;
-  currentSeal3?: string;
-  currentSeal4?: string;
+  @ApiProperty()currentSeal1?: string;
+  @ApiProperty()currentSeal2?: string;
+  @ApiProperty()currentSeal3?: string;
+  @ApiProperty()currentSeal4?: string;
 
-  rspoUniqueNumber?: string;
-  isccUniqueNumber?: string;
+  @ApiProperty() rspoUniqueNumber?: string;
+  @ApiProperty() isccUniqueNumber?: string;
 
-  originSiteCode?: string;
-  originSiteName?: string;
-  originSourceStorageTankCode?: string;
-  originSourceStorageTankName?: string;
-  destinationSiteCode?: string;
-  destinationSiteName?: string;
-  destinationSinkStorageTankCode?: string;
-  destinationSinkStorageTankName?: string;
+  @ApiProperty() originSiteCode?: string;
+  @ApiProperty() originSiteName?: string;
+  @ApiProperty() originSourceStorageTankCode?: string;
+  @ApiProperty()originSourceStorageTankName?: string;
+  @ApiProperty()destinationSiteCode?: string;
+  @ApiProperty() destinationSiteName?: string;
+  @ApiProperty() destinationSinkStorageTankCode?: string;
+  @ApiProperty() destinationSinkStorageTankName?: string;
 
-  destinationWeighInRemark?: string;
-  destinationWeighInOperatorName?: string;
-  destinationWeighInTimestamp?: Date;
-  destinationWeighOutRemark?: string;
-  destinationWeighOutOperatorName?: string;
-  destinationWeighOutTimestamp?: Date;
+  @ApiProperty() destinationWeighInRemark?: string;
+  @ApiProperty() destinationWeighInOperatorName?: string;
+  @ApiProperty() destinationWeighInTimestamp?: Date;
+  @ApiProperty() destinationWeighOutRemark?: string;
+  @ApiProperty() destinationWeighOutOperatorName?: string;
+  @ApiProperty() destinationWeighOutTimestamp?: Date;
 
-  loadedSeal1?: string;
-  loadedSeal2?: string;
-  loadedSeal3?: string;
-  loadedSeal4?: string;
-  loadingRemark?: string;
-  loadingOperatorName?: string;
-  loadingTimestamp?: Date;
-  unloadedSeal1?: string;
-  unloadedSeal2?: string;
-  unloadedSeal3?: string;
-  unloadedSeal4?: string;
-  unloadingRemark?: string;
-  unloadingOperatorName?: string;
-  unloadingTimestamp?: Date;
-  returnUnloadedSeal1?: string;
-  returnUnloadedSeal2?: string;
-  returnUnloadedSeal3?: string;
-  returnUnloadedSeal4?: string;
-  returnUnloadingRemark?: string;
-  returnUnloadingOperatorName?: string;
-  returnUnloadingTimestamp?: Date;
+  @ApiProperty() loadedSeal1?: string;
+  @ApiProperty() loadedSeal2?: string;
+  @ApiProperty() loadedSeal3?: string;
+  @ApiProperty() loadedSeal4?: string;
+  @ApiProperty() loadingRemark?: string;
+  @ApiProperty() loadingOperatorName?: string;
+  @ApiProperty() loadingTimestamp?: Date;
+  @ApiProperty() unloadedSeal1?: string;
+  @ApiProperty() unloadedSeal2?: string;
+  @ApiProperty() unloadedSeal3?: string;
+  @ApiProperty() unloadedSeal4?: string;
+  @ApiProperty() unloadingRemark?: string;
+  @ApiProperty() unloadingOperatorName?: string;
+  @ApiProperty() unloadingTimestamp?: Date;
+  @ApiProperty() returnUnloadedSeal1?: string;
+  @ApiProperty() returnUnloadedSeal2?: string;
+  @ApiProperty() returnUnloadedSeal3?: string;
+  @ApiProperty() returnUnloadedSeal4?: string;
+  @ApiProperty() returnUnloadingRemark?: string;
+  @ApiProperty() returnUnloadingOperatorName?: string;
+  @ApiProperty() returnUnloadingTimestamp?: Date;
 
   // jsonData: QrcodeDto;
-  rspoSccModel: number;
-  isccSccModel: number;
-  isccGhgValue: number;
-  isccEeeValue: number;
-  originSiteId?: string;
-  destinationSiteId?: string;
-  originFfaPercentage: number;
-  originMoistPercentage: number;
-  originDirtPercentage: number;
-  destinationWeighInKg: number;
-  destinationWeighOutKg: number;
+  @ApiProperty() rspoSccModel: number;
+  @ApiProperty() isccSccModel: number;
+  @ApiProperty() isccGhgValue: number;
+  @ApiProperty() isccEeeValue: number;
+  @ApiProperty() originSiteId?: string;
+  @ApiProperty() destinationSiteId?: string;
+  @ApiProperty() originFfaPercentage: number;
+  @ApiProperty() originMoistPercentage: number;
+  @ApiProperty() originDirtPercentage: number;
+  @ApiProperty() destinationWeighInKg: number;
+  @ApiProperty() destinationWeighOutKg: number;
 }
