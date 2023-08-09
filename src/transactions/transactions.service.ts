@@ -309,7 +309,6 @@ export class TransactionService {
         ...createTransactionDto,
         userCreated: userId,
         userModified: '',
-        dtModified: '',
       };
       const record = await this.db.transaction.create({
         data,
