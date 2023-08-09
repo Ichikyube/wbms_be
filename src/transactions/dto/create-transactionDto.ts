@@ -111,8 +111,8 @@ export class CreateTransactionDto {
   isccSccModel: number;
   isccGhgValue: number;
   isccEeeValue: number;
-  originSiteId: string;
-  destinationSiteId: string;
+  originSiteId?: string;
+  destinationSiteId?: string;
   originFfaPercentage: number;
   originMoistPercentage: number;
   originDirtPercentage: number;

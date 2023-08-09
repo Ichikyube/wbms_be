@@ -2,6 +2,11 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma, Transaction } from "@prisma/client";
 import { IsString, IsNotEmpty } from "class-validator";
 import { QrcodeDto } from "src/semai/dto/qrcode.dt";
+import { StorageTankEntity } from './storageTank.entity';
+import { SiteEntity } from './site.entity';
+import { DriverEntity } from './driver.entity';
+import { CompanyEntity } from './company.entity';
+import { ProductEntity } from './product.entity';
 
 
 export class TransactionEntity  {
@@ -9,333 +14,333 @@ export class TransactionEntity  {
   
 
   @ApiProperty({ type: String })
-  id: string = undefined;
+  id: string;
 
   @ApiProperty({ type: Number })
   tType: number = 1;
 
   @ApiPropertyOptional({ type: String })
-  bonTripNo?: string = undefined;
+  bonTripNo?: string;
 
   @ApiProperty({ type: Number })
-  vehicleStatus: number = undefined;
+  vehicleStatus: number;
 
   @ApiProperty({ type: Number })
-  deliveryStatus: number = undefined;
+  deliveryStatus: number;
 
   @ApiProperty({ type: Number })
-  progressStatus: number = undefined;
+  progressStatus: number;
 
   @ApiPropertyOptional({ type: String })
-  deliveryOrderId?: string = undefined;
+  deliveryOrderId?: string;
 
   @ApiPropertyOptional({ type: String })
-  deliveryOrderNo?: string = undefined;
+  deliveryOrderNo?: string;
 
   @ApiPropertyOptional({ type: Date })
-  deliveryDate?: Date = undefined;
+  deliveryDate?: Date;
 
   @ApiPropertyOptional({ type: String })
-  productId?: string = undefined;
+  productId?: string;
 
   @ApiPropertyOptional({ type: String })
-  productCode?: string = undefined;
+  productCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  productName?: string = undefined;
+  productName?: string;
 
   @ApiProperty({ type: Number })
-  rspoSccModel: number = undefined;
+  rspoSccModel: number;
 
   @ApiPropertyOptional({ type: String })
-  rspoUniqueNumber?: string = undefined;
+  rspoUniqueNumber?: string;
 
   @ApiProperty({ type: Number })
-  isccSccModel: number = undefined;
+  isccSccModel: number;
 
   @ApiPropertyOptional({ type: String })
-  isccUniqueNumber?: string = undefined;
+  isccUniqueNumber?: string;
 
   @ApiProperty({ type: Number })
-  isccGhgValue: number = undefined;
+  isccGhgValue: number;
 
   @ApiProperty({ type: Number })
-  isccEeeValue: number = undefined;
+  isccEeeValue: number;
 
   @ApiPropertyOptional({ type: String })
-  transporterId?: string = undefined;
+  transporterId?: string;
 
   @ApiPropertyOptional({ type: String })
-  transporterCompanyCode?: string = undefined;
+  transporterCompanyCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  transporterCompanyName?: string = undefined;
+  transporterCompanyName?: string;
 
   @ApiPropertyOptional({ type: String })
-  transporterCompanyShortName?: string = undefined;
+  transporterCompanyShortName?: string;
 
   @ApiPropertyOptional({ type: String })
-  driverId?: string = undefined;
+  driverId?: string;
 
   @ApiPropertyOptional({ type: String })
-  driverNik?: string = undefined;
+  driverNik?: string;
 
   @ApiPropertyOptional({ type: String })
-  driverName?: string = undefined;
+  driverName?: string;
 
   @ApiPropertyOptional({ type: String })
-  driverLicenseNo?: string = undefined;
+  driverLicenseNo?: string;
 
   @ApiPropertyOptional({ type: String })
-  transportVehicleId?: string = undefined;
+  transportVehicleId?: string;
 
   @ApiPropertyOptional({ type: String })
-  transportVehiclePlateNo?: string = undefined;
+  transportVehiclePlateNo?: string;
 
   @ApiPropertyOptional({ type: String })
-  transportVehicleProductCode?: string = undefined;
+  transportVehicleProductCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  transportVehicleProductName?: string = undefined;
+  transportVehicleProductName?: string;
 
   @ApiPropertyOptional({ type: Number })
-  transportVehicleSccModel?: number = undefined;
+  transportVehicleSccModel?: number;
 
   @ApiPropertyOptional({ type: String })
-  originSiteId?: string = undefined;
+  originSiteId?: string;
 
   @ApiPropertyOptional({ type: String })
-  originSiteCode?: string = undefined;
+  originSiteCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  originSiteName?: string = undefined;
+  originSiteName?: string;
 
   @ApiPropertyOptional({ type: String })
-  originSourceStorageTankId?: string = undefined;
+  originSourceStorageTankId?: string;
 
   @ApiPropertyOptional({ type: String })
-  originSourceStorageTankCode?: string = undefined;
+  originSourceStorageTankCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  originSourceStorageTankName?: string = undefined;
+  originSourceStorageTankName?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationSiteId?: string = undefined;
+  destinationSiteId?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationSiteCode?: string = undefined;
+  destinationSiteCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationSiteName?: string = undefined;
+  destinationSiteName?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationSinkStorageTankId?: string = undefined;
+  destinationSinkStorageTankId?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationSinkStorageTankCode?: string = undefined;
+  destinationSinkStorageTankCode?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationSinkStorageTankName?: string = undefined;
+  destinationSinkStorageTankName?: string;
 
   @ApiProperty({ type: Number })
-  originFfaPercentage: number = undefined;
+  originFfaPercentage: number;
 
   @ApiProperty({ type: Number })
-  originMoistPercentage: number = undefined;
+  originMoistPercentage: number;
 
   @ApiProperty({ type: Number })
-  originDirtPercentage: number = undefined;
+  originDirtPercentage: number;
 
   @ApiProperty({ type: Number })
-  originWeighInKg: number = undefined;
+  originWeighInKg: number;
 
   @ApiPropertyOptional({ type: String })
-  originWeighInRemark?: string = undefined;
+  originWeighInRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  originWeighInOperatorName?: string = undefined;
+  originWeighInOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  originWeighInTimestamp?: Date = undefined;
+  originWeighInTimestamp?: Date;
 
   @ApiProperty({ type: Number })
-  originWeighOutKg: number = undefined;
+  originWeighOutKg: number;
 
   @ApiPropertyOptional({ type: String })
-  originWeighOutRemark?: string = undefined;
+  originWeighOutRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  originWeighOutOperatorName?: string = undefined;
+  originWeighOutOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  originWeighOutTimestamp?: Date = undefined;
+  originWeighOutTimestamp?: Date;
 
   @ApiProperty({ type: Number })
-  potonganWajib: number = undefined;
+  potonganWajib: number;
 
   @ApiProperty({ type: Number })
-  potonganLain: number = undefined;
+  potonganLain: number;
 
   @ApiProperty({ type: Number })
-  destinationWeighInKg: number = undefined;
+  destinationWeighInKg: number;
 
   @ApiPropertyOptional({ type: String })
-  destinationWeighInRemark?: string = undefined;
+  destinationWeighInRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationWeighInOperatorName?: string = undefined;
+  destinationWeighInOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  destinationWeighInTimestamp?: Date = undefined;
+  destinationWeighInTimestamp?: Date;
 
   @ApiProperty({ type: Number })
-  destinationWeighOutKg: number = undefined;
+  destinationWeighOutKg: number;
 
   @ApiPropertyOptional({ type: String })
-  destinationWeighOutRemark?: string = undefined;
+  destinationWeighOutRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  destinationWeighOutOperatorName?: string = undefined;
+  destinationWeighOutOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  destinationWeighOutTimestamp?: Date = undefined;
+  destinationWeighOutTimestamp?: Date;
 
   @ApiProperty({ type: Number })
-  returnWeighInKg: number = undefined;
+  returnWeighInKg: number;
 
   @ApiPropertyOptional({ type: String })
-  returnWeighInRemark?: string = undefined;
+  returnWeighInRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnWeighInOperatorName?: string = undefined;
+  returnWeighInOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  returnWeighInTimestamp?: Date = undefined;
+  returnWeighInTimestamp?: Date;
 
   @ApiProperty({ type: Number })
-  returnWeighOutKg: number = undefined;
+  returnWeighOutKg: number;
 
   @ApiPropertyOptional({ type: String })
-  returnWeighOutRemark?: string = undefined;
+  returnWeighOutRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnWeighOutOperatorName?: string = undefined;
+  returnWeighOutOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  returnWeighOutTimestamp?: Date = undefined;
+  returnWeighOutTimestamp?: Date;
 
   @ApiPropertyOptional({ type: String })
-  currentSeal1?: string = undefined;
+  currentSeal1?: string;
 
   @ApiPropertyOptional({ type: String })
-  currentSeal2?: string = undefined;
+  currentSeal2?: string;
 
   @ApiPropertyOptional({ type: String })
-  currentSeal3?: string = undefined;
+  currentSeal3?: string;
 
   @ApiPropertyOptional({ type: String })
-  currentSeal4?: string = undefined;
+  currentSeal4?: string;
 
   @ApiPropertyOptional({ type: String })
-  loadedSeal1?: string = undefined;
+  loadedSeal1?: string;
 
   @ApiPropertyOptional({ type: String })
-  loadedSeal2?: string = undefined;
+  loadedSeal2?: string;
 
   @ApiPropertyOptional({ type: String })
-  loadedSeal3?: string = undefined;
+  loadedSeal3?: string;
 
   @ApiPropertyOptional({ type: String })
-  loadedSeal4?: string = undefined;
+  loadedSeal4?: string;
 
   @ApiPropertyOptional({ type: String })
-  loadingRemark?: string = undefined;
+  loadingRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  loadingOperatorName?: string = undefined;
+  loadingOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  loadingTimestamp?: Date = undefined;
+  loadingTimestamp?: Date;
 
   @ApiPropertyOptional({ type: String })
-  unloadedSeal1?: string = undefined;
+  unloadedSeal1?: string;
 
   @ApiPropertyOptional({ type: String })
-  unloadedSeal2?: string = undefined;
+  unloadedSeal2?: string;
 
   @ApiPropertyOptional({ type: String })
-  unloadedSeal3?: string = undefined;
+  unloadedSeal3?: string;
 
   @ApiPropertyOptional({ type: String })
-  unloadedSeal4?: string = undefined;
+  unloadedSeal4?: string;
 
   @ApiPropertyOptional({ type: String })
-  unloadingRemark?: string = undefined;
+  unloadingRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  unloadingOperatorName?: string = undefined;
+  unloadingOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  unloadingTimestamp?: Date = undefined;
+  unloadingTimestamp?: Date;
 
   @ApiPropertyOptional({ type: String })
-  returnUnloadedSeal1?: string = undefined;
+  returnUnloadedSeal1?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnUnloadedSeal2?: string = undefined;
+  returnUnloadedSeal2?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnUnloadedSeal3?: string = undefined;
+  returnUnloadedSeal3?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnUnloadedSeal4?: string = undefined;
+  returnUnloadedSeal4?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnUnloadingRemark?: string = undefined;
+  returnUnloadingRemark?: string;
 
   @ApiPropertyOptional({ type: String })
-  returnUnloadingOperatorName?: string = undefined;
+  returnUnloadingOperatorName?: string;
 
   @ApiPropertyOptional({ type: Date })
-  returnUnloadingTimestamp?: Date = undefined;
+  returnUnloadingTimestamp?: Date;
 
   @ApiPropertyOptional({ type: Object })
-  jsonData?: object = undefined;
+  jsonData?: object;
 
   @ApiProperty({ type: Boolean })
-  isDeleted: boolean = undefined;
+  isDeleted: boolean;
 
   @ApiProperty({ type: String })
-  userCreated: string = undefined;
+  userCreated: string;
 
   @ApiProperty({ type: String })
-  userModified: string = undefined;
+  userModified: string;
 
   @ApiProperty({ type: Date })
-  dtCreated: Date = undefined;
+  dtCreated: Date;
 
   @ApiProperty({ type: Date })
-  dtModified: Date = undefined;
+  dtModified: Date;
 
-  @ApiPropertyOptional({ type: () => Product })
-  product?: Product = undefined;
+  @ApiPropertyOptional({ type: () => ProductEntity })
+  product?: ProductEntity;
 
-  @ApiPropertyOptional({ type: () => Company })
-  transporter?: Company = undefined;
+  @ApiPropertyOptional({ type: () => CompanyEntity })
+  transporter?: CompanyEntity;
 
-  @ApiPropertyOptional({ type: () => Driver })
-  driver?: Driver = undefined;
+  @ApiPropertyOptional({ type: () => DriverEntity })
+  driver?: DriverEntity;
 
-  @ApiPropertyOptional({ type: () => Site })
-  originSite?: Site = undefined;
+  @ApiPropertyOptional({ type: () => SiteEntity })
+  originSite?: SiteEntity;
 
-  @ApiPropertyOptional({ type: () => Site })
-  destinationSite?: Site = undefined;
+  @ApiPropertyOptional({ type: () => SiteEntity })
+  destinationSite?: SiteEntity;
 
-  @ApiPropertyOptional({ type: () => StorageTank })
-  originSourceStorageTank?: StorageTank = undefined;
+  @ApiPropertyOptional({ type: () => StorageTankEntity })
+  originSourceStorageTank?: StorageTankEntity;
 
-  @ApiPropertyOptional({ type: () => StorageTank })
-  destinationSinkStorageTank?: StorageTank = undefined;
+  @ApiPropertyOptional({ type: () => StorageTankEntity })
+  destinationSinkStorageTank?: StorageTankEntity;
 
 }

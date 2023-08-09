@@ -1,6 +1,6 @@
-import { Site } from './site';
 import { ConfigType, Status } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { SiteEntity } from 'src/entities';
 
 export class Config {
   @ApiProperty({ type: Number })
@@ -30,8 +30,8 @@ export class Config {
   @ApiProperty({ type: Date })
   end: Date = undefined;
 
-  @ApiProperty({ isArray: true, type: () => Site })
-  sites: Site[] = undefined;
+  // @ApiProperty({ isArray: true, type: () => SiteEntity })
+  // sites: SiteEntity[] = undefined;
 
   @ApiProperty({ type: Boolean })
   isDeleted: boolean = undefined;

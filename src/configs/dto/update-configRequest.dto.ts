@@ -1,9 +1,3 @@
-
-
-
-
-
-
 export class UpdateConfigRequestDto {
   lvl1Aprrover?: string;
 lvl2Approver?: string;

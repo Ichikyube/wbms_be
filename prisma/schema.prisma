@@ -28,10 +28,10 @@ model Province {
   name String @db.VarChar(30)
 
   isDeleted    Boolean  @default(false) @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   cities City[]
   @@map("provinces")
@@ -44,10 +44,10 @@ model City {
   name String @db.VarChar(30)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   province Province @relation(fields: [provinceId], references: [id])
 
@@ -61,7 +61,7 @@ model Image {
   id        String  @id @default(uuid()) @db.Char(36)
   path      String
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 }
 
 model Company {
@@ -91,10 +91,10 @@ model Company {
   isEstate       Boolean @default(false) @map("is_estate")
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   sites             Site[]
   transportVehicles TransportVehicle[]
@@ -127,10 +127,10 @@ model Customer {
   sortasi      Float? //Decimal
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   customerType  CustomerType  @relation(fields: [customerTypeId], references: [id])
   customerGroup CustomerGroup @relation(fields: [customerGroupId], references: [id])
@@ -147,10 +147,10 @@ model CustomerType {
   description String? @db.VarChar(500)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   customers Customer[]
   @@map("customer_types")
@@ -164,10 +164,10 @@ model CustomerGroup {
   description String? @db.VarChar(500)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   customers Customer[]
   @@map("customer_groups")
@@ -181,10 +181,10 @@ model BarcodeType {
   description String? @db.VarChar(500)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
   @@map("barcode_types")
   // customers Customer[]
 }
@@ -217,10 +217,10 @@ model Site {
   isMill Boolean @default(false)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.VarChar(36)  @map("user_created")
-  userModified String   @db.VarChar(36) @map("user_modified")
+  userCreated  String?   @db.VarChar(36)  @map("user_created")
+  userModified String?   @db.VarChar(36) @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   sourceSite Site?    @relation("source_of_this_site", fields: [sourceSiteId], references: [id])
   company    Company? @relation(fields: [companyId], references: [id])
@@ -247,10 +247,10 @@ model Mill {
   name String @db.VarChar(50)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)   @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)   @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   site    Site    @relation(fields: [siteId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
@@ -265,10 +265,10 @@ model Weighbridge {
   name String @db.VarChar(50)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   site Site @relation(fields: [siteId], references: [id])
   @@map("weighbridges")
@@ -317,10 +317,10 @@ model Config {
   end          DateTime
   sites        Site[]
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
   @@map("configuration")
 }
 
@@ -347,10 +347,10 @@ model User {
   isDisabled      Boolean @default(false) @map("is_disabled")
   isDeleted       Boolean @default(false)  @map("is_deleted")
 
-  userCreated  String   @db.VarChar(36)  @map("user_created")
-  userModified String   @db.VarChar(36) @map("user_modified")
+  userCreated  String?   @db.VarChar(36)  @map("user_created")
+  userModified String?   @db.VarChar(36) @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
   userRole         Role?     @relation(fields: [roleId], references: [id])
   @@map("users")
 }
@@ -360,10 +360,10 @@ model Role {
   name        String       @unique @db.VarChar(255)
   permissions Permission[]
 
-  userCreated  String   @db.VarChar(36)  @map("user_created")
-  userModified String   @db.VarChar(36) @map("user_modified")
+  userCreated  String?   @db.VarChar(36)  @map("user_created")
+  userModified String?   @db.VarChar(36) @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
   users       User[]
   @@map("roles")
 }
@@ -375,10 +375,10 @@ model Permission {
   roleId   Int    @map("role_id")
   role     Role    @relation(fields: [roleId], references: [id])
   
-  userCreated  String   @db.VarChar(36)  @map("user_created")
-  userModified String   @db.VarChar(36)  @map("user_modified")
+  userCreated  String?   @db.VarChar(36)  @map("user_created")
+  userModified String?   @db.VarChar(36)  @map("user_modified")
   dtCreated    DateTime @default(now())  @map("date_created")
-  dtModified   DateTime @updatedAt       @map("date_modified")
+  dtModified   DateTime? @updatedAt       @map("date_modified")
   @@map("permissions")
 }
 
@@ -390,10 +390,10 @@ model Grant {
   permissionId String     @db.Char(36) @map("permission_id")
   permission   Permission @relation(fields: [permissionId], references: [id])
   
-  userCreated  String   @db.VarChar(36)  @map("user_created")
-  userModified String   @db.VarChar(36) @map("user_modified")
+  userCreated  String?   @db.VarChar(36)  @map("user_created")
+  userModified String?   @db.VarChar(36) @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
   @@map("grants")
 }
 model Attribute {
@@ -448,10 +448,10 @@ model Product {
   certification String? @db.VarChar(100)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   storageTanks      StorageTank[]
   transactions      Transaction[]
@@ -467,10 +467,10 @@ model ProductGroup {
   description String? @db.VarChar(500)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
   @@map("product_groups")
 }
 
@@ -501,10 +501,10 @@ model StorageTank {
   sccModel    Int     @default(0)
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   site       Site?    @relation(fields: [siteId], references: [id])
   stockOwner Company? @relation(fields: [stockOwnerId], references: [id])
@@ -535,10 +535,10 @@ model Driver {
   licenseED DateTime? @map("license_ed")
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   company      Company?      @relation(fields: [companyId], references: [id])
   transactions Transaction[]
@@ -571,10 +571,10 @@ model TransportVehicle {
   keurED    DateTime? @map("keur_ed")
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.Char(36)  @map("user_created")
-  userModified String   @db.Char(36)  @map("user_modified")
+  userCreated  String?   @db.Char(36)  @map("user_created")
+  userModified String?   @db.Char(36)  @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   company Company? @relation(fields: [companyId], references: [id])
   product Product? @relation(fields: [productId], references: [id])
@@ -706,10 +706,10 @@ model Transaction {
   jsonData Json?
 
   isDeleted    Boolean  @default(false)  @map("is_deleted")
-  userCreated  String   @db.VarChar(36)  @map("user_created")
-  userModified String   @db.VarChar(36) @map("user_modified")
+  userCreated  String?   @db.VarChar(36)  @map("user_created")
+  userModified String?   @db.VarChar(36) @map("user_modified")
   dtCreated    DateTime @default(now()) @map("date_created")
-  dtModified   DateTime @updatedAt  @map("date_modified")
+  dtModified   DateTime? @updatedAt  @map("date_modified")
 
   product     Product? @relation(fields: [productId], references: [id])
   transporter Company? @relation(fields: [transporterId], references: [id])

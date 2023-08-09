@@ -35,9 +35,9 @@ export class CreateConfigDto {
   @ApiProperty()
   activeEnd: Date;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  siteId: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @ApiProperty()
+  // siteId: string;
 }
 

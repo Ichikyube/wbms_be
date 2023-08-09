@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { SemaiService } from 'src/semai/semai.service';
 import { ConfigsService } from 'src/configs/configs.service';
 
-import { CreateTransactionDto } from './dto/manual-transaction.dto';
+import { CreateTransactionDto } from './dto/create-transactionDto';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
 import { Prisma } from '@prisma/client';
 import { TransactionEntity } from 'src/entities';
@@ -304,8 +304,15 @@ export class TransactionService {
       // const destinationSite
       // const originSourceStorageTank
       // const destinationSinkStorageTank
+      const userId = '';
+      const data = {
+        ...createTransactionDto,
+        userCreated: userId,
+        userModified: '',
+        dtModified: '',
+      };
       const record = await this.db.transaction.create({
-        data: createTransactionDto,
+        data,
       });
 
       dataOut.record = record;
