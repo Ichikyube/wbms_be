@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Attributes')
 @Controller('app')
 export class AppController {
-//   @Roles('Administrator')
+  //   @Roles('Administrator')
   @Get('resourceslist')
   async getAll() {
     const dataOut = {
@@ -29,7 +29,6 @@ export class AppController {
           .find((model) => model.name === name)
           .fields.map((field) => field.name);
       });
-      console.log(schemas);
 
       dataOut.data.model.records = models;
       dataOut.data.model.allAttributes = schemas;

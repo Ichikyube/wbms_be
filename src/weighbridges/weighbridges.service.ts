@@ -20,6 +20,9 @@ export class WeighbridgesService {
           name: 'desc',
         },
       ],
+      include: {
+        site: true,
+      },
     });
 
     return records;
