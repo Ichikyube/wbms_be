@@ -292,12 +292,24 @@ enum Status {
   REJECTED
 }
 
+model ConfigRequest {
+  id Int   @id @default(autoincrement())
+  lvl1Aprrover String @map("lvl_1_aprrover")
+  lvl2Approver String? @map("lvl_2_aprrover")
+  lvl3Aprrover String? @map("lvl_3_aprrover")
+  lvl1Signed String @map("lvl_1_signed")
+  lvl2Signed String? @map("lvl_2_signed")
+  lvl3Signed String? @map("lvl_3_signed")
+  configId   Int
+}
+
 model Config {
-  id String    @id @default(uuid()) @db.Char(36)
+  id           Int   @id @default(autoincrement())
   name         String  @unique @db.VarChar(36)
   description  String   @db.VarChar(255)
   type         ConfigType?
   value        String?  @db.VarChar(36)
+  editedValue  String?  @db.VarChar(36)
   lvlOfApprvl  Int      @map("level_of_approval")
 
   status       Status  

@@ -1,278 +1,341 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma, Transaction } from "@prisma/client";
 import { IsString, IsNotEmpty } from "class-validator";
 import { QrcodeDto } from "src/semai/dto/qrcode.dt";
 
+
 export class TransactionEntity  {
-  id: string;
-  tType: number;
-  bonTripNo: string;
-  vehicleStatus: number;
-  deliveryStatus: number;
-  progressStatus: number;
-  deliveryOrderId: string;
-  deliveryOrderNo: string;
-  deliveryDate: Date;
-  productId: string;
-  productCode: string;
-  productName: string;
-  rspoSccModel: number;
-  rspoUniqueNumber: string;
-  isccSccModel: number;
-  isccUniqueNumber: string;
-  isccGhgValue: number;
-  isccEeeValue: number;
-  transporterId: string;
-  transporterCompanyCode: string;
-  transporterCompanyName: string;
-  transporterCompanyShortName: string;
-  driverId: string;
-  driverNik: string;
-  driverName: string;
-  driverLicenseNo: string;
-  transportVehicleId: string;
-  transportVehiclePlateNo: string;
-  transportVehicleProductCode: string;
-  transportVehicleProductName: string;
-  transportVehicleSccModel: number;
-  originSiteId: string;
-  originSiteCode: string;
-  originSiteName: string;
-  originSourceStorageTankId: string;
-  originSourceStorageTankCode: string;
-  originSourceStorageTankName: string;
-  destinationSiteId: string;
-  destinationSiteCode: string;
-  destinationSiteName: string;
-  destinationSinkStorageTankId: string;
-  destinationSinkStorageTankCode: string;
-  destinationSinkStorageTankName: string;
-  originFfaPercentage: number;
-  originMoistPercentage: number;
-  originDirtPercentage: number;
-  originWeighInKg: number;
-  originWeighInRemark: string;
-  originWeighInOperatorName: string;
-  originWeighInTimestamp: Date;
-  originWeighOutKg: number;
-  originWeighOutRemark: string;
-  originWeighOutOperatorName: string;
-  originWeighOutTimestamp: Date;
-  potonganWajib: number;
-  potonganLain: number;
-  destinationWeighInKg: number;
-  destinationWeighInRemark: string;
-  destinationWeighInOperatorName: string;
-  destinationWeighInTimestamp: Date;
-  destinationWeighOutKg: number;
-  destinationWeighOutRemark: string;
-  destinationWeighOutOperatorName: string;
-  destinationWeighOutTimestamp: Date;
-  returnWeighInKg: number;
-  returnWeighInRemark: string;
-  returnWeighInOperatorName: string;
-  returnWeighInTimestamp: Date;
-  returnWeighOutKg: number;
-  returnWeighOutRemark: string;
-  returnWeighOutOperatorName: string;
-  returnWeighOutTimestamp: Date;
-  currentSeal1: string;
-  currentSeal2: string;
-  currentSeal3: string;
-  currentSeal4: string;
-  loadedSeal1: string;
-  loadedSeal2: string;
-  loadedSeal3: string;
-  loadedSeal4: string;
-  loadingRemark: string;
-  loadingOperatorName: string;
-  loadingTimestamp: Date;
-  unloadedSeal1: string;
-  unloadedSeal2: string;
-  unloadedSeal3: string;
-  unloadedSeal4: string;
-  unloadingRemark: string;
-  unloadingOperatorName: string;
-  unloadingTimestamp: Date;
-  returnUnloadedSeal1: string;
-  returnUnloadedSeal2: string;
-  returnUnloadedSeal3: string;
-  returnUnloadedSeal4: string;
-  returnUnloadingRemark: string;
-  returnUnloadingOperatorName: string;
-  returnUnloadingTimestamp: Date;
-  jsonData: Prisma.JsonValue;
-  isDeleted: boolean;
-  userCreated: string;
-  userModified: string;
-  dtCreated: Date;
-  dtModified: Date;
-  // deliveryOrderId: string;
-  // deliveryOrderNo: string;
-  // deliveryDate: Date;
-  // rspoSccModel: number;
-  // rspoUniqueNumber: string;
-  // isccSccModel: number;
-  // isccUniqueNumber: string;
-  // isccGhgValue: number;
-  // isccEeeValue: number;
-  // originSiteId: string;
-  // originSiteCode: string;
-  // originSiteName: string;
-  // originSourceStorageTankId: string;
-  // originSourceStorageTankCode: string;
-  // originSourceStorageTankName: string;
-  // destinationSiteId: string;
-  // destinationSiteCode: string;
-  // destinationSiteName: string;
-  // destinationSinkStorageTankId: string;
-  // destinationSinkStorageTankCode: string;
-  // destinationSinkStorageTankName: string;
-  // originFfaPercentage: number;
-  // originMoistPercentage: number;
-  // originDirtPercentage: number;
-  // @ApiProperty() tType: number;
-  // @ApiProperty() bonTripNo?: string;
-  // @ApiProperty() vehicleStatus: number;
-  // @ApiProperty() deliveryStatus: number;
-  // @ApiProperty() progressStatus: number;
-  // @ApiProperty() productId?: string;
-  // @ApiProperty() productCode?: string;
-  // @ApiProperty() productName?: string;
-  // @ApiProperty() transporterId?: string;
-  // @ApiProperty() transporterCompanyCode?: string;
-  // @ApiProperty() transporterCompanyName?: string;
-  // @ApiProperty() transporterCompanyShortName?: string;
-  // @ApiProperty() driverId?: string;
-  // @ApiProperty() driverNik?: string;
-  // @ApiProperty() driverName?: string;
-  // @ApiProperty() driverLicenseNo?: string;
-  // @ApiProperty() transportVehicleId?: string;
-  // @ApiProperty() transportVehiclePlateNo?: string;
-  // @ApiProperty() transportVehicleProductCode?: string;
-  // @ApiProperty() transportVehicleProductName?: string;
-  // @ApiProperty() transportVehicleSccModel?: number;
-  // // originSiteId   String? @db.Char(36)
-  // // originSiteCode String? @db.VarChar(20)
-  // // originSiteName String? @db.VarChar(20)
-  // // destinationSiteId   String? @db.Char(36)
-  // // destinationSiteCode String? @db.VarChar(20)
-  // // destinationSiteName String? @db.VarChar(20)
-  // // originSourceStorageTankId   String? @db.Char(36)
-  // // originSourceStorageTankCode String? @db.VarChar(20)
-  // // originSourceStorageTankName String? @db.VarChar(20)
-  // // destinationSinkStorageTankId   String? @db.Char(36)
-  // // destinationSinkStorageTankCode String? @db.VarChar(20)
-  // // destinationSinkStorageTankName String? @db.VarChar(20)
-  // // deliveryOrderId String?   @db.VarChar(50)
-  // // deliveryOrderNo String?   @db.VarChar(50)
-  // // deliveryDate    DateTime?
-  // // rspoSccModel     Int?
-  // // rspoUniqueNumber String? @db.VarChar(50)
-  // // isccSccModel     Int?
-  // // isccUniqueNumber String? @db.VarChar(50)
-  // // isccGhgValue     Float?
-  // // isccEeeValue     Float?
-  // // originFfaPercentage   Float?
-  // // originMoistPercentage Float?
-  // // originDirtPercentage  Float?
-  // originWeighInKg: number;
-  // originWeighInRemark?: string;
-  // originWeighInOperatorName?: string;
-  // originWeighInTimestamp?: Date;
-  // originWeighOutKg: number;
-  // originWeighOutRemark?: string;
-  // originWeighOutOperatorName?: string;
-  // originWeighOutTimestamp?: Date;
-  // potonganWajib: number;
-  // potonganLain: number;
-  // // destinationWeighInKg           Float     @default(0)
-  // // destinationWeighInRemark       String?   @db.VarChar(500)
-  // // destinationWeighInOperatorName String?   @db.VarChar(50)
-  // // destinationWeighInTimestamp    DateTime?
-  // // destinationWeighOutKg           Float     @default(0)
-  // // destinationWeighOutRemark       String?   @db.VarChar(500)
-  // // destinationWeighOutOperatorName String?   @db.VarChar(50)
-  // // destinationWeighOutTimestamp    DateTime?
-  // // returnWeighInKg: number;
-  // // returnWeighInRemark?: string;
-  // // returnWeighInOperatorName?: string;
-  // // returnWeighInTimestamp?: Date;
-  // // returnWeighOutKg: number;
-  // // returnWeighOutRemark?: string;
-  // // returnWeighOutOperatorName?: string;
-  // // returnWeighOutTimestamp?: Date;
-  // // currentSeal1?: string;
-  // // currentSeal2?: string;
-  // // currentSeal3?: string;
-  // // currentSeal4?: string;
-  // // loadedSeal1         String?
-  // // loadedSeal2         String?
-  // // loadedSeal3         String?
-  // // loadedSeal4         String?
-  // // loadingRemark       String?
-  // // loadingOperatorName String?
-  // // loadingTimestamp    DateTime?
-  // // unloadedSeal1         String?
-  // // unloadedSeal2         String?
-  // // unloadedSeal3         String?
-  // // unloadedSeal4         String?
-  // // unloadingRemark       String?
-  // // unloadingOperatorName String?
-  // // unloadingTimestamp    DateTime?
-  // // returnUnloadedSeal1         String?
-  // // returnUnloadedSeal2         String?
-  // // returnUnloadedSeal3         String?
-  // // returnUnloadedSeal4         String?
-  // // returnUnloadingRemark       String?
-  // // returnUnloadingOperatorName String?
-  // // returnUnloadingTimestamp    DateTime?
-  // returnWeighInKg: number;
-  // returnWeighInRemark: string;
-  // returnWeighInOperatorName: string;
-  // returnWeighInTimestamp: Date;
-  // returnWeighOutKg: number;
-  // returnWeighOutRemark: string;
-  // returnWeighOutOperatorName: string;
-  // returnWeighOutTimestamp: Date;
-  // currentSeal1: string;
-  // currentSeal2: string;
-  // currentSeal3: string;
-  // currentSeal4: string;
-  // id: string;
-  // destinationWeighInKg: number;
-  // destinationWeighInRemark: string;
-  // destinationWeighInOperatorName: string;
-  // destinationWeighInTimestamp: Date;
-  // destinationWeighOutKg: number;
-  // destinationWeighOutRemark: string;
-  // destinationWeighOutOperatorName: string;
-  // destinationWeighOutTimestamp: Date;
-  // loadedSeal1: string;
-  // loadedSeal2: string;
-  // loadedSeal3: string;
-  // loadedSeal4: string;
-  // loadingRemark: string;
-  // loadingOperatorName: string;
-  // loadingTimestamp: Date;
-  // unloadedSeal1: string;
-  // unloadedSeal2: string;
-  // unloadedSeal3: string;
-  // unloadedSeal4: string;
-  // unloadingRemark: string;
-  // unloadingOperatorName: string;
-  // unloadingTimestamp: Date;
-  // returnUnloadedSeal1: string;
-  // returnUnloadedSeal2: string;
-  // returnUnloadedSeal3: string;
-  // returnUnloadedSeal4: string;
-  // returnUnloadingRemark: string;
-  // returnUnloadingOperatorName: string;
-  // returnUnloadingTimestamp: Date;
-  // jsonData: Prisma.JsonValue;
-  // isDeleted: boolean;
-  // userCreated: string;
-  // userModified: string;
-  // dtCreated: Date;
-  // dtModified: Date;
+
+  
+
+  @ApiProperty({ type: String })
+  id: string = undefined;
+
+  @ApiProperty({ type: Number })
+  tType: number = 1;
+
+  @ApiPropertyOptional({ type: String })
+  bonTripNo?: string = undefined;
+
+  @ApiProperty({ type: Number })
+  vehicleStatus: number = undefined;
+
+  @ApiProperty({ type: Number })
+  deliveryStatus: number = undefined;
+
+  @ApiProperty({ type: Number })
+  progressStatus: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  deliveryOrderId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  deliveryOrderNo?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  deliveryDate?: Date = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  productId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  productCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  productName?: string = undefined;
+
+  @ApiProperty({ type: Number })
+  rspoSccModel: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  rspoUniqueNumber?: string = undefined;
+
+  @ApiProperty({ type: Number })
+  isccSccModel: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  isccUniqueNumber?: string = undefined;
+
+  @ApiProperty({ type: Number })
+  isccGhgValue: number = undefined;
+
+  @ApiProperty({ type: Number })
+  isccEeeValue: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transporterId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transporterCompanyCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transporterCompanyName?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transporterCompanyShortName?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  driverId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  driverNik?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  driverName?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  driverLicenseNo?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transportVehicleId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transportVehiclePlateNo?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transportVehicleProductCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  transportVehicleProductName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Number })
+  transportVehicleSccModel?: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originSiteId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originSiteCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originSiteName?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originSourceStorageTankId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originSourceStorageTankCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originSourceStorageTankName?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationSiteId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationSiteCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationSiteName?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationSinkStorageTankId?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationSinkStorageTankCode?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationSinkStorageTankName?: string = undefined;
+
+  @ApiProperty({ type: Number })
+  originFfaPercentage: number = undefined;
+
+  @ApiProperty({ type: Number })
+  originMoistPercentage: number = undefined;
+
+  @ApiProperty({ type: Number })
+  originDirtPercentage: number = undefined;
+
+  @ApiProperty({ type: Number })
+  originWeighInKg: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originWeighInRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originWeighInOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  originWeighInTimestamp?: Date = undefined;
+
+  @ApiProperty({ type: Number })
+  originWeighOutKg: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originWeighOutRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  originWeighOutOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  originWeighOutTimestamp?: Date = undefined;
+
+  @ApiProperty({ type: Number })
+  potonganWajib: number = undefined;
+
+  @ApiProperty({ type: Number })
+  potonganLain: number = undefined;
+
+  @ApiProperty({ type: Number })
+  destinationWeighInKg: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationWeighInRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationWeighInOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  destinationWeighInTimestamp?: Date = undefined;
+
+  @ApiProperty({ type: Number })
+  destinationWeighOutKg: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationWeighOutRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  destinationWeighOutOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  destinationWeighOutTimestamp?: Date = undefined;
+
+  @ApiProperty({ type: Number })
+  returnWeighInKg: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnWeighInRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnWeighInOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  returnWeighInTimestamp?: Date = undefined;
+
+  @ApiProperty({ type: Number })
+  returnWeighOutKg: number = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnWeighOutRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnWeighOutOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  returnWeighOutTimestamp?: Date = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  currentSeal1?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  currentSeal2?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  currentSeal3?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  currentSeal4?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  loadedSeal1?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  loadedSeal2?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  loadedSeal3?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  loadedSeal4?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  loadingRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  loadingOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  loadingTimestamp?: Date = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  unloadedSeal1?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  unloadedSeal2?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  unloadedSeal3?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  unloadedSeal4?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  unloadingRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  unloadingOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  unloadingTimestamp?: Date = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnUnloadedSeal1?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnUnloadedSeal2?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnUnloadedSeal3?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnUnloadedSeal4?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnUnloadingRemark?: string = undefined;
+
+  @ApiPropertyOptional({ type: String })
+  returnUnloadingOperatorName?: string = undefined;
+
+  @ApiPropertyOptional({ type: Date })
+  returnUnloadingTimestamp?: Date = undefined;
+
+  @ApiPropertyOptional({ type: Object })
+  jsonData?: object = undefined;
+
+  @ApiProperty({ type: Boolean })
+  isDeleted: boolean = undefined;
+
+  @ApiProperty({ type: String })
+  userCreated: string = undefined;
+
+  @ApiProperty({ type: String })
+  userModified: string = undefined;
+
+  @ApiProperty({ type: Date })
+  dtCreated: Date = undefined;
+
+  @ApiProperty({ type: Date })
+  dtModified: Date = undefined;
+
+  @ApiPropertyOptional({ type: () => Product })
+  product?: Product = undefined;
+
+  @ApiPropertyOptional({ type: () => Company })
+  transporter?: Company = undefined;
+
+  @ApiPropertyOptional({ type: () => Driver })
+  driver?: Driver = undefined;
+
+  @ApiPropertyOptional({ type: () => Site })
+  originSite?: Site = undefined;
+
+  @ApiPropertyOptional({ type: () => Site })
+  destinationSite?: Site = undefined;
+
+  @ApiPropertyOptional({ type: () => StorageTank })
+  originSourceStorageTank?: StorageTank = undefined;
+
+  @ApiPropertyOptional({ type: () => StorageTank })
+  destinationSinkStorageTank?: StorageTank = undefined;
+
 }

@@ -12,6 +12,11 @@ export class CreateConfigDto {
   @IsOptional()
   @ApiProperty()
   value?: string;
+  
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  editedValue?: string;
 
   @IsString()
   @IsOptional()
@@ -35,3 +40,4 @@ export class CreateConfigDto {
   @ApiProperty()
   siteId: string;
 }
+
