@@ -20,6 +20,10 @@ export class MillsService {
           name: 'desc',
         },
       ],
+      include: {
+        site: true,
+        company: true
+      },
     });
 
     return records;

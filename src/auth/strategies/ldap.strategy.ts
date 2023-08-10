@@ -13,7 +13,7 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldapauth') {
           bindDN: process.env.LDAP_DN,
           bindCredentials: process.env.LDAP_PASSWORD,
           searchBase: process.env.LDAP_BASE_DN,
-          searchFilter: '(uid={{username}})',
+          searchFilter: '(uid={{username}})(mail={{email}})',
         },
       },
       async (req: Request, user: any, done) => {
