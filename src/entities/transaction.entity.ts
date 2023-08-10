@@ -7,6 +7,7 @@ import { SiteEntity } from './site.entity';
 import { DriverEntity } from './driver.entity';
 import { CompanyEntity } from './company.entity';
 import { ProductEntity } from './product.entity';
+import { CustomerEntity } from './customer.entity';
 
 
 export class TransactionEntity  {
@@ -321,7 +322,12 @@ export class TransactionEntity  {
 
   @ApiProperty({ type: Date })
   dtModified: Date;
+  qtyTbs: number  | null;
+  qtyTbsDikirim: number  | null;
+  qtyTbsDikembalikan: number  | null;
 
+  @ApiPropertyOptional({ type: () => ProductEntity })
+  customer?: CustomerEntity  | null;
   @ApiPropertyOptional({ type: () => ProductEntity })
   product?: ProductEntity;
 

@@ -639,7 +639,7 @@ model Transaction {
   driverLicenseNo String? @map("driver_license_no") @db.VarChar(30)
 
   transportVehicleId          String? @map("transport_vehicle_id") @db.Char(36)
-  transportVehiclePlateNo     String? @map("transport_vehicle_plate_no") @db.VarChar(10)
+  transportVehiclePlateNo     String? @map("transport_vehicle_plate_no") @db.VarChar(12)
   transportVehicleProductCode String? @map("transport_vehicle_product_code") @db.VarChar(30)
   transportVehicleProductName String? @map("transport_vehicle_product_name") @db.VarChar(50)
   transportVehicleSccModel    Int?    @default(0) @map("transport_vehicle_scc_model")

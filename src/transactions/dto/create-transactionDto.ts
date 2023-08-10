@@ -105,7 +105,9 @@ export class CreateTransactionDto {
   @ApiProperty() returnUnloadingRemark?: string;
   @ApiProperty() returnUnloadingOperatorName?: string;
   @ApiProperty() returnUnloadingTimestamp?: Date;
-
+  @ApiProperty() qtyTbs?: number;
+  @ApiProperty() qtyTbsDikirim?: number;
+  @ApiProperty()  qtyTbsDikembalikan?: number;
   // jsonData: QrcodeDto;
   @ApiProperty() rspoSccModel: number;
   @ApiProperty() isccSccModel: number;
