@@ -421,34 +421,6 @@ model Attribute {
   @@map("attributes")
 }
 
-enum Resource {
-  barcodeTypes
-  cities
-  companies
-  configs
-  customerGroups
-  customers
-  customerType
-  driver
-  mills
-  products
-  ProductGroups
-  provinces
-  semai
-  sites
-  storageTanks
-  transactions
-  transportVehicles
-  users
-  weighbridges
-}
-
-enum MainSite {
-  PKS
-  T30
-  Labanan
-}
-
 model Product {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0) @map("ref_type")

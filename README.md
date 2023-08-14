@@ -310,3 +310,75 @@ exports.isLoggedIn = function (roles = []) {// roles param can be a single role 
 next();
 }];
 }
+
+
+
+  @Post('signup')
+  @UseGuards()
+  @ApiOperation({
+    summary: 'Create a user',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiCreatedResponse({ description: 'User has been successfully created' })
+  @ApiBadRequestResponse({
+    description: 'Some character error or type error',
+  })
+  @ApiForbiddenResponse({
+    description: 'User already exists',
+  })
+  @HttpCode(HttpStatus.CREATED)
+  async signup(
+    @Body() dto: SignupDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        user: null,
+      },
+      logs: {},
+    };
+
+    try {
+      const user = await this.authService.signup(dto, file);
+
+      const { username, email, nik, name, division, position, phone } = user;
+
+      dataOut.data.user = {
+        username,
+        email,
+        nik,
+        name,
+        division,
+        position,
+        phone,
+      };
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = {
+        ...dataOut.logs,
+        error,
+      };
+    }
+
+    return dataOut;
+  }
+
+  
+  async signup(
+    dto: CreateUserDto,
+    file: Express.Multer.File,
+  ): Promise<UserEntity> {
+    const userId = '';
+    const user = await this.usersService.create(dto, file, userId);
+    const tokens = await this.signTokens({
+      sub: user.id,
+      username: user.username,
+      role: user.role,
+    });
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    // req.tokens;
+    return user;
+  }

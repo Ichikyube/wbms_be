@@ -14,7 +14,7 @@ export class SignupDto extends CreateUserDto {}
 export class SigninDto {
   @ApiPropertyOptional({
     description: 'Username anda',
-    example: 'admin01@kpbookstore.kp',
+    example: 'Armin',
   })
   @IsString()
   @IsOptional()

@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   Length,
@@ -33,14 +34,17 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   division?: string;
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   position?: string;
 
   @ApiProperty({ required: false })
   // @IsPhoneNumber('IN')
+  @IsOptional()
   phone?: string;
 
   // @IsEnum(UserRole)

@@ -12,6 +12,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import { NextFunction, Response } from 'express';
 import passport from 'passport';
 import * as ldap from 'ldapjs';
+import Cookies from 'universal-cookie';
 
 @Injectable()
 export class AuthService {
@@ -21,22 +22,6 @@ export class AuthService {
     private config: ConfigService,
     private usersService: UsersService,
   ) {}
-
-  async signup(
-    dto: CreateUserDto,
-    file: Express.Multer.File,
-  ): Promise<UserEntity> {
-    const userId = '';
-    const user = await this.usersService.create(dto, file, userId);
-    const tokens = await this.signTokens({
-      sub: user.id,
-      username: user.username,
-      role: user.role,
-    });
-    await this.updateRtHash(user.id, tokens.refresh_token);
-    // req.tokens;
-    return user;
-  }
 
   async signin(
     dto: SigninDto,

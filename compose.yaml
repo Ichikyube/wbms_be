@@ -13,9 +13,12 @@ services:
     image: containrrr/watchtower:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    # command: --interval 43200
+    command: --interval 200
     environment:
-      - WATCHTOWER_POLL_INTERVAL=43200
+      WATCHTOWER_POLL_INTERVAL: 3200
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_INCLUDE_STOPPED: true
+      WATCHTOWER_REVIVE_STOPPED: true
     networks:
       - armin-net
   redis:

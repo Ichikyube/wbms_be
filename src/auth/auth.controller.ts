@@ -72,62 +72,10 @@ export class AuthController {
     return dataOut;
   }
 
-  @Post('signup')
-  @UseGuards()
-  @ApiOperation({
-    summary: 'Create a user',
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiCreatedResponse({ description: 'User has been successfully created' })
-  @ApiBadRequestResponse({
-    description: 'Some character error or type error',
-  })
-  @ApiForbiddenResponse({
-    description: 'User already exists',
-  })
-  @HttpCode(HttpStatus.CREATED)
-  async signup(
-    @Body() dto: SignupDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const dataOut = {
-      status: true,
-      message: '',
-      data: {
-        user: null,
-      },
-      logs: {},
-    };
-
-    try {
-      const user = await this.authService.signup(dto, file);
-
-      const { username, email, nik, name, division, position, phone } = user;
-
-      dataOut.data.user = {
-        username,
-        email,
-        nik,
-        name,
-        division,
-        position,
-        phone,
-      };
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = {
-        ...dataOut.logs,
-        error,
-      };
-    }
-
-    return dataOut;
-  }
-
   @Post('signin')
   @UseGuards()
-  @UseGuards(AuthGuard('ldapauth'))
+  // @UseGuards(AuthGuard('ldap'))
+  // @UseGuards(AuthGuard('ldapauth'))
   @ApiOperation({
     summary: 'User login API',
   })
@@ -176,13 +124,6 @@ export class AuthController {
     return dataOut;
   }
 
-	@UseGuards(AuthGuard('ldap'))
-	@Post('ldap')
-	ldapLogin(@Req() req) {
-		// passport.authenticate('ldap', { session: false });
-		return req.user;
-	}
-
   @Post('signout')
   @UseGuards(AtGuard)
   @ApiOperation({
@@ -207,7 +148,7 @@ export class AuthController {
     };
 
     try {
-      const isSuccess = await this.authService.signout(req.user['sub'], res);
+      const isSuccess = await this.authService.signout(req.user['id'], res);
 
       if (isSuccess) {
         dataOut.message = 'Signed out successfully.';
