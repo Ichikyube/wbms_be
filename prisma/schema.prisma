@@ -593,7 +593,7 @@ model Transaction {
 
   customerId  String? @map("customer_id") @db.Char(36)
   customerCode        String? @map("customer_code")  @db.VarChar(50)
-  name        String? @map("customer_name")  @db.VarChar(50)
+  customerName        String? @map("customer_name")  @db.VarChar(50)
 
   rspoSccModel     Int     @default(0) @map("rspo_scc_model")
   rspoUniqueNumber String? @map("rspo_unique_number") @db.VarChar(50)

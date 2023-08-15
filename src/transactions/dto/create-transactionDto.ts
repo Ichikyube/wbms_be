@@ -20,7 +20,9 @@ export class CreateTransactionDto {
   @ApiProperty() productId?: string;
   @ApiProperty() productCode?: string;
   @ApiProperty() productName?: string;
-
+  @ApiProperty() customerId?: string;
+  @ApiProperty() customername?: string;
+  @ApiProperty() customerCode?: string;
   @ApiProperty() transporterId?: string;
   @ApiProperty() transporterCompanyCode?: string;
   @ApiProperty() transporterCompanyName?: string;
