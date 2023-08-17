@@ -291,7 +291,7 @@ enum Status {
 
 model Approver {
   id     String  @id @default(uuid()) @db.Char(36)
-  userId String  @unique @db.Char(36)
+  userId String  @unique @db.Char(36) @map("user_id")
   user   User    @relation(fields: [userId], references: [id])
   name   String
   lvl    String
@@ -312,7 +312,7 @@ model Approver {
 //jika config direquest, lihat brapa lvlnya, minta approval, status brubah
 model ConfigApproval {
   id          String  @id @default(uuid()) @db.Char(36)
-  requestId   String  @unique @db.Char(36)
+  requestId   String  @unique @db.Char(36)  @map("request_id")
   approver1Id String  @map("lvl_1_aprrover") @db.Char(36)
   approver2Id String? @unique @map("lvl_2_aprrover") @db.Char(36)
   approver3Id String? @unique @map("lvl_3_aprrover") @db.Char(36)
@@ -337,8 +337,9 @@ model ConfigApproval {
 
 model ConfigRequest {
   id          String    @id @default(uuid()) @db.Char(36)
-  configId    Int
-  editedValue String?   @db.VarChar(36)
+  configId    Int       @map("config_id")
+
+  editedValue String?   @db.VarChar(36) @map("edited_value")
   status      Status
   start       DateTime?
   end         DateTime?
