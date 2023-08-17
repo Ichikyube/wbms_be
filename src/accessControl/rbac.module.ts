@@ -21,22 +21,34 @@ export class RbacModule {}
 // const ac = new AccessControl(grantsObject);
 // ac.setGrants(grantsObject);
 // console.log(ac.getGrants());
-// let grantsObject = {
-//   admin: {
-//     video: {
-//       'create:any': ['*', '!views'],
-//       'read:any': ['*'],
-//       'update:any': ['*', '!views'],
-//       'delete:any': ['*'],
-//     },
-//   },
-//   user: {
-//     video: {
-//       'create:own': ['*', '!rating', '!views'],
-//       'read:own': ['*'],
-//       'update:own': ['*', '!rating', '!views'],
-//       'delete:own': ['*'],
-//     },
-//   },
-// };
+let grantsObject = {
+  admin: {
+    config: {
+      'create:own': ['*'],
+      'read:own': ['*'],
+      'update:own': ['*'],
+      'delete:own': ['*'],
+    },
+    configRequest: {
+      'create:own': ['*'],
+      'read:own': ['*'],
+      'update:own': ['*'],
+      'delete:own': ['*'],
+    },
+  },
+  superAdmin: {
+    user: {
+      'create:any': ['*'],
+      'read:any': ['*'],
+      'update:any': ['*'],
+      'delete:any': ['*'],
+    },
+    config: {
+      'create:any': ['*'],
+      'read:any': ['*'],
+      'update:any': ['*'],
+      'delete:any': ['*'],
+    },
+  },
+};
 // const ac = new AccessControl(grantsObject);

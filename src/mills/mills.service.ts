@@ -21,8 +21,21 @@ export class MillsService {
         },
       ],
       include: {
-        site: true,
-        company: true
+        site: {
+          select: {
+            id:true,
+            name: true,
+            shortName:true,
+            description:true,
+          }
+        },
+        company: {
+          select: {
+            id:true,
+            name:true,
+            shortName:true,
+          }
+        }
       },
     });
 

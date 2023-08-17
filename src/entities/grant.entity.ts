@@ -3,6 +3,7 @@ import {
   ArrayNotEmpty,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -24,20 +25,20 @@ export class GrantEntity {
   @IsNotEmpty()
   // @IsEnum(action)
   @IsString()
-  @ApiProperty({ enum: action }) //
+  @ApiProperty({ enum: action })
   action: string;
 
   @IsNotEmpty()
   // @IsEnum(possession)
   @IsString()
-  @ApiProperty({ enum: possession }) //
+  @ApiProperty({ enum: possession })
   possession: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
-  @ArrayNotEmpty()
   @Type(() => AttributeEntity)
   attributes: AttributeEntity[];
+
   id?: any;
 
   userCreated?: string;

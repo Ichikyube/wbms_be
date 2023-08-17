@@ -92,7 +92,7 @@ import { AppController } from './app.controller';
       provide: APP_INTERCEPTOR,
       useClass: TimestampInterceptor,
     },
-    SseGateway,
+    // SseGateway,
   ],
 })
 export class AppModule {}

@@ -12,7 +12,6 @@ import { PermissionEntity } from 'src/entities/permission.entity';
 import { AttributeEntity } from 'src/entities/attribute.entity';
 const fs = require('fs');
 
-
 @Injectable()
 export class RolesService {
   constructor(private db: DbService) {}
@@ -65,7 +64,7 @@ export class RolesService {
     const ac = JSON.stringify(grants);
     await fs.writeFileSync('./rbac-policy.json', ac);
 
-    return new RolesBuilder(grants)
+    return new RolesBuilder(grants);
   }
 
   async parseData(data) {
@@ -86,10 +85,10 @@ export class RolesService {
           for (const grant of grants) {
             const { action, possession, attributes } = grant;
             const grantKey = `${action}:${possession}`;
-            console.log(attributes);
-            resourcePermissions[grantKey] = attributes.map(
-              (attribute) => attribute.attr,
+            const exception = attributes.map(
+              (attribute) => `!${attribute.attr}`,
             );
+            resourcePermissions[grantKey] = ['*', ...exception];
           }
 
           rolePermissions[resource] = resourcePermissions;
@@ -107,17 +106,6 @@ export class RolesService {
 
     let role = await this.db.role.findUnique({
       where: { name },
-      include: {
-        permissions: {
-          include: {
-            grants: {
-              include: {
-                attributes: true,
-              },
-            },
-          },
-        },
-      },
     });
     if (role) {
       throw new HttpException('Role already exists', HttpStatus.BAD_REQUEST);
@@ -136,7 +124,6 @@ export class RolesService {
           userModified: '',
         },
       });
-      console.log(permissionsData);
       permissionsData.forEach(async (permission) => {
         await this.db.permission.create({
           data: {
@@ -164,13 +151,6 @@ export class RolesService {
             userCreated: userId,
             userModified: '',
           },
-          include: {
-            grants: {
-              include: {
-                attributes: true,
-              },
-            },
-          },
         });
       });
       await this.updateAC();
@@ -192,21 +172,25 @@ export class RolesService {
       },
     });
   }
-  async updateRole(userId, roleId: number, updatedRoleData: RoleEntity): Promise<any | null> {
+  async updateRole(
+    userId,
+    roleId: number,
+    updatedRoleData: RoleEntity,
+  ): Promise<any | null> {
     try {
       const existingRole = await this.db.role.findUnique({
         where: { id: roleId },
         include: { permissions: { include: { grants: true } } },
       });
-  
+
       if (!existingRole) {
         throw new Error(`Role with ID ${roleId} not found.`);
       }
 
       for (const permission of updatedRoleData.permissions) {
         const { id, ...rest } = permission;
-      
-        this.updateUpsertPermission(userId, permission)
+
+        this.updateUpsertPermission(userId, permission);
       }
       // Update the main role entity fields
       const updatedRole = await this.db.role.update({
@@ -216,7 +200,7 @@ export class RolesService {
         },
         include: { permissions: { include: { grants: true } } },
       });
-  
+
       return updatedRole;
     } catch (error) {
       console.error('Error updating role with permissions:', error);
@@ -224,12 +208,15 @@ export class RolesService {
     }
   }
 
-  async updateUpsertPermission(userId, permissionData: PermissionEntity): Promise<PermissionEntity> {
+  async updateUpsertPermission(
+    userId,
+    permissionData: PermissionEntity,
+  ): Promise<PermissionEntity> {
     try {
       const existingPermission = await this.db.permission.findUnique({
         where: { id: permissionData.id },
       });
-  
+
       if (existingPermission) {
         // Permission exists, perform an update
         return await this.db.permission.update({
@@ -277,24 +264,27 @@ export class RolesService {
             dtCreated: permissionData.dtCreated,
             dtModified: permissionData.dtModified,
             grants: {
-              create: permissionData.grants.map( ({ action, possession, attributes }) => ({
-                action,
-                possession,
-                attributes: {
-                  create: attributes.map(({ attr }) => ({
-                    attr,
-                  })),
-                },
-                userModified: userId,
-              }),),
+              create: permissionData.grants.map(
+                ({ action, possession, attributes }) => ({
+                  action,
+                  possession,
+                  attributes: {
+                    create: attributes.map(({ attr }) => ({
+                      attr,
+                    })),
+                  },
+                  userModified: userId,
+                }),
+              ),
             },
           },
         });
       }
-
     } catch (error) {
       console.error('Error updating or upserting permission:', error);
-      throw new Error('An error occurred while updating or upserting permission');
+      throw new Error(
+        'An error occurred while updating or upserting permission',
+      );
     }
   }
 

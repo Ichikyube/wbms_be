@@ -49,14 +49,18 @@ export class CitiesService {
   //       return city;
   //     }),
   //   );
-
   // }
 
   async getAll(): Promise<CityEntity[]> {
     const records = await this.db.city.findMany({
       where: { isDeleted: false },
       include: {
-        province: true,
+        province: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
       orderBy: [
         {

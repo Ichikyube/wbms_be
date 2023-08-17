@@ -21,7 +21,14 @@ export class WeighbridgesService {
         },
       ],
       include: {
-        site: true,
+        site: {
+          select: {
+            id:true,
+            name: true,
+            shortName:true,
+            description:true,
+          }
+        }
       },
     });
 

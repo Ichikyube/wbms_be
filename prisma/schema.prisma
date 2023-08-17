@@ -10,19 +10,6 @@ datasource db {
   url      = env("WBMS_DB_URL")
 }
 
-// generator nestjsDto {
-// provider = "prisma-generator-nestjs-dto"
-// output = "../src/gen"
-// outputToNestJsResourceStructure = "true"
-// }
-// generator prismaClassGenerator {
-//   provider               = "prisma-class-generator"
-//   output                 = "../src/_gen/prisma-class"
-//   dryRun                 = "false"
-//   separateRelationFields = "false"
-//   useUndefinedDefault    = "true"
-// }
-
 model Province {
   id String @id @default(uuid()) @db.Char(36)
 
@@ -302,37 +289,88 @@ enum Status {
   REJECTED
 }
 
-model ConfigRequest {
-  id           Int     @id @default(autoincrement())
-  lvl1Aprrover String  @map("lvl_1_aprrover")
-  lvl2Approver String? @map("lvl_2_aprrover")
-  lvl3Aprrover String? @map("lvl_3_aprrover")
-  lvl1Signed   String  @map("lvl_1_signed")
-  lvl2Signed   String? @map("lvl_2_signed")
-  lvl3Signed   String? @map("lvl_3_signed")
-  configId     Int
-}
+model Approver {
+  id     String  @id @default(uuid()) @db.Char(36)
+  userId String  @unique @db.Char(36)
+  user   User    @relation(fields: [userId], references: [id])
+  name   String
+  lvl    String
+  active Boolean
 
-model Config {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique @db.VarChar(36)
-  description String      @db.VarChar(255)
-  type        ConfigType?
-  value       String?     @db.VarChar(36)
-  editedValue String?     @db.VarChar(36)
-  lvlOfApprvl Int         @map("level_of_approval")
-
-  status       Status
-  start        DateTime?
-  end          DateTime?
-  // sites        Site[]
   isDeleted    Boolean   @default(false) @map("is_deleted")
   userCreated  String?   @map("user_created") @db.Char(36)
   userModified String?   @map("user_modified") @db.Char(36)
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  @@map("configuration")
+  lvl1Request ConfigApproval[] @relation(name: "lvl1Aprrover")
+  lvl2Request ConfigApproval[] @relation(name: "lvl2Aprrover")
+  lvl3Request ConfigApproval[] @relation(name: "lvl3Aprrover")
+  config      Config[]
+}
+
+//jika config direquest, lihat brapa lvlnya, minta approval, status brubah
+model ConfigApproval {
+  id          String  @id @default(uuid()) @db.Char(36)
+  requestId   String  @unique @db.Char(36)
+  approver1Id String  @map("lvl_1_aprrover") @db.Char(36)
+  approver2Id String? @unique @map("lvl_2_aprrover") @db.Char(36)
+  approver3Id String? @unique @map("lvl_3_aprrover") @db.Char(36)
+
+  lvl1Signed Boolean  @map("lvl_1_signed")
+  lvl2Signed Boolean? @map("lvl_2_signed")
+  lvl3Signed Boolean? @map("lvl_3_signed")
+
+  isDeleted    Boolean   @default(false) @map("is_deleted")
+  userCreated  String?   @map("user_created") @db.Char(36)
+  userModified String?   @map("user_modified") @db.Char(36)
+  dtCreated    DateTime  @default(now()) @map("date_created")
+  dtModified   DateTime? @updatedAt @map("date_modified")
+
+  lvl1Aprrover Approver      @relation(name: "lvl1Aprrover", fields: [approver1Id], references: [id])
+  lvl2Approver Approver?     @relation(name: "lvl2Aprrover", fields: [approver2Id], references: [id])
+  lvl3Aprrover Approver?     @relation(name: "lvl3Aprrover", fields: [approver3Id], references: [id])
+  request      ConfigRequest @relation(fields: [requestId], references: [id])
+
+  @@map("config_approval")
+}
+
+model ConfigRequest {
+  id          String    @id @default(uuid()) @db.Char(36)
+  configId    Int
+  editedValue String?   @db.VarChar(36)
+  status      Status
+  start       DateTime?
+  end         DateTime?
+
+  isDeleted    Boolean         @default(false) @map("is_deleted")
+  userCreated  String?         @map("user_created") @db.Char(36)
+  userModified String?         @map("user_modified") @db.Char(36)
+  dtCreated    DateTime        @default(now()) @map("date_created")
+  dtModified   DateTime?       @updatedAt @map("date_modified")
+  config       Config          @relation(fields: [configId], references: [id])
+  approval     ConfigApproval?
+
+  @@map("config_requests")
+}
+
+model Config {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique @db.VarChar(36)
+  description   String          @db.VarChar(255)
+  type          ConfigType?
+  value         String?         @db.VarChar(36)
+  lvlOfApprvl   Int             @map("level_of_approval")
+  approver      Approver[]
+  // sites        Site[]
+  isDeleted     Boolean         @default(false) @map("is_deleted")
+  userCreated   String?         @map("user_created") @db.Char(36)
+  userModified  String?         @map("user_modified") @db.Char(36)
+  dtCreated     DateTime        @default(now()) @map("date_created")
+  dtModified    DateTime?       @updatedAt @map("date_modified")
+  ConfigRequest ConfigRequest[]
+
+  @@map("configs")
 }
 
 model User {
@@ -363,6 +401,7 @@ model User {
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
   userRole     Role?     @relation(fields: [roleId], references: [id])
+  approver     Approver?
 
   @@map("users")
 }
@@ -591,9 +630,9 @@ model Transaction {
   productCode String? @map("product_code") @db.VarChar(30)
   productName String? @map("product_name") @db.VarChar(50)
 
-  customerId  String? @map("customer_id") @db.Char(36)
-  customerCode        String? @map("customer_code")  @db.VarChar(50)
-  customerName        String? @map("customer_name")  @db.VarChar(50)
+  customerId   String? @map("customer_id") @db.Char(36)
+  customerCode String? @map("customer_code") @db.VarChar(50)
+  customerName String? @map("customer_name") @db.VarChar(50)
 
   rspoSccModel     Int     @default(0) @map("rspo_scc_model")
   rspoUniqueNumber String? @map("rspo_unique_number") @db.VarChar(50)
@@ -699,9 +738,9 @@ model Transaction {
   returnUnloadingRemark       String?   @map("return_unloading_remark") @db.VarChar(500)
   returnUnloadingOperatorName String?   @map("return_unloading_operator_name") @db.VarChar(50)
   returnUnloadingTimestamp    DateTime? @map("return_unloading_timestamp")
-  qtyTbs                      Int?       @default(0) @map("qty_tbs")
-  qtyTbsDikirim               Int?       @default(0) @map("qty_tbs_dikirim")
-  qtyTbsDikembalikan          Int?       @default(0) @map("qty_tbs_dikembalikan")
+  qtyTbs                      Int?      @default(0) @map("qty_tbs")
+  qtyTbsDikirim               Int?      @default(0) @map("qty_tbs_dikirim")
+  qtyTbsDikembalikan          Int?      @default(0) @map("qty_tbs_dikembalikan")
 
   jsonData Json?
 
