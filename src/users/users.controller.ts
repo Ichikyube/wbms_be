@@ -53,9 +53,19 @@ export class UsersController {
     try {
       const user = await this.usersService.getIAM(req.user['id']);
 
-      const { username, email, name, division, position, phone } = user;
-
-      dataOut.data.user = { username, email, name, division, position, phone };
+      const { name, profilePic, division, position, phone, alamat } =
+        user.profile;
+      const { username, email } = user;
+      dataOut.data.user = {
+        username,
+        email,
+        name,
+        profilePic,
+        division,
+        position,
+        phone,
+        alamat,
+      };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -64,12 +74,13 @@ export class UsersController {
     return dataOut;
   }
 
-  @Sse('sse')
-  sse(): Observable<MessageEvent> {
-    return interval(1000).pipe(
-      map((_) => ({ data: { hello: 'world' } }) as MessageEvent),
-    );
-  }
+  // @Sse('sse')
+  // sse(): Observable<MessageEvent> {
+  //   return interval(1000).pipe(
+  //     map((_) => ({ data: { hello: 'world' } }) as MessageEvent),
+  //   );
+  // }
+
   @Get()
   @UseRoles({
     resource: 'usersData',
@@ -170,15 +181,19 @@ export class UsersController {
     try {
       const user = await this.usersService.getById(userId);
 
-      const { username, email, name, division, position, phone } = user;
+      const { name, profilePic, division, position, phone, alamat } =
+        user.profile;
+      const { username, email } = user;
 
       dataOut.data.user.records.push({
         username,
         email,
         name,
+        profilePic,
         division,
         position,
         phone,
+        alamat,
       });
       dataOut.data.user.totalRecords = 1;
     } catch (error) {
@@ -268,9 +283,19 @@ export class UsersController {
 
       const user = await this.usersService.create(dto, file, userId);
 
-      const { username, email, name, division, position, phone } = user;
-
-      dataOut.data.user = { username, email, name, division, position, phone };
+      const { name, profilePic, division, position, phone, alamat } =
+        user.profile;
+      const { username, email } = user;
+      dataOut.data.user = {
+        username,
+        email,
+        name,
+        profilePic,
+        division,
+        position,
+        phone,
+        alamat,
+      };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -297,9 +322,19 @@ export class UsersController {
     try {
       const user = await this.usersService.updateUserRole(userId, roleId);
 
-      const { username, email, name, division, position, phone } = user;
-
-      dataOut.data.user = { username, email, name, division, position, phone };
+      const { name, profilePic, division, position, phone, alamat } =
+        user.profile;
+      const { username, email } = user;
+      dataOut.data.user = {
+        username,
+        email,
+        name,
+        profilePic,
+        division,
+        position,
+        phone,
+        alamat,
+      };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -346,9 +381,19 @@ export class UsersController {
         userId,
       );
 
-      const { username, email, name, division, position, phone } = user;
-
-      dataOut.data.user = { username, email, name, division, position, phone };
+      const { name, profilePic, division, position, phone, alamat } =
+        user.profile;
+      const { username, email } = user;
+      dataOut.data.user = {
+        username,
+        email,
+        name,
+        profilePic,
+        division,
+        position,
+        phone,
+        alamat,
+      };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -378,9 +423,9 @@ export class UsersController {
       const userId = ''; // req.user['id'];
       const user = await this.usersService.deleteById(id, userId);
 
-      const { username, email, name, isDisabled, isDeleted } = user;
+      const { username, nik, email, isDisabled, isDeleted } = user;
 
-      dataOut.data.user = { username, email, name, isDisabled, isDeleted };
+      dataOut.data.user = { username, email, nik, isDisabled, isDeleted };
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

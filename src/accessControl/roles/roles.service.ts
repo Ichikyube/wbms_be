@@ -9,7 +9,6 @@ import { RolesBuilder } from 'nest-access-control';
 import { GrantEntity, action } from 'src/entities/grant.entity';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { PermissionEntity } from 'src/entities/permission.entity';
-import { AttributeEntity } from 'src/entities/attribute.entity';
 const fs = require('fs');
 
 @Injectable()

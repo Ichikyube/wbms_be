@@ -12,10 +12,12 @@ import { CreateAttributeDto } from './create-attribute.dto';
 export class CreateGrantDto {
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ type: String })
   action: string;
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ type: String })
   possession: string;
 
   @ValidateNested({ each: true })

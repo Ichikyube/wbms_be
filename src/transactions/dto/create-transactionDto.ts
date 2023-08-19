@@ -109,7 +109,7 @@ export class CreateTransactionDto {
   @ApiProperty() returnUnloadingTimestamp?: Date;
   @ApiProperty() qtyTbs?: number;
   @ApiProperty() qtyTbsDikirim?: number;
-  @ApiProperty()  qtyTbsDikembalikan?: number;
+  @ApiProperty() qtyTbsDikembalikan?: number;
   // jsonData: QrcodeDto;
   @ApiProperty() rspoSccModel: number;
   @ApiProperty() isccSccModel: number;

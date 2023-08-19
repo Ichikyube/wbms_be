@@ -11,7 +11,9 @@ import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { UseRoles } from 'nest-access-control';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Weighbridges')
 @Controller('transactions')
 export class TransactionController {
   constructor(private transactionService: TransactionService) {}
