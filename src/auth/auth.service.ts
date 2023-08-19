@@ -41,7 +41,6 @@ export class AuthService {
         username: true,
         email: true,
         nik: true,
-        name: true,
         role: true,
         hashedPassword: true,
       },

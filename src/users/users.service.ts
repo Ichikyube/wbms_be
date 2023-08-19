@@ -14,6 +14,8 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 import { UserEntity } from 'src/entities';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { now } from 'moment';
+import { Update } from 'aws-sdk/clients/dynamodb';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +23,10 @@ export class UsersService {
 
   async getIAM(id: string): Promise<UserEntity> {
     // const decodedUserInfo = req.user as { id: string; email: string };
-    const user = await this.db.user.findUnique({ where: { id } });
+    const user = await this.db.user.findUnique({
+      where: { id },
+      include: { profile: true },
+    });
     if (!user) {
       throw new NotFoundException();
     }
@@ -81,10 +86,13 @@ export class UsersService {
   }
 
   async searchFirst(query: any): Promise<UserEntity> {
-    query.where = { ...query.where, isDeleted: false };
-
-    const record = await this.db.user.findFirst(query);
-
+    const record = await this.db.user.findFirst({
+      where: {
+        ...query.where,
+        AND: [{ isDeleted: false }],
+      },
+      include: { profile: true },
+    });
     return record;
   }
 
@@ -92,11 +100,9 @@ export class UsersService {
     const records = await this.db.user.findMany({
       where: {
         ...query.where,
-        AND: [
-          { isDeleted: false },
-        ],
+        AND: [{ isDeleted: false }],
       },
-      include: { profile: true }
+      include: { profile: true },
     });
     return records;
   }
@@ -105,11 +111,9 @@ export class UsersService {
     const record = await this.db.user.findFirst({
       where: {
         ...query.where,
-        AND: [
-          { isDeleted: true },
-        ],
+        AND: [{ isDeleted: true }],
       },
-      include: { profile: true }
+      include: { profile: true },
     });
     return record;
   }
@@ -118,11 +122,9 @@ export class UsersService {
     const records = await this.db.user.findMany({
       where: {
         ...query.where,
-        AND: [
-          { isDeleted: true },
-        ],
+        AND: [{ isDeleted: true }],
       },
-      include: { profile: true }
+      include: { profile: true },
     });
 
     return records;
@@ -134,7 +136,7 @@ export class UsersService {
     userId: string,
   ): Promise<UserEntity> {
     // generate the password hash
-    const { username, name } = dto;
+    const { username } = dto;
     let user = await this.db.user.findFirst({ where: { username } });
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
@@ -142,14 +144,7 @@ export class UsersService {
     const hashedPassword = await hash(dto.password);
     const role = await this.db.role.findUnique({ where: { id: dto.roleId } });
     if (!role) {
-      await this.db.role.upsert({
-        where: { id: dto.roleId },
-        update: {},
-        create: {
-          name: 'Test User',
-        },
-      });
-      // throw new HttpException('Role not found', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Role not found', HttpStatus.BAD_REQUEST);
     }
     // save the new user in the db
     let userRole = role?.name ? role.name : 'user';
@@ -161,11 +156,13 @@ export class UsersService {
           nik: dto.nik,
           profile: {
             create: {
-              name: name,
+              name: dto.name,
               profilePic: file.filename,
               division: dto.division,
               position: dto.position,
               phone: dto.phone,
+              doB: dto.doB,
+              alamat: dto.alamat,
             },
           },
           hashedPassword: hashedPassword,
@@ -175,6 +172,7 @@ export class UsersService {
           userModified: '',
           isLDAPUser: dto.isLDAPUser,
         },
+        include: { profile: true },
       })
       .catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -194,53 +192,66 @@ export class UsersService {
     dto: UpdateUserDto,
     file: Express.Multer.File,
     userId: string,
-  ): Promise<UserEntity> {
+  ) {
     let updateData = new UserEntity();
-
+    const profileDto = [
+      'name',
+      'file',
+      'division',
+      'position',
+      'phone',
+      'doB',
+      'alamat',
+    ];
     if (dto.password) updateData.hashedPassword = await hash(dto.password);
     delete dto.password;
     let filteredDto: Partial<UserEntity> = {};
-
+    let filteredProfileDto: Partial<ProfileEntity> = {};
     for (const prop in dto) {
       if (dto[prop]) {
         filteredDto[prop] = dto[prop];
       }
     }
-    console.log(filteredDto);
-    if (file) {
-      updateData = {
-        ...updateData,
-        ...filteredDto,
-        profilePic: file.filename,
-        userModified: userId,
-      };
-    } else {
-      updateData = {
-        ...updateData,
-        ...filteredDto,
-        userModified: userId,
-      };
+    for (const prop in filteredDto) {
+      if (profileDto.includes(prop)) {
+        filteredProfileDto[prop] = filteredDto[prop];
+        filteredProfileDto = {
+          ...filteredProfileDto,
+          userModified: userId,
+          dtModified: new Date(),
+        };
+      }
     }
-    const updatedUser = await this.db.user.update({
-      where: { id: userId },
-      data: {
-        ...updateData,
-        profile: {
-          update: {
-            ...profileDto
-          }
+    console.log(updateData);
+
+    if (file) {
+      filteredProfileDto.profilePic = file.filename;
+    }
+
+    updateData = {
+      ...updateData,
+      ...filteredDto,
+      userModified: userId,
+      dtModified: new Date(),
+    };
+    const updatedUser = await this.db.user
+      .update({
+        where: { id: id },
+        data: {
+          ...updateData,
+          profile: {update: filteredProfileDto }
+        },
+        include: {
+          profile: true,
+        },
+      })
+      .catch((error) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002')
+            throw new ForbiddenException('Username/Email/NIK already taken.');
         }
-      },
-      include: {
-        profile: true
-      }
-    }).catch((error) => {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new ForbiddenException('Username/Email/NIK already taken.');
-      }
-      throw error;
-    });
+        throw error;
+      });
 
     return updatedUser;
   }
@@ -262,7 +273,10 @@ export class UsersService {
       }
     }
   }
-  async updateUserProfile(userId: string, dto: UpdateProfileDto): Promise<ProfileEntity> {
+  async updateUserProfile(
+    userId: string,
+    dto: UpdateProfileDto,
+  ): Promise<ProfileEntity> {
     try {
       return await this.db.profile.update({
         where: {
@@ -270,7 +284,7 @@ export class UsersService {
         },
         data: {
           ...dto,
-        }
+        },
       });
     } catch (err) {
       if (err?.code === 'P2025') {

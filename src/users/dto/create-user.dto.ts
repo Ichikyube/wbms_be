@@ -8,8 +8,9 @@ import {
   IsPhoneNumber,
   IsString,
   Length,
+  ValidateNested,
+  isNotEmpty,
 } from 'class-validator';
-import { RoleEntity } from 'src/entities/roles.entity';
 
 export class CreateUserDto {
   @ApiProperty() @IsString() @IsNotEmpty() username: string = 'Jhonny';
@@ -23,6 +24,13 @@ export class CreateUserDto {
     message: 'Panjang password minimal 8 karakter dan maksimal 20 karakter.',
   })
   password: string = '12345678';
+  
+  // @IsEnum(UserRole)
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsInt()
+  readonly roleId: number;
+
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
 
@@ -30,7 +38,7 @@ export class CreateUserDto {
     type: 'string',
     format: 'binary',
   })
-  file: Express.Multer.File;
+  file?: Express.Multer.File;
 
   @ApiProperty()
   @IsString()
@@ -47,11 +55,14 @@ export class CreateUserDto {
   @IsOptional()
   phone?: string;
 
-  // @IsEnum(UserRole)
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsInt()
-  readonly roleId: number;
+  @ApiProperty({
+    example: '2022-01-01',
+    description: 'The user date of birth',
+    type: 'string',
+    format: 'date',
+  }) @IsOptional() doB?: Date;
+
+  @ApiProperty({ required: false }) @IsString() @IsOptional() alamat?: string;
 
   @ApiProperty({ type: Boolean }) @IsBoolean() isLDAPUser: boolean;
 }

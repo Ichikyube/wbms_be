@@ -90,36 +90,12 @@ export class ConfigsService {
     return record;
   }
 
-  async create(dto: CreateConfigDto) {
-    const params = {
-      data: {
-        ...dto,
-        userCreated: '',
-        userModified: '',
-      },
-    };
-
-    const record = await this.db.config.create(params);
-
-    return record;
-  }
-
-  async updateById(id: number, dto: any) {
+  async editById(id: number, dto: any) {
     const params = {
       where: { id },
       data: { ...dto, userModified: '' },
     };
 
-    const record = await this.db.config.update(params);
-
-    return record;
-  }
-
-  async deleteById(id: number) {
-    const params = {
-      where: { id },
-      data: { isDeleted: true, userModified: '' },
-    };
     const record = await this.db.config.update(params);
 
     return record;

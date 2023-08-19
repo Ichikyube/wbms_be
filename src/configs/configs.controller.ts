@@ -174,44 +174,13 @@ export class ConfigsController {
     return dataOut;
   }
 
-  @Post()
-  @UseRoles({
-    resource: 'config',
-    action: 'create',
-    possession: 'own',
-  })
-  async create(@Body() dto: CreateConfigDto) {
-    const dataOut = {
-      status: true,
-      message: '',
-      data: {
-        config: null,
-      },
-      logs: {},
-    };
-
-    try {
-      // const userId = req.user['id'];
-      const userId = '';
-      const record = await this.configsService.create(dto);
-
-      dataOut.data.config = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, reqBody: dto, error };
-    }
-
-    return dataOut;
-  }
-
   @Patch(':id')
   @UseRoles({
     resource: 'config',
     action: 'update',
     possession: 'own',
   })
-  async updateById(@Param('id') id: number, @Body() dto: any) {
+  async editById(@Param('id') id: number, @Body() dto: any) {
     const dataOut = {
       status: true,
       message: '',
@@ -224,7 +193,7 @@ export class ConfigsController {
     try {
       const userId = ''; //req.user['id'];
       console.log(id);
-      const record = await this.configsService.updateById(id, dto);
+      const record = await this.configsService.editById(id, dto);
 
       dataOut.data.config = record;
     } catch (error) {
@@ -236,33 +205,4 @@ export class ConfigsController {
     return dataOut;
   }
 
-  @Delete(':id')
-  @UseRoles({
-    resource: 'config',
-    action: 'delete',
-    possession: 'own',
-  })
-  async deleteById(@Param('id') id: number) {
-    const dataOut = {
-      status: true,
-      message: '',
-      data: {
-        config: null,
-      },
-      logs: {},
-    };
-
-    try {
-      const userId = ''; // req.user['id'];
-      const record = await this.configsService.deleteById(id);
-
-      dataOut.data.config = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, param: id, error };
-    }
-
-    return dataOut;
-  }
 }

@@ -50,15 +50,18 @@ export class AuthController {
     try {
       const user = await this.authService.getIAM(req.user['id']);
 
-      const { username, email, name, division, position, phone } = user;
-
+      const { name, profilePic, division, position, phone, alamat } =
+        user.profile;
+      const { username, email } = user;
       dataOut.data.user = {
         username,
         email,
         name,
+        profilePic,
         division,
         position,
         phone,
+        alamat,
       };
     } catch (error) {
       dataOut.status = false;

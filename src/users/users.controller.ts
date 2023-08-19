@@ -282,7 +282,7 @@ export class UsersController {
       const userId = ''; //req.user['id'];
 
       const user = await this.usersService.create(dto, file, userId);
-
+      console.log(user)
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
       const { username, email } = user;
@@ -343,6 +343,7 @@ export class UsersController {
 
     return dataOut;
   }
+
   @Patch(':id')
   @UseRoles({
     resource: 'usersData',
@@ -372,7 +373,7 @@ export class UsersController {
       },
       logs: {},
     };
-
+    const user = await this.usersService.updateById(userId, dto, file, userId);
     try {
       const user = await this.usersService.updateById(
         userId,

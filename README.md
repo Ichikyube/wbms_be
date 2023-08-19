@@ -382,3 +382,64 @@ next();
     // req.tokens;
     return user;
   }
+
+
+    // WbTransactionUrlMapping() {
+  //   // 4:15 harus dirubah, ini sementara, status ini tidak valid, seharusnya 4:20
+  //   const urlMapping = {
+  //     1: {
+  //       1: {
+  //         0: '/wb/pks-transaction/normal',
+  //         15: '/wb/pks-transaction/cancel',
+  //       },
+  //       3: {
+  //         10: '/wb/pks-transaction/normal',
+  //         15: '/wb/pks-transaction/cancel',
+  //       },
+  //       4: {
+  //         15: '/wb/pks-transaction/cancel',
+  //         20: '/wb/pks-transaction/cancel',
+  //       },
+  //       5: { 23: '/wb/pks-transaction/reject' },
+  //     },
+  //     2: {
+  //       1: { 0: '/wb/t30-transaction/normal' },
+  //       4: { 20: '/wb/t30-transaction/cancel' },
+  //     },
+  //     3: {
+  //       4: { 20: '/wb/bulking-transaction/normal' },
+  //     },
+  //   };
+
+  //   return urlMapping;
+  // }
+
+  // TransactionValidation() {
+  //   // 4:15 harus dirubah, ini sementara, status ini tidak valid, seharusnya 4:20
+  //   const statusMapping = {
+  //     1: {
+  //       1: {
+  //         0: 'pks-normal',
+  //         15: 'pks-cancel',
+  //       },
+  //       3: {
+  //         10: 'pks-normal',
+  //         15: 'pks-cancel',
+  //       },
+  //       4: {
+  //         15: 'pks-cancel',
+  //         20: 'pks-cancel',
+  //       },
+  //       5: { 23: 'pks-reject' },
+  //     },
+  //     2: {
+  //       1: { 0: '/wb/t30-transaction/normal' },
+  //       4: { 20: '/wb/t30-transaction/cancel' },
+  //     },
+  //     3: {
+  //       4: { 20: '/wb/bulking-transaction/normal' },
+  //     },
+  //   };
+
+  //   return statusMapping;
+  // }

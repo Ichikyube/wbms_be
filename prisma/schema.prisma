@@ -5,27 +5,28 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator prismaClassGenerator {
-    provider = "prisma-class-generator"
-    output   = "../src/generated/prisma-class"
-    dryRun                 = "false"
-    separateRelationFields = "true"
-    useUndefinedDefault    = "true"
-}
+// generator prismaClassGenerator {
+//     provider = "prisma-class-generator"
+//     output   = "../src/generated/prisma-class"
+//     dryRun                 = "false"
+//     separateRelationFields = "true"
+//     useUndefinedDefault    = "true"
+// }
 
-generator nestjsDto {
-  provider                        = "prisma-generator-nestjs-dto"
-  output                          = "../src/generated/nestjs-dto"
-  outputToNestJsResourceStructure = "false"
-  exportRelationModifierClasses   = "true"
-  reExport                        = "false"
-  createDtoPrefix                 = "Create"
-  updateDtoPrefix                 = "Update"
-  dtoSuffix                       = "Dto"
-  entityPrefix                    = ""
-  entitySuffix                    = "Entity"
-  fileNamingStyle                 = "camel"
-}
+// generator nestjsDto {
+//   provider                        = "prisma-generator-nestjs-dto"
+//   output                          = "../src/generated/nestjs-dto"
+//   outputToNestJsResourceStructure = "false"
+//   exportRelationModifierClasses   = "true"
+//   reExport                        = "false"
+//   createDtoPrefix                 = "Create"
+//   updateDtoPrefix                 = "Update"
+//   dtoSuffix                       = "Dto"
+//   entityPrefix                    = ""
+//   entitySuffix                    = "Entity"
+//   fileNamingStyle                 = "camel"
+// }
+
 datasource db {
   provider = "mysql"
   url      = env("WBMS_DB_URL")
@@ -335,9 +336,6 @@ model Approver {
 model ConfigApproval {
   id          String  @id @default(uuid()) @db.Char(36)
   requestId   String  @unique @db.Char(36)  @map("request_id")
-  approver1Id String  @map("lvl_1_aprrover") @db.Char(36)
-  approver2Id String? @unique @map("lvl_2_aprrover") @db.Char(36)
-  approver3Id String? @unique @map("lvl_3_aprrover") @db.Char(36)
 
   lvl1Signed Boolean  @map("lvl_1_signed")
   lvl2Signed Boolean? @map("lvl_2_signed")
@@ -349,9 +347,9 @@ model ConfigApproval {
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  lvl1Aprrover Approver      @relation(name: "lvl1Aprrover", fields: [approver1Id], references: [id])
-  lvl2Approver Approver?     @relation(name: "lvl2Aprrover", fields: [approver2Id], references: [id])
-  lvl3Aprrover Approver?     @relation(name: "lvl3Aprrover", fields: [approver3Id], references: [id])
+  lvl1Aprrover Approver[]    @relation(name: "lvl1Aprrover")
+  lvl2Approver Approver[]    @relation(name: "lvl2Aprrover")
+  lvl3Aprrover Approver[]    @relation(name: "lvl3Aprrover")
   request      ConfigRequest @relation(fields: [requestId], references: [id])
 
   @@map("config_approval")
@@ -404,7 +402,7 @@ model Profile {
   phone       String? @db.VarChar(30)
   division    String  @db.VarChar(30)
   position    String  @db.VarChar(30)
-  doB         DateTime 
+  doB         DateTime?  @map("date_of_birth")
   alamat      String?  @db.VarChar(255)
 
   userCreated  String?   @map("user_created") @db.VarChar(36)
