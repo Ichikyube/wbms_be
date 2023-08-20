@@ -382,7 +382,12 @@ model Config {
   type          ConfigType?
   value         String?         @db.VarChar(36)
   lvlOfApprvl   Int             @map("level_of_approval")
+  status      Status
+  start       DateTime?
+  end         DateTime?
+
   approver      Approver[]
+  
   // sites        Site[]
   isDeleted     Boolean         @default(false) @map("is_deleted")
   userCreated   String?         @map("user_created") @db.Char(36)

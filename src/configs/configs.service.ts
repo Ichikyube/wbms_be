@@ -57,6 +57,9 @@ export class ConfigsService {
           name: 'desc',
         },
       ],
+      include: {
+        
+      }
     });
 
     return records;

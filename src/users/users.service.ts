@@ -205,7 +205,8 @@ export class UsersService {
     ];
     if (dto.password) updateData.hashedPassword = await hash(dto.password);
     delete dto.password;
-    let filteredDto: Partial<UserEntity> = {};
+    let filteredDto: any = {};
+    let filteredUserDto: Partial<UserEntity> = {};
     let filteredProfileDto: Partial<ProfileEntity> = {};
     for (const prop in dto) {
       if (dto[prop]) {
@@ -215,14 +216,16 @@ export class UsersService {
     for (const prop in filteredDto) {
       if (profileDto.includes(prop)) {
         filteredProfileDto[prop] = filteredDto[prop];
-        filteredProfileDto = {
-          ...filteredProfileDto,
-          userModified: userId,
-          dtModified: new Date(),
-        };
+      } else {
+        filteredUserDto[prop] = filteredDto[prop];
       }
     }
-    console.log(updateData);
+
+    filteredProfileDto = {
+      ...filteredProfileDto,
+      userModified: userId,
+      dtModified: new Date(),
+    };
 
     if (file) {
       filteredProfileDto.profilePic = file.filename;
@@ -230,7 +233,7 @@ export class UsersService {
 
     updateData = {
       ...updateData,
-      ...filteredDto,
+      ...filteredUserDto,
       userModified: userId,
       dtModified: new Date(),
     };
@@ -239,7 +242,7 @@ export class UsersService {
         where: { id: id },
         data: {
           ...updateData,
-          profile: {update: filteredProfileDto }
+          profile: { update: filteredProfileDto },
         },
         include: {
           profile: true,
