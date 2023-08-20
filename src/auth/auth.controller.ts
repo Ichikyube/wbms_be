@@ -110,10 +110,22 @@ export class AuthController {
 
     try {
       const { tokens, user } = await this.authService.signin(dto, res);
-
+      const { name, profilePic, division, position, phone, doB, alamat } = user.profile;
+      const { username, email } = user;
       dataOut.data.tokens = tokens;
       dataOut.data.user = user;
-      // dataOut.data = { tokens, user };
+
+      dataOut.data.user = {
+        username,
+        email,
+        name,
+        profilePic,
+        division,
+        position,
+        phone,
+        doB,
+        alamat,
+      };
       dataOut.message = 'Signed in successfully.';
     } catch (error) {
       dataOut.status = false;

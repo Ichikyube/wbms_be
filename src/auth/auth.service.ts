@@ -43,7 +43,19 @@ export class AuthService {
         nik: true,
         role: true,
         hashedPassword: true,
+        profile: {
+          select: {
+            name: true,
+            profilePic: true,
+            phone: true,
+            division: true,
+            position: true,
+            doB: true,
+            alamat: true, 
+          }
+        }
       },
+
     });
 
     // if user does not exist throw exception
