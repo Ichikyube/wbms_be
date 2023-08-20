@@ -518,7 +518,7 @@ model Product {
   storageTanks      StorageTank[]
   transactions      Transaction[]
   transportVehicles TransportVehicle[]
-
+  otherTransportVehicles      TransportVehicle[] @relation(name: "other_product")
   @@map("products")
 }
 
@@ -644,7 +644,7 @@ model TransportVehicle {
 
   company Company? @relation(fields: [companyId], references: [id])
   product Product? @relation(fields: [productId], references: [id])
-
+  extraProduct  Product[] @relation(name: "other_product")
   @@map("transportation_vehicles")
 }
 

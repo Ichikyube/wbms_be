@@ -1,8 +1,7 @@
-import { ApiProperty, PartialType } from "@nestjs/swagger";
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateProfileDto {
-
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
 
   @ApiProperty({
@@ -31,8 +30,9 @@ export class UpdateProfileDto {
     description: 'The user date of birth',
     type: 'string',
     format: 'date',
-  }) @IsOptional() doB?: Date;
+  })
+  @IsOptional()
+  doB?: Date;
 
   @ApiProperty({ required: false }) @IsString() @IsOptional() alamat?: string;
-  
 }
