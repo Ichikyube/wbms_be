@@ -432,7 +432,7 @@ model User {
   hashedRT       String? @map("hashed_rt") @db.VarChar(100)
 
   isEmailVerified Boolean @default(false) @map("is_email_verified")
-  isLDAPUser      Boolean @default(true) @map("is_ldap_user")
+  isLDAPUser      Boolean @map("is_ldap_user")
   isDisabled      Boolean @default(false) @map("is_disabled")
   isDeleted       Boolean @default(false) @map("is_deleted")
 

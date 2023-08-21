@@ -50,7 +50,7 @@ export class AuthController {
     try {
       const user = await this.authService.getIAM(req.user['id']);
 
-      const { name, profilePic, division, position, phone, alamat } =
+      const { name, profilePic, division, position, phone, doB, alamat } =
         user.profile;
       const { username, email } = user;
       dataOut.data.user = {
@@ -61,6 +61,7 @@ export class AuthController {
         division,
         position,
         phone,
+        doB,
         alamat,
       };
     } catch (error) {
@@ -112,13 +113,14 @@ export class AuthController {
       const { tokens, user } = await this.authService.signin(dto, res);
       const { name, profilePic, division, position, phone, doB, alamat } =
         user.profile;
-      const { username, email } = user;
+      const { username, email, role } = user;
       dataOut.data.tokens = tokens;
       dataOut.data.user = user;
 
       dataOut.data.user = {
         username,
         email,
+        role,
         name,
         profilePic,
         division,
