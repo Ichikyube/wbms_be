@@ -8,7 +8,7 @@ import {ApiProperty} from '@nestjs/swagger'
 export class UpdateConfigDto {
   name?: string;
   description?: string;
-  @ApiProperty({ enum: ConfigType})
+  @ApiProperty({ enum: ConfigType})npm 
   type?: ConfigType;
   value?: string;
   editedValue?: string;
