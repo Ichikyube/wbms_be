@@ -17,8 +17,6 @@ import { CreateConfigDto } from './dto/create-config.dto';
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
-  
-
   @Get('')
   @UseRoles({
     resource: 'configsData',

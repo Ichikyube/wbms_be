@@ -45,7 +45,7 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'upload'),
-      serveRoot: '/img',
+      serveRoot: '/img/',
     }),
     // AccessControlModule.forRootAsync({
     //   imports: [RolesModule],
@@ -80,10 +80,10 @@ import { AppController } from './app.controller';
   ],
   controllers: [AppController],
   providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AtGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
     // {
     //   provide: APP_GUARD,
     //   useClass: ACGuard,

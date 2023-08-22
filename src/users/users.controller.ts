@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
@@ -35,10 +36,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Observable, interval, map } from 'rxjs';
 
 @ApiTags('Users')
+// @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
-
   @Get('iam')
   async getIAM(@Req() req: Request) {
     const dataOut = {
@@ -49,9 +50,8 @@ export class UsersController {
       },
       logs: {},
     };
-
     try {
-      const user = await this.usersService.getIAM(req.user['id']);
+      const user = await this.usersService.getIAM(req.user['sub']);
 
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
@@ -280,9 +280,9 @@ export class UsersController {
 
     try {
       const userId = ''; //req.user['id'];
-
+      console.log(dto.isLDAPUser);
       const user = await this.usersService.create(dto, file, userId);
-      console.log(user)
+      console.log(user);
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
       const { username, email } = user;

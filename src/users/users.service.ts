@@ -31,9 +31,6 @@ export class UsersService {
       throw new NotFoundException();
     }
 
-    // if (user.id !== decodedUserInfo.id) {
-    //   throw new ForbiddenException();
-    // }
     delete user.hashedPassword;
     delete user.hashedRT;
 
@@ -136,7 +133,7 @@ export class UsersService {
     userId: string,
   ): Promise<UserEntity> {
     // generate the password hash
-    const { username } = dto;
+    const { username, email, nik, isLDAPUser, roleId } = dto;
     let user = await this.db.user.findFirst({ where: { username } });
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
@@ -148,12 +145,13 @@ export class UsersService {
     }
     // save the new user in the db
     let userRole = role?.name ? role.name : 'user';
+    console.log(isLDAPUser)
     user = await this.db.user
       .create({
         data: {
           username: username,
-          email: dto.email,
-          nik: dto.nik,
+          email: email,
+          nik: nik,
           profile: {
             create: {
               name: dto.name,
@@ -166,11 +164,10 @@ export class UsersService {
             },
           },
           hashedPassword: hashedPassword,
-          roleId: dto.roleId,
+          roleId: roleId,
           role: userRole,
           userCreated: userId,
-          userModified: '',
-          isLDAPUser: dto.isLDAPUser,
+          isLDAPUser: isLDAPUser,
         },
         include: { profile: true },
       })

@@ -1,10 +1,12 @@
+prisma migrate dev
+snaplet restore --data-only
+
 Todo
 backend
+
 ldap(sso(Single-SignOn)),
+
 config
-inject Admin IT, Admin System ke role
-Buat superAdmin(AdminIT)
-Transaction
 
 
 

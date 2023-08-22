@@ -48,7 +48,7 @@ export class AuthController {
     };
 
     try {
-      const user = await this.authService.getIAM(req.user['id']);
+      const user = await this.authService.getIAM(req.user['sub']);
 
       const { name, profilePic, division, position, phone, doB, alamat } =
         user.profile;

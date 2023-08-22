@@ -24,10 +24,21 @@ export default class SwaggerDocumentation {
         'access-token',
       )
       .addTag('DNS')
+      .addSecurity('ApiKeyAuth', {
+        type: 'apiKey',
+        in: 'header',
+        name: 'Authorization',
+      })
+      .addSecurityRequirements('ApiKeyAuth')
       .build();
 
     const document = SwaggerModule.createDocument(this.app, config);
     SwaggerModule.setup('api', this.app, document, {
+      // swaggerOptions: {
+      //   persistAuthorization: true,
+      // },
+      // customCssUrl: '../swagger/swagger.css',
+      // customfavIcon: '../swagger/favicon.png',
       customSiteTitle: 'DSN - Weighbridge Management System',
     });
   }

@@ -288,6 +288,16 @@ export class RolesService {
   }
 
   async deleteRole(id: number): Promise<RoleEntity> {
+    const role = await this.db.role.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  
+    if (role.name === "Admin Master" || role.name === "Admin System") {
+      throw new Error("Cannot delete admin role");
+    }
+  
     return this.db.role.delete({
       where: { id },
     });

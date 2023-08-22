@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
@@ -56,6 +57,7 @@ export class CreateUserDto {
   phone?: string;
 
   @ApiProperty({
+    required: false,
     example: '2022-01-01',
     description: 'The user date of birth',
     type: 'string',
@@ -63,6 +65,8 @@ export class CreateUserDto {
   }) @IsOptional() doB?: Date;
 
   @ApiProperty({ required: false }) @IsString() @IsOptional() alamat?: string;
-
-  @ApiProperty({ type: Boolean }) @IsBoolean() isLDAPUser: boolean;
+  
+  @Transform(({ value }) => value === 'true')
+  @ApiProperty({ type: Boolean }) 
+  @IsBoolean() isLDAPUser: boolean;
 }
