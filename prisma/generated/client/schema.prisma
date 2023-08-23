@@ -385,7 +385,7 @@ model ConfigRequest {
 
 model Config {
   id            Int             @id @default(autoincrement())
-  name          String          @unique @db.VarChar(36)
+  name          String          @unique @db.VarChar(100)
   description   String          @db.VarChar(255)
   type          ConfigType?
   value         String?         @db.VarChar(36)

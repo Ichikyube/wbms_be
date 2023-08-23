@@ -203,4 +203,18 @@ export class ConfigsController {
     return dataOut;
   }
 
+  @Post()
+  create(@Body() dto: any) {
+    return this.configsService.create(dto);
+  }
+
+  @Patch(':id')
+  updateById(@Param('id') id: number, @Body() dto: any) {
+    return this.configsService.updateById(id, dto);
+  }
+
+  @Delete(':id')
+  deleteById(@Param('id') id: number) {
+    return this.configsService.deleteById(id);
+  }
 }

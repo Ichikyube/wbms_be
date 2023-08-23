@@ -160,4 +160,89 @@ export class ConfigsService {
 
     return statusMapping;
   }
+  async create(dto: any) {
+    const dataOut = {
+      status: true,
+      message: '',
+      page: 0,
+      totalRecords: 0,
+      record: {},
+      logs: {},
+    };
+
+    try {
+      const params = {
+        data: {
+          ...dto,
+          userCreated: '',
+          userModified: '',
+        },
+      };
+
+      const record = await this.db.config.create(params);
+
+      dataOut.record = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { error };
+    }
+
+    return dataOut;
+  }
+
+  async updateById(id: number, dto: any) {
+    const dataOut = {
+      status: true,
+      message: '',
+      page: 0,
+      totalRecords: 0,
+      record: {},
+      logs: {},
+    };
+
+    try {
+      const params = {
+        where: { id },
+        data: { ...dto, userModified: '' },
+      };
+
+      const record = await this.db.config.update(params);
+
+      dataOut.record = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { error };
+    }
+
+    return dataOut;
+  }
+
+  async deleteById(id: number) {
+    const dataOut = {
+      status: true,
+      message: '',
+      page: 0,
+      totalRecords: 0,
+      record: {},
+      logs: {},
+    };
+
+    try {
+      const params = {
+        where: { id },
+        data: { isDeleted: true, userModified: '' },
+      };
+      const record = await this.db.config.update(params);
+
+      dataOut.record = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { error };
+    }
+
+    return dataOut;
+  }
 }

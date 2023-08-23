@@ -51,11 +51,10 @@ export class AuthService {
             division: true,
             position: true,
             doB: true,
-            alamat: true, 
-          }
-        }
+            alamat: true,
+          },
+        },
       },
-
     });
 
     // if user does not exist throw exception
@@ -266,7 +265,7 @@ export class AuthService {
       // 60s*15 = 15m
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: 60 * 15,
+        expiresIn: 60 * 60 * 15,
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,

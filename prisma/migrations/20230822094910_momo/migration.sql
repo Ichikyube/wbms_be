@@ -223,9 +223,6 @@ CREATE TABLE `approvers` (
 CREATE TABLE `config_approval` (
     `id` CHAR(36) NOT NULL,
     `request_id` CHAR(36) NOT NULL,
-    `lvl_1_aprrover` CHAR(36) NOT NULL,
-    `lvl_2_aprrover` CHAR(36) NULL,
-    `lvl_3_aprrover` CHAR(36) NULL,
     `lvl_1_signed` BOOLEAN NOT NULL,
     `lvl_2_signed` BOOLEAN NULL,
     `lvl_3_signed` BOOLEAN NULL,
@@ -236,8 +233,6 @@ CREATE TABLE `config_approval` (
     `date_modified` DATETIME(3) NULL,
 
     UNIQUE INDEX `config_approval_request_id_key`(`request_id`),
-    UNIQUE INDEX `config_approval_lvl_2_aprrover_key`(`lvl_2_aprrover`),
-    UNIQUE INDEX `config_approval_lvl_3_aprrover_key`(`lvl_3_aprrover`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -261,11 +256,14 @@ CREATE TABLE `config_requests` (
 -- CreateTable
 CREATE TABLE `configs` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(36) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `type` ENUM('boolean', 'string', 'number', 'bigint', 'array', 'object') NULL,
     `value` VARCHAR(36) NULL,
     `level_of_approval` INTEGER NOT NULL,
+    `status` ENUM('ACTIVE', 'DISABLED', 'PENDING', 'APPROVED', 'REJECTED') NOT NULL,
+    `start` DATETIME(3) NULL,
+    `end` DATETIME(3) NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `user_created` CHAR(36) NULL,
     `user_modified` CHAR(36) NULL,
@@ -285,7 +283,7 @@ CREATE TABLE `profiles` (
     `phone` VARCHAR(30) NULL,
     `division` VARCHAR(30) NOT NULL,
     `position` VARCHAR(30) NOT NULL,
-    `doB` DATETIME(3) NULL,
+    `date_of_birth` DATETIME(3) NULL,
     `alamat` VARCHAR(255) NULL,
     `user_created` VARCHAR(36) NULL,
     `user_modified` VARCHAR(36) NULL,
@@ -307,7 +305,7 @@ CREATE TABLE `users` (
     `hashed_password` VARCHAR(100) NOT NULL,
     `hashed_rt` VARCHAR(100) NULL,
     `is_email_verified` BOOLEAN NOT NULL DEFAULT false,
-    `is_ldap_user` BOOLEAN NOT NULL DEFAULT true,
+    `is_ldap_user` BOOLEAN NOT NULL,
     `is_disabled` BOOLEAN NOT NULL DEFAULT false,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `user_created` VARCHAR(36) NULL,
@@ -609,12 +607,48 @@ CREATE TABLE `transactions` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `_lvl1Aprrover` (
+    `A` CHAR(36) NOT NULL,
+    `B` CHAR(36) NOT NULL,
+
+    UNIQUE INDEX `_lvl1Aprrover_AB_unique`(`A`, `B`),
+    INDEX `_lvl1Aprrover_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_lvl2Aprrover` (
+    `A` CHAR(36) NOT NULL,
+    `B` CHAR(36) NOT NULL,
+
+    UNIQUE INDEX `_lvl2Aprrover_AB_unique`(`A`, `B`),
+    INDEX `_lvl2Aprrover_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_lvl3Aprrover` (
+    `A` CHAR(36) NOT NULL,
+    `B` CHAR(36) NOT NULL,
+
+    UNIQUE INDEX `_lvl3Aprrover_AB_unique`(`A`, `B`),
+    INDEX `_lvl3Aprrover_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_ApproverToConfig` (
     `A` CHAR(36) NOT NULL,
     `B` INTEGER NOT NULL,
 
     UNIQUE INDEX `_ApproverToConfig_AB_unique`(`A`, `B`),
     INDEX `_ApproverToConfig_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `_other_product` (
+    `A` CHAR(36) NOT NULL,
+    `B` CHAR(36) NOT NULL,
+
+    UNIQUE INDEX `_other_product_AB_unique`(`A`, `B`),
+    INDEX `_other_product_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
@@ -649,15 +683,6 @@ ALTER TABLE `weighbridges` ADD CONSTRAINT `weighbridges_site_id_fkey` FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE `approvers` ADD CONSTRAINT `approvers_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `config_approval` ADD CONSTRAINT `config_approval_lvl_1_aprrover_fkey` FOREIGN KEY (`lvl_1_aprrover`) REFERENCES `approvers`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `config_approval` ADD CONSTRAINT `config_approval_lvl_2_aprrover_fkey` FOREIGN KEY (`lvl_2_aprrover`) REFERENCES `approvers`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `config_approval` ADD CONSTRAINT `config_approval_lvl_3_aprrover_fkey` FOREIGN KEY (`lvl_3_aprrover`) REFERENCES `approvers`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `config_approval` ADD CONSTRAINT `config_approval_request_id_fkey` FOREIGN KEY (`request_id`) REFERENCES `config_requests`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -723,7 +748,31 @@ ALTER TABLE `transactions` ADD CONSTRAINT `transactions_origin_source_storage_ta
 ALTER TABLE `transactions` ADD CONSTRAINT `transactions_destination_sink_storage_tank_id_fkey` FOREIGN KEY (`destination_sink_storage_tank_id`) REFERENCES `storage_tanks`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `_lvl1Aprrover` ADD CONSTRAINT `_lvl1Aprrover_A_fkey` FOREIGN KEY (`A`) REFERENCES `approvers`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_lvl1Aprrover` ADD CONSTRAINT `_lvl1Aprrover_B_fkey` FOREIGN KEY (`B`) REFERENCES `config_approval`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_lvl2Aprrover` ADD CONSTRAINT `_lvl2Aprrover_A_fkey` FOREIGN KEY (`A`) REFERENCES `approvers`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_lvl2Aprrover` ADD CONSTRAINT `_lvl2Aprrover_B_fkey` FOREIGN KEY (`B`) REFERENCES `config_approval`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_lvl3Aprrover` ADD CONSTRAINT `_lvl3Aprrover_A_fkey` FOREIGN KEY (`A`) REFERENCES `approvers`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_lvl3Aprrover` ADD CONSTRAINT `_lvl3Aprrover_B_fkey` FOREIGN KEY (`B`) REFERENCES `config_approval`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `_ApproverToConfig` ADD CONSTRAINT `_ApproverToConfig_A_fkey` FOREIGN KEY (`A`) REFERENCES `approvers`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_ApproverToConfig` ADD CONSTRAINT `_ApproverToConfig_B_fkey` FOREIGN KEY (`B`) REFERENCES `configs`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_other_product` ADD CONSTRAINT `_other_product_A_fkey` FOREIGN KEY (`A`) REFERENCES `products`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_other_product` ADD CONSTRAINT `_other_product_B_fkey` FOREIGN KEY (`B`) REFERENCES `transportation_vehicles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

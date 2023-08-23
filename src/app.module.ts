@@ -39,6 +39,7 @@ import { RbacModule } from './accessControl/rbac.module';
 import { RolesService } from './accessControl/roles/roles.service';
 import { SseGateway } from './sse/sse.gateway';
 import { AppController } from './app.controller';
+import { ConfigRequestModule } from './configs/config-request/config-request.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { AppController } from './app.controller';
     DriverModule,
     TransportVehicleModule,
     FilesModule,
+    ConfigRequestModule,
   ],
   controllers: [AppController],
   providers: [
