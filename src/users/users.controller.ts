@@ -307,7 +307,7 @@ export class UsersController {
 
   async updateUserRole(
     @Param('id') userId: string,
-    @Param('id') roleId: number,
+    @Param('id') roleId: string,
     @Req() req: Request,
   ) {
     const dataOut = {

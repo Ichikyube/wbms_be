@@ -39,7 +39,7 @@ export class RolesService {
     });
   }
 
-  async getRoleById(id: number): Promise<RoleEntity | null> {
+  async getRoleById(id: string): Promise<RoleEntity | null> {
     return this.db.role.findUnique({
       where: { id },
     });
@@ -162,7 +162,7 @@ export class RolesService {
     }
   }
 
-  async findRoleById(id: number): Promise<RoleEntity | null> {
+  async findRoleById(id: string): Promise<RoleEntity | null> {
     return this.db.role.findUnique({
       where: { id },
       include: {
@@ -173,7 +173,7 @@ export class RolesService {
   }
   async updateRole(
     userId,
-    roleId: number,
+    roleId: string,
     updatedRoleData: RoleEntity,
   ): Promise<any | null> {
     try {
@@ -287,23 +287,23 @@ export class RolesService {
     }
   }
 
-  async deleteRole(id: number): Promise<RoleEntity> {
+  async deleteRole(id: string): Promise<RoleEntity> {
     const role = await this.db.role.findUnique({
       where: {
         id: id,
       },
     });
-  
-    if (role.name === "Admin Master" || role.name === "Admin System") {
-      throw new Error("Cannot delete admin role");
+
+    if (role.name === 'Admin Master' || role.name === 'Admin System') {
+      throw new Error('Cannot delete admin role');
     }
-  
+
     return this.db.role.delete({
       where: { id },
     });
   }
 
-  async assignRoleToUser(userId: string, roleId: number): Promise<any> {
+  async assignRoleToUser(userId: string, roleId: string): Promise<any> {
     return this.db.user.update({
       where: { id: userId },
       data: {

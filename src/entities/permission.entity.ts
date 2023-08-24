@@ -20,7 +20,7 @@ export class PermissionEntity {
   @ArrayNotEmpty()
   @Type(() => GrantEntity)
   readonly grants?: GrantEntity[];
-  @ApiProperty() @IsNumber() @IsNotEmpty() roleId: number;
+  @ApiProperty() @IsString() @IsNotEmpty() roleId: string;
 
   userCreated?: string;
   userModified?: string;

@@ -145,7 +145,7 @@ export class UsersService {
     }
     // save the new user in the db
     let userRole = role?.name ? role.name : 'user';
-    console.log(isLDAPUser)
+    console.log(isLDAPUser);
     user = await this.db.user
       .create({
         data: {
@@ -256,7 +256,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async updateUserRole(userId: string, roleId: number): Promise<UserEntity> {
+  async updateUserRole(userId: string, roleId: string): Promise<UserEntity> {
     try {
       return await this.db.user.update({
         where: {

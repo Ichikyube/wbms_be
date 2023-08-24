@@ -29,8 +29,8 @@ export class CreateUserDto {
   // @IsEnum(UserRole)
   @ApiProperty()
   @IsNotEmpty()
-  @IsInt()
-  readonly roleId: number;
+  @IsString()
+  readonly roleId: string;
 
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string;

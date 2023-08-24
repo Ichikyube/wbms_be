@@ -5,10 +5,9 @@ const prisma = new PrismaClient();
 async function main() {
   //   create two main roles
   const masterAdmin = await prisma.role.upsert({
-    where: { id: 1 },
+    where: { name: 'Admin Master' },
     update: {},
     create: {
-      id: 1,
       name: 'Admin Master',
       permissions: {
         create: [
@@ -64,10 +63,9 @@ async function main() {
   });
 
   const admin = await prisma.role.upsert({
-    where: { id: 2 },
+    where: { name: 'Admin System' },
     update: {},
     create: {
-      id: 2,
       name: 'Admin System',
       permissions: {
         create: [

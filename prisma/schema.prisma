@@ -395,7 +395,7 @@ model User {
   email    String @unique @db.VarChar(50)
   nik      String @unique @db.VarChar(30)
 
-  roleId         Int     @map("role_id")
+  roleId         String  @db.VarChar(36) @map("role_id")
   role           String  @db.VarChar(36)
   hashedPassword String  @map("hashed_password") @db.VarChar(100)
   hashedRT       String? @map("hashed_rt") @db.VarChar(100)
@@ -416,7 +416,7 @@ model User {
 }
 
 model Role {
-  id          Int          @id @default(autoincrement())
+  id          String  @id @default(uuid()) @db.Char(36)
   name        String       @unique @db.VarChar(255)
   permissions Permission[]
 
@@ -433,7 +433,7 @@ model Permission {
   id       String  @id @default(uuid()) @db.Char(36)
   resource String  @db.Char(36)
   grants   Grant[]
-  roleId   Int     @map("role_id")
+  roleId   String  @db.VarChar(36) @map("role_id")
   role     Role    @relation(fields: [roleId], references: [id])
 
   userCreated  String?   @map("user_created") @db.VarChar(36)
