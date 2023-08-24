@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Prisma, Transaction } from "@prisma/client";
-import { IsString, IsNotEmpty } from "class-validator";
-import { QrcodeDto } from "src/semai/dto/qrcode.dt";
+import { Prisma, Transaction } from '@prisma/client';
+import { IsString, IsNotEmpty } from 'class-validator';
+import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
 import { StorageTankEntity } from './storageTank.entity';
 import { SiteEntity } from './site.entity';
 import { DriverEntity } from './driver.entity';
@@ -9,11 +9,7 @@ import { CompanyEntity } from './company.entity';
 import { ProductEntity } from './product.entity';
 import { CustomerEntity } from './customer.entity';
 
-
-export class TransactionEntity  {
-
-  
-
+export class TransactionEntity {
   @ApiProperty({ type: String })
   id: string;
 
@@ -322,12 +318,13 @@ export class TransactionEntity  {
 
   @ApiProperty({ type: Date })
   dtModified: Date;
-  qtyTbs: number  | null;
-  qtyTbsDikirim: number  | null;
-  qtyTbsDikembalikan: number  | null;
+  qtyTbs: number | null;
+  qtyTbsDikirim: number | null;
+  qtyTbsDikembalikan: number | null;
 
-  @ApiPropertyOptional({ type: () => ProductEntity })
-  customer?: CustomerEntity  | null;
+  @ApiPropertyOptional({ type: () => CustomerEntity })
+  customer?: CustomerEntity | null;
+  
   @ApiPropertyOptional({ type: () => ProductEntity })
   product?: ProductEntity;
 
@@ -348,5 +345,4 @@ export class TransactionEntity  {
 
   @ApiPropertyOptional({ type: () => StorageTankEntity })
   destinationSinkStorageTank?: StorageTankEntity;
-
 }
