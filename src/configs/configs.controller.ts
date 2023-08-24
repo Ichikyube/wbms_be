@@ -51,16 +51,6 @@ export class ConfigsController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'configsData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.configsService.getAttributes();
-  }
-
   @Get('env')
   @UseRoles({
     resource: 'configsData',

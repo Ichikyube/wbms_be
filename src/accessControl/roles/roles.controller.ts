@@ -11,13 +11,14 @@ import {
 } from '@nestjs/common';
 import { AtGuard } from 'src/common/guards';
 import { RolesService } from './roles.service';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from 'src/entities/roles.entity';
 import { UpdateRoleAliasRequest } from 'aws-sdk/clients/iot';
 import { UpdateRoleDto } from './dto/update-role.dto';
 
 @ApiTags('Roles')
+@ApiBearerAuth()
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}

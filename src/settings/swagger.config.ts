@@ -15,21 +15,21 @@ export default class SwaggerDocumentation {
       .setDescription('Weighbridge Management System API Documentation')
       .setVersion('0.1')
       .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          in: 'header',
-        },
-        'access-token',
+        // {
+        //   type: 'http',
+        //   scheme: 'bearer',
+        //   bearerFormat: 'JWT',
+        //   in: 'header',
+        // },
+        // 'access-token',
       )
       .addTag('DNS')
-      .addSecurity('ApiKeyAuth', {
-        type: 'apiKey',
-        in: 'header',
-        name: 'Authorization',
-      })
-      .addSecurityRequirements('ApiKeyAuth')
+      // .addSecurity('ApiKeyAuth', {
+      //   type: 'apiKey',
+      //   in: 'header',
+      //   name: 'Authorization',
+      // })
+      // .addSecurityRequirements('ApiKeyAuth')
       .build();
 
     const document = SwaggerModule.createDocument(this.app, config);

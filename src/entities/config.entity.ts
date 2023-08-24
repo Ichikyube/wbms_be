@@ -1,53 +1,35 @@
-import { ConfigType, Status } from '@prisma/client';
+import { Status } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { SiteEntity } from './site.entity';
 
 export class Config {
   @ApiProperty({ type: Number })
-  id: number = undefined;
+  id: number;
 
   @ApiProperty({ type: String })
-  name: string = undefined;
+  name: string;
 
   @ApiProperty({ type: String })
-  description: string = undefined;
-
-  @ApiPropertyOptional({ enum: ConfigType, enumName: 'ConfigType' })
-  type?: ConfigType = undefined;
-
-  @ApiPropertyOptional({ type: String })
-  value?: string = undefined;
-
-  @ApiPropertyOptional({ type: String })
-  editedValue?: string = undefined;
+  description: string;
 
   @ApiProperty({ type: Number })
-  lvlOfApprvl: number = undefined;
+  lvlOfApprvl: number;
 
   @ApiProperty({ enum: Status, enumName: 'Status' })
-  status: Status = undefined;
-
-  @ApiProperty({ type: Date })
-  start: Date = undefined;
-
-  @ApiProperty({ type: Date })
-  end: Date = undefined;
-
-  @ApiProperty({ isArray: true, type: () => SiteEntity })
-  sites: SiteEntity[] = undefined;
+  status: Status;
 
   @ApiProperty({ type: Boolean })
-  isDeleted: boolean = undefined;
+  isDeleted: boolean;
 
   @ApiProperty({ type: String })
-  userCreated: string = undefined;
+  userCreated: string;
 
   @ApiProperty({ type: String })
-  userModified: string = undefined;
+  userModified: string;
 
   @ApiProperty({ type: Date })
-  dtCreated: Date = undefined;
+  dtCreated: Date;
 
   @ApiProperty({ type: Date })
-  dtModified: Date = undefined;
+  dtModified: Date;
 }

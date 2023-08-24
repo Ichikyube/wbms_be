@@ -11,15 +11,6 @@ export class ConfigsService {
     private config: ConfigService,
   ) {}
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Config',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
-
   async getEnv() {
     const dataOut = {
       status: true,

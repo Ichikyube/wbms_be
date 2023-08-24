@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
+  // output   = "./generated/client"
 }
 
 // generator migration {
@@ -302,52 +302,25 @@ model Weighbridge {
   @@map("weighbridges")
 }
 
-enum ConfigType {
-  boolean
-  string
-  number
-  bigint
-  array
-  object
-}
-
-enum Status {
+enum Status {F
   ACTIVE
   DISABLED
+}
+
+enum RequestStatus {
   PENDING
   APPROVED
   REJECTED
 }
 
-model Approver {
-  id     String  @id @default(uuid()) @db.Char(36)
-  userId String  @unique @db.Char(36) @map("user_id")
-  user   User    @relation(fields: [userId], references: [id])
-  name   String
-  lvl    String
-  active Boolean
-
-  isDeleted    Boolean   @default(false) @map("is_deleted")
-  userCreated  String?   @map("user_created") @db.Char(36)
-  userModified String?   @map("user_modified") @db.Char(36)
-  dtCreated    DateTime  @default(now()) @map("date_created")
-  dtModified   DateTime? @updatedAt @map("date_modified")
-
-  lvl1Request ConfigApproval[] @relation(name: "lvl1Aprrover")
-  lvl2Request ConfigApproval[] @relation(name: "lvl2Aprrover")
-  lvl3Request ConfigApproval[] @relation(name: "lvl3Aprrover")
-  config      Config[]
-  @@map("approvers")
-}
-
 //jika config direquest, lihat brapa lvlnya, minta approval, status brubah
 model ConfigApproval {
-  id          String  @id @default(uuid()) @db.Char(36)
-  requestId   String  @unique @db.Char(36)  @map("request_id")
+  id        String @id @default(uuid()) @db.Char(36)
+  requestId String @unique @map("request_id") @db.Char(36)
 
-  lvl1Signed Boolean  @map("lvl_1_signed")
-  lvl2Signed Boolean? @map("lvl_2_signed")
-  lvl3Signed Boolean? @map("lvl_3_signed")
+  lvl1Signed String  @map("lvl_1_signed")
+  lvl2Signed String? @map("lvl_2_signed")
+  lvl3Signed String? @map("lvl_3_signed")
 
   isDeleted    Boolean   @default(false) @map("is_deleted")
   userCreated  String?   @map("user_created") @db.Char(36)
@@ -355,22 +328,17 @@ model ConfigApproval {
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  lvl1Aprrover Approver[]    @relation(name: "lvl1Aprrover")
-  lvl2Approver Approver[]    @relation(name: "lvl2Aprrover")
-  lvl3Aprrover Approver[]    @relation(name: "lvl3Aprrover")
-  request      ConfigRequest @relation(fields: [requestId], references: [id])
+  request ConfigRequest @relation(fields: [requestId], references: [id])
 
   @@map("config_approval")
 }
 
 model ConfigRequest {
-  id          String    @id @default(uuid()) @db.Char(36)
-  configId    Int       @map("config_id")
-
-  editedValue String?   @db.VarChar(36) @map("edited_value")
-  status      Status
-  start       DateTime?
-  end         DateTime?
+  id       String        @id @default(uuid()) @db.Char(36)
+  configId Int           @map("config_id")
+  status   RequestStatus
+  start    DateTime?
+  end      DateTime?
 
   isDeleted    Boolean         @default(false) @map("is_deleted")
   userCreated  String?         @map("user_created") @db.Char(36)
@@ -384,19 +352,12 @@ model ConfigRequest {
 }
 
 model Config {
-  id            Int             @id @default(autoincrement())
-  name          String          @unique @db.VarChar(100)
-  description   String          @db.VarChar(255)
-  type          ConfigType?
-  value         String?         @db.VarChar(36)
-  lvlOfApprvl   Int             @map("level_of_approval")
+  id          Int    @id @default(autoincrement())
+  name        String @unique @db.VarChar(100)
+  description String @db.VarChar(255)
+  lvlOfApprvl Int    @map("level_of_approval")
   status      Status
-  start       DateTime?
-  end         DateTime?
 
-  approver      Approver[]
-  
-  // sites        Site[]
   isDeleted     Boolean         @default(false) @map("is_deleted")
   userCreated   String?         @map("user_created") @db.Char(36)
   userModified  String?         @map("user_modified") @db.Char(36)
@@ -408,31 +369,31 @@ model Config {
 }
 
 model Profile {
-  id          String @id @default(uuid()) @db.Char(36)
-  userId      String  @db.VarChar(36) @unique @map("user_id")
-  name        String  @db.VarChar(50)
-  profilePic  String?  @db.VarChar(255) @map("photo")
-  phone       String? @db.VarChar(30)
-  division    String  @db.VarChar(30)
-  position    String  @db.VarChar(30)
-  doB         DateTime?  @map("date_of_birth")
-  alamat      String?  @db.VarChar(255)
+  id         String    @id @default(uuid()) @db.Char(36)
+  userId     String    @unique @map("user_id") @db.VarChar(36)
+  name       String    @db.VarChar(50)
+  profilePic String?   @map("photo") @db.VarChar(255)
+  phone      String?   @db.VarChar(30)
+  division   String    @db.VarChar(30)
+  position   String    @db.VarChar(30)
+  doB        DateTime? @map("date_of_birth")
+  alamat     String?   @db.VarChar(255)
 
   userCreated  String?   @map("user_created") @db.VarChar(36)
   userModified String?   @map("user_modified") @db.VarChar(36)
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  user        User    @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("profiles")
 }
 
 model User {
   id       String @id @default(uuid()) @db.Char(36)
-  username String  @unique @db.VarChar(30)
-  email    String  @unique @db.VarChar(50)
-  nik      String  @unique @db.VarChar(30)
+  username String @unique @db.VarChar(30)
+  email    String @unique @db.VarChar(50)
+  nik      String @unique @db.VarChar(30)
 
   roleId         Int     @map("role_id")
   role           String  @db.VarChar(36)
@@ -449,8 +410,8 @@ model User {
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
   userRole     Role?     @relation(fields: [roleId], references: [id])
-  approver     Approver?
   profile      Profile?
+
   @@map("users")
 }
 
@@ -528,10 +489,11 @@ model Product {
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  storageTanks      StorageTank[]
-  transactions      Transaction[]
-  transportVehicles TransportVehicle[]
-  otherTransportVehicles      TransportVehicle[] @relation(name: "other_product")
+  storageTanks           StorageTank[]
+  transactions           Transaction[]
+  transportVehicles      TransportVehicle[]
+  otherTransportVehicles TransportVehicle[] @relation(name: "other_product")
+
   @@map("products")
 }
 
@@ -655,9 +617,10 @@ model TransportVehicle {
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  company Company? @relation(fields: [companyId], references: [id])
-  product Product? @relation(fields: [productId], references: [id])
-  extraProduct  Product[] @relation(name: "other_product")
+  company      Company?  @relation(fields: [companyId], references: [id])
+  product      Product?  @relation(fields: [productId], references: [id])
+  extraProduct Product[] @relation(name: "other_product")
+
   @@map("transportation_vehicles")
 }
 
