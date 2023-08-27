@@ -14,8 +14,6 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 import { UserEntity } from 'src/entities';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { now } from 'moment';
-import { Update } from 'aws-sdk/clients/dynamodb';
 
 @Injectable()
 export class UsersService {

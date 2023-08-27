@@ -6,13 +6,6 @@ generator client {
   // output   = "./generated/client"
 }
 
-// generator migration {
-//   provider = "prisma-migrate-shim"
-//   output   = "./prisma"
-
-//   binaryTargets = ["native"]
-// }
-
 // generator prismaClassGenerator {
 //     provider = "prisma-class-generator"
 //     output   = "../src/generated/prisma-class"
@@ -302,7 +295,7 @@ model Weighbridge {
   @@map("weighbridges")
 }
 
-enum Status {F
+enum Status {
   ACTIVE
   DISABLED
 }
@@ -313,6 +306,14 @@ enum RequestStatus {
   REJECTED
 }
 
+model ConfigAdminList {
+  id           Int    @id @default(autoincrement())
+  lvlMap       Json @map("lvl_map")
+  userCreated  String?   @map("user_created") @db.Char(36)
+  dtCreated    DateTime  @default(now()) @map("date_created")
+  
+  @@map("config_admin_list")
+}
 //jika config direquest, lihat brapa lvlnya, minta approval, status brubah
 model ConfigApproval {
   id        String @id @default(uuid()) @db.Char(36)

@@ -10,7 +10,7 @@ export class ConfigRequestService {
     private db: DbService,
     private config: ConfigService,
   ) {}
-
+  
   async getAllRequests() {
     return this.db.configRequest.findMany();
   }

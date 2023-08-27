@@ -1,0 +1,40 @@
+import { Injectable } from '@nestjs/common';
+import { DbService } from 'src/db/db.service';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class ConfigRequestsAdminService {
+  constructor(
+    private db: DbService,
+    private config: ConfigService,
+  ) {}
+  async createRequestAdminList(lvlMap:object) {
+    const dataOut = {
+      status: true,
+      message: '',
+      page: 0,
+      totalRecords: 0,
+      record: {},
+      logs: {},
+    };
+
+    try {
+      const params = {
+        data: {
+          lvlMap,
+        },
+      };
+
+      const record = await this.db.configAdminList.create(params);
+
+      dataOut.record = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { error };
+    }
+
+    return dataOut;
+  }
+
+}

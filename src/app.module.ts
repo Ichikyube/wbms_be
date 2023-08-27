@@ -40,6 +40,7 @@ import { RolesService } from './accessControl/roles/roles.service';
 import { SseGateway } from './sse/sse.gateway';
 import { AppController } from './app.controller';
 import { ConfigRequestModule } from './configs/config-request/config-request.module';
+import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { ConfigRequestModule } from './configs/config-request/config-request.mod
     TransportVehicleModule,
     FilesModule,
     ConfigRequestModule,
+    ConfigRequestsAdminModule,
   ],
   controllers: [AppController],
   providers: [
