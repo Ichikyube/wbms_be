@@ -7,9 +7,12 @@ export class ConfigRequestsAdminController {
   
   @Post()
   async createAdminList(
-    @Body('groupMapping') lvlMap: object,
+    @Body('groupMap') lvlMap: object,
   ) {
     return this.configRequestsAdminService.createRequestAdminList(lvlMap);
   }
-
+  @Get()
+  async getAdminList() {
+    return this.configRequestsAdminService.getRequestAdminList();
+  }
 }

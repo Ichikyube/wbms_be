@@ -1,15 +1,13 @@
-import {Status} from '@prisma/client'
+import {RequestStatus, Status} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 
 
 
 
 export class CreateConfigRequestDto {
-    editedValue?: string;
-    @ApiProperty({ enum: Status})
-    status: Status;
-    start?: Date;
-    end?: Date;
-    userCreated?: string;
-    userModified?: string;
+    @ApiProperty({ enum: RequestStatus})
+    status: string;
+    @ApiProperty() start?: Date;
+    @ApiProperty() end?: Date;
+    @ApiProperty() configId: number;
 }

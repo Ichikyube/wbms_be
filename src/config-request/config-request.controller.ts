@@ -12,13 +12,20 @@ import { CreateConfigRequestDto } from './dto/create-config-request.dto';
 import { UpdateConfigRequestDto } from './dto/update-config-request.dto';
 import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Configs-Request')
-@Controller('config-request')
+@Controller('config-requests')
 export class ConfigRequestController {
   constructor(private readonly requestService: ConfigRequestService) {}
 
   @Get()
   async getAllRequests() {
     return this.requestService.getAllRequests();
+  }
+  @Post('')
+  async createConfigRequest(
+    @Body() dto: CreateConfigRequestDto,
+  ) {
+    console.log(dto);
+    return this.requestService.createRequest(dto);
   }
 
   @Patch(':id/approve')

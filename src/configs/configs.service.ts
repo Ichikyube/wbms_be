@@ -82,12 +82,17 @@ export class ConfigsService {
     return record;
   }
 
-  async editById(id: number, dto: any) {
+  async editById(id: number, dto: any, userId: string) {
+    const data = {
+      lvlOfApprvl : parseInt(dto.lvlOfApprvl),
+      status: dto.status,
+      userModified: userId
+    }
     const params = {
       where: { id },
-      data: { ...dto, userModified: '' },
+      data
     };
-
+    
     const record = await this.db.config.update(params);
 
     return record;
@@ -173,34 +178,6 @@ export class ConfigsService {
       };
 
       const record = await this.db.config.create(params);
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
-  }
-
-  async updateById(id: number, dto: any) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
-    };
-
-    try {
-      const params = {
-        where: { id },
-        data: { ...dto, userModified: '' },
-      };
-
-      const record = await this.db.config.update(params);
 
       dataOut.record = record;
     } catch (error) {

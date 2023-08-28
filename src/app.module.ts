@@ -39,7 +39,7 @@ import { RbacModule } from './accessControl/rbac.module';
 import { RolesService } from './accessControl/roles/roles.service';
 import { SseGateway } from './sse/sse.gateway';
 import { AppController } from './app.controller';
-import { ConfigRequestModule } from './configs/config-request/config-request.module';
+import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
 
 @Module({

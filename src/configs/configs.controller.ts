@@ -180,8 +180,7 @@ export class ConfigsController {
 
     try {
       const userId = ''; //req.user['id'];
-      console.log(id);
-      const record = await this.configsService.editById(id, dto);
+      const record = await this.configsService.editById(id, dto, userId);
 
       dataOut.data.config = record;
     } catch (error) {
@@ -196,11 +195,6 @@ export class ConfigsController {
   @Post()
   create(@Body() dto: any) {
     return this.configsService.create(dto);
-  }
-
-  @Patch(':id')
-  updateById(@Param('id') id: number, @Body() dto: any) {
-    return this.configsService.updateById(id, dto);
   }
 
   @Delete(':id')

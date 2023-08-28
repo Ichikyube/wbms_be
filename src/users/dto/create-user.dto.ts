@@ -25,13 +25,12 @@ export class CreateUserDto {
     message: 'Panjang password minimal 8 karakter dan maksimal 20 karakter.',
   })
   password: string = '12345678';
-  
+
   // @IsEnum(UserRole)
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
   readonly roleId: string;
-
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
 
@@ -62,11 +61,16 @@ export class CreateUserDto {
     description: 'The user date of birth',
     type: 'string',
     format: 'date',
-  }) @IsOptional() doB?: Date;
+  })
+  @IsOptional()
+  doB?: Date;
 
   @ApiProperty({ required: false }) @IsString() @IsOptional() alamat?: string;
-  
-  @Transform(({ value }) => value === 'true')
-  @ApiProperty({ type: Boolean }) 
-  @IsBoolean() isLDAPUser: boolean;
+
+  @Transform(({ obj, key }) => {
+    return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+  })
+  @ApiProperty({ type: Boolean })
+  @IsBoolean()
+  isLDAPUser: boolean;
 }
