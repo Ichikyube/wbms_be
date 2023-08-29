@@ -18,23 +18,21 @@ export class ConfigRequestController {
 
   @Get()
   async getAllRequests() {
-    return this.requestService.getAllRequests();
+    return await this.requestService.getAllRequests();
   }
   @Post('')
-  async createConfigRequest(
-    @Body() dto: CreateConfigRequestDto,
-  ) {
+  async createConfigRequest(@Body() dto: CreateConfigRequestDto) {
     console.log(dto);
-    return this.requestService.createRequest(dto);
+    return await this.requestService.createRequest(dto);
   }
 
   @Patch(':id/approve')
   async approveRequest(@Param('id') id: string) {
-    return this.requestService.approveRequest(id);
+    return await this.requestService.approveRequest(id);
   }
 
   @Patch(':id/reject')
   async rejectRequest(@Param('id') id: string) {
-    return this.requestService.rejectRequest(id);
+    return await this.requestService.rejectRequest(id);
   }
 }

@@ -621,6 +621,7 @@ model TransportVehicle {
   company      Company?  @relation(fields: [companyId], references: [id])
   product      Product?  @relation(fields: [productId], references: [id])
   extraProduct Product[] @relation(name: "other_product")
+  transaction  Transaction[]
 
   @@map("transportation_vehicles")
 }
@@ -765,6 +766,7 @@ model Transaction {
   product     Product?  @relation(fields: [productId], references: [id])
   customer    Customer? @relation(fields: [customerId], references: [id])
   transporter Company?  @relation(fields: [transporterId], references: [id])
+  transportVehicle TransportVehicle?  @relation(fields: [transportVehicleId], references: [id])
   driver      Driver?   @relation(fields: [driverId], references: [id])
 
   originSite      Site? @relation(fields: [originSiteId], references: [id], name: "transactionOriginSite")

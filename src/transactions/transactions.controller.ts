@@ -27,16 +27,6 @@ export class TransactionController {
   getAll() {
     return this.transactionService.getAll();
   }
-
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.transactionService.getAttributes();;
-  }
   
   @Get(':id')
   @UseRoles({

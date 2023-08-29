@@ -1,1 +1,150 @@
-{"anyuser":{},"Admin System":{"user":{"update:any":["*"],"delete:any":["*"],"read:any":["*"],"create:any":["*"]}},"Admin Master":{"configs":{"read:any":["*"],"create:any":["*"],"delete:any":["*"],"update:any":["*"]},"users":{"create:any":["*"],"update:any":["*"],"delete:any":["*"],"read:any":["*"]}}}
+{
+  "NA": {
+    "Product": {
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "Company": {
+      "create:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "update:own": ["*", "!"]
+    },
+    "Mill": {
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    }
+  },
+  "Gan": {
+    "Driver": {
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "Customer": {
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "Company": {
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    }
+  },
+  "anyuser": {
+    "StorageTank": {
+      "read:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    },
+    "Weighbridge": {
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    },
+    "Company": {
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "Driver": {
+      "delete:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "Transaction": {
+      "update:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    },
+    "Site": {
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "TransportVehicle": {
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"]
+    },
+    "Mill": {
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"]
+    },
+    "Customer": {
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"]
+    },
+    "Product": {
+      "delete:own": ["*", "!"],
+      "read:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "create:own": ["*", "!"]
+    }
+  },
+  "Admin System": {
+    "user": {
+      "update:any": ["*"],
+      "delete:any": ["*"],
+      "read:any": ["*"],
+      "create:any": ["*"]
+    }
+  },
+  "Admin Master": {
+    "configs": {
+      "read:any": ["*"],
+      "create:any": ["*"],
+      "delete:any": ["*"],
+      "update:any": ["*"]
+    },
+    "users": {
+      "create:any": ["*"],
+      "update:any": ["*"],
+      "delete:any": ["*"],
+      "read:any": ["*"]
+    }
+  }
+}
+
+{
+  "bonTripNo": "P041230829110156",
+  "customerId": "4cf831a8-9276-4101-b260-e9ef96573a49",
+  "customername": "0123",
+  "deliveryOrderNo": "435",
+  "driverId": "ec4720b2-2a13-450b-80df-16c472099c45",
+  "driverName": "JOKO",
+  "originWeighInKg": 1000,
+  "originWeighInTimestamp": "2023-08-29T04:02:10.629Z",
+  "productId": "35b238cf-eca1-4aae-9dd6-986bd38ce303",
+  "productName": "PUPUK",
+  "progressStatus": 20,
+  "tType": "1",
+  "transportVehicleId": "dd7e6680-fa53-4132-9d62-895de12df195",
+  "transportVehiclePlateNo": "10201218",
+  "transportVehicleSccModel": 552,
+  "transporterCompanyName": "PT. SURYA DELI",
+  "transporterId": "d866e74d-204e-47d1-8c2f-ee80d76611a3"
+  }
+
+admin System
+admin HC
+ADMIN IT

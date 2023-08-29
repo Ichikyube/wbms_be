@@ -48,14 +48,6 @@ export class TransactionService {
     return dataOut;
   }
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Transaction',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
   async searchMany(query: any) {
     const dataOut = {
       status: true,
@@ -284,7 +276,7 @@ export class TransactionService {
     return dataOut;
   }
 
-  async create(createTransactionDto: CreateTransactionDto) {
+  async create(dto: CreateTransactionDto) {
     const dataOut = {
       status: true,
       message: '',
@@ -296,7 +288,7 @@ export class TransactionService {
 
     try {
       console.log('create new data:');
-      console.log(createTransactionDto);
+      console.log(dto);
       // const product
       // const transporter
       // const driver
@@ -305,11 +297,43 @@ export class TransactionService {
       // const originSourceStorageTank
       // const destinationSinkStorageTank
       const userId = '';
+      const arr = {
+        'productId':'product',
+        'customerId':'customer',
+        'driverId':'driver',
+        'transporterId':'transporter',
+        'transportVehicleId':'transportVehicle',
+        'originSiteId':'originSite',
+        'destinationSiteId':'destinationSite',
+        'originSourceStorageTankId':'originSourceStorageTank',
+        'destinationSinkStorageTankId':'destinationSinkStorageTank'
+      };
+      let filteredDto: any = {};
+      let filteredData: any = {};
+      
+      for (const prop in dto) {
+        if (Object.keys(arr).includes(prop)) {
+          filteredDto[prop] = dto[prop];
+        } else filteredData[prop] = dto[prop];
+      }
+      let mappedArray={};
+      for (const prop in filteredDto) {
+        mappedArray[arr[prop]]= {
+          connect: {
+            id:  filteredDto[prop],
+          },
+        }
+      }
+
+      
       const data = {
-        ...createTransactionDto,
+        ...filteredData,
+        ...mappedArray,
         userCreated: userId,
         userModified: '',
       };
+      console.log(mappedArray);
+      console.log(data);
       const record = await this.db.transaction.create({
         data,
       });
