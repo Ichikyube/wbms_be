@@ -6,12 +6,21 @@ import {
   Controller,
   Patch,
   Query,
+  Delete,
+  Req,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { UseRoles } from 'nest-access-control';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { TransactionEntity } from 'src/entities';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -27,7 +36,7 @@ export class TransactionController {
   getAll() {
     return this.transactionService.getAll();
   }
-  
+
   @Get(':id')
   @UseRoles({
     resource: 'transactionsData',
@@ -104,7 +113,42 @@ export class TransactionController {
     action: 'update',
     possession: 'own',
   })
+  @ApiOkResponse({
+    description: 'Transaction has been successfully updated.',
+    type: UpdateTransactionDto,
+  })
   updateById(@Param('id') id: string, @Body() dto: UpdateTransactionDto) {
     return this.transactionService.updateById(id, dto);
+  }
+
+  @Delete(':id')
+  @UseRoles({
+    resource: 'transactionsData',
+    action: 'delete',
+    possession: 'own',
+  })
+  @ApiOkResponse({ description: 'Transaction has been successfully deleted.' })
+  @ApiNotFoundResponse({ description: 'Transaction not found.' })
+  async deleteById(@Param('id') id: string, @Req() req: Request) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        id,
+      },
+      logs: {},
+    };
+
+    try {
+      const userId = req.user['id'];
+      await this.transactionService.deleteById(id, userId);
+      dataOut.message = `Transaction with id: '${id}' has successfully deleted`;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, reqBody: id, error };
+    }
+
+    return dataOut;
   }
 }

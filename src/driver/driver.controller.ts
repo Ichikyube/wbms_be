@@ -328,8 +328,7 @@ export class DriverController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
-      console.log(id);
+      const userId = req.user['id'];
       const record = await this.driverService.updateById(id, dto, userId);
 
       dataOut.data.driver = record;
@@ -348,7 +347,6 @@ export class DriverController {
     action: 'delete',
     possession: 'own',
   })
-  @ApiCreatedResponse({ type: DriverEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,

@@ -298,34 +298,33 @@ export class TransactionService {
       // const destinationSinkStorageTank
       const userId = '';
       const arr = {
-        'productId':'product',
-        'customerId':'customer',
-        'driverId':'driver',
-        'transporterId':'transporter',
-        'transportVehicleId':'transportVehicle',
-        'originSiteId':'originSite',
-        'destinationSiteId':'destinationSite',
-        'originSourceStorageTankId':'originSourceStorageTank',
-        'destinationSinkStorageTankId':'destinationSinkStorageTank'
+        productId: 'product',
+        customerId: 'customer',
+        driverId: 'driver',
+        transporterId: 'transporter',
+        transportVehicleId: 'transportVehicle',
+        originSiteId: 'originSite',
+        destinationSiteId: 'destinationSite',
+        originSourceStorageTankId: 'originSourceStorageTank',
+        destinationSinkStorageTankId: 'destinationSinkStorageTank',
       };
       let filteredDto: any = {};
       let filteredData: any = {};
-      
+
       for (const prop in dto) {
         if (Object.keys(arr).includes(prop)) {
           filteredDto[prop] = dto[prop];
         } else filteredData[prop] = dto[prop];
       }
-      let mappedArray={};
+      let mappedArray = {};
       for (const prop in filteredDto) {
-        mappedArray[arr[prop]]= {
+        mappedArray[arr[prop]] = {
           connect: {
-            id:  filteredDto[prop],
+            id: filteredDto[prop],
           },
-        }
+        };
       }
 
-      
       const data = {
         ...filteredData,
         ...mappedArray,
@@ -382,6 +381,17 @@ export class TransactionService {
     }
 
     return dataOut;
+  }
+
+  async deleteById(id: string, userId: string) {
+    const params = {
+      where: { id },
+      data: { isDeleted: true, userModified: userId },
+    };
+
+    const record = await this.db.transaction.update(params);
+
+    return record;
   }
 
   private copyQrToTransaction(dto: QrcodeDto, tType): CreateTransactionDto {
