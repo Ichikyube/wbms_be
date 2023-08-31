@@ -32,6 +32,9 @@ export class TransactionService {
 
     try {
       const records = await this.db.transaction.findMany({
+        where: {
+          isDeleted: false,
+        },
         orderBy: [
           {
             dtCreated: 'desc',

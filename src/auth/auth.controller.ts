@@ -113,11 +113,12 @@ export class AuthController {
       const { tokens, user } = await this.authService.signin(dto, res);
       const { name, profilePic, division, position, phone, doB, alamat } =
         user.profile;
-      const { username, email, role } = user;
+      const { id, username, email, role } = user;
       dataOut.data.tokens = tokens;
       dataOut.data.user = user;
 
       dataOut.data.user = {
+        id,
         username,
         email,
         role,
