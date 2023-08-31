@@ -41,6 +41,8 @@ import { SseGateway } from './sse/sse.gateway';
 import { AppController } from './app.controller';
 import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
+import { ConfigApprovalModule } from './config-approval/config-approval.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -81,6 +83,8 @@ import { ConfigRequestsAdminModule } from './config-requests-admin/config-reques
     FilesModule,
     ConfigRequestModule,
     ConfigRequestsAdminModule,
+    ConfigApprovalModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [

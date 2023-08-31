@@ -314,7 +314,7 @@ model ConfigAdminList {
   
   @@map("config_admin_list")
 }
-//jika config direquest, lihat brapa lvlnya, minta approval, status brubah
+
 model ConfigApproval {
   id        String @id @default(uuid()) @db.Char(36)
   requestId String @unique @map("request_id") @db.Char(36)
@@ -323,9 +323,6 @@ model ConfigApproval {
   lvl2Signed String? @map("lvl_2_signed")
   lvl3Signed String? @map("lvl_3_signed")
 
-  isDeleted    Boolean   @default(false) @map("is_deleted")
-  userCreated  String?   @map("user_created") @db.Char(36)
-  userModified String?   @map("user_modified") @db.Char(36)
   dtCreated    DateTime  @default(now()) @map("date_created")
   dtModified   DateTime? @updatedAt @map("date_modified")
 
@@ -333,7 +330,7 @@ model ConfigApproval {
 
   @@map("config_approval")
 }
-
+//jika level lebih dari 1 maka buat config Approval
 model ConfigRequest {
   id       String        @id @default(uuid()) @db.Char(36)
   configId Int           @map("config_id")
@@ -367,6 +364,13 @@ model Config {
   ConfigRequest ConfigRequest[]
 
   @@map("configs")
+}
+
+model Notification {
+  id         String    @id @default(uuid()) @db.Char(36)
+  message    String
+  isReaded   Boolean  @default(false)
+  dtCreated  DateTime @default(now())    
 }
 
 model Profile {

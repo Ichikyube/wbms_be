@@ -26,13 +26,4 @@ export class ConfigRequestController {
     return await this.requestService.createRequest(dto);
   }
 
-  @Patch(':id/approve')
-  async approveRequest(@Param('id') id: string) {
-    return await this.requestService.approveRequest(id);
-  }
-
-  @Patch(':id/reject')
-  async rejectRequest(@Param('id') id: string) {
-    return await this.requestService.rejectRequest(id);
-  }
 }

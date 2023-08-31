@@ -12,16 +12,30 @@ export class ConfigRequestService {
     private config: ConfigService,
   ) {}
   async createRequest(dto: CreateConfigRequestDto) {
-    const data = {
+    const config = await this.db.config.findFirst({
+      where: { id: dto.configId },
+    });
+    const otherData = {
       config: {
         connect: {
-          id: dto.configId,
+          id: config.id,
         },
       },
       status: RequestStatus.PENDING,
       start: dto.start,
       end: dto.end,
     };
+    const approval = {
+      lvl1Signed: '',
+    };
+    const data =
+      config.lvlOfApprvl > 1
+        ? {
+            ...otherData,
+            approval: { create: approval },
+          }
+        : otherData;
+
     return this.db.configRequest.create({ data });
   }
 
@@ -34,22 +48,8 @@ export class ConfigRequestService {
         },
       ],
       include: {
-        config:true
-      }
-    });
-  }
-
-  async approveRequest(requestId: string) {
-    return this.db.configRequest.update({
-      where: { id: requestId },
-      data: { status: RequestStatus.APPROVED },
-    });
-  }
-
-  async rejectRequest(requestId: string) {
-    return this.db.configRequest.update({
-      where: { id: requestId },
-      data: { status: RequestStatus.REJECTED },
+        config: true,
+      },
     });
   }
 }
