@@ -63,9 +63,9 @@ export class MillsController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.millsService.getAttributes();;
+    return await this.millsService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'millsData',
@@ -293,7 +293,7 @@ export class MillsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.millsService.create(dto, userId);
 
       dataOut.data.mill = record;
@@ -328,7 +328,7 @@ export class MillsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.millsService.updateById(id, dto, userId);
 
@@ -360,7 +360,7 @@ export class MillsController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.millsService.deleteById(id, userId);
 
       dataOut.data.mill = record;

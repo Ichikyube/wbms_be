@@ -97,9 +97,9 @@ export class SitesController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.sitesService.getAttributes();;
+    return await this.sitesService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'sitesData',
@@ -327,7 +327,7 @@ export class SitesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.sitesService.create(dto, userId);
 
       dataOut.data.site = record;
@@ -362,7 +362,7 @@ export class SitesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.sitesService.updateById(id, dto, userId);
 
       dataOut.data.site = record;
@@ -393,7 +393,7 @@ export class SitesController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.sitesService.deleteById(id, userId);
 
       dataOut.data.site = record;

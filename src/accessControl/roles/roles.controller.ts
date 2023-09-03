@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   ValidationPipe,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { RolesService } from './roles.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -33,7 +35,7 @@ export class RolesController {
 
   @Post()
   @ApiCreatedResponse({ type: RoleEntity })
-  async createRole(@Body(new ValidationPipe()) dto: CreateRoleDto) {
+  async createRole(@Body(new ValidationPipe()) dto: CreateRoleDto, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -44,7 +46,7 @@ export class RolesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.rolesService.createRole(dto, userId);
 
       dataOut.data.role = record;
@@ -62,6 +64,7 @@ export class RolesController {
   async updateRole(
     @Param() { id },
     @Body(new ValidationPipe()) params: UpdateRoleDto,
+    @Req() req: Request
   ) {
     const dataOut = {
       status: true,
@@ -73,7 +76,7 @@ export class RolesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.rolesService.updateRole(userId, id, params);
 
       dataOut.data.role = record;

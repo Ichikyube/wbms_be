@@ -63,9 +63,9 @@ export class ProductGroupsController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.productGroupsService.getAttributes();;
+    return await this.productGroupsService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'productGroupsData',
@@ -293,7 +293,7 @@ export class ProductGroupsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.productGroupsService.create(dto, userId);
 
       dataOut.data.productGroup = record;
@@ -328,7 +328,7 @@ export class ProductGroupsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.productGroupsService.updateById(
         id,
@@ -364,7 +364,7 @@ export class ProductGroupsController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.productGroupsService.deleteById(id, userId);
 
       dataOut.data.productGroup = record;

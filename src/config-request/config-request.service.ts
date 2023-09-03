@@ -11,30 +11,22 @@ export class ConfigRequestService {
     private db: DbService,
     private config: ConfigService,
   ) {}
+
   async createRequest(dto: CreateConfigRequestDto) {
     const config = await this.db.config.findFirst({
       where: { id: dto.configId },
     });
-    const otherData = {
+    const data = {
       config: {
         connect: {
           id: config.id,
         },
       },
+      approval: [],
       status: RequestStatus.PENDING,
       start: dto.start,
       end: dto.end,
     };
-    const approval = {
-      lvl1Signed: '',
-    };
-    const data =
-      config.lvlOfApprvl > 1
-        ? {
-            ...otherData,
-            approval: { create: approval },
-          }
-        : otherData;
 
     return this.db.configRequest.create({ data });
   }
@@ -51,5 +43,69 @@ export class ConfigRequestService {
         config: true,
       },
     });
+  }
+
+  async rejectRequest(userId: string, requestId: string) {
+    const configRequest = await this.db.configRequest.findUnique({
+      where: { id: requestId },
+      include: { config: { select: { lvlOfApprvl: true } } },
+    });
+    if (configRequest.status === RequestStatus.REJECTED) return;
+    const signList = JSON.parse(JSON.stringify(configRequest.approval));
+    signList.push(userId);
+    return this.db.configRequest.update({
+      where: { id: requestId },
+      data: {
+        status: RequestStatus.REJECTED,
+        approval: signList,
+      },
+    });
+  }
+
+  /**
+   * setiap kali approval
+   * apabila approved, maka approval masuk ke level kedua,
+   * notifikasi masuk ke PJ2 untuk segera memberi response,
+   * Hanya apabila approval di semua level approve,
+   * maka status request berubah menjadi Approved,
+   */
+  async approveRequest(userId: string, requestId: string) {
+    const lvl = {
+      1: 'PJ1',
+      2: 'PJ2',
+      3: 'PJ3',
+    };
+    const result = await this.db.configAdminList
+      .findFirst({
+        orderBy: { dtCreated: 'desc' },
+      })
+      .then((data) => JSON.parse(JSON.stringify(data)));
+    const { lvlMap } = result;
+    const userLvl = lvlMap[userId];
+    const configRequest = await this.db.configRequest.findUnique({
+      where: { id: requestId },
+      include: { config: { select: { lvlOfApprvl: true } } },
+    });
+    const configLvl = configRequest.config.lvlOfApprvl;
+    const signList = JSON.parse(JSON.stringify(configRequest.approval));
+    const newList = [...signList, userId];
+    const currentLevel = signList.length + 1;
+    if (userLvl !== lvl[currentLevel]) return console.log('false approver');
+    const data =
+      currentLevel < configLvl
+        ? {
+            approval: newList,
+          }
+        : {
+            status: RequestStatus.APPROVED,
+            approval: newList,
+          };
+    try {
+      await this.db.configRequest.update({
+        where: { id: requestId },
+        data,
+      });
+      //sendNotification
+    } catch (e) {}
   }
 }

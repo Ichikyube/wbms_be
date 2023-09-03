@@ -4,11 +4,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   //   create two main roles
-  const masterAdmin = await prisma.role.upsert({
-    where: { name: 'Admin Master' },
-    update: {},
+  const adminIT = await prisma.role.upsert({
+    where: { name: 'adminIT' },
+    update: {description: 'Admin IT'},
     create: {
-      name: 'Admin Master',
+      name: 'adminIT',
+      description: 'Admin IT',
       permissions: {
         create: [
           {
@@ -62,11 +63,70 @@ async function main() {
     },
   });
 
-  const admin = await prisma.role.upsert({
-    where: { name: 'Admin System' },
-    update: {},
+  const adminSys = await prisma.role.upsert({
+    where: { name: 'admin_system' },
+    update: {description: 'Admin System'},
     create: {
-      name: 'Admin System',
+      name: 'admin_system',
+      description: 'Admin System',
+      permissions: {
+        create: [
+          {
+            resource: 'user',
+            grants: {
+              create: [
+                {
+                  action: 'read',
+                  possession: 'own',
+                },
+                {
+                  action: 'create',
+                  possession: 'own',
+                },
+                {
+                  action: 'update',
+                  possession: 'own',
+                },
+                {
+                  action: 'delete',
+                  possession: 'own',
+                },
+              ],
+            },
+          },
+          {
+            resource: 'user',
+            grants: {
+              create: [
+                {
+                  action: 'read',
+                  possession: 'any',
+                },
+                {
+                  action: 'create',
+                  possession: 'any',
+                },
+                {
+                  action: 'update',
+                  possession: 'any',
+                },
+                {
+                  action: 'delete',
+                  possession: 'any',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  });
+  const adminHC = await prisma.role.upsert({
+    where: { name: 'adminHC' },
+    update: {description: 'Admin HC'},
+    create: {
+      name: 'adminHC',
+      description: 'Admin HC',
       permissions: {
         create: [
           {

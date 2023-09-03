@@ -43,7 +43,6 @@ export class ConfigsService {
 
   async getAll() {
     const records = await this.db.config.findMany({
-      where: { isDeleted: false },
       orderBy: [
         {
           name: 'desc',
@@ -58,7 +57,6 @@ export class ConfigsService {
     const records = await this.db.config.findMany({
       where: {
         ...query,
-        isDeleted: false,
       },
     });
 
@@ -68,7 +66,6 @@ export class ConfigsService {
   async searchFirst(query: any) {
     const record = await this.db.config.findFirst({
       ...query,
-      isDeleted: false,
     });
 
     return record;

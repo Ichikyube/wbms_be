@@ -301,7 +301,7 @@ export class CitiesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.citiesService.create(dto, userId);
       console.log(record);
       dataOut.data.city = record;
@@ -336,7 +336,7 @@ export class CitiesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.citiesService.updateById(id, dto, userId);
 
       dataOut.data.city = record;
@@ -367,7 +367,7 @@ export class CitiesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.citiesService.deleteById(id, userId);
 
       dataOut.data.city = record;

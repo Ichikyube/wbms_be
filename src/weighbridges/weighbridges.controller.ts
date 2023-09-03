@@ -283,7 +283,7 @@ export class WeighbridgesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.weighbridgesService.create(dto, userId);
 
       dataOut.data.weighbridge = record;
@@ -318,7 +318,7 @@ export class WeighbridgesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.weighbridgesService.updateById(id, dto, userId);
 
@@ -350,7 +350,7 @@ export class WeighbridgesController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.weighbridgesService.deleteById(id, userId);
 
       dataOut.data.weighbridge = record;

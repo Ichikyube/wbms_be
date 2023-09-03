@@ -293,7 +293,7 @@ export class DriverController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.driverService.create(dto, userId);
 
       dataOut.data.driver = record;
@@ -328,7 +328,7 @@ export class DriverController {
     };
 
     try {
-      const userId = req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.driverService.updateById(id, dto, userId);
 
       dataOut.data.driver = record;
@@ -358,7 +358,7 @@ export class DriverController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.driverService.deleteById(id, userId);
 
       dataOut.data.driver = record;

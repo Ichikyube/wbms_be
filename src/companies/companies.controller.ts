@@ -69,7 +69,7 @@ export class CompaniesController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.companiesService.getAttributes();;
+    return await this.companiesService.getAttributes();
   }
 
   @Get('deleted')
@@ -299,7 +299,7 @@ export class CompaniesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.companiesService.create(dto, userId);
 
       dataOut.data.company = record;
@@ -334,7 +334,7 @@ export class CompaniesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.companiesService.updateById(id, dto, userId);
 
       dataOut.data.company = record;
@@ -365,7 +365,7 @@ export class CompaniesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.companiesService.deleteById(id, userId);
 
       dataOut.data.company = record;

@@ -6,7 +6,9 @@ import {
   Controller,
   Patch,
   Delete,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 import { ApiTags } from '@nestjs/swagger';
@@ -148,8 +150,6 @@ export class ConfigsController {
     };
 
     try {
-      // const userId = req.user['id'];
-      const userId = '';
       const record = await this.configsService.getById(id);
 
       dataOut.data.config = record;
@@ -168,7 +168,7 @@ export class ConfigsController {
     action: 'update',
     possession: 'own',
   })
-  async editById(@Param('id') id: number, @Body() dto: any) {
+  async editById(@Param('id') id: number, @Body() dto: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -179,7 +179,7 @@ export class ConfigsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.configsService.editById(id, dto, userId);
 
       dataOut.data.config = record;

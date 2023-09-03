@@ -63,7 +63,7 @@ export class CustomersController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.customersService.getAttributes();;
+    return await this.customersService.getAttributes();
   }
 
   @Get('deleted')
@@ -293,7 +293,7 @@ export class CustomersController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.customersService.create(dto, userId);
 
       dataOut.data.customer = record;
@@ -328,7 +328,7 @@ export class CustomersController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.customersService.updateById(id, dto, userId);
 
       dataOut.data.customer = record;
@@ -359,7 +359,7 @@ export class CustomersController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.customersService.deleteById(id, userId);
 
       dataOut.data.customer = record;

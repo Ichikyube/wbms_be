@@ -40,6 +40,9 @@ export class ConfigRequestsAdminService {
     return await this.db.configAdminList.findFirst({
       orderBy: {
         dtCreated: 'desc' // Assuming 'createdAt' is the timestamp field indicating creation
+      },
+      select: {
+        lvlMap: true
       }
     });
   }

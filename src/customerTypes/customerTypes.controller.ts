@@ -63,9 +63,9 @@ export class CustomerTypesController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.customerTypesService.getAttributes();;
+    return await this.customerTypesService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'customerTypesData',
@@ -293,7 +293,7 @@ export class CustomerTypesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.customerTypesService.create(dto, userId);
 
       dataOut.data.customerType = record;
@@ -328,7 +328,7 @@ export class CustomerTypesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.customerTypesService.updateById(
         id,
@@ -364,7 +364,7 @@ export class CustomerTypesController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.customerTypesService.deleteById(id, userId);
 
       dataOut.data.customerType = record;

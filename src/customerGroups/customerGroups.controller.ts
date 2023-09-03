@@ -63,7 +63,7 @@ export class CustomerGroupsController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.customerGroupsService.getAttributes();;
+    return await this.customerGroupsService.getAttributes();
   }
 
   @Get('deleted')
@@ -293,7 +293,7 @@ export class CustomerGroupsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.customerGroupsService.create(dto, userId);
 
       dataOut.data.customerGroups = record;
@@ -328,7 +328,7 @@ export class CustomerGroupsController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.customerGroupsService.updateById(
         id,
@@ -364,7 +364,7 @@ export class CustomerGroupsController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.customerGroupsService.deleteById(id, userId);
 
       dataOut.data.customerGroups = record;

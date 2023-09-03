@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
-
+import {
+  ACGuard,
+  AccessControlModule,
+  RolesBuilder,
+} from 'nest-access-control';
 import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
 import { TransactionModule } from './transactions/transactions.module';
@@ -26,12 +30,6 @@ import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
 import { AtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
-import {
-  ACGuard,
-  AccessControlModule,
-  RolesBuilder,
-} from 'nest-access-control';
-
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
 import { RolesModule } from './accessControl/roles/roles.module';
@@ -41,7 +39,6 @@ import { SseGateway } from './sse/sse.gateway';
 import { AppController } from './app.controller';
 import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
-import { ConfigApprovalModule } from './config-approval/config-approval.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
@@ -83,7 +80,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     FilesModule,
     ConfigRequestModule,
     ConfigRequestsAdminModule,
-    ConfigApprovalModule,
     NotificationsModule,
   ],
   controllers: [AppController],

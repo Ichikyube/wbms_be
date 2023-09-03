@@ -315,26 +315,27 @@ model ConfigAdminList {
   @@map("config_admin_list")
 }
 
-model ConfigApproval {
-  id        String @id @default(uuid()) @db.Char(36)
-  requestId String @unique @map("request_id") @db.Char(36)
+// model ConfigApproval {
+//   id        String @id @default(uuid()) @db.Char(36)
+//   requestId String @unique @map("request_id") @db.Char(36)
 
-  lvl1Signed String  @map("lvl_1_signed")
-  lvl2Signed String? @map("lvl_2_signed")
-  lvl3Signed String? @map("lvl_3_signed")
+//   lvl1Signed String  @map("lvl_1_signed")
+//   lvl2Signed String? @map("lvl_2_signed")
+//   lvl3Signed String? @map("lvl_3_signed")
 
-  dtCreated    DateTime  @default(now()) @map("date_created")
-  dtModified   DateTime? @updatedAt @map("date_modified")
+//   dtCreated    DateTime  @default(now()) @map("date_created")
+//   dtModified   DateTime? @updatedAt @map("date_modified")
 
-  request ConfigRequest @relation(fields: [requestId], references: [id])
+//   request ConfigRequest @relation(fields: [requestId], references: [id])
 
-  @@map("config_approval")
-}
-//jika level lebih dari 1 maka buat config Approval
+//   @@map("config_approval")
+// }
+
 model ConfigRequest {
   id       String        @id @default(uuid()) @db.Char(36)
   configId Int           @map("config_id")
   status   RequestStatus
+  approval Json
   start    DateTime?
   end      DateTime?
 
@@ -344,7 +345,7 @@ model ConfigRequest {
   dtCreated    DateTime        @default(now()) @map("date_created")
   dtModified   DateTime?       @updatedAt @map("date_modified")
   config       Config          @relation(fields: [configId], references: [id])
-  approval     ConfigApproval?
+  // approval     ConfigApproval?
 
   @@map("config_requests")
 }
@@ -422,7 +423,8 @@ model User {
 
 model Role {
   id          String  @id @default(uuid()) @db.Char(36)
-  name        String       @unique @db.VarChar(255)
+  name        String  @unique @db.VarChar(30)
+  description String  @db.VarChar(255)
   permissions Permission[]
 
   userCreated  String?   @map("user_created") @db.VarChar(36)
@@ -436,7 +438,7 @@ model Role {
 
 model Permission {
   id       String  @id @default(uuid()) @db.Char(36)
-  resource String  @db.Char(36)
+  resource String  @db.Char(30)
   grants   Grant[]
   roleId   String  @db.VarChar(36) @map("role_id")
   role     Role    @relation(fields: [roleId], references: [id])
@@ -497,7 +499,6 @@ model Product {
   storageTanks           StorageTank[]
   transactions           Transaction[]
   transportVehicles      TransportVehicle[]
-  otherTransportVehicles TransportVehicle[] @relation(name: "other_product")
 
   @@map("products")
 }
@@ -624,7 +625,6 @@ model TransportVehicle {
 
   company      Company?  @relation(fields: [companyId], references: [id])
   product      Product?  @relation(fields: [productId], references: [id])
-  extraProduct Product[] @relation(name: "other_product")
   transaction  Transaction[]
 
   @@map("transportation_vehicles")

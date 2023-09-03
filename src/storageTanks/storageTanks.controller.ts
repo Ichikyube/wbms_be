@@ -63,9 +63,9 @@ export class StorageTanksController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.storageTanksService.getAttributes();;
+    return await this.storageTanksService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'storageTanksData',
@@ -293,7 +293,7 @@ export class StorageTanksController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.storageTanksService.create(dto, userId);
 
       dataOut.data.storageTank = record;
@@ -328,7 +328,7 @@ export class StorageTanksController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.storageTanksService.updateById(id, dto, userId);
 
@@ -360,7 +360,7 @@ export class StorageTanksController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.storageTanksService.deleteById(id, userId);
 
       dataOut.data.storageTank = record;

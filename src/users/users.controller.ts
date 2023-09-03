@@ -117,7 +117,6 @@ export class UsersController {
     return dataOut;
   }
 
-
   @Get('deleted')
   @UseRoles({
     resource: 'usersData',
@@ -270,7 +269,7 @@ export class UsersController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(dto.isLDAPUser);
       const user = await this.usersService.create(dto, file, userId);
       console.log(user);
@@ -412,7 +411,7 @@ export class UsersController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const user = await this.usersService.deleteById(id, userId);
 
       const { username, nik, email, isDisabled, isDeleted } = user;

@@ -65,9 +65,9 @@ export class TransportVehicleController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.transportVehicleService.getAttributes();;
+    return await this.transportVehicleService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'carsData',
@@ -227,9 +227,8 @@ export class TransportVehicleController {
     };
 
     try {
-      const record = await this.transportVehicleService.searchFirstDeleted(
-        query,
-      );
+      const record =
+        await this.transportVehicleService.searchFirstDeleted(query);
 
       if (record) {
         dataOut.data.transportVehicle.records.push(record);
@@ -266,9 +265,8 @@ export class TransportVehicleController {
     };
 
     try {
-      const records = await this.transportVehicleService.searchManyDeleted(
-        query,
-      );
+      const records =
+        await this.transportVehicleService.searchManyDeleted(query);
 
       dataOut.data.transportVehicle.records = records;
       dataOut.data.transportVehicle.totalRecords = records.length;
@@ -299,7 +297,7 @@ export class TransportVehicleController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       const record = await this.transportVehicleService.create(dto, userId);
 
       dataOut.data.transportVehicle = record;
@@ -334,7 +332,7 @@ export class TransportVehicleController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.transportVehicleService.updateById(
         id,
@@ -370,7 +368,7 @@ export class TransportVehicleController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.transportVehicleService.deleteById(id, userId);
 
       dataOut.data.transportVehicle = record;

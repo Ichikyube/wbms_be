@@ -8,7 +8,9 @@ export class CreateRoleDto {
   @IsString()
   @ApiProperty({ type: String })
   name: string;
-
+  @IsString()
+  @ApiProperty({ type: String })
+  description: string;
   @ValidateNested({ each: true })
   @ArrayNotEmpty()
   readonly permissions?: CreatePermissionDto[];

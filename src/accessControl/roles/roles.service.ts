@@ -27,6 +27,7 @@ export class RolesService {
             },
           },
         },
+        users: true
       },
     });
 
@@ -101,7 +102,7 @@ export class RolesService {
   }
 
   async createRole(createRoleDto: CreateRoleDto, userId: string): Promise<any> {
-    const { name, permissions } = createRoleDto;
+    const { name, description, permissions } = createRoleDto;
 
     let role = await this.db.role.findUnique({
       where: { name },
@@ -119,6 +120,7 @@ export class RolesService {
       const newRole = await this.db.role.create({
         data: {
           name,
+          description,
           userCreated: userId,
           userModified: '',
         },

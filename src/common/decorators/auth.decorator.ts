@@ -6,5 +6,5 @@ import { UserRole } from 'src/accessControl/roles/types/roles.type';
 
 export const Auth = (roles?: UserRole[]) => {
   if (!roles?.length) return applyDecorators(UseGuards(AtGuard));
-  // return applyDecorators(Roles(...roles), UseGuards(AtGuard, RolesGuard));
+  return applyDecorators(Roles(...roles), UseGuards(AtGuard, RolesGuard));
 };

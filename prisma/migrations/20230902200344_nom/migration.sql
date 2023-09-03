@@ -203,19 +203,12 @@ CREATE TABLE `weighbridges` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `config_approval` (
-    `id` CHAR(36) NOT NULL,
-    `request_id` CHAR(36) NOT NULL,
-    `lvl_1_signed` VARCHAR(191) NOT NULL,
-    `lvl_2_signed` VARCHAR(191) NULL,
-    `lvl_3_signed` VARCHAR(191) NULL,
-    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+CREATE TABLE `config_admin_list` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `lvl_map` JSON NOT NULL,
     `user_created` CHAR(36) NULL,
-    `user_modified` CHAR(36) NULL,
     `date_created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `date_modified` DATETIME(3) NULL,
 
-    UNIQUE INDEX `config_approval_request_id_key`(`request_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -224,6 +217,7 @@ CREATE TABLE `config_requests` (
     `id` CHAR(36) NOT NULL,
     `config_id` INTEGER NOT NULL,
     `status` ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL,
+    `approval` JSON NOT NULL,
     `start` DATETIME(3) NULL,
     `end` DATETIME(3) NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
@@ -249,6 +243,16 @@ CREATE TABLE `configs` (
     `date_modified` DATETIME(3) NULL,
 
     UNIQUE INDEX `configs_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Notification` (
+    `id` CHAR(36) NOT NULL,
+    `message` VARCHAR(191) NOT NULL,
+    `isReaded` BOOLEAN NOT NULL DEFAULT false,
+    `dtCreated` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -283,7 +287,7 @@ CREATE TABLE `users` (
     `hashed_password` VARCHAR(100) NOT NULL,
     `hashed_rt` VARCHAR(100) NULL,
     `is_email_verified` BOOLEAN NOT NULL DEFAULT false,
-    `is_ldap_user` BOOLEAN NOT NULL,
+    `is_ldap_user` BOOLEAN NOT NULL DEFAULT false,
     `is_disabled` BOOLEAN NOT NULL DEFAULT false,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `user_created` VARCHAR(36) NULL,
@@ -300,7 +304,8 @@ CREATE TABLE `users` (
 -- CreateTable
 CREATE TABLE `roles` (
     `id` CHAR(36) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(30) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
     `user_created` VARCHAR(36) NULL,
     `user_modified` VARCHAR(36) NULL,
     `date_created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -313,7 +318,7 @@ CREATE TABLE `roles` (
 -- CreateTable
 CREATE TABLE `permissions` (
     `id` CHAR(36) NOT NULL,
-    `resource` CHAR(36) NOT NULL,
+    `resource` CHAR(30) NOT NULL,
     `role_id` VARCHAR(36) NOT NULL,
     `user_created` VARCHAR(36) NULL,
     `user_modified` VARCHAR(36) NULL,
@@ -584,15 +589,6 @@ CREATE TABLE `transactions` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `_other_product` (
-    `A` CHAR(36) NOT NULL,
-    `B` CHAR(36) NOT NULL,
-
-    UNIQUE INDEX `_other_product_AB_unique`(`A`, `B`),
-    INDEX `_other_product_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 -- AddForeignKey
 ALTER TABLE `cities` ADD CONSTRAINT `cities_province_id_fkey` FOREIGN KEY (`province_id`) REFERENCES `provinces`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -622,9 +618,6 @@ ALTER TABLE `mills` ADD CONSTRAINT `mills_company_id_fkey` FOREIGN KEY (`company
 
 -- AddForeignKey
 ALTER TABLE `weighbridges` ADD CONSTRAINT `weighbridges_site_id_fkey` FOREIGN KEY (`site_id`) REFERENCES `sites`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `config_approval` ADD CONSTRAINT `config_approval_request_id_fkey` FOREIGN KEY (`request_id`) REFERENCES `config_requests`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `config_requests` ADD CONSTRAINT `config_requests_config_id_fkey` FOREIGN KEY (`config_id`) REFERENCES `configs`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -672,6 +665,9 @@ ALTER TABLE `transactions` ADD CONSTRAINT `transactions_customer_id_fkey` FOREIG
 ALTER TABLE `transactions` ADD CONSTRAINT `transactions_transporter_id_fkey` FOREIGN KEY (`transporter_id`) REFERENCES `companies`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `transactions` ADD CONSTRAINT `transactions_transport_vehicle_id_fkey` FOREIGN KEY (`transport_vehicle_id`) REFERENCES `transportation_vehicles`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `transactions` ADD CONSTRAINT `transactions_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `drivers`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -685,9 +681,3 @@ ALTER TABLE `transactions` ADD CONSTRAINT `transactions_origin_source_storage_ta
 
 -- AddForeignKey
 ALTER TABLE `transactions` ADD CONSTRAINT `transactions_destination_sink_storage_tank_id_fkey` FOREIGN KEY (`destination_sink_storage_tank_id`) REFERENCES `storage_tanks`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_other_product` ADD CONSTRAINT `_other_product_A_fkey` FOREIGN KEY (`A`) REFERENCES `products`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_other_product` ADD CONSTRAINT `_other_product_B_fkey` FOREIGN KEY (`B`) REFERENCES `transportation_vehicles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

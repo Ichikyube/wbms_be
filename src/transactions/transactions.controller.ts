@@ -140,7 +140,7 @@ export class TransactionController {
     };
 
     try {
-      const userId = req.user['id'];
+      const userId = req.user['sub'];
       await this.transactionService.deleteById(id, userId);
       dataOut.message = `Transaction with id: '${id}' has successfully deleted`;
     } catch (error) {

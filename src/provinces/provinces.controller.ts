@@ -68,9 +68,9 @@ export class ProvincesController {
     possession: 'own',
   })
   async getAttributes() {
-    return await this.provincesService.getAttributes();;
+    return await this.provincesService.getAttributes();
   }
-  
+
   @Get('deleted')
   @UseRoles({
     resource: 'provincesData',
@@ -298,7 +298,7 @@ export class ProvincesController {
     };
 
     try {
-      // const userId = req.user['id'];
+      // const userId = req.user['sub']
       const userId = '';
       const record = await this.provincesService.create(dto, userId);
 
@@ -334,7 +334,7 @@ export class ProvincesController {
     };
 
     try {
-      const userId = ''; //req.user['id'];
+      const userId = req.user['sub'];
       console.log(id);
       const record = await this.provincesService.updateById(id, dto, userId);
 
@@ -366,7 +366,7 @@ export class ProvincesController {
     };
 
     try {
-      const userId = ''; // req.user['id'];
+      const userId = ''; // req.user['sub']
       const record = await this.provincesService.deleteById(id, userId);
 
       dataOut.data.province = record;
