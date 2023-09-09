@@ -23,32 +23,7 @@ export class RbacModule {}
 // console.log(ac.getGrants());
 let grantsObject = {
   admin: {
-    config: {
-      'create:own': ['*'],
-      'read:own': ['*'],
-      'update:own': ['*'],
-      'delete:own': ['*'],
-    },
-    configRequest: {
-      'create:own': ['*'],
-      'read:own': ['*'],
-      'update:own': ['*'],
-      'delete:own': ['*'],
-    },
-  },
-  superAdmin: {
-    user: {
-      'create:any': ['*'],
-      'read:any': ['*'],
-      'update:any': ['*'],
-      'delete:any': ['*'],
-    },
-    config: {
-      'create:any': ['*'],
-      'read:any': ['*'],
-      'update:any': ['*'],
-      'delete:any': ['*'],
-    },
+
   },
 };
 // const ac = new AccessControl(grantsObject);

@@ -56,7 +56,17 @@ export class AuthService {
         },
       },
     });
-
+    // if (isLdap) {
+    //   const isAuthenticated = await this.ldapAuthService.authenticate(username, password);
+    //   if (!isAuthenticated) {
+    //     return { message: 'LDAP Authentication Failed' };
+    //   }
+    //   // Perform additional actions or return JWT token or any other response
+    //   return { message: 'LDAP Authentication Successful' };
+    // } else {
+    //   // Handle non-LDAP authentication logic here
+    //   return { message: 'Non-LDAP Authentication' };
+    // }
     // if user does not exist throw exception
     if (!user) throw new ForbiddenException('Invalid username or password.');
 

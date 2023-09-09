@@ -465,4 +465,15 @@ export class TransactionService {
 
     return transaction;
   }
+
+  // async set(key: string, value: string): Promise<string> {
+  //   const client = this.redisService.getClient();
+  //   await client.set(key, value);
+  //   return value;
+  // }
+
+  // async get(key: string): Promise<string | null> {
+  //   const client = this.redisService.getClient();
+  //   return client.get(key);
+  // }
 }

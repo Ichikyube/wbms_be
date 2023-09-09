@@ -59,7 +59,6 @@ export class CompaniesController {
     }
 
     return dataOut;
-    return this.companiesService.getAll();
   }
 
   @Get('attr')

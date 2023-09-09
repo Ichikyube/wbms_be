@@ -4,181 +4,167 @@ const prisma = new PrismaClient();
 
 async function main() {
   //   create two main roles
-  const adminIT = await prisma.role.upsert({
-    where: { name: 'adminIT' },
-    update: {description: 'Admin IT'},
-    create: {
-      name: 'adminIT',
-      description: 'Admin IT',
-      permissions: {
-        create: [
-          {
-            resource: 'users',
-            grants: {
-              create: [
-                {
-                  action: 'read',
-                  possession: 'any',
-                },
-                {
-                  action: 'create',
-                  possession: 'any',
-                },
-                {
-                  action: 'update',
-                  possession: 'any',
-                },
-                {
-                  action: 'delete',
-                  possession: 'any',
-                },
-              ],
-            },
+  try {
+    const newRole = await prisma.role.create({
+      data: {
+        name: 'admin',
+        description: 'Administrator role',
+        permissions: {
+          "config": {
+            'create:own': ['*'],
+            'read:own': ['*'],
+            'update:own': ['*'],
+            'delete:own': ['*'],
           },
-          {
-            resource: 'configs',
-            grants: {
-              create: [
-                {
-                  action: 'read',
-                  possession: 'any',
-                },
-                {
-                  action: 'create',
-                  possession: 'any',
-                },
-                {
-                  action: 'update',
-                  possession: 'any',
-                },
-                {
-                  action: 'delete',
-                  possession: 'any',
-                },
-              ],
-            },
+          "configRequest": {
+            'create:own': ['*'],
+            'read:own': ['*'],
+            'update:own': ['*'],
+            'delete:own': ['*'],
           },
-        ],
+        }, // Store JSON data as a string
       },
-    },
-  });
+    });
 
-  const adminSys = await prisma.role.upsert({
-    where: { name: 'admin_system' },
-    update: {description: 'Admin System'},
-    create: {
-      name: 'admin_system',
-      description: 'Admin System',
-      permissions: {
-        create: [
-          {
-            resource: 'user',
-            grants: {
-              create: [
-                {
-                  action: 'read',
-                  possession: 'own',
-                },
-                {
-                  action: 'create',
-                  possession: 'own',
-                },
-                {
-                  action: 'update',
-                  possession: 'own',
-                },
-                {
-                  action: 'delete',
-                  possession: 'own',
-                },
-              ],
-            },
-          },
-          {
-            resource: 'user',
-            grants: {
-              create: [
-                {
-                  action: 'read',
-                  possession: 'any',
-                },
-                {
-                  action: 'create',
-                  possession: 'any',
-                },
-                {
-                  action: 'update',
-                  possession: 'any',
-                },
-                {
-                  action: 'delete',
-                  possession: 'any',
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
-  const adminHC = await prisma.role.upsert({
-    where: { name: 'adminHC' },
-    update: {description: 'Admin HC'},
-    create: {
-      name: 'adminHC',
-      description: 'Admin HC',
-      permissions: {
-        create: [
-          {
-            resource: 'user',
-            grants: {
-              create: [
-                {
-                  action: 'read',
-                  possession: 'own',
-                },
-                {
-                  action: 'create',
-                  possession: 'own',
-                },
-                {
-                  action: 'update',
-                  possession: 'own',
-                },
-                {
-                  action: 'delete',
-                  possession: 'own',
-                },
-              ],
-            },
-          },
-          {
-            resource: 'user',
-            grants: {
-              create: [
-                {
-                  action: 'read',
-                  possession: 'any',
-                },
-                {
-                  action: 'create',
-                  possession: 'any',
-                },
-                {
-                  action: 'update',
-                  possession: 'any',
-                },
-                {
-                  action: 'delete',
-                  possession: 'any',
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  });
+    console.log('Role created with permissions:', newRole);
+  } catch (error) {
+    console.error('Error creating role:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  // const adminIT = await prisma.role.create({
+  //   data: {
+  //     name: 'adminIT',
+  //     description: 'Admin IT',
+  //     permissions: JSON.stringify({
+  //       user: {
+  //         'create:any': ['*'],
+  //         'read:any': ['*'],
+  //         'update:any': ['*'],
+  //         'delete:any': ['*'],
+  //       },
+  //       config: {
+  //         'create:any': ['*'],
+  //         'read:any': ['*'],
+  //         'update:any': ['*'],
+  //         'delete:any': ['*'],
+  //       },
+  //     }),
+  //   }
+  // });
+
+  // const adminSys = await prisma.role.create({
+  //   data: {
+  //     name: 'admin_system',
+  //     description: 'Admin System',
+  //     permissions: {
+  //       create: [
+  //         {
+  //           resource: 'user',
+  //           grants: {
+  //             create: [
+  //               {
+  //                 action: 'read',
+  //                 possession: 'own',
+  //               },
+  //               {
+  //                 action: 'create',
+  //                 possession: 'own',
+  //               },
+  //               {
+  //                 action: 'update',
+  //                 possession: 'own',
+  //               },
+  //               {
+  //                 action: 'delete',
+  //                 possession: 'own',
+  //               },
+  //             ],
+  //           },
+  //         },
+  //         {
+  //           resource: 'user',
+  //           grants: {
+  //             create: [
+  //               {
+  //                 action: 'read',
+  //                 possession: 'any',
+  //               },
+  //               {
+  //                 action: 'create',
+  //                 possession: 'any',
+  //               },
+  //               {
+  //                 action: 'update',
+  //                 possession: 'any',
+  //               },
+  //               {
+  //                 action: 'delete',
+  //                 possession: 'any',
+  //               },
+  //             ],
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   },
+  // });
+  // const adminHC = await prisma.role.create({
+  //   data: {
+  //     name: 'adminHC',
+  //     description: 'Admin HC',
+  //     permissions: {
+  //       create: [
+  //         {
+  //           resource: 'user',
+  //           grants: {
+  //             create: [
+  //               {
+  //                 action: 'read',
+  //                 possession: 'own',
+  //               },
+  //               {
+  //                 action: 'create',
+  //                 possession: 'own',
+  //               },
+  //               {
+  //                 action: 'update',
+  //                 possession: 'own',
+  //               },
+  //               {
+  //                 action: 'delete',
+  //                 possession: 'own',
+  //               },
+  //             ],
+  //           },
+  //         },
+  //         {
+  //           resource: 'user',
+  //           grants: {
+  //             create: [
+  //               {
+  //                 action: 'read',
+  //                 possession: 'any',
+  //               },
+  //               {
+  //                 action: 'create',
+  //                 possession: 'any',
+  //               },
+  //               {
+  //                 action: 'update',
+  //                 possession: 'any',
+  //               },
+  //               {
+  //                 action: 'delete',
+  //                 possession: 'any',
+  //               },
+  //             ],
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   },
+  // });
 
   const configs = await prisma.config.createMany({
     data: [

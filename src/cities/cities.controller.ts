@@ -64,15 +64,7 @@ export class CitiesController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.citiesService.getAttributes();
-  }
+
 
   @Get('deleted')
   @UseRoles({

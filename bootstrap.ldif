@@ -1,102 +1,90 @@
-# Create a new organization
+# Base DN Entry
 dn: dc=wbms,dc=dsn
+objectClass: top
 objectClass: dcObject
 objectClass: organization
+o: wbms-dsn
 dc: wbms
-o: My Organization
 description: The wbms organization
 
-# Create role for the directory manager
-dn: cn=Manager,dc=wbms,dc=dsn
-objectClass: organizationalRole
-cn: Manager
-description: Directory Manager
-
-# Create unit for groups
-dn: ou=groups,dc=wbms,dc=dsn
+# Organizational Units
+dn: ou=People,dc=wbms,dc=dsn
 objectClass: top
 objectClass: organizationalUnit
-ou: groups
-description: Organizational unit for user groups
-
-# Create unit for people
-dn: ou=people,dc=wbms,dc=dsn
-objectClass: top
-objectClass: organizationalUnit
-ou: people
+ou: People
 description: Organizational unit for user accounts
 
-# Create a test user in the people unit
-dn: uid=test,ou=people,dc=wbms,dc=dsn
+dn: ou=Groups,dc=wbms,dc=dsn
 objectClass: top
-objectClass: person
-objectClass: posixAccount
-uid: test
-cn: Test User
-sn: Test
-uidNumber: 10001
-gidNumber: 100
-homeDirectory: /home/test
-loginShell: /bin/bash
+objectClass: organizationalUnit
+ou: Groups
+description: Organizational unit for groups
 
-# Creating ops group in the groups unit
-dn: cn=ops,ou=armin,dc=wbms,dc=dsn
+# Group Entries
+dn: cn=staff,ou=Groups,dc=wbms,dc=dsn
 objectClass: top
 objectClass: posixGroup
-objectClass: groupOfMembers
-cn: ops
+cn: staff
 gidNumber: 10001
-description: Operations Group
+description: Staff Group
 
-dn: cn=developer,dc=armin,dc=intern
-changetype: add
-objectclass: inetOrgPerson
-cn: developer
-givenname: developer
-sn: Developer
-displayname: Developer User
-mail: developer@gmail.com
-userpassword: developer_pass
+dn: cn=operator,ou=Groups,dc=wbms,dc=dsn
+objectClass: top
+objectClass: posixGroup
+cn: operator
+gidNumber: 10002
+description: Operator Group
 
-dn: cn=maintainer,dc=armin,dc=intern
-changetype: add
-objectclass: inetOrgPerson
-cn: maintainer
-givenname: maintainer
-sn: Maintainer
-displayname: Maintainer User
-mail: maintainer@gmail.com
-userpassword: maintainer_pass
+dn: cn=admin,ou=Groups,dc=wbms,dc=dsn
+objectClass: top
+objectClass: posixGroup
+cn: admin
+gidNumber: 10003
+description: Admin Group
 
-dn: cn=admin_gh,dc=armin,dc=intern
-changetype: add
-objectclass: inetOrgPerson
-cn: admin_gh
-givenname: admin_gh
-sn: AdminGithub
-displayname: Admin Github User
-mail: admin_gh@gmail.com
-userpassword: admin_gh_pass
+# User Entries
+dn: uid=user1,ou=People,dc=wbms,dc=dsn
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: user1
+cn: User One
+sn: One
+mail: user1@wbms.dsn
+employeeNumber: 1001
+userPassword: OpentheGate#1step
 
-dn: ou=Groups,dc=armin,dc=intern
-changetype: add
-objectclass: organizationalUnit
-ou: Groups
+dn: uid=user2,ou=People,dc=wbms,dc=dsn
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: user2
+cn: User Two
+sn: Two
+mail: user2@wbms.dsn
+employeeNumber: 1002
+userPassword: OpentheGate#1step
 
-dn: ou=Users,dc=armin,dc=intern
-changetype: add
-objectclass: organizationalUnit
-ou: Users
+# ... (repeat for user3 to user12)
 
-dn: cn=Admins,ou=Groups,dc=armin,dc=intern
-changetype: add
-cn: Admins
-objectclass: groupOfUniqueNames
-uniqueMember: cn=admin_gh,dc=armin,dc=intern
+# Add users to groups
+dn: cn=staff,ou=Groups,dc=wbms,dc=dsn
+changetype: modify
+add: memberUid
+memberUid: user1
+memberUid: user2
+# Add user3 to user12 to respective groups
 
-dn: cn=Maintaners,ou=Groups,dc=armin,dc=intern
-changetype: add
-cn: Maintaners
-objectclass: groupOfUniqueNames
-uniqueMember: cn=maintainer,dc=armin,dc=intern
-uniqueMember: cn=developer,dc=armin,dc=intern
+dn: cn=operator,ou=Groups,dc=wbms,dc=dsn
+changetype: modify
+add: memberUid
+memberUid: user3
+# Add user4 to user6 to operator group
+
+dn: cn=admin,ou=Groups,dc=wbms,dc=dsn
+changetype: modify
+add: memberUid
+memberUid: user7
+# Add user8 to user12 to admin group

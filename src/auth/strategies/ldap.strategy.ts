@@ -22,9 +22,17 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldapauth') {
       },
     );
   }
-
 }
-
+// var OPTS = {
+//   server: {
+//     url: 'LDAP://ldap.forumsys.com:389', //LDAP URL
+//     bindDN: 'CN=adminAccount,DC=forumsys', //Admin BaseDN details
+//     bindCredentials: AdminCredentials,
+//     searchBase: 'dc=forumsys', //search base
+//     searchFilter: '(|(sAMAccountName={{username}})(employeeID={{username}}))',
+//     timeLimit: 3000,
+//   },
+// };
 // Example POST:
 // curl --request POST \
 //   --url http://localhost:3000/ldap \

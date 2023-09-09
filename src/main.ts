@@ -7,8 +7,12 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
 import SwaggerDocumentation from './settings/swagger.config';
-import { join } from 'path';
-import { Prisma } from '@prisma/client';
+import * as fs from 'fs';
+import { AccessControl } from 'accesscontrol';
+const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
+const ac = new AccessControl(grantsObject);
+
+console.log(grantsObject); // output 'testing'
 
 declare const module: any;
 
@@ -27,7 +31,6 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  console.log(join(__dirname, '..', 'upload'));
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -50,7 +53,6 @@ async function bootstrap() {
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
- 
 }
 bootstrap();
 

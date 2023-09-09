@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayNotEmpty,
+  IsArray,
   IsNotEmpty,
   IsString,
   ValidateNested,
@@ -15,5 +16,6 @@ export class CreatePermissionDto {
 
   @ValidateNested({ each: true })
   @ArrayNotEmpty()
+  @IsArray()
   readonly grants?: CreateGrantDto[];
 }

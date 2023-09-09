@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import {
   ACGuard,
@@ -36,10 +36,11 @@ import { RolesModule } from './accessControl/roles/roles.module';
 import { RbacModule } from './accessControl/rbac.module';
 import { RolesService } from './accessControl/roles/roles.service';
 import { SseGateway } from './sse/sse.gateway';
-import { AppController } from './app.controller';
 import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { SseController } from './sse/sse.controller';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -81,8 +82,8 @@ import { NotificationsModule } from './notifications/notifications.module';
     ConfigRequestModule,
     ConfigRequestsAdminModule,
     NotificationsModule,
+    RedisModule,
   ],
-  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
@@ -98,5 +99,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     },
     // SseGateway,
   ],
+  controllers: [SseController],
 })
 export class AppModule {}

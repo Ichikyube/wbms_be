@@ -1,99 +1,17 @@
-prisma migrate dev
-snaplet restore --data-only
-
-Todo
-backend
-
-ldap(sso(Single-SignOn)),
-
-config
-
-
-
-frontend
-role,
-auth
-role,
-
-
-Pindahkan file bootstrap.ldif ke alamat docker image /container/service/sldap/assets/config/bootstrap/ldif/. Sehingga data terupload ketika program dijalankan
-Easiest way to set up LDAP for dev testing
-LDAP Authentication in nestjs
-How to create mock LDAP server for nestjs project
-
-var OPTS = {
-server: {
-url: "LDAP://ldap.forumsys.com:389", //LDAP URL
-bindDN: "CN=adminAccount,DC=forumsys", //Admin BaseDN details  
- bindCredentials: AdminCredentials,  
- searchBase: "dc=forumsys", //search base
-searchFilter: "(|(sAMAccountName={{username}})(employeeID={{username}}))",
-timeLimit: 3000,
-}
-}
-
 Verify Users
 Access the openldap container:
-
+ldapsearch -x -LLL -D "cn=admin,dc=wbms,dc=dsn" -w admin -b "dc=wbms,dc=dsn" -s sub "(objectClass=*)"
 docker-dsnpose exec openldap bash
+openssl s_client -connect wbms.dsn:389 -starttls ldap -showcerts
 You can use ldapsearch to verify our user:
-
 ldapsearch -x -h openldap -D "uid=ruan,ou=people,dc=wbms,dc=org" -b "ou=people,dc=wbms,dc=org" -w "$PASSWORD" -s base 'uid=ruan'
 Or we can use ldapwhoami:
-
 ldapwhoami -vvv -h ldap://openldap:389 -p 389 -D 'uid=ruan,ou=people,dc=wbms,dc=org' -x -w "$PASSWORD"
-Which will provide a output with something like:
-
-ldap_initialize( <DEFAULT> )
-dn:uid=ruan,ou=people,dc=wbms,dc=org
-Result: Success (0)
 
 ldapadd -W -H ldap://openldap -D 'cn=admin,dc=wbms,dc=dsn' <<LDIF
 LDIF
-
-websocket server-sent event
-ldap
-rbac
-edit role
-config
- ldapadd -x -D 'cn=admin,dc=wbms,dc=dsn' -w admin -h ldap://openldap:389 -p 389  -f  '/assets/openldap/custom/ldif/bootstrap.ldif'
- ldapsearch -x -b dc=field,dc=aerospike,dc=com -D "cn=admin,dc=field,dc=aerospike,dc=com" -w admin '(uid=aerospike)'
- ldapsearch -x -b dc=field,dc=aerospike,dc=com -D "cn=admin,dc=field,dc=aerospike,dc=com" -w admin
- ldapsearch -x -b dc=field,dc=aerospike,dc=com -D "cn=admin,dc=field,dc=aerospike,dc=com" -w admin '(memberUid=aerospike)'
+ldapadd -x -D 'cn=admin,dc=wbms,dc=dsn' -w admin -h ldap://openldap:389 -p 389  -f  '/assets/openldap/custom/ldif/bootstrap.ldif'
 ldapsearch -x -h ldap://openldap:389 -p 389  -D "cn=admin,dc=wbms,dc=dsn"  -w admin -s base 'dc=wbms,dc=dsn'
-    - name: Test
-      run: |
-        echo $RELEASE_VERSION
-        echo ${{ env.RELEASE_VERSION }}
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-    - name: Get the version
-      id: vars
-      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
-    - name: Build the tagged Docker image
-      if: ${{ github.event.release }}
-      run: docker build . --file Dockerfile --tag wbms_tbe:${{steps.vars.outputs.tag}}
-      run: docker build . --file src/MasterReport.UI/Dockerfile --tag eriksongm/master-report:${{ secrets.MAJOR }}.${{ secrets.MINOR }}
-    -
-      name: Push to DockerHub
-      run: docker push eriksongm/master-report:${{ secrets.MAJOR }}.${{ secrets.MINOR }}
-    -
-      name: Update Minor version
-      uses: hmanzur/actions-set-secret@v2.0.0
-      with:
-        name: 'MINOR'
-        value: $((${{ secrets.MINOR }}+1))
-        repository: EriksonGM/MasterReport
-        token: ${{ secrets.REPO_ACCESS_TOKEN }}
-
-timestamp=$(date +%Y%m%d%H%M%S)
-$(git rev-parse --short HEAD)
-$(docker images | awk '(\$1 == "your/project") {print \$2 += .01; exit}')
 
 import {
 Injectable,
@@ -128,7 +46,16 @@ data: data,
 );
 }
 }
-
+export const permission = [
+  'read:own',
+  'create:own',
+  'update:own',
+  'delete:own',
+  'read:any',
+  'create:any',
+  'update:any',
+  'delete:any',
+] as const;
 
 import { Observable } from 'rxjs';
 
@@ -150,240 +77,6 @@ function listenForEvents(element, eventName) {
   });
 }
 
-
-
-Lightweight Directory Access Protocol (LDAP)
-LDAP (Lightweight Directory Access Protocol) is a software protocol for enabling anyone to locate organizations, individuals, and other resources such as files and devices in a network, whether on the public Internet or on a corporate intranet.
-An LDAP directory is organized in a simple “tree” hierarchy consisting of the following levels:
-
-The root directory (the starting place or the source of the tree), which branches out to
-Countries, each of which branches out to
-Organizations, which branch out to
-Organizational units (divisions, departments, and so forth), which branches out to (includes an entry for)
-Individuals (which includes people, files, and shared resources such as printers)
-Default Port: 389
-Operation on LDAP:
-Search — Performs a search operation against the LDAP server. Responses from the search method are an Event Emitter where you will get a notification for each search Entry that comes back from the server. You will additionally be able to listen for a search Reference, error and end event.
-Add — This is used to insert a new entry into the directory-to-server database. If the name entered by a user already exists, the server fails to add a duplicate entry and instead show an “entryAlreadyExists” message.
-Bind — On connection with the LDAP server,the default authentication state of the session is anonymous.
-Delete — As the name suggests,this operation is used to delete an entry from the directory.In order to do this, the LDAP client has to transmit a perfectly composed delete request to server.
-Modify — This operation is used by LDAP clients to make a request for making changes to the already existing database. The change to be made must be one of the following operations:
-Add(Including a new value)
-Delete(Deleting an already existing value)
-Replace(Overwriting an existing value with a new one)
-Unbind — This is inverse of the bind operation. Unbind aborts any existing operations and terminates the connection, leaving no response in the end.
-Attributes:
-
-Distinguished Name:(Mandatory) Known as dn.
-Object classes: It indicates the type of attributes,schemas associated with the object class.(Example: person, top, posixGroup, posixAccount, uidObject etc.)
-Attribute Types: It defines the list of attributes that have been used to customize the schema. (Example: gidNumber, uidNumber, cn, givenName, sn )
-JSON WEB TOKEN (JWT)
-Traditional authentication strategy makes use of session and cookie, but scaling these solutions is very difficult as some kind of state is maintained by the server.JWT, on the other hand, provide a stateless solution for authentication and stateless applications are pretty easy to scale.
-
-JWT is used for authentication and they can also be used for sharing information, most of jwt are signed using a public key and a private key, therefore, it is very difficult to tamper with these token. Jwt has three parts: head, body and signature, each separated by “dot(.)”.
-
-Verification
-When the server verifies the token, it creates the hash using the private key if the hash matches the signature on the token then the token is authentic. If the token is tempered with the hash of the token should change but the hacker cannot create the new hash because the key is save with the server. Therefore the token is verified and the client can also be verified using the data in the body.
-
-token=base64url(head)+"."+baser64url(body)+"."+signature
-How authentication with JWT works?
-The token with username and role is given to the client and the client sends the token back to the server every time the client makes an HTTP request to the server.
-
-body={
- username:"l1s15bscs0105",
- role: "group the user_id belongs to"
-}
-The client must store the token in the browser. The token can be saved in local storage or session storage. The token is sent to the server in authorization header as Bearer {token} .
-
-Using JWT and OpenLDAP with Nodejs.
-If you don’t want to write your own custom jwt solution you can always use an NPM module for it. We would first install express and JSON web token library. Here I am assuming that you have OpenLDAP server configured and up running on Default Port: 389.
-
-npm i express jsonwebtoken express-jwt ldapjs
-The directory structure of the project
-
-root
-   -index.js
-   -config.js
-   -authentication
-         - auth.js
-The config.js contains the private key but it is not a good practice. you should always use env variable for such sensitive data.
-
-const config = {secret : "YUYFDISYFSIERTEWRTEWTWETRNNNMNJHKHFASDdyfiudayDAYIUSDFYASIOFOOASIUDFYEREAHLSKJFE57894502354354HJKAFDDFS"}
-module.exports = config;
-Let us create a simple express server.
-
-The route /login which takes username and password as the body parameters, first binds the admin to LDAP server and then searches the user’s group by the filter of username and attribute of gidNumber and finally binds the username and password and if successful then issues a token to the user with username and role added as a part of token. Below is the implementation for the this route.
-
-const express = require('express');
-const router = express.Router();
-const auth = require('./authentication/auth');
-var ldap = require('ldapjs')
-const jwt = require('jsonwebtoken');
-const {secret} = require("./config");var client = ldap.createClient({
-url: `ldap://ldap-service:389`,
-connectTimeout: 30000,
-reconnect: true
-});router.post('/login', function(req, res){
-   var LDAP_BASE_DN = 'dc=scytalelabs, dc=com';
-   var bdn_pass = 'adminPassword';
-   var username = req.body.username;
-   var password = req.body.password;
-var opts = {
-   filter: `(uid=${username})`,
-   scope: 'sub',
-   attributes: ['gidNumber', 'uidNumber' ,'cn','givenName','sn']};try {
-     client.bind(  'cn=admin, ' + LDAP_BASE_DN, bdn_pass, function(error) {
-  if(error){res.status(500).send('Internal Server Error.');}
-  else {
-    client.search(LDAP_BASE_DN , opts, function(error, search) {
-    var searchList = [];
-    search.on('searchEntry', function(entry) {
-     searchList.push(entry.object);
-     });    search.on('error', function(error) {
-     res.status(500).send('Internal Server Error.');
-    });    search.on("end", (retVal) => {
-     if (searchList.length === 1) {
-      // Get a list of groups, try to bind after you get it
-      var groupList = [];
-      
-      client.search(LDAP_BASE_DN,{filter:'((objectclass=posixGroup)(gidNumber=' +   
-        searchList[0].gidNumber + '))',
-        scope:"sub", attributes:['cn']},      
-    (error, searchRes) => {    searchRes.on("searchEntry", (entry) => {
-    groupList.push(entry.object);
-     });     searchRes.on("error", (error) => {
-     res.status(500).send('Internal Server Error.');
-     });searchRes.on("end", (entry) => {
-     if(groupList.length === 1){
-      client.bind(  'cn=' + username +
-      ',ou=users,dc=scytalelabs,dc=com', password, function 
-        (error) {
-          if(error){
-          res.status(500).send('Internal Server Error.');
-         }
-         else {
-          const token = jwt.sign({ sub: username, role:   
-          groupList[0].cn }, secret, {expiresIn: '1h'});    client.unbind(function(error) {
-     if(error){
-      res.status(500).send('Internal Server Error.');
-      }
-     else{
-     res.status(200).send(token);
-     }
-});
-}
-});
-}
-else{
-res.status(404).send('Group Not Found...');
-}
-});
-});
-}
-else {
-res.status(404).send('User Not Found...');
-}
-});
-});
-}
-});
-} 
-catch(error){
-client.unbind(function(error) {if(error){console.log(error  );} else{console.log('client disconnected');}});
-}
-});
-The token is sent by the user to the server every time in the request header and the token is authenticated by the auth.isLoggedIn(['role']) middleware every time. The middleware also adds user details to the req as req.user . This middleware should be added to every route that needs to be protected with the allowed roles for the route. Below is the implementation for this middleware.
-
-const expressJwt = require('express-jwt');
-const {secret} = require("../config");
-exports.isLoggedIn = function (roles = []) {// roles param can be a single role string (e.g. Role.User or
-//'User')// or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', //'User'])if (typeof roles === 'string') {
-    roles = [roles];
-}return [
-// authenticate JWT token and attach user to request object //(req.user)
-    
-       expressJwt({ secret }),
-// authorize based on user role
-      (req, res, next) => {
-       if (roles.length && !roles.includes(req.user.role)) {
-         // user's role is not authorized
-  return res.status(401).json({ message: 'Unauthorized Access' });
-}// authentication and authorization successful
-next();
-}];
-}
-
-
-
-  @Post('signup')
-  @UseGuards()
-  @ApiOperation({
-    summary: 'Create a user',
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiCreatedResponse({ description: 'User has been successfully created' })
-  @ApiBadRequestResponse({
-    description: 'Some character error or type error',
-  })
-  @ApiForbiddenResponse({
-    description: 'User already exists',
-  })
-  @HttpCode(HttpStatus.CREATED)
-  async signup(
-    @Body() dto: SignupDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const dataOut = {
-      status: true,
-      message: '',
-      data: {
-        user: null,
-      },
-      logs: {},
-    };
-
-    try {
-      const user = await this.authService.signup(dto, file);
-
-      const { username, email, nik, name, division, position, phone } = user;
-
-      dataOut.data.user = {
-        username,
-        email,
-        nik,
-        name,
-        division,
-        position,
-        phone,
-      };
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = {
-        ...dataOut.logs,
-        error,
-      };
-    }
-
-    return dataOut;
-  }
-
-  
-  async signup(
-    dto: CreateUserDto,
-    file: Express.Multer.File,
-  ): Promise<UserEntity> {
-    const userId = '';
-    const user = await this.usersService.create(dto, file, userId);
-    const tokens = await this.signTokens({
-      sub: user.id,
-      username: user.username,
-      role: user.role,
-    });
-    await this.updateRtHash(user.id, tokens.refresh_token);
-    // req.tokens;
-    return user;
-  }
 
 
     // WbTransactionUrlMapping() {
@@ -445,3 +138,448 @@ next();
 
   //   return statusMapping;
   // }
+
+async function authenticate(username: string, password: string) {
+  const client = ldap.createClient({
+    url: process.env.LDAP_HOST as string,
+  });
+
+  const entries: ldap.SearchEntry[] = [];
+
+  return new Promise((resolve, reject) => {
+    client.bind(
+      process.env.LDAP_DN as string,
+      process.env.LDAP_PASSWORD as string,
+      (error) => {
+        if (error) {
+          reject('LDAP bound failed');
+        } else {
+          const opts: ldap.SearchOptions = {
+            filter: `(&(sAMAccountName=${username}))`,
+            scope: 'sub',
+            attributes: ['dn', 'sn', 'cn', 'sAMAccountName'],
+          };
+
+          client.search(
+            process.env.LDAP_BASE_DN as string,
+            opts,
+            (err, res) => {
+              if (err) {
+                reject(`User ${username} LDAP search error`);
+              } else {
+                res.on('searchRequest', (searchRequest) => {
+                  //console.log('searchRequest: ', searchRequest.messageID);
+                });
+                res.on('searchEntry', (entry) => {
+                  entries.push(entry);
+
+                  client.bind(entry.dn, password, (err, res) => {
+                    if (err) {
+                      reject(`User ${username} username or password problem`);
+                    } else {
+                      resolve({
+                        username,
+                        password,
+                      });
+                    }
+                  });
+                });
+                res.on('searchReference', (referral) => {
+                  //console.log('referral: ' + referral.uris.join());
+                });
+                res.on('error', (err) => {
+                  reject('LDAP SEARCH error');
+                });
+                res.on('end', (result) => {
+                  if (entries.length == 0) {
+                    reject(`User ${username} username or password problem`);
+                  }
+                });
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+}
+
+
+
+
+
+
+
+
+sse
+@Service
+@Primary
+@AllArgsConstructor
+@Slf4j
+public class SseNotificationService implements NotificationService {
+ 
+   private final EmitterRepository emitterRepository;
+   private final EventMapper eventMapper;
+ 
+   @Override
+   public void sendNotification(String memberId, EventDto event) {
+       if (event == null) {
+           log.debug("No server event to send to device.");
+           return;
+       }
+       doSendNotification(memberId, event);
+   }
+ 
+   private void doSendNotification(String memberId, EventDto event) {
+       emitterRepository.get(memberId).ifPresentOrElse(sseEmitter -> {
+           try {
+               log.debug("Sending event: {} for member: {}", event, memberId);
+               sseEmitter.send(eventMapper.toSseEventBuilder(event));
+           } catch (IOException | IllegalStateException e) {
+               log.debug("Error while sending event: {} for member: {} - exception: {}", event, memberId, e);
+               emitterRepository.remove(memberId);
+           }
+       }, () -> log.debug("No emitter for member {}", memberId));
+   }
+}
+
+@Slf4j
+@RestController
+@RequestMapping("/events")
+@RequiredArgsConstructor
+public class EventController {
+   public static final String MEMBER_ID_HEADER = "MemberId";
+ 
+   private final EmitterService emitterService;
+   private final NotificationService notificationService;
+ 
+   @GetMapping
+   public SseEmitter subscribeToEvents(@RequestHeader(name = MEMBER_ID_HEADER) String memberId) {
+       log.debug("Subscribing member with id {}", memberId);
+       return emitterService.createEmitter(memberId);
+   }
+ 
+   @PostMapping
+   @ResponseStatus(HttpStatus.ACCEPTED)
+   public void publishEvent(@RequestHeader(name = MEMBER_ID_HEADER) String memberId, @RequestBody EventDto event) {
+       log.debug("Publishing event {} for member with id {}", event, memberId);
+       notificationService.sendNotification(memberId, event);
+   }
+}
+
+
+
+
+
+
+
+
+
+
+@GetMapping("/sse-emitter")
+public SseEmitter sseEmitter() {
+   SseEmitter emitter = new SseEmitter();
+   Executors.newSingleThreadExecutor().execute(() -> {
+       try {
+           for (int i = 0; true; i++) {
+               SseEmitter.SseEventBuilder event = SseEmitter.event()
+                       .id(String.valueOf(i))
+                       .name("SSE_EMITTER_EVENT")
+                       .data("SSE EMITTER - " + LocalTime.now().toString());
+               emitter.send(event);
+               Thread.sleep(1000);
+           }
+       } catch (Exception ex) {
+           emitter.completeWithError(ex);
+       }
+   });
+   return emitter;
+}
+
+
+GetMapping("/sse-flux-2")
+public Flux<ServerSentEvent> sseFlux2() {
+   return Flux.interval(Duration.ofSeconds(1))
+           .map(sequence -> ServerSentEvent.builder()
+                   .id(String.valueOf(sequence))
+                   .event("EVENT_TYPE")
+                   .data("SSE - " + LocalTime.now().toString())
+                   .build());
+}
+
+
+
+
+import { Injectable } from '@nestjs/common';
+import { Subject } from 'rxjs';
+
+@Injectable()
+export class NotificationService {
+  notificationEvents: Record<string, Subject<any>> = {}
+  async handleConnection(id: string) {
+    if (!this.notificationEvetnts[id]) {
+      this.notificationEvents[id] = new Subject();
+    }
+    setInterval(() => {
+      this.notificationEvents[id].next({ data: { message: 'Hello World' } });
+    }, 1000);
+    return this.notificationEvent[id].asObservable();
+  }
+}
+
+@Sse('notifications/:id')
+sendNotification(@Param() { id }: record<string, string>): Observable<any> {
+  // no need to make this async or return a Promise. Observables are handled just fine as they are
+  return this.notificationService.handleConnection(id);
+}
+
+
+
+
+import {
+  Controller,
+  Post,
+  UploadedFile,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiFile } from './api-file.decorator';
+import { FilesService } from './files.service';
+import { fileMimetypeFilter } from './file-mimetype-filter';
+
+@Controller('files')
+@ApiTags('files')
+export class FilesController {
+  constructor(private readonly filesService: FilesService) {}
+
+  @Post('upload')
+  @ApiFile('avatar', true, { fileFilter: fileMimetypeFilter('image') }) 
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
+
+    @Post('avatar')
+  @ApiImageFile('avatar', true)
+  uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
+  
+  @Post('document')
+  @ApiPdfFile('document', true)
+  uploadDocument(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+  }
+}
+
+
+
+export class UploadController {
+
+}
+
+
+let formData = new FormData();
+files.forEach((file) => {
+  formData.append('files', file, file.name);
+});
+  ```
+
+
+
+const fs = require('fs');
+const path = require('path');
+
+const swaggerUIPath = path.resolve(__dirname, 'path_to_your_swagger_ui_folder'); // Replace with the actual path
+
+// Read the index.html file from Swagger UI
+const indexHtml = fs.readFileSync(path.join(swaggerUIPath, 'index.html'), 'utf-8');
+
+// Write the HTML file to a different location
+fs.writeFileSync(path.join(__dirname, 'exported_swagger.html'), indexHtml);
+
+console.log('Swagger UI exported successfully.');
+npm install @nestjs/platform-socket.io socket.io
+
+'
+
+
+
+  async createUser(data: Prisma.UserCreateInput, profilePictureFile?: MulterFile): Promise<User> {
+    if (profilePictureFile) {
+      // Save the profile picture to a directory on the server
+      const profilePicturePath = await this.saveProfilePicture(profilePictureFile);
+      data.profilePicture = profilePicturePath;
+    }
+
+    return this.prisma.user.create({
+      data,
+    });
+  }
+
+  private async saveProfilePicture(file: MulterFile): Promise<string> {
+    const fileExt = path.extname(file.originalname);
+    const randomName = new Date().getTime().toString();
+    const newFileName = `${randomName}${fileExt}`;
+
+    // Define the directory where the profile pictures will be stored
+    const uploadDirectory = path.join(__dirname, '../../uploads/profilePictures');
+
+    if (!fs.existsSync(uploadDirectory)) {
+      fs.mkdirSync(uploadDirectory, { recursive: true });
+    }
+
+    const filePath = path.join(uploadDirectory, newFileName);
+
+    return new Promise((resolve, reject) => {
+      fs.writeFile(filePath, file.buffer, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(filePath);
+        }
+      });
+    });
+  }
+
+
+    @Post()
+  @UseInterceptors(FileInterceptor('profilePicture')) // 'profilePicture' is the field name for the uploaded file
+  async createUser(
+    @Body() data: Prisma.UserCreateInput,
+    @UploadedFile() profilePictureFile?: Express.Multer.File,
+  ): Promise<User> {
+    return this.usersService.createUser(data, profilePictureFile);
+  }
+
+
+
+  // file-upload.module.ts
+
+import { Module } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+
+@Module({
+  imports: [
+    MulterModule.register({
+      storage: diskStorage({
+        destination: './uploads/profilePictures', // Directory where the uploaded files will be saved
+        filename: (req, file, cb) => {
+          const randomName = new Date().getTime().toString();
+          const fileExt = path.extname(file.originalname);
+          cb(null, `${randomName}${fileExt}`);
+        },
+      }),
+    }),
+  ],
+  exports: [MulterModule],
+})
+export class FileUploadModule {}
+
+
+// file-upload.middleware.ts
+
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import { diskStorage } from 'multer';
+
+export const FileUploadOptions: MulterOptions = {
+  storage: diskStorage({
+    destination: './uploads', // Directory where the uploaded files will be saved
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      cb(null, file.fieldname + '-' + uniqueSuffix);
+    },
+  }),
+};
+
+
+// upload.service.ts
+
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { Prisma, UploadedFile } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { FileUploadOptions } from '../file-upload/file-upload.middleware';
+import * as fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+
+@Injectable()
+export class UploadService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async uploadImage(file: UploadedFile): Promise<string> {
+    if (!file) {
+      throw new BadRequestException('No file uploaded.');
+    }
+
+    // Generate a unique filename using UUID
+    const filename = uuidv4() + '-' + file.originalname;
+
+    // Create the uploads directory if it doesn't exist
+    const uploadDirectory = './uploads';
+    if (!fs.existsSync(uploadDirectory)) {
+      fs.mkdirSync(uploadDirectory, { recursive: true });
+    }
+
+    // Save the file to the uploads directory
+    const filePath = `${uploadDirectory}/${filename}`;
+    fs.writeFileSync(filePath, file.buffer);
+
+    // Save the file path in the database using Prisma
+    await this.prisma.image.create({
+      data: { path: filePath },
+    });
+
+    return filePath;
+  }
+}
+
+
+// file-upload.utils.ts
+import { extname } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { BadRequestException } from '@nestjs/common';
+import { diskStorage } from 'multer';
+
+export const fileFilter = (req, file, callback) => {
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    callback(null, true);
+  } else {
+    callback(new BadRequestException('Unsupported file type'), false);
+  }
+};
+
+export const editFileName = (req, file, callback) => {
+  const fileExtName = extname(file.originalname);
+  const randomName = uuidv4();
+  callback(null, `${randomName}${fileExtName}`);
+};
+
+export const uploadOptions = {
+  storage: diskStorage({
+    destination: './uploads', // Specify your desired upload directory here
+    filename: editFileName,
+  }),
+  fileFilter,
+};
+
+
+
+const http = require('http');
+const server = http.createServer();
+const io = require('socket.io')(server);
+
+io.on('connection', socket => {
+  console.log('Client connected');
+  
+  // Send SSE-like data to the client every second
+  const interval = setInterval(() => {
+    socket.emit('sse', { message: 'Hello from server' });
+  }, 1000);
+  
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+    clearInterval(interval);
+  });
+});
+
+server.listen(8080);

@@ -13,14 +13,15 @@ export class NotificationsService {
     });
   }
 
-  async findAllNotifications() {
+  async getAllNotifications() {
     return this.db.notification.findMany();
   }
 
-  async setAsReaded(id: string) {
+  async markNotificationAsRead(id: string) {
     return this.db.notification.update({
       where: { id },
-      data: { isReaded: true },
+      data: { isResponded: true },
     });
   }
+
 }

@@ -6,14 +6,16 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { PermissionEntity } from 'src/entities/permission.entity';
+import { CreatePermissionDto } from './create-permission.dto';
 export class UpdateRoleDto extends PartialType(CreateRoleDto) {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ type: String })
-  name: string;
-
-  @ValidateNested({ each: true })
-  @ArrayNotEmpty()
-  readonly permissions?: PermissionEntity[];
+  // @IsNotEmpty()
+  // @IsString()
+  // @ApiProperty({ type: String })
+  // name: string;
+  // @IsString()
+  // @ApiProperty({ type: String })
+  // description: string;
+  // @ValidateNested({ each: true })
+  // @ArrayNotEmpty()
+  // readonly permissions?: CreatePermissionDto[];
 }

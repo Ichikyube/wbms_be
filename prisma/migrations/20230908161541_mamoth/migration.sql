@@ -236,6 +236,7 @@ CREATE TABLE `configs` (
     `description` VARCHAR(255) NOT NULL,
     `level_of_approval` INTEGER NOT NULL,
     `status` ENUM('ACTIVE', 'DISABLED') NOT NULL,
+    `edit_livespan` INTEGER NULL DEFAULT 43200,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `user_created` CHAR(36) NULL,
     `user_modified` CHAR(36) NULL,
@@ -282,7 +283,7 @@ CREATE TABLE `users` (
     `username` VARCHAR(30) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
     `nik` VARCHAR(30) NOT NULL,
-    `role_id` VARCHAR(36) NOT NULL,
+    `role_id` INTEGER NOT NULL,
     `role` VARCHAR(36) NOT NULL,
     `hashed_password` VARCHAR(100) NOT NULL,
     `hashed_rt` VARCHAR(100) NULL,
@@ -303,9 +304,11 @@ CREATE TABLE `users` (
 
 -- CreateTable
 CREATE TABLE `roles` (
-    `id` CHAR(36) NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(30) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
+    `permissions` JSON NOT NULL,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `user_created` VARCHAR(36) NULL,
     `user_modified` VARCHAR(36) NULL,
     `date_created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -316,38 +319,15 @@ CREATE TABLE `roles` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `permissions` (
+CREATE TABLE `RoleArchive` (
     `id` CHAR(36) NOT NULL,
-    `resource` CHAR(30) NOT NULL,
-    `role_id` VARCHAR(36) NOT NULL,
+    `name` VARCHAR(30) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `permissions` JSON NOT NULL,
     `user_created` VARCHAR(36) NULL,
-    `user_modified` VARCHAR(36) NULL,
     `date_created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `date_modified` DATETIME(3) NULL,
 
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `grants` (
-    `id` CHAR(36) NOT NULL,
-    `action` VARCHAR(191) NOT NULL,
-    `possession` VARCHAR(191) NOT NULL,
-    `permission_id` CHAR(36) NOT NULL,
-    `user_created` VARCHAR(36) NULL,
-    `user_modified` VARCHAR(36) NULL,
-    `date_created` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `date_modified` DATETIME(3) NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `attributes` (
-    `id` CHAR(36) NOT NULL,
-    `attr` VARCHAR(191) NOT NULL,
-    `grant_id` CHAR(36) NOT NULL,
-
+    UNIQUE INDEX `RoleArchive_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -627,15 +607,6 @@ ALTER TABLE `profiles` ADD CONSTRAINT `profiles_user_id_fkey` FOREIGN KEY (`user
 
 -- AddForeignKey
 ALTER TABLE `users` ADD CONSTRAINT `users_role_id_fkey` FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `permissions` ADD CONSTRAINT `permissions_role_id_fkey` FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `grants` ADD CONSTRAINT `grants_permission_id_fkey` FOREIGN KEY (`permission_id`) REFERENCES `permissions`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `attributes` ADD CONSTRAINT `attributes_grant_id_fkey` FOREIGN KEY (`grant_id`) REFERENCES `grants`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `storage_tanks` ADD CONSTRAINT `storage_tanks_site_id_fkey` FOREIGN KEY (`site_id`) REFERENCES `sites`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

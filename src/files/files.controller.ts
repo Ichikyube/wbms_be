@@ -18,6 +18,9 @@ import { extname } from 'path';
 import { multerOptions } from 'src/settings/multer.config';
 import { FilesService } from './files.service';
 import { Request, Response } from 'express';
+import { ParseFile } from 'src/common/pipes/parse-file.pipe';
+import { UploadFileDto } from './dto/uploadFile.dto';
+
 @ApiTags('Files')
 @Controller({
   path: 'files',
@@ -26,8 +29,6 @@ import { Request, Response } from 'express';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  // @ApiBearerAuth()
-  // @UseGuards(AuthGuard('jwt'))
   @Post('upload')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -42,36 +43,33 @@ export class FilesController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file) {
+  async uploadFile(@UploadedFile(ParseFile) file: Express.Multer.File) {
+    const response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    console.log(response);
     return await this.filesService.uploadImage(file);
   }
-  
-  @Post()
+
+  @Post('multiple')
+  @UseInterceptors(FilesInterceptor('files', 20, multerOptions))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
         },
       },
     },
   })
-  @UseInterceptors(FileInterceptor('image'))
-  async uploadedFile(@UploadedFile() file) {
-    const response = {
-      originalname: file.originalname,
-      filename: file.filename,
-    };
-    return console.log(response);
-  }
-  @Post('multiple')
-  @UseInterceptors(
-    FilesInterceptor('image', 20, multerOptions),
-  )
-  async uploadMultipleFiles(@UploadedFiles() files) {
+  async uploadMultipleFiles(@UploadedFiles() files: Express.Multer.File[]) {
     const response = [];
     files.forEach((file) => {
       const fileReponse = {
@@ -82,10 +80,12 @@ export class FilesController {
     });
     return response;
   }
+
   @Get(':imgpath')
   seeUploadedFile(@Param('imgpath') image, @Res() res) {
     return res.sendFile(image, { root: './files' });
   }
+
   @Get(':path')
   download(@Param('path') path, @Res() response) {
     return response.sendFile(path, { root: './files' });

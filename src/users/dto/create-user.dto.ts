@@ -5,13 +5,16 @@ import {
   IsEmail,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
   Length,
   ValidateNested,
   isNotEmpty,
+  isNumber,
 } from 'class-validator';
+import * as moment from 'moment';
 
 export class CreateUserDto {
   @ApiProperty() @IsString() @IsNotEmpty() username: string = 'Jhonny';
@@ -29,8 +32,8 @@ export class CreateUserDto {
   // @IsEnum(UserRole)
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  readonly roleId: string;
+  @IsNumber()
+  readonly roleId: number;
 
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
 
@@ -54,23 +57,26 @@ export class CreateUserDto {
   // @IsPhoneNumber('IN')
   @IsOptional()
   phone?: string;
+  
 
   @ApiProperty({
     required: false,
-    example: '2022-01-01',
-    description: 'The user date of birth',
-    type: 'string',
+    type: String,
     format: 'date',
-  })
+    example: '09/08/2023', // This is the input
+    description: 'The user date of birth',
+  })  
   @IsOptional()
   doB?: Date;
+  
 
   @ApiProperty({ required: false }) @IsString() @IsOptional() alamat?: string;
 
+
+  @ApiProperty({ type: String })
+  @IsBoolean()
   @Transform(({ obj, key }) => {
     return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
   })
-  @ApiProperty({ type: Boolean })
-  @IsBoolean()
   isLDAPUser: boolean;
 }

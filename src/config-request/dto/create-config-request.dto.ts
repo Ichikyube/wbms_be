@@ -1,13 +1,22 @@
-import {RequestStatus, Status} from '@prisma/client'
-import {ApiProperty} from '@nestjs/swagger'
-
-
-
+import { RequestStatus, Status } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateConfigRequestDto {
-    @ApiProperty({ enum: RequestStatus})
-    status: string;
-    @ApiProperty() start?: Date;
-    @ApiProperty() end?: Date;
-    @ApiProperty() configId: number;
+  @ApiProperty({ enum: RequestStatus })
+  status: string;
+  @ApiProperty({
+    type: String,
+    format: 'date-time', // Use the appropriate format for your date field
+    example: '2023-09-08T10:00:00Z', // Provide an example date in the expected format
+    description: 'The start time of the Request.', // Describe the field
+  })
+  start: string;
+  @ApiProperty({
+    type: String,
+    format: 'date-time',
+    example: '2023-09-08T10:00:00Z',
+    description: 'The ended time of the Request.', 
+  })
+  end: string;
+  @ApiProperty() configId: number;
 }

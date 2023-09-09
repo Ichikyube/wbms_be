@@ -62,13 +62,7 @@ export class ConfigRequestService {
     });
   }
 
-  /**
-   * setiap kali approval
-   * apabila approved, maka approval masuk ke level kedua,
-   * notifikasi masuk ke PJ2 untuk segera memberi response,
-   * Hanya apabila approval di semua level approve,
-   * maka status request berubah menjadi Approved,
-   */
+
   async approveRequest(userId: string, requestId: string) {
     const lvl = {
       1: 'PJ1',
@@ -91,6 +85,11 @@ export class ConfigRequestService {
     const newList = [...signList, userId];
     const currentLevel = signList.length + 1;
     if (userLvl !== lvl[currentLevel]) return console.log('false approver');
+      /**
+   * setiap kali approval currentLvl naik 1 tingkat
+   * Hanya apabila approval di semua level approve,
+   * maka status request berubah menjadi Approved,
+   */
     const data =
       currentLevel < configLvl
         ? {
@@ -105,7 +104,6 @@ export class ConfigRequestService {
         where: { id: requestId },
         data,
       });
-      //sendNotification
     } catch (e) {}
   }
 }

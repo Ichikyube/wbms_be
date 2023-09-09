@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
+  IsArray,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -20,7 +21,7 @@ export class CreateGrantDto {
   @ApiProperty({ type: String })
   possession: string;
 
-  @ValidateNested({ each: true })
-  @IsOptional()
+  @IsOptional()  
+  @IsArray()
   readonly attributes?: CreateAttributeDto[];
 }

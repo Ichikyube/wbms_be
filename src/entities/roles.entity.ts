@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PermissionEntity } from './permission.entity';
+import { JsonObject, JsonValue } from '@prisma/client/runtime/library';
 
 export class RoleEntity {
-  @ApiProperty() id?: string;
+  @ApiProperty() id?: number;
   @ApiProperty() name: string;
-  permissions?: PermissionEntity[];
+  @ApiProperty() description: string;
+  permissions?: JsonValue;
 }

@@ -1,1 +1,23 @@
-{"adminIT":{"configs":{"read:any":["*"],"update:any":["*"],"delete:any":["*"],"create:any":["*"]},"users":{"read:any":["*"],"delete:any":["*"],"create:any":["*"],"update:any":["*"]}},"adminHC":{"user":{"create:any":["*"],"update:any":["*"],"delete:any":["*"],"read:any":["*"]}},"admin_system":{"user":{"create:any":["*"],"delete:any":["*"],"read:any":["*"],"update:any":["*"]}},"Staff":{"Customer":{"delete:own":["*","!"],"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"]},"Company":{"create:own":["*","!"],"delete:own":["*","!"],"update:own":["*","!"],"read:own":["*","!"]},"Driver":{"update:own":["*","!"],"create:own":["*","!"],"read:own":["*","!"],"delete:own":["*","!"]},"StorageTank":{"update:own":["*","!"],"read:own":["*","!"],"delete:own":["*","!"],"create:own":["*","!"]}}}
+{
+  "admiral": {
+    "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] }
+  },
+  "ninja": {
+    "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] }
+  },
+  "lord": { "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] } },
+  "mala": { "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] } },
+  "malari": {
+    "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] }
+  },
+  "malaria": { "gudang": { "create:own": ["*", "!id"] } },
+  "malarsia": { "gudang": { "create:own": ["*", "!id"] } },
+  "sickyu": { "mangu": { "read:own": ["*", "!id"] } },
+  "mixue": { "mangu": { "read:own": ["*", "!id"] } },
+  "mixuwe": { "mangu": { "read:own": ["*", "!id"] } },
+  "mixuwqe": { "mangu": { "read:own": ["*", "!id"] } },
+  "mixuwqie": { "mangu": { "read:own": ["*", "!id"] } },
+  "mixe": { "mangu": { "read:own": ["*", "!id"] } },
+  "mixex": { "mangu": { "read:own": ["*", "!id"] } },
+  "mayang": { "string": { "read:own": ["*", "!string"] } }
+}

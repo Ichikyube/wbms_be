@@ -151,4 +151,17 @@ export class TransactionController {
 
     return dataOut;
   }
+
+  // @Get()
+  // async findAll(): Promise<string[]> {
+  //   const cachedData = await this.cacheService.get('items');
+  //   if (cachedData) {
+  //     return JSON.parse(cachedData);
+  //   }
+
+  //   const data = ['item1', 'item2', 'item3'];
+  //   await this.cacheService.set('items', JSON.stringify(data));
+
+  //   return data;
+  // }
 }

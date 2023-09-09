@@ -254,7 +254,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async updateUserRole(userId: string, roleId: string): Promise<UserEntity> {
+  async updateUserRole(userId: string, roleId: number): Promise<UserEntity> {
     try {
       return await this.db.user.update({
         where: {
