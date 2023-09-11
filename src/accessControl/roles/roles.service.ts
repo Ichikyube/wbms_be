@@ -8,6 +8,7 @@ import { RoleEntity } from 'src/entities/roles.entity';
 import { RolesBuilder } from 'nest-access-control';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import * as fs from 'fs';
+import * as _ from 'lodash';
 
 @Injectable()
 export class RolesService {
@@ -18,11 +19,11 @@ export class RolesService {
       where: { isDeleted: false },
       include: {
         users: {
-          select:{
-            id:true,
-            username:true,
-            nik:true
-          }
+          select: {
+            id: true,
+            username: true,
+            nik: true,
+          },
         },
       },
     });
@@ -56,19 +57,20 @@ export class RolesService {
 
   async updateAC(): Promise<any> {
     const roles = await this.db.role.findMany({
-      where: { isDeleted: false }});
-      
+      where: { isDeleted: false },
+    });
+
     const grants = await this.parseData(roles);
 
-    const ac = JSON.stringify(grants)
-    fs.writeFileSync('./rbac-policy.json',  ac);
+    const ac = JSON.stringify(grants);
+    fs.writeFileSync('./rbac-policy.json', ac);
     return true;
   }
 
   async parseData(data) {
     const result = {};
     for (const item of data) {
-      console.log(item)
+      console.log(item);
       const role = item.name;
       const permissions = item.permissions;
       const rolePermissions = {};
@@ -81,13 +83,14 @@ export class RolesService {
           const resourcePermissions = {};
 
           for (const { action, possession, attributes } of grants) {
-            const grantKey = `${action}:${possession}`;
-            const exception = attributes.map(
-              (attribute) => `!${attribute.attr}`,
-            );
-            resourcePermissions[grantKey] =  ['*', ...exception];
+            if(action) {
+              const grantKey = `${action}:${possession}`;
+              const exception = attributes.map(
+                (attribute) => `!${attribute.attr}`,
+              );
+              resourcePermissions[grantKey] = ['*', ...exception];
+            }
           }
-
           rolePermissions[resource] = resourcePermissions;
         }
       }
@@ -118,17 +121,17 @@ export class RolesService {
         data: {
           name,
           description,
-          permissions: permissionsData.map( (permission) => ({
+          permissions: permissionsData.map((permission) => ({
             resource: permission.resource,
-            grants:  permission.grants.map(
-                ({ action, possession, attributes }) => ({
-                  action,
-                  possession,
-                  attributes:  attributes.map(({ attr }) => ({
-                      attr,
-                    })),
-                }),
-              ),
+            grants: permission.grants.map(
+              ({ action, possession, attributes }) => ({
+                action,
+                possession,
+                attributes: attributes.map(({ attr }) => ({
+                  attr,
+                })),
+              }),
+            ),
           })),
           userCreated: userId,
           userModified: '',
@@ -165,17 +168,16 @@ export class RolesService {
     if (!existingRole) {
       throw new Error(`Role with ID ${roleId} not found.`);
     }
-    
+
     try {
-      await this.db.roleArchive.create({
-        data:{
-          roleId: roleId,
-          name: existingRole.name,
-          description: existingRole.description,
-          permissions: existingRole.permissions,
-          userCreated: userId
-        }
-      })
+      if (_.isEqual(existingRole.permissions, updatedRoleData.permissions))
+        await this.db.roleArchive.create({
+          data: {
+            roleId: roleId,
+            permissions: existingRole.permissions,
+            userCreated: userId,
+          },
+        });
       const permissionsData = updatedRoleData.permissions.map((permission) => ({
         resource: permission.resource,
         grants: permission.grants,
@@ -186,22 +188,22 @@ export class RolesService {
         data: {
           name: updatedRoleData.name,
           description: updatedRoleData.description,
-          permissions: permissionsData.map( (permission) => ({
+          permissions: permissionsData.map((permission) => ({
             resource: permission.resource,
-            grants:  permission.grants.map(
-                ({ action, possession, attributes }) => ({
-                  action,
-                  possession,
-                  attributes:  attributes.map(({ attr }) => ({
-                      attr,
-                    })),
-                }),
-              ),
+            grants: permission.grants.map(
+              ({ action, possession, attributes }) => ({
+                action,
+                possession,
+                attributes: attributes.map(({ attr }) => ({
+                  attr,
+                })),
+              }),
+            ),
           })),
           userModified: userId,
         },
       });
-
+      await this.updateAC();
       return updatedRole;
     } catch (error) {
       console.error('Error updating role with permissions:', error);
@@ -220,7 +222,7 @@ export class RolesService {
       throw new Error('Cannot delete admin role');
     }
 
-    return this.db.role.update({
+    return await this.db.role.update({
       where: { id },
       data: { isDeleted: true },
     });

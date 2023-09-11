@@ -424,8 +424,6 @@ model Role {
 model RoleArchive {
   id          String  @id @default(uuid()) @db.Char(36)
   roleId      Int     
-  name        String  @unique @db.VarChar(30)
-  description String  @db.VarChar(255)
   permissions  Json
   userCreated  String?   @map("user_created") @db.VarChar(36)
   dtCreated    DateTime  @default(now()) @map("date_created")

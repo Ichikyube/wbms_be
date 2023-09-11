@@ -92,7 +92,7 @@ export class RolesController {
   @Patch(':id')
   @ApiCreatedResponse()
   async updateRole(
-    @Param() { id },
+    @Param('id') id: number,
     @Body(new ValidationPipe()) params: UpdateRoleDto,
     @Req() req: Request,
   ) {
@@ -125,7 +125,6 @@ export class RolesController {
     description: 'Gets the Role id',
   })
   async deleteRole(@Param('id') id: number) {
-    console.log(id);
     return this.rolesService.deleteRole(id);
   }
 }

@@ -1,23 +1,46 @@
 {
-  "admiral": {
-    "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] }
-  },
-  "ninja": {
-    "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] }
-  },
-  "lord": { "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] } },
-  "mala": { "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] } },
-  "malari": {
-    "gudang": { "read:own": ["*", "!id"], "create:own": ["*", "!id"] }
-  },
-  "malaria": { "gudang": { "create:own": ["*", "!id"] } },
-  "malarsia": { "gudang": { "create:own": ["*", "!id"] } },
-  "sickyu": { "mangu": { "read:own": ["*", "!id"] } },
-  "mixue": { "mangu": { "read:own": ["*", "!id"] } },
-  "mixuwe": { "mangu": { "read:own": ["*", "!id"] } },
-  "mixuwqe": { "mangu": { "read:own": ["*", "!id"] } },
-  "mixuwqie": { "mangu": { "read:own": ["*", "!id"] } },
-  "mixe": { "mangu": { "read:own": ["*", "!id"] } },
-  "mixex": { "mangu": { "read:own": ["*", "!id"] } },
-  "mayang": { "string": { "read:own": ["*", "!string"] } }
+  "Kuga": {
+    "Company": {
+      "read:own": ["*"],
+      "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    },
+    "Customer": {
+      "read:own": ["*"],
+      "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    },
+    "Driver": {
+      "read:own": ["*"],
+      "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    },
+    "Mill": {
+      "read:own": ["*"],
+      "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    },
+    "Product": {
+      "read:own": ["*"],
+      "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    },
+    "Site": {
+      "read:own": ["*"],
+      "create:own": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    },
+    "Config": {
+      "read:any": ["*", "!type", "!value"],
+      "create:any": ["*"],
+      "update:own": ["*"],
+      "delete:own": ["*"]
+    }
+  }
 }

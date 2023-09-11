@@ -9,10 +9,8 @@ import { DbService } from './db/db.service';
 import SwaggerDocumentation from './settings/swagger.config';
 import * as fs from 'fs';
 import { AccessControl } from 'accesscontrol';
-const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
-const ac = new AccessControl(grantsObject);
-
-console.log(grantsObject); // output 'testing'
+// const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
+// const ac = new AccessControl(grantsObject);
 
 declare const module: any;
 

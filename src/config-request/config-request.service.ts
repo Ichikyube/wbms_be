@@ -83,22 +83,22 @@ export class ConfigRequestService {
     const configLvl = configRequest.config.lvlOfApprvl;
     const signList = JSON.parse(JSON.stringify(configRequest.approval));
     const newList = [...signList, userId];
-    const currentLevel = signList.length + 1;
+    
+    const currentLevel = signList.length + 1; //setiap kali approval currentLvl naik 1 tingkat
     if (userLvl !== lvl[currentLevel]) return console.log('false approver');
-      /**
-   * setiap kali approval currentLvl naik 1 tingkat
-   * Hanya apabila approval di semua level approve,
-   * maka status request berubah menjadi Approved,
-   */
+    //Apabila sign sudah sesuai dengan level dari config, 
+    /**
+     * Hanya apabila approval di semua level approve,
+     * maka status request berubah menjadi Approved,
+     */
     const data =
-      currentLevel < configLvl
-        ? {
+      currentLevel < configLvl? {
             approval: newList,
           }
         : {
             status: RequestStatus.APPROVED,
             approval: newList,
-          };
+        };
     try {
       await this.db.configRequest.update({
         where: { id: requestId },
@@ -107,3 +107,4 @@ export class ConfigRequestService {
     } catch (e) {}
   }
 }
+
