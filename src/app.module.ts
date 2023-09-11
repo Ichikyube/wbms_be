@@ -82,7 +82,7 @@ import { RedisModule } from './redis/redis.module';
     ConfigRequestModule,
     ConfigRequestsAdminModule,
     NotificationsModule,
-    RedisModule,
+    // RedisModule,
   ],
   providers: [
     {

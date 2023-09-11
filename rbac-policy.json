@@ -1,46 +1,6 @@
-{
-  "Kuga": {
-    "Company": {
-      "read:own": ["*"],
-      "create:own": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    },
-    "Customer": {
-      "read:own": ["*"],
-      "create:own": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    },
-    "Driver": {
-      "read:own": ["*"],
-      "create:own": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    },
-    "Mill": {
-      "read:own": ["*"],
-      "create:own": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    },
-    "Product": {
-      "read:own": ["*"],
-      "create:own": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    },
-    "Site": {
-      "read:own": ["*"],
-      "create:own": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    },
-    "Config": {
-      "read:any": ["*", "!type", "!value"],
-      "create:any": ["*"],
-      "update:own": ["*"],
-      "delete:own": ["*"]
-    }
-  }
-}
+{"baru":{"Company":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Customer":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Driver":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Mill":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Site":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Transaction":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"User":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Config":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]}}}
+
+
+
+
+docker run -itd -e POSTGRES_USER=armin -e POSTGRES_PASSWORD=3031323334 -p 5432:5432 -v /data:/var/lib/postgresql/data --name postgresql postgres
