@@ -1,11 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import {
-  ACGuard,
-  AccessControlModule,
-  RolesBuilder,
-} from 'nest-access-control';
+import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
 import { TransactionModule } from './transactions/transactions.module';
@@ -49,6 +45,7 @@ import { RedisModule } from './redis/redis.module';
       rootPath: join(__dirname, '..', 'upload'),
       serveRoot: '/img/',
     }),
+    CacheModule.register({ isGlobal: true }),
     // AccessControlModule.forRootAsync({
     //   imports: [RolesModule],
     //   inject: [RolesService],

@@ -24,7 +24,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { AuthService } from './auth.service';
 import { AtGuard, RtGuard } from 'src/common/guards';
 import { SigninDto, SignupDto } from './dto';

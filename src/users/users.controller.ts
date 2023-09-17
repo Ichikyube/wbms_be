@@ -26,13 +26,15 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 
 import { UsersService } from './users.service';
 import { AtGuard } from 'src/common/guards';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
-import { FileInterceptor } from '@nestjs/platform-express';
+
 import { Observable, interval, map } from 'rxjs';
 
 @ApiTags('Users')

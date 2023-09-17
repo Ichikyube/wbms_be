@@ -9,6 +9,7 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request, Response } from 'express';
 import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto';

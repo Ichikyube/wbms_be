@@ -13,7 +13,7 @@ import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateConfigDto } from './dto/create-config.dto';
-
+import { CacheInterceptor } from '@nestjs/cache-manager';
 @ApiTags('Configs')
 @Controller('configs')
 export class ConfigsController {

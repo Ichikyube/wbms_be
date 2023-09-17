@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { BarcodeTypesService } from './barcodeTypes.service';
 import { UseRoles } from 'nest-access-control';
 

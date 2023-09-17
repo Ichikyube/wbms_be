@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProvincesService } from './provinces.service';
 import { CreateProvinceDto, UpdateProvinceDto } from './dto';
 import { SaveUserIdGuard } from 'src/common/guards/SaveUserIdGuard ';

@@ -10,9 +10,9 @@ import {
   Sse,
   Res,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Request, Response } from 'express';
 import { CitiesService } from './cities.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { UseRoles } from 'nest-access-control';

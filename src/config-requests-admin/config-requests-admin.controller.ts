@@ -7,8 +7,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ConfigRequestsAdminService } from './config-requests-admin.service';
 import { ApiTags } from '@nestjs/swagger';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { ConfigRequestsAdminService } from './config-requests-admin.service';
 
 @ApiTags('Config-Requests-Admin')
 @Controller('config-requests-admin')
