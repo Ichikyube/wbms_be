@@ -389,7 +389,6 @@ model User {
   nik      String @unique @db.VarChar(30)
 
   roleId         Int     @map("role_id")
-  role           String  @db.VarChar(36)
   hashedPassword String  @map("hashed_password") @db.VarChar(100)
   hashedRT       String? @map("hashed_rt") @db.VarChar(100)
 

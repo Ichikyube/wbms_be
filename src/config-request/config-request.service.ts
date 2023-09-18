@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConfigRequestDto } from './dto/create-config-request.dto';
-import { UpdateConfigRequestDto } from './dto/update-config-request.dto';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
 import { RequestStatus } from '@prisma/client';
@@ -13,6 +12,16 @@ export class ConfigRequestService {
   ) {}
 
   async createRequest(dto: CreateConfigRequestDto) {
+    const existingSchedule = await this.db.configRequest.findFirst({
+      where: {
+        schedule: dto.schedule,
+      },
+    });
+
+    if (existingSchedule.schedule.getDate() === dto.schedule.getDate()) {
+      if(dto.schedule.getHours()  >= existingSchedule.schedule.getHours() && dto.schedule.getHours() <= existingSchedule.schedule.getHours())
+        throw new NotFoundException('Request failed: Schedule already exists for this date.');
+    } 
     const config = await this.db.config.findFirst({
       where: { id: dto.configId },
     });
@@ -24,8 +33,7 @@ export class ConfigRequestService {
       },
       approval: [],
       status: RequestStatus.PENDING,
-      start: dto.start,
-      end: dto.end,
+      schedule: dto.schedule,
     };
 
     return this.db.configRequest.create({ data });
@@ -61,7 +69,6 @@ export class ConfigRequestService {
       },
     });
   }
-
 
   async approveRequest(userId: string, requestId: string) {
     const lvl = {

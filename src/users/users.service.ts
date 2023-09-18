@@ -19,11 +19,18 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 export class UsersService {
   constructor(private db: DbService) {}
 
-  async getIAM(id: string): Promise<UserEntity> {
+  async getIAM(id: string): Promise<any> {
     // const decodedUserInfo = req.user as { id: string; email: string };
     const user = await this.db.user.findUnique({
       where: { id },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     if (!user) {
       throw new NotFoundException();
@@ -35,11 +42,18 @@ export class UsersService {
     return user;
   }
 
-  async getAll(): Promise<UserEntity[]> {
+  async getAll(): Promise<any[]> {
     const records = await this.db.user.findMany({
       // select: { id: true, email: true },
       where: { isDeleted: false },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
       orderBy: [
         {
           dtCreated: 'desc',
@@ -61,65 +75,107 @@ export class UsersService {
     return attr;
   }
 
-  async getAllDeleted(): Promise<UserEntity[]> {
+  async getAllDeleted(): Promise<any[]> {
     const records = await this.db.user.findMany({
       where: { isDeleted: true },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     return records;
   }
 
-  async getById(id: string): Promise<UserEntity> {
+  async getById(id: string): Promise<any> {
     // find the user by username
     const user = await this.db.user.findUnique({
       where: { id },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     return user;
   }
 
-  async searchFirst(query: any): Promise<UserEntity> {
+  async searchFirst(query: any): Promise<any> {
     const record = await this.db.user.findFirst({
       where: {
         ...query.where,
         AND: [{ isDeleted: false }],
       },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     return record;
   }
 
-  async searchMany(query: any): Promise<UserEntity[]> {
+  async searchMany(query: any): Promise<any[]> {
     const records = await this.db.user.findMany({
       where: {
         ...query.where,
         AND: [{ isDeleted: false }],
       },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     return records;
   }
 
-  async searchFirstDeleted(query: any): Promise<UserEntity> {
+  async searchFirstDeleted(query: any): Promise<any> {
     const record = await this.db.user.findFirst({
       where: {
         ...query.where,
         AND: [{ isDeleted: true }],
       },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     return record;
   }
 
-  async searchManyDeleted(query: any): Promise<UserEntity[]> {
+  async searchManyDeleted(query: any): Promise<any[]> {
     const records = await this.db.user.findMany({
       where: {
         ...query.where,
         AND: [{ isDeleted: true }],
       },
-      include: { profile: true },
+      include: {
+        profile: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     return records;
@@ -129,7 +185,7 @@ export class UsersService {
     dto: CreateUserDto,
     file: Express.Multer.File,
     userId: string,
-  ): Promise<UserEntity> {
+  ): Promise<any> {
     // generate the password hash
     const { username, email, nik, isLDAPUser, roleId } = dto;
     let user = await this.db.user.findFirst({ where: { username } });
@@ -142,7 +198,6 @@ export class UsersService {
       throw new HttpException('Role not found', HttpStatus.BAD_REQUEST);
     }
     // save the new user in the db
-    let userRole = role?.name ? role.name : 'user';
     console.log(isLDAPUser);
     user = await this.db.user
       .create({
@@ -163,7 +218,6 @@ export class UsersService {
           },
           hashedPassword: hashedPassword,
           roleId: roleId,
-          role: userRole,
           userCreated: userId,
           isLDAPUser: isLDAPUser,
         },
@@ -241,6 +295,11 @@ export class UsersService {
         },
         include: {
           profile: true,
+          userRole:{
+            select:{
+              name: true
+            }
+          }
         },
       })
       .catch((error) => {
@@ -254,7 +313,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async updateUserRole(userId: string, roleId: number): Promise<UserEntity> {
+  async updateUserRole(userId: string, roleId: number): Promise<any> {
     try {
       return await this.db.user.update({
         where: {

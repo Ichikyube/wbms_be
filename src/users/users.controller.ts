@@ -57,9 +57,10 @@ export class UsersController {
 
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
-      const { username, email } = user;
+      const { username, email, userRole } = user;
       dataOut.data.user = {
         username,
+        role: userRole,
         email,
         name,
         profilePic,
@@ -175,10 +176,10 @@ export class UsersController {
 
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
-      const { username, email } = user;
-
+        const { username, email, userRole } = user;
       dataOut.data.user.records.push({
         username,
+        role: userRole,
         email,
         name,
         profilePic,
@@ -277,9 +278,11 @@ export class UsersController {
       console.log(user);
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
-      const { username, email } = user;
+      const { username, email, userRole } = user;
+      
       dataOut.data.user = {
         username,
+        role: userRole,
         email,
         name,
         profilePic,
@@ -316,9 +319,10 @@ export class UsersController {
 
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
-      const { username, email } = user;
+      const { username, email, userRole } = user;
       dataOut.data.user = {
         username,
+        role: userRole,
         email,
         name,
         profilePic,
@@ -376,9 +380,10 @@ export class UsersController {
 
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
-      const { username, email } = user;
+      const { username, email, userRole } = user;
       dataOut.data.user = {
         username,
+        role: userRole,
         email,
         name,
         profilePic,

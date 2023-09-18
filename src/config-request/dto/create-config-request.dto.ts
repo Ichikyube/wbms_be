@@ -10,13 +10,7 @@ export class CreateConfigRequestDto {
     example: '2023-09-08T10:00:00Z', // Provide an example date in the expected format
     description: 'The start time of the Request.', // Describe the field
   })
-  start: string;
-  @ApiProperty({
-    type: String,
-    format: 'date-time',
-    example: '2023-09-08T10:00:00Z',
-    description: 'The ended time of the Request.', 
-  })
-  end: string;
+  schedule: Date;
+
   @ApiProperty() configId: number;
 }

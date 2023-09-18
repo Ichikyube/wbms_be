@@ -41,7 +41,11 @@ export class AuthService {
         username: true,
         email: true,
         nik: true,
-        role: true,
+        userRole: {
+          select:{
+            name:true
+          }
+        },
         hashedPassword: true,
         profile: {
           select: {
@@ -85,7 +89,7 @@ export class AuthService {
     const tokens = await this.signTokens({
       sub: user.id,
       username: user.username,
-      role: user.role,
+      role: user.userRole.name,
     });
 
     await this.updateRtHash(user.id, tokens.refresh_token);
@@ -200,6 +204,13 @@ export class AuthService {
       where: {
         id: userId,
       },
+      include:{
+        userRole:{
+          select:{
+            name:true
+          }
+        }
+      }
     });
 
     if (!user || !user.hashedRT) throw new ForbiddenException('Access Denied');
@@ -211,7 +222,7 @@ export class AuthService {
     const tokens = await this.signTokens({
       sub: user.id,
       username: user.email,
-      role: user.role,
+      role: user.userRole.name,
     });
 
     await this.updateRtHash(user.id, tokens.refresh_token);
