@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { NotificationsService } from './notifications.service';
 

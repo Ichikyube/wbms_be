@@ -31,14 +31,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 
 import { UsersService } from './users.service';
-import { AtGuard } from 'src/common/guards';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UseRoles } from 'nest-access-control';
 
 import { Observable, interval, map } from 'rxjs';
 
 @ApiTags('Users')
-// @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}

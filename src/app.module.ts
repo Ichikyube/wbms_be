@@ -24,7 +24,7 @@ import { SemaiModule } from './semai/semai.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
-import { AtGuard } from './common/guards';
+import { AtGuard, RtGuard } from './common/guards';
 import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
@@ -46,13 +46,6 @@ import { RedisModule } from './redis/redis.module';
       serveRoot: '/img/',
     }),
     CacheModule.register({ isGlobal: true }),
-    // AccessControlModule.forRootAsync({
-    //   imports: [RolesModule],
-    //   inject: [RolesService],
-    //   useFactory: async (roleService: RolesService): Promise<RolesBuilder> => {
-    //     return new RolesBuilder(await roleService.getRoles());
-    //   },
-    // }),
     DbModule,
     AuthModule,
     TransactionModule,
@@ -86,10 +79,6 @@ import { RedisModule } from './redis/redis.module';
       provide: APP_GUARD,
       useClass: AtGuard,
     },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ACGuard,
-    // },
     {
       provide: APP_INTERCEPTOR,
       useClass: TimestampInterceptor,

@@ -7,6 +7,7 @@ import { AtStrategy, JwtStrategy, RtStrategy } from './strategies';
 import { UsersModule } from 'src/users/users.module';
 import { LdapStrategy } from './strategies/ldap.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { LdapAuthService } from './ldap-auth/ldap-auth.service';
 
 @Module({
   imports: [
@@ -19,12 +20,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
-    // PassportModule,
-    PassportModule.register({ defaultStrategy: 'ldapAuth' }),
+    PassportModule,
+    // PassportModule.register({ defaultStrategy: 'ldapAuth' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy],
-  // exports: [PassportModule],
-  exports: [PassportModule.register({ defaultStrategy: 'ldapAuth' })],
+  providers: [AuthService, JwtStrategy, RtStrategy, AtStrategy, LdapStrategy, LdapAuthService],
+  exports: [PassportModule],
+  // exports: [PassportModule.register({ defaultStrategy: 'ldapAuth' })],
 })
 export class AuthModule {}

@@ -14,7 +14,6 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProvincesService } from './provinces.service';
 import { CreateProvinceDto, UpdateProvinceDto } from './dto';
-import { SaveUserIdGuard } from 'src/common/guards/SaveUserIdGuard ';
 import { UseRoles } from 'nest-access-control';
 import { ProvinceEntity } from 'src/entities';
 

@@ -19,6 +19,7 @@ services:
       WATCHTOWER_CLEANUP: true
       WATCHTOWER_INCLUDE_STOPPED: true
       WATCHTOWER_REVIVE_STOPPED: true
+      WATCHTOWER_HEAD_BASED_DIGEST_CHECKING: true
     networks:
       - armin-net
   redis:
@@ -62,7 +63,7 @@ services:
       # LDAP_READONLY_USER_PASSWORD: watcher
       LDAP_RFC2307BIS_SCHEMA: true
       LDAP_REMOVE_CONFIG_AFTER_SETUP: true
-      LDAP_SEED_INTERNAL_LDIF_PATH: '/assets/openldap/custom/ldif'
+      # LDAP_SEED_INTERNAL_LDIF_PATH: '/assets/openldap/custom/ldif'
       # LDAP_TLS: false
       LDAP_TLS_DH_PARAM_FILE: /container/service/slapd/assets/certs/dhparam.pem
       # LDAP_TLS_ENFORCE: false
@@ -71,11 +72,12 @@ services:
 
     command: --copy-service --loglevel debug
     volumes:
+      - ldap-data:/container/service/slapd/assets/config/bootstrap/ldif/custom
+      # - ldap-config:/etc/ldap/slapd.d
+      - ../armin/ldap/config:/etc/ldap/slapd.d
       - ../armin/ldap/certificates:/container/service/slapd/assets/certs
       - ../armin/ldap/database:/var/lib/ldap
-      - ../armin/ldap/config:/etc/ldap/slapd.d
       - ../armin/ldif:/assets/openldap/custom/ldif
-      # - ../armin/ldap/bootstrap:/container/service/slapd/assets/config/bootstrap/ldif/custom
     networks:
       - armin-net
   phpldapadmin:
@@ -209,6 +211,6 @@ services:
 networks:
   armin-net:
     driver: bridge
-# volumes:
-#   ldap-data:/container/service/slapd/assets/config/bootstrap/ldif/custom
-#   ldap-config:
+volumes:
+  ldap-data:
+  ldap-config:

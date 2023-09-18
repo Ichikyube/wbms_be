@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request, Response } from 'express';

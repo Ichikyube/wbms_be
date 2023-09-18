@@ -10,9 +10,8 @@ import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto';
 import { UserEntity } from 'src/entities/user.entity';
 import { NextFunction, Response } from 'express';
-import passport from 'passport';
-import * as ldap from 'ldapjs';
-import Cookies from 'universal-cookie';
+
+import { LdapAuthService } from './ldap-auth/ldap-auth.service';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +20,7 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
     private usersService: UsersService,
+    private ldapAuthService: LdapAuthService
   ) {}
 
   async signin(
@@ -47,6 +47,7 @@ export class AuthService {
           }
         },
         hashedPassword: true,
+        isLDAPUser: true,
         profile: {
           select: {
             name: true,
@@ -60,26 +61,22 @@ export class AuthService {
         },
       },
     });
-    // if (isLdap) {
-    //   const isAuthenticated = await this.ldapAuthService.authenticate(username, password);
-    //   if (!isAuthenticated) {
-    //     return { message: 'LDAP Authentication Failed' };
-    //   }
-    //   // Perform additional actions or return JWT token or any other response
-    //   return { message: 'LDAP Authentication Successful' };
-    // } else {
-    //   // Handle non-LDAP authentication logic here
-    //   return { message: 'Non-LDAP Authentication' };
-    // }
+
     // if user does not exist throw exception
     if (!user) throw new ForbiddenException('Invalid username or password.');
+    if (user.isLDAPUser) {
+      const isAuthenticated = await this.ldapAuthService.authenticate(user.username, dto.password);
+      if (!isAuthenticated) {
+        throw new ForbiddenException('LDAP Authentication Failed');
+      }
+    } else {
+      // compare password
+      const pwMatches = await verify(user.hashedPassword, dto.password);
 
-    // compare password
-    const pwMatches = await verify(user.hashedPassword, dto.password);
-
-    // if password incorrect throw exception
-    if (!pwMatches)
-      throw new ForbiddenException('Invalid username or password.');
+      // if password incorrect throw exception
+      if (!pwMatches)
+        throw new ForbiddenException('Invalid username or password.');
+    }
 
     // send back the user
     delete user.hashedPassword; // Tidak perlu lg karena sudah pakai return jwt
@@ -103,80 +100,6 @@ export class AuthService {
       sameSite: 'lax',
     });
 
-    return { tokens, user };
-  }
-
-  async authenticate(username: string, password: string): Promise<boolean> {
-    const ldapUrl = 'ldap://your-ldap-server-url';
-    const ldapBaseDN = 'dc=example,dc=com'; // The Base DN of your LDAP server
-
-    const client = ldap.createClient({
-      url: ldapUrl,
-    });
-
-    return new Promise<boolean>((resolve, reject) => {
-      client.bind(`cn=${username},${ldapBaseDN}`, password, (err) => {
-        if (err) {
-          // LDAP authentication failed
-          resolve(false);
-        } else {
-          // LDAP authentication successful
-          resolve(true);
-        }
-        client.unbind();
-      });
-    });
-  }
-
-  async fakeLdapAuth(username: string, password: string) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        return resolve({
-          username,
-          password,
-        });
-      });
-    });
-  }
-
-  async ldapSignin(
-    user: any,
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<{ tokens: Tokens; user: any }> {
-    // find the user by username
-    const userLdap = await this.db.user.findUnique({
-      where: { username: user.username, isLDAPUser: true },
-    });
-    passport.authenticate('ldapauth', { session: false }, (err, user, info) => {
-      var error = err || info;
-
-      if (error) {
-        return res.send({
-          status: 500,
-          data: error,
-        });
-      }
-      if (!user) {
-        return res.send({
-          status: 404,
-          data: 'User Not Found',
-        });
-      } else {
-        return res.send({
-          status: 200,
-          data: user,
-        });
-      }
-    })(req, res, next);
-    // using access_token and refresh_token now, not just single jwt
-    // return this.signToken(user.id, user.username, user.role);
-    const tokens = await this.signTokens({
-      sub: user.id,
-      username: user.username,
-      role: user.role,
-    });
     return { tokens, user };
   }
 
