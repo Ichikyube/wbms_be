@@ -18,8 +18,6 @@ export class CreateConfigDto {
   @ApiProperty()
   status: Status;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // @ApiProperty()
-  // siteId: string;
+  @ApiProperty()
+  lifespan: number;
 }

@@ -83,6 +83,7 @@ export class ConfigsService {
     const data = {
       lvlOfApprvl : parseInt(dto.lvlOfApprvl),
       status: dto.status,
+      lifespan: dto.lifespan,
       userModified: userId
     }
     const params = {

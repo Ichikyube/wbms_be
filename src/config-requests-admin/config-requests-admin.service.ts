@@ -8,7 +8,7 @@ export class ConfigRequestsAdminService {
     private db: DbService,
     private config: ConfigService,
   ) {}
-  async createRequestAdminList(lvlMap:object) {
+  async createRequestAdminList(lvlMap: object, userId: string) {
     const dataOut = {
       status: true,
       message: '',
@@ -22,6 +22,7 @@ export class ConfigRequestsAdminService {
       const params = {
         data: {
           lvlMap,
+          dtCreated: userId,
         },
       };
 
@@ -39,14 +40,11 @@ export class ConfigRequestsAdminService {
   async getRequestAdminList() {
     return await this.db.configAdminList.findFirst({
       orderBy: {
-        dtCreated: 'desc' // Assuming 'createdAt' is the timestamp field indicating creation
+        dtCreated: 'desc', // Assuming 'createdAt' is the timestamp field indicating creation
       },
       select: {
-        lvlMap: true
-      }
+        lvlMap: true,
+      },
     });
   }
-
-  
-  
 }

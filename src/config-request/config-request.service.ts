@@ -12,16 +12,16 @@ export class ConfigRequestService {
   ) {}
 
   async createRequest(dto: CreateConfigRequestDto) {
-    const existingSchedule = await this.db.configRequest.findFirst({
-      where: {
-        schedule: dto.schedule,
-      },
-    });
+    // const existingSchedule = await this.db.configRequest.findFirst({
+    //   where: {
+    //     schedule: dto.schedule,
+    //   },
+    // });
 
-    if (existingSchedule.schedule.getDate() === dto.schedule.getDate()) {
-      if(dto.schedule.getHours()  >= existingSchedule.schedule.getHours() && dto.schedule.getHours() <= existingSchedule.schedule.getHours())
-        throw new NotFoundException('Request failed: Schedule already exists for this date.');
-    } 
+    // if (existingSchedule.schedule.getDate() === dto.schedule.getDate()) {
+    //   if(dto.schedule.getHours()  >= existingSchedule.schedule.getHours() && dto.schedule.getHours() <= existingSchedule.schedule.getHours())
+    //     throw new NotFoundException('Request failed: Schedule already exists for this date.');
+    // } 
     const config = await this.db.config.findFirst({
       where: { id: dto.configId },
     });
