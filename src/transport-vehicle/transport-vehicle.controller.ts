@@ -335,7 +335,6 @@ export class TransportVehicleController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.transportVehicleService.updateById(
         id,
         dto,

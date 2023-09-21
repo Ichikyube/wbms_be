@@ -1,6 +1,47 @@
-{"baru":{"Company":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Customer":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Driver":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Mill":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Site":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Transaction":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"User":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]},"Config":{"read:own":["*","!"],"create:own":["*","!"],"update:own":["*","!"],"delete:own":["*","!"]}}}
-
-
-
-
-docker run -itd -e POSTGRES_USER=armin -e POSTGRES_PASSWORD=3031323334 -p 5432:5432 -v /data:/var/lib/postgresql/data --name postgresql postgres
+[
+  {
+    "resource": "Province",
+    "grants": [
+      { "action": "read", "possession": "own", "attributes": [] },
+      { "action": "create", "possession": "own", "attributes": [] },
+      { "action": "update", "possession": "own", "attributes": [] },
+      { "action": "delete", "possession": "own", "attributes": [] }
+    ]
+  },
+  {
+    "resource": "City",
+    "grants": [
+      { "action": "read", "possession": "own", "attributes": [] },
+      { "action": "create", "possession": "own", "attributes": [] },
+      { "action": "update", "possession": "own", "attributes": [] },
+      { "action": "delete", "possession": "own", "attributes": [] }
+    ]
+  },
+  {
+    "resource": "Driver",
+    "grants": [
+      {
+        "action": "read",
+        "possession": "own",
+        "attributes": [
+          { "attr": "refType" },
+          { "attr": "refId" },
+          { "attr": "companyId" },
+          { "attr": "companyRefId" },
+          { "attr": "companyName" }
+        ]
+      },
+      { "action": "create", "possession": "own", "attributes": [] },
+      {
+        "action": "update",
+        "possession": "own",
+        "attributes": [
+          { "attr": "refId" },
+          { "attr": "codeSap" },
+          { "attr": "companyId" }
+        ]
+      },
+      { "action": "delete", "possession": "own", "attributes": [] }
+    ]
+  }
+]

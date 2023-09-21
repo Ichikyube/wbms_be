@@ -319,7 +319,6 @@ export class WeighbridgesController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.weighbridgesService.updateById(id, dto, userId);
 
       dataOut.data.weighbridge = record;

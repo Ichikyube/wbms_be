@@ -295,7 +295,6 @@ export class CitiesController {
     try {
       const userId = req.user['sub'];
       const record = await this.citiesService.create(dto, userId);
-      console.log(record);
       dataOut.data.city = record;
     } catch (error) {
       dataOut.status = false;

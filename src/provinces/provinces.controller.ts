@@ -332,7 +332,6 @@ export class ProvincesController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.provincesService.updateById(id, dto, userId);
 
       dataOut.data.province = record;

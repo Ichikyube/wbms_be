@@ -77,9 +77,7 @@ export class AuthController {
   }
 
   @Post('signin')
-  @UseGuards()
   // @UseGuards(AuthGuard('ldap'))
-  // @UseGuards(AuthGuard('ldapauth'))
   @ApiOperation({
     summary: 'User login API',
   })
@@ -92,13 +90,7 @@ export class AuthController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
-  async signin(
-    @Body() dto: SigninDto,
-    @Res({
-      passthrough: true,
-    })
-    res: Response,
-  ) {
+  async signin(@Body() dto: SigninDto) {
     const dataOut = {
       status: true,
       message: '',
@@ -110,13 +102,12 @@ export class AuthController {
     };
 
     try {
-      const { tokens, user } = await this.authService.signin(dto, res);
+      const { tokens, user } = await this.authService.signin(dto);
       const { name, profilePic, division, position, phone, doB, alamat } =
         user.profile;
       const { id, username, email, userRole } = user;
       dataOut.data.tokens = tokens;
       dataOut.data.user = user;
-
       dataOut.data.user = {
         id,
         username,
@@ -198,11 +189,7 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   async refreshToken(
-    @Req() req: Request,
-    @Res({
-      passthrough: true,
-    })
-    res: Response,
+    @Req() req: Request
   ) {
     const dataOut = {
       status: true,
@@ -212,12 +199,10 @@ export class AuthController {
       },
       logs: {},
     };
-
     try {
       const tokens = await this.authService.refreshToken(
         req.user['sub'],
-        req.user['refreshToken'],
-        res,
+        req.user['refreshToken']
       );
 
       dataOut.data.tokens = tokens;

@@ -1,4 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { ConfigType, Prisma, PrismaClient } from '@prisma/client';
+import { values } from 'lodash';
 
 const prisma = new PrismaClient();
 
@@ -169,45 +170,66 @@ async function main() {
     const configs = await prisma.config.createMany({
       data: [
         {
+          id: 1,
           name: 'Zero Lock',
           description:
             'Mengubah status menjadi unlock pada timbangan secara realtime',
           lvlOfApprvl: 3,
-          default: 'ACTIVE',
+          status: 'ACTIVE',
+          type: ConfigType.Int,
+          defaultVal: "0",
         },
         {
+          id:2,
           name: 'UnStable Lock',
           description:
             'Mengubah status Unlock menjadi lock pada timbangan sehingga operator tidak bisa melakukan double entry',
           lvlOfApprvl: 3,
           status: 'ACTIVE',
+          type: ConfigType.Int,
+          defaultVal: "3000",
         },
         {
-          name: 'Manual Entry For Weighbridge',
+          id:3,
+          name: 'manualEntryWB',
           description:
-            'Fitur untuk melakukan scan barcode dan melakukan decode barcode',
+            'Manual Entry For Weighbridge',
           lvlOfApprvl: 3,
           status: 'ACTIVE',
+          type: ConfigType.Boolean,
+          defaultVal: "false",
         },
         {
-          name: 'Manual Entry For CPO/PKO Transaction',
-          description: 'Fitur melakukan input manual untuk transaksi CPO/PKO',
+          id:4,
+          name: 'backdatedTemplate',
+          description: 'Manual Entry For CPO/PKO Transaction',
           lvlOfApprvl: 3,
           status: 'DISABLED',
+          type: ConfigType.Boolean,
+          defaultVal: "false",
+          start: new Date(),
         },
         {
-          name: 'Manual Entry For TBS Internal Transaction',
+          id:5,
+          name: 'backDatedForm',
           description:
             'Fitur melakukan input manual untuk transaksi TBS Internal',
           lvlOfApprvl: 3,
           status: 'DISABLED',
+          type: ConfigType.Boolean,
+          defaultVal: "false",
+          start: new Date(),
         },
         {
-          name: 'Manual Entry For TBS External Transaction',
+          id:6,
+          name: 'editTransaction',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
           lvlOfApprvl: 3,
+          type: ConfigType.Boolean,
+          defaultVal: "false",
           status: 'DISABLED',
+          start: new Date(),
         },
       ],
       skipDuplicates: true,

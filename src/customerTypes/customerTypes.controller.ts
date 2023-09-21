@@ -330,7 +330,6 @@ export class CustomerTypesController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.customerTypesService.updateById(
         id,
         dto,

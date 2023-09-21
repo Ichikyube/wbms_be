@@ -330,7 +330,6 @@ export class ProductsController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.productsService.updateById(id, dto, userId);
 
       dataOut.data.product = record;

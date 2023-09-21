@@ -25,7 +25,6 @@ export class AuthService {
 
   async signin(
     dto: SigninDto,
-    res: Response,
   ): Promise<{ tokens: Tokens; user: any }> {
     // find the user by username
     const user = await this.db.user.findFirst({
@@ -91,15 +90,6 @@ export class AuthService {
 
     await this.updateRtHash(user.id, tokens.refresh_token);
 
-    res.cookie('at', tokens.access_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-    });
-    res.cookie('rt', tokens.refresh_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-    });
-
     return { tokens, user };
   }
 
@@ -121,7 +111,6 @@ export class AuthService {
   async refreshToken(
     userId: string,
     rt: string,
-    res: Response,
   ): Promise<Tokens> {
     const user = await this.db.user.findUnique({
       where: {
@@ -137,11 +126,8 @@ export class AuthService {
     });
 
     if (!user || !user.hashedRT) throw new ForbiddenException('Access Denied');
-
     const rtMatches = await verify(user.hashedRT, rt);
-
     if (!rtMatches) throw new ForbiddenException('Access Denied');
-
     const tokens = await this.signTokens({
       sub: user.id,
       username: user.email,
@@ -149,15 +135,6 @@ export class AuthService {
     });
 
     await this.updateRtHash(user.id, tokens.refresh_token);
-
-    res.cookie('at', tokens.access_token, {
-      httpOnly: true,
-      sameSite: 'strict',
-    });
-    res.cookie('rt', tokens.refresh_token, {
-      httpOnly: true,
-      sameSite: 'strict',
-    });
 
     return tokens;
   }
@@ -206,17 +183,16 @@ export class AuthService {
     const secret_rt = this.config.get('WBMS_JWT_RT_KEY');
 
     const [at, rt] = await Promise.all([
-      // 60s*15 = 15m
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: 60 * 60 * 15,
+        expiresIn: 60 * 1,
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,
         expiresIn: 60 * 60 * 24 * 7,
       }),
     ]);
-
+    
     return { access_token: at, refresh_token: rt, access_type: 'Bearer' };
   }
 }

@@ -27,7 +27,6 @@ export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
 
   async validate(req: Request, payload: JwtPayloadWithRt) {
     let refreshToken = null;
-
     if (req.cookies && "rt" in req.cookies) refreshToken = req.cookies.rt;
     else refreshToken = req?.get("authorization")?.replace("Bearer", "").trim();
 

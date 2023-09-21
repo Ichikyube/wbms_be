@@ -11,20 +11,23 @@ import { resolve } from 'path';
 
 @Injectable()
 export class SemaiService {
-  constructor(private db: DbService, private config: ConfigService) {
-    console.log(resolve(this.WBMS_SEMAI_CERT))
+  constructor(
+    private db: DbService,
+    private config: ConfigService,
+  ) {
+    console.log(resolve(this.WBMS_SEMAI_CERT));
   }
 
   WBMS_SEMAI_API_URL = this.config.get('WBMS_SEMAI_API_URL');
   WBMS_SEMAI_API_KEY = this.config.get('WBMS_SEMAI_API_KEY');
   WBMS_SEMAI_CERT = this.config.get('WBMS_SEMAI_CERT');
   WBMS_SEMAI_KEY = this.config.get('WBMS_SEMAI_KEY');
-  
+
   httpsAgent = new https.Agent({
     cert: fs.readFileSync(resolve(this.WBMS_SEMAI_CERT)),
     key: fs.readFileSync(resolve(this.WBMS_SEMAI_KEY)),
   });
-  
+
   // httpsAgent: this.httpsAgent,
   api = axios.create({
     baseURL: `${this.WBMS_SEMAI_API_URL}/`,
@@ -52,6 +55,33 @@ export class SemaiService {
 
   remove(id: number) {
     return `This action removes a #${id} semai`;
+  }
+
+  async companies() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        companies: [],
+      },
+      logs: {},
+    };
+
+    try {
+      const response = await this.api
+        .get(`sites?pageSize=0`)
+        .then((res) => res?.data);
+
+      if (!response.success) throw new Error(response?.message);
+      console.log(response);
+      dataOut.data.companies = response.record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { error };
+    }
+
+    return dataOut;
   }
 
   async products() {

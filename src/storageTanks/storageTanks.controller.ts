@@ -330,7 +330,6 @@ export class StorageTanksController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.storageTanksService.updateById(id, dto, userId);
 
       dataOut.data.storageTank = record;

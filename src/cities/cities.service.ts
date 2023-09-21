@@ -137,7 +137,6 @@ export class CitiesService {
         userModified: userId,
       },
     };
-    console.log(params);
     const record = await this.db.city.update(params);
 
     return record;

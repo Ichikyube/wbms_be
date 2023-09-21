@@ -7,8 +7,9 @@ import {
   Patch,
   Delete,
   Req,
+  Res,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { ConfigsService } from './configs.service';
 import { UseRoles } from 'nest-access-control';
 import { ApiTags } from '@nestjs/swagger';
@@ -20,11 +21,6 @@ export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
   @Get('')
-  @UseRoles({
-    resource: 'configsData',
-    action: 'delete',
-    possession: 'own',
-  })
   async getAll() {
     const dataOut = {
       status: true,
@@ -53,22 +49,54 @@ export class ConfigsController {
     return dataOut;
   }
 
+  @Get('active-today')
+  async getActiveConfigsToday(@Res() res: Response) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        config: {
+          records: [],
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    // Cache for 24 hours
+    // Calculate the time remaining until 24:00
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const timeRemainingInSeconds = Math.floor((midnight.getTime() - now.getTime()) / 1000);
+
+    try {
+      const records = await this.configsService.getActiveConfigsToday();
+      // Set the Cache-Control header
+      res.setHeader(`Cache-Control`, `max-age=${timeRemainingInSeconds}, private=true, immutable=true`);
+      res.json(records);
+      dataOut.data.config.records = records;
+      dataOut.data.config.totalRecords = records.length;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+      // Set the Cache-Control header even in case of an error
+      res.setHeader(
+        'Cache-Control',
+        `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
+      );
+      res.json(dataOut);
+    }
+  }
+
   @Get('env')
-  @UseRoles({
-    resource: 'configsData',
-    action: 'read',
-    possession: 'own',
-  })
   getEnv() {
     return this.configsService.getEnv();
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'configsData',
-    action: 'read',
-    possession: 'own',
-  })
   async searchMany(@Body() query: any) {
     const dataOut = {
       status: true,
@@ -98,11 +126,6 @@ export class ConfigsController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'config',
-    action: 'read',
-    possession: 'own',
-  })
   async searchFirst(@Body() query: any) {
     const dataOut = {
       status: true,
@@ -134,11 +157,6 @@ export class ConfigsController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'config',
-    action: 'read',
-    possession: 'own',
-  })
   async getById(@Param('id') id: number) {
     const dataOut = {
       status: true,
@@ -163,12 +181,11 @@ export class ConfigsController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'config',
-    action: 'update',
-    possession: 'own',
-  })
-  async editById(@Param('id') id: number, @Body() dto: any, @Req() req: Request) {
+  async editById(
+    @Param('id') id: number,
+    @Body() dto: any,
+    @Req() req: Request,
+  ) {
     const dataOut = {
       status: true,
       message: '',
@@ -190,15 +207,5 @@ export class ConfigsController {
     }
 
     return dataOut;
-  }
-
-  @Post()
-  create(@Body() dto: any) {
-    return this.configsService.create(dto);
-  }
-
-  @Delete(':id')
-  deleteById(@Param('id') id: number) {
-    return this.configsService.deleteById(id);
   }
 }

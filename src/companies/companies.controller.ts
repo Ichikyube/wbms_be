@@ -26,12 +26,36 @@ import { CompanyEntity } from 'src/entities';
 export class CompaniesController {
   constructor(private companiesService: CompaniesService) {}
 
+  @Get('sync-with-semai')
+  async syncWithSemai() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        site: {
+          records: [],
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    try {
+      const records = await this.companiesService.syncWithSemai();
+
+      dataOut.data.site.records = records;
+      dataOut.data.site.totalRecords = records.length;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+    }
+
+    return dataOut;
+  }
+  
   @Get('')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async getAll() {
     const dataOut = {

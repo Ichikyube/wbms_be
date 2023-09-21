@@ -329,7 +329,6 @@ export class CustomerGroupsController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.customerGroupsService.updateById(
         id,
         dto,

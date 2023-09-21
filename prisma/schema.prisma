@@ -322,7 +322,6 @@ model ConfigRequest {
   approval Json
   schedule DateTime
 
-  isDeleted    Boolean         @default(false) @map("is_deleted")
   userCreated  String?         @map("user_created") @db.Char(36)
   userModified String?         @map("user_modified") @db.Char(36)
   dtCreated    DateTime        @default(now()) @map("date_created")
@@ -332,21 +331,28 @@ model ConfigRequest {
   @@map("config_requests")
 }
 
+enum ConfigType {
+  Boolean
+  Int
+  Json
+  Status
+  String
+}
+
 model Config {
   id          Int    @id @default(autoincrement())
   name        String @unique @db.VarChar(100)
   description String @db.VarChar(255)
   lvlOfApprvl Int    @map("level_of_approval")
-  default     Status @default(DISABLED)
+  type        ConfigType
+  tempValue   String? @map("temp_value")
+  defaultVal  String @map("default_value")
   status      Status?
   start       DateTime?
   end         DateTime?
-  lifespan  Int?  @map("livespan") @default(43200)
+  lifespan    Int?  @map("livespan") @default(43200)
 
-  isDeleted     Boolean         @default(false) @map("is_deleted")
-  userCreated   String?         @map("user_created") @db.Char(36)
   userModified  String?         @map("user_modified") @db.Char(36)
-  dtCreated     DateTime        @default(now()) @map("date_created")
   dtModified    DateTime?       @updatedAt @map("date_modified")
   ConfigRequest ConfigRequest[]
 

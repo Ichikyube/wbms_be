@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
-import { Prisma } from '@prisma/client';
+import { Config, Prisma, Status } from '@prisma/client';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { JsonArray, JsonObject } from '@prisma/client/runtime/library';
 
@@ -52,6 +52,21 @@ export class ConfigsService {
 
     return records;
   }
+  async getActiveConfigsToday(): Promise<Config[]> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const activeConfigs = await this.db.config.findMany({
+      where: {
+        status: Status.ACTIVE,
+        start: {
+          equals: today,
+        },
+      },
+    });
+
+    return activeConfigs;
+  }
 
   async searchMany(query: any) {
     const records = await this.db.config.findMany({
@@ -81,16 +96,16 @@ export class ConfigsService {
 
   async editById(id: number, dto: any, userId: string) {
     const data = {
-      lvlOfApprvl : parseInt(dto.lvlOfApprvl),
+      lvlOfApprvl: parseInt(dto.lvlOfApprvl),
       status: dto.status,
       lifespan: dto.lifespan,
-      userModified: userId
-    }
+      userModified: userId,
+    };
     const params = {
       where: { id },
-      data
+      data,
     };
-    
+
     const record = await this.db.config.update(params);
 
     return record;
@@ -154,63 +169,5 @@ export class ConfigsService {
     };
 
     return statusMapping;
-  }
-  
-  async create(dto: any) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
-    };
-
-    try {
-      const params = {
-        data: {
-          ...dto,
-          userCreated: '',
-          userModified: '',
-        },
-      };
-
-      const record = await this.db.config.create(params);
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
-  }
-
-  async deleteById(id: number) {
-    const dataOut = {
-      status: true,
-      message: '',
-      page: 0,
-      totalRecords: 0,
-      record: {},
-      logs: {},
-    };
-
-    try {
-      const params = {
-        where: { id },
-        data: { isDeleted: true, userModified: '' },
-      };
-      const record = await this.db.config.update(params);
-
-      dataOut.record = record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
   }
 }

@@ -22,7 +22,7 @@ export class ConfigRequestsAdminService {
       const params = {
         data: {
           lvlMap,
-          dtCreated: userId,
+          userCreated: userId,
         },
       };
 

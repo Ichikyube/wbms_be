@@ -4,10 +4,11 @@ import { DbService } from 'src/db/db.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
 import { DriverEntity } from 'src/entities';
 import { Prisma, PrismaClient, Driver } from '@prisma/client';
+import { SemaiService } from 'src/semai/semai.service';
 
 @Injectable()
 export class DriverService {
-  constructor(private db: DbService) {}
+  constructor(private db: DbService, private semaiService: SemaiService) {}
 
   async getAll(): Promise<DriverEntity[]> {
     const records = await this.db.driver.findMany({
@@ -121,5 +122,82 @@ export class DriverService {
     const record = await this.db.driver.update(params);
 
     return record;
+  }
+
+  
+  async syncWithSemai() {
+    const products = await this.semaiService.products().then((res) => res.data.products);
+
+    if (products?.length > 0)
+      products.forEach((site) => {
+        this.db.site
+          .findFirstOrThrow({
+            where: {
+              refType: 1,
+              refId: site.id,
+            },
+          })
+          .then((res) => {
+            this.db.site
+              .update({
+                where: { id: res.id },
+                data: {
+                  sourceSiteRefId: site?.sourceSiteId,
+                  sourceSiteName: site?.sourceSiteName,
+
+                  companyRefId: site?.companyId,
+                  companyName: site?.companyName,
+
+                  code: site?.code,
+                  name: site?.name,
+                  shortName: site?.shortName,
+                  description: site?.description,
+
+                  latitude: site?.latitude,
+                  longitude: site?.longitude,
+                  solarCalibration: site?.solarCalibration,
+
+                  isMill: site?.isMill,
+
+                  isDeleted: !!site?.isDeleted,
+                },
+              })
+              .then((res) => console.log(res));
+          })
+          .catch(() => {
+            this.db.site
+              .create({
+                data: {
+                  refType: 1,
+                  refId: site.id,
+
+                  sourceSiteRefId: site?.sourceSiteId,
+                  sourceSiteName: site?.sourceSiteName,
+
+                  companyRefId: site?.companyId,
+                  companyName: site?.companyName,
+
+                  code: site?.code,
+                  name: site?.name,
+                  shortName: site?.shortName,
+                  description: site?.description,
+
+                  latitude: site?.latitude,
+                  longitude: site?.longitude,
+                  solarCalibration: site?.solarCalibration,
+
+                  isMill: site?.isMill,
+
+                  isDeleted: !!site?.isDeleted,
+
+                  userCreated: "",
+                  userModified: "",
+                },
+              })
+              .then((res) => console.log(res));
+          });
+      });
+
+    return products;
   }
 }

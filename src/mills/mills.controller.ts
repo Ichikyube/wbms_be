@@ -331,7 +331,6 @@ export class MillsController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.millsService.updateById(id, dto, userId);
 
       dataOut.data.mill = record;

@@ -330,7 +330,6 @@ export class ProductGroupsController {
 
     try {
       const userId = req.user['sub'];
-      console.log(id);
       const record = await this.productGroupsService.updateById(
         id,
         dto,
