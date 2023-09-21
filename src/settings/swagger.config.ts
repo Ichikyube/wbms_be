@@ -20,6 +20,7 @@ export default class SwaggerDocumentation {
         //   scheme: 'bearer',
         //   bearerFormat: 'JWT',
         //   in: 'header',
+        //   name: 'Authorization',
         // },
         // 'access-token',
       )
@@ -34,9 +35,9 @@ export default class SwaggerDocumentation {
 
     const document = SwaggerModule.createDocument(this.app, config);
     SwaggerModule.setup('api', this.app, document, {
-      // swaggerOptions: {
-      //   persistAuthorization: true,
-      // },
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
       // customCssUrl: '../swagger/swagger.css',
       // customfavIcon: '../swagger/favicon.png',
       customSiteTitle: 'DSN - Weighbridge Management System',

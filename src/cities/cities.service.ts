@@ -4,14 +4,14 @@ import { DbService } from 'src/db/db.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from 'src/entities';
 import { Prisma } from '@prisma/client';
-import { SseGateway } from 'src/sse/sse.gateway';
+// import { SseGateway } from 'src/sse/sse.gateway';
 import { Observable, from, map } from 'rxjs';
 
 @Injectable()
 export class CitiesService {
   constructor(
     private db: DbService,
-    private readonly sseGateway: SseGateway,
+    // private readonly sseGateway: SseGateway,
   ) {}
 
   async create(dto: CreateCityDto, userId: string): Promise<CityEntity> {

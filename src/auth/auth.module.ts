@@ -16,7 +16,6 @@ import { LdapAuthService } from './ldap-auth/ldap-auth.service';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('WBMS_JWT_KEY'),
-        signOptions: { expiresIn: '60s' },
       }),
       inject: [ConfigService],
     }),

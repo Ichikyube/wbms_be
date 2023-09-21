@@ -12,7 +12,8 @@ import { UserEntity } from 'src/entities/user.entity';
 import { NextFunction, Response } from 'express';
 
 import { LdapAuthService } from './ldap-auth/ldap-auth.service';
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth()
 @Injectable()
 export class AuthService {
   constructor(
@@ -102,8 +103,8 @@ export class AuthService {
   async signout(userId: string, res: Response): Promise<boolean> {
     const updatedCount = await this.removeRtHash(userId);
 
-    res.clearCookie('at');
-    res.clearCookie('rt');
+    // res.clearCookie('at');
+    // res.clearCookie('rt');
 
     return updatedCount.count > 0 ? true : false;
   }
@@ -185,7 +186,7 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: 60 * 1,
+        expiresIn: '35m',
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,

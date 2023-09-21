@@ -199,6 +199,7 @@ export class AuthController {
       },
       logs: {},
     };
+    
     try {
       const tokens = await this.authService.refreshToken(
         req.user['sub'],

@@ -58,6 +58,7 @@ export class ConfigRequestService {
       where: { id: requestId },
       include: { config: { select: { lvlOfApprvl: true } } },
     });
+
     if (configRequest.status === RequestStatus.REJECTED) return;
     const signList = JSON.parse(JSON.stringify(configRequest.approval));
     signList.push(userId);

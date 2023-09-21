@@ -12,7 +12,6 @@ import {
 import { Request, Response } from 'express';
 import { RolesService } from './roles.service';
 import {
-  ApiBearerAuth,
   ApiCreatedResponse,
   ApiParam,
   ApiTags,
@@ -22,7 +21,6 @@ import { RoleEntity } from 'src/entities/roles.entity';
 import { UpdateRoleDto } from './dto/update-role.dto';
 
 @ApiTags('Roles')
-@ApiBearerAuth()
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}

@@ -31,7 +31,7 @@ import { join } from 'path';
 import { RolesModule } from './accessControl/roles/roles.module';
 import { RbacModule } from './accessControl/rbac.module';
 import { RolesService } from './accessControl/roles/roles.service';
-import { SseGateway } from './sse/sse.gateway';
+// import { SseGateway } from './sse/sse.gateway';
 import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
@@ -85,6 +85,6 @@ import { RedisModule } from './redis/redis.module';
     },
     // SseGateway,
   ],
-  controllers: [SseController],
+  // controllers: [SseController],
 })
 export class AppModule {}

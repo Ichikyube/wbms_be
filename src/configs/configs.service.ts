@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
-import { Config, Prisma, Status } from '@prisma/client';
-import { CreateConfigDto } from './dto/create-config.dto';
-import { JsonArray, JsonObject } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ConfigsService {
@@ -52,19 +49,38 @@ export class ConfigsService {
 
     return records;
   }
-  async getActiveConfigsToday(): Promise<Config[]> {
+  async getActiveConfigsToday(): Promise<any[]> {
+    // const date = new Date().toLocaleString("id-ID");
+    // console.log(date)
+    // // Split the date string on the forward slash '/' character.
+    // const dateParts = date.split('/');
+
+    // // Convert the year, month, and day strings to integers.
+    // const year = parseInt(dateParts[2]);
+    // const month = parseInt(dateParts[1]);
+    // const day = parseInt(dateParts[0]);
+
+    // // Create a new Date object using the year, month, and day integers.
+    // const today = new Date(year, month - 1, day+1);
+    // today.setHours(today.getHours() - 7);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
     const activeConfigs = await this.db.config.findMany({
       where: {
-        status: Status.ACTIVE,
         start: {
-          equals: today,
+          gte: today,
+          lte: tomorrow
         },
       },
+      select: {
+        name:true,
+        type:true,
+        defaultVal:true,
+        start:true,
+        end:true,
+      }
     });
-
     return activeConfigs;
   }
 
