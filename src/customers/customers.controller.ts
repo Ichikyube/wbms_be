@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto, UpdateCustomerDto } from './dto';
@@ -18,6 +18,7 @@ import { UseRoles } from 'nest-access-control';
 import { CustomerEntity } from 'src/entities';
 
 @ApiTags('Customers')
+@ApiBearerAuth('access-token')
 @Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}

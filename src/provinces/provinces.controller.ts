@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProvincesService } from './provinces.service';
 import { CreateProvinceDto, UpdateProvinceDto } from './dto';
@@ -18,6 +18,7 @@ import { UseRoles } from 'nest-access-control';
 import { ProvinceEntity } from 'src/entities';
 
 @ApiTags('Provinces')
+@ApiBearerAuth('access-token')
 @Controller('provinces')
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}

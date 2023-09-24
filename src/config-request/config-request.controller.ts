@@ -12,9 +12,10 @@ import { Request, Response } from 'express';
 import { ConfigRequestService } from './config-request.service';
 import { CreateConfigRequestDto } from './dto/create-config-request.dto';
 import { UpdateConfigRequestDto } from './dto/update-config-request.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Configs-Request')
+@ApiBearerAuth('access-token')
 @Controller('config-requests')
 export class ConfigRequestController {
   constructor(private readonly requestService: ConfigRequestService) {}

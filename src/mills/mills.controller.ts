@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { MillsService } from './mills.service';
 import { CreateMillDto, UpdateMillDto } from './dto';
@@ -19,6 +19,7 @@ import { UseRoles } from 'nest-access-control';
 import { MillEntity } from 'src/entities';
 
 @ApiTags('Mills')
+@ApiBearerAuth('access-token')
 @Controller('mills')
 export class MillsController {
   constructor(private millsService: MillsService) {}

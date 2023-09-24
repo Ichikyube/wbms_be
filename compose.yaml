@@ -13,11 +13,11 @@ services:
     image: containrrr/watchtower:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 200
     environment:
-      WATCHTOWER_SCHEDULE: '0 12 15 * *'
+      WATCHTOWER_SCHEDULE: '15 9 * * *'
       TZ: 'Asia/Jakarta'
       WATCHTOWER_CLEANUP: true
+      WATCHTOWER_ROLLING_RESTART: true
       WATCHTOWER_INCLUDE_STOPPED: true
       WATCHTOWER_REVIVE_STOPPED: true
       WATCHTOWER_HEAD_BASED_DIGEST_CHECKING: true
@@ -31,7 +31,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - redis/data:/data
+      - redis:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:
@@ -137,7 +137,7 @@ services:
       MARIADB_EXTRA_FLAGS: --innodb_strict_mode=0 --innodb_log_file_size=512M --innodb_log_buffer_size=256M
 
     volumes:
-      - database/mariadb-data-pks04:/bitnami/mariadb
+      - mariadb-data-pks04:/bitnami/mariadb
       # - ./database/my_custom.cnf:/opt/bitnami/mariadb/conf/my_custom.cnf:ro
     networks:
       - armin-net
@@ -213,5 +213,5 @@ networks:
 volumes:
   ldap-data:
   ldap-config:
-  redis/data:
-  database/mariadb-data-pks04:
+  redis:
+  mariadb-data-pks04:

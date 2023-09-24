@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { WeighbridgesService } from './weighbridges.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
@@ -17,6 +17,7 @@ import { UseRoles } from 'nest-access-control';
 import { WeighbridgeEntity } from 'src/entities';
 
 @ApiTags('Weighbridges')
+@ApiBearerAuth('access-token')
 @Controller('weighbridges')
 export class WeighbridgesController {
   constructor(private weighbridgesService: WeighbridgesService) {}

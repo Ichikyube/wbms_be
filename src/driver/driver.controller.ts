@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { DriverService } from './driver.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
@@ -18,6 +18,7 @@ import { UseRoles } from 'nest-access-control';
 import { DriverEntity } from 'src/entities';
 
 @ApiTags('Drivers')
+@ApiBearerAuth('access-token')
 @Controller('driver')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}

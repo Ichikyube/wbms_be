@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
@@ -17,6 +17,7 @@ import { UseRoles } from 'nest-access-control';
 import { CompanyEntity } from 'src/entities';
 
 @ApiTags('Companies')
+@ApiBearerAuth('access-token')
 @UseRoles({
   resource: 'companiesData',
   action: 'read',

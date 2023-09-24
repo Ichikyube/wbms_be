@@ -7,10 +7,9 @@ import {
   Patch,
   Delete,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CustomerTypesService } from './customerTypes.service';
 import { CreateCustomerTypeDto, UpdateCustomerTypeDto } from './dto';
@@ -18,6 +17,7 @@ import { UseRoles } from 'nest-access-control';
 import { CustomerTypeEntity } from 'src/entities';
 
 @ApiTags('Customer Types')
+@ApiBearerAuth('access-token')
 @Controller('customer-types')
 export class CustomerTypesController {
   constructor(private customerTypesService: CustomerTypesService) {}

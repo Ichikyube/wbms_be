@@ -15,13 +15,10 @@ import {
 import { Request, Response } from 'express';
 import {
   ApiBadRequestResponse,
-  ApiBody,
-  ApiConsumes,
-  ApiCreatedResponse,
+  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
@@ -31,6 +28,7 @@ import { SigninDto, SignupDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
+@ApiBearerAuth('access-token')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

@@ -15,14 +15,13 @@ export default class SwaggerDocumentation {
       .setDescription('Weighbridge Management System API Documentation')
       .setVersion('0.1')
       .addBearerAuth(
-        // {
-        //   type: 'http',
-        //   scheme: 'bearer',
-        //   bearerFormat: 'JWT',
-        //   in: 'header',
-        //   name: 'Authorization',
-        // },
-        // 'access-token',
+        {
+          type: 'http',
+          // scheme: 'bearer',
+          bearerFormat: 'JWT',
+          in: 'header',
+        },
+        'access-token',
       )
       .addTag('DNS')
       // .addSecurity('ApiKeyAuth', {

@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { SitesService } from './sites.service';
 import { CreateSiteDto, UpdateSiteDto } from './dto';
@@ -18,6 +18,7 @@ import { UseRoles } from 'nest-access-control';
 import { SiteEntity } from 'src/entities';
 
 @ApiTags('Sites')
+@ApiBearerAuth('access-token')
 @Controller('sites')
 export class SitesController {
   constructor(private readonly sitesService: SitesService) {}

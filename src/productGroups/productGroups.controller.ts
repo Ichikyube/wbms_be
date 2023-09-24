@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProductGroupsService } from './productGroups.service';
 import { CreateProductGroupDto, UpdateProductGroupDto } from './dto';
@@ -18,6 +18,7 @@ import { UseRoles } from 'nest-access-control';
 import { ProductGroupEntity } from 'src/entities';
 
 @ApiTags('Product Groups')
+@ApiBearerAuth('access-token')
 @Controller('product-groups')
 export class ProductGroupsController {
   constructor(private productGroupsService: ProductGroupsService) {}

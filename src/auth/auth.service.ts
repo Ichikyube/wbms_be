@@ -21,12 +21,10 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
     private usersService: UsersService,
-    private ldapAuthService: LdapAuthService
+    private ldapAuthService: LdapAuthService,
   ) {}
 
-  async signin(
-    dto: SigninDto,
-  ): Promise<{ tokens: Tokens; user: any }> {
+  async signin(dto: SigninDto): Promise<{ tokens: Tokens; user: any }> {
     // find the user by username
     const user = await this.db.user.findFirst({
       where: {
@@ -42,9 +40,9 @@ export class AuthService {
         email: true,
         nik: true,
         userRole: {
-          select:{
-            name:true
-          }
+          select: {
+            name: true,
+          },
         },
         hashedPassword: true,
         isLDAPUser: true,
@@ -65,7 +63,10 @@ export class AuthService {
     // if user does not exist throw exception
     if (!user) throw new ForbiddenException('Invalid username or password.');
     if (user.isLDAPUser) {
-      const isAuthenticated = await this.ldapAuthService.authenticate(user.username, dto.password);
+      const isAuthenticated = await this.ldapAuthService.authenticate(
+        user.username,
+        dto.password,
+      );
       if (!isAuthenticated) {
         throw new ForbiddenException('LDAP Authentication Failed');
       }
@@ -103,27 +104,25 @@ export class AuthService {
   async signout(userId: string, res: Response): Promise<boolean> {
     const updatedCount = await this.removeRtHash(userId);
 
-    // res.clearCookie('at');
-    // res.clearCookie('rt');
-
     return updatedCount.count > 0 ? true : false;
   }
 
-  async refreshToken(
-    userId: string,
-    rt: string,
-  ): Promise<Tokens> {
-    const user = await this.db.user.findUnique({
+  async refreshToken(userId: string, rt: string): Promise<Tokens> {
+
+    const user = await this.db.user.findFirst({
       where: {
         id: userId,
       },
-      include:{
-        userRole:{
-          select:{
-            name:true
-          }
-        }
-      }
+      select: {
+        id: true,
+        email: true,
+        hashedRT: true,
+        userRole: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     if (!user || !user.hashedRT) throw new ForbiddenException('Access Denied');
@@ -186,14 +185,14 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: '35m',
+        expiresIn: '1h',
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,
-        expiresIn: 60 * 60 * 24 * 7,
+        expiresIn: '7d',
       }),
     ]);
-    
+
     return { access_token: at, refresh_token: rt, access_type: 'Bearer' };
   }
 }

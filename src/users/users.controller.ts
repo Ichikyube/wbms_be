@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -35,6 +36,7 @@ import { UseRoles } from 'nest-access-control';
 import { Observable, interval, map } from 'rxjs';
 
 @ApiTags('Users')
+@ApiBearerAuth('access-token')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}

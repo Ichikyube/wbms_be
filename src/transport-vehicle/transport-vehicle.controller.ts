@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { TransportVehicleService } from './transport-vehicle.service';
 import { CreateTransportVehicleDto, UpdateTransportVehicleDto } from './dto';
@@ -19,6 +19,7 @@ import { UseRoles } from 'nest-access-control';
 import { TransportVehicleEntity } from 'src/entities';
 
 @ApiTags('Transport Vehicles')
+@ApiBearerAuth('access-token')
 @Controller('transport-vehicle')
 export class TransportVehicleController {
   constructor(

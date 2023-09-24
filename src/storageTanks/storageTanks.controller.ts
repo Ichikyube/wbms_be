@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request } from 'express';
 import { StorageTanksService } from './storageTanks.service';
@@ -18,6 +18,7 @@ import { UseRoles } from 'nest-access-control';
 import { StorageTankEntity } from 'src/entities';
 
 @ApiTags('Storage Tanks')
+@ApiBearerAuth('access-token')
 @Controller('storage-tanks')
 export class StorageTanksController {
   constructor(private storageTanksService: StorageTanksService) {}

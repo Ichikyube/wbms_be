@@ -49,37 +49,43 @@ export class ConfigsService {
 
     return records;
   }
+
   async getActiveConfigsToday(): Promise<any[]> {
-    // const date = new Date().toLocaleString("id-ID");
-    // console.log(date)
-    // // Split the date string on the forward slash '/' character.
-    // const dateParts = date.split('/');
+    const date = new Date().toLocaleString("id-ID");
+    console.log(date)
+    
+    const dateParts = date.split(', ')[0].split('/'); // Split the date
+    const timeParts = date.split(', ')[1].split('.'); // Split the time
+    // Convert the year, month, and day strings to integers.
+    const year = parseInt(dateParts[2]);
+    const month = parseInt(dateParts[1]);
+    const day = parseInt(dateParts[0]);
+    const hours = parseInt(timeParts[0]);
+    const minutes = parseInt(timeParts[1]);
+    const seconds = parseInt(timeParts[2]);
 
-    // // Convert the year, month, and day strings to integers.
-    // const year = parseInt(dateParts[2]);
-    // const month = parseInt(dateParts[1]);
-    // const day = parseInt(dateParts[0]);
-
-    // // Create a new Date object using the year, month, and day integers.
-    // const today = new Date(year, month - 1, day+1);
-    // today.setHours(today.getHours() - 7);
-    const today = new Date();
-    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-
+    // Create a new Date object using the year, month, and day integers.
+    const parsedDate = Date.UTC(year, month-1, day, hours, minutes, seconds);
+    
+    console.log(parsedDate)
+    const today = new Date(parsedDate);
+    console.log(today)
+    today.setHours(0, 0, 0, 0);
+    const midnight = new Date(today.getTime() + 24 * 60 * 60 * 1000);
     const activeConfigs = await this.db.config.findMany({
       where: {
         start: {
           gte: today,
-          lte: tomorrow
+          lte: midnight,
         },
       },
       select: {
-        name:true,
-        type:true,
-        defaultVal:true,
-        start:true,
-        end:true,
-      }
+        name: true,
+        type: true,
+        defaultVal: true,
+        start: true,
+        end: true,
+      },
     });
     return activeConfigs;
   }

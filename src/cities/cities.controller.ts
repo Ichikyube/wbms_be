@@ -10,7 +10,7 @@ import {
   Sse,
   Res,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request, Response } from 'express';
 import { CitiesService } from './cities.service';
@@ -20,6 +20,7 @@ import { CityEntity } from 'src/entities';
 import { Observable } from 'rxjs';
 
 @ApiTags('Cities')
+@ApiBearerAuth('access-token')
 @Controller('cities')
 export class CitiesController {
   constructor(private citiesService: CitiesService) {}

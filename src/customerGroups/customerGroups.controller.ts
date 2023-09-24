@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CustomerGroupsService } from './customerGroups.service';
 import { CreateCustomerGroupDto, UpdateCustomerGroupDto } from './dto';
@@ -17,6 +17,7 @@ import { UseRoles } from 'nest-access-control';
 import { CustomerGroupEntity } from 'src/entities';
 
 @ApiTags('Customer Groups')
+@ApiBearerAuth('access-token')
 @Controller('customer-groups')
 export class CustomerGroupsController {
   constructor(private customerGroupsService: CustomerGroupsService) {}

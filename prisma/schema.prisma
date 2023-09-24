@@ -333,9 +333,8 @@ model ConfigRequest {
 
 enum ConfigType {
   Boolean
-  Int
+  Number
   Json
-  Status
   String
 }
 

@@ -11,17 +11,16 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigsService } from './configs.service';
-import { UseRoles } from 'nest-access-control';
-import { ApiTags } from '@nestjs/swagger';
-import { CreateConfigDto } from './dto/create-config.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 @ApiTags('Configs')
+@ApiBearerAuth('access-token')
 @Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
   @Get('')
-  async getAll() {
+  async getAll(@Res() res: Response) {
     const dataOut = {
       status: true,
       message: '',
@@ -34,6 +33,13 @@ export class ConfigsController {
       },
       logs: {},
     };
+    // Calculate the time remaining until 24:00
+    // const now = new Date();
+    // const midnight = new Date(now);
+    // midnight.setHours(24, 0, 0, 0);
+    // const timeRemainingInSeconds = Math.floor(
+    //   (midnight.getTime() - now.getTime()) / 1000,
+    // );
 
     try {
       const records = await this.configsService.getAll();
@@ -45,12 +51,17 @@ export class ConfigsController {
       dataOut.message = error.message;
       dataOut.logs = { ...dataOut.logs, error };
     }
+    // Set the Cache-Control header
+    // res.setHeader(
+    //   `Cache-Control`,
+    //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
+    // );
 
     return dataOut;
   }
 
-  @Get('active-today')
-  async getActiveConfigsToday(@Res() res: Response) {
+  @Get('activetoday')
+  async getActiveConfigsToday() {
     const dataOut = {
       status: true,
       message: '',
@@ -64,31 +75,17 @@ export class ConfigsController {
       logs: {},
     };
 
-    // Cache for 24 hours
-    // Calculate the time remaining until 24:00
-    const now = new Date();
-    const midnight = new Date(now);
-    midnight.setHours(24, 0, 0, 0);
-    const timeRemainingInSeconds = Math.floor((midnight.getTime() - now.getTime()) / 1000);
-
     try {
       const records = await this.configsService.getActiveConfigsToday();
-      // Set the Cache-Control header
-      res.setHeader(`Cache-Control`, `max-age=${timeRemainingInSeconds}, private=true, immutable=true`);
-      res.json(records);
+
       dataOut.data.config.records = records;
       dataOut.data.config.totalRecords = records.length;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
       dataOut.logs = { ...dataOut.logs, error };
-      // Set the Cache-Control header even in case of an error
-      res.setHeader(
-        'Cache-Control',
-        `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
-      );
-      res.json(dataOut);
     }
+    return dataOut;
   }
 
   @Get('env')
