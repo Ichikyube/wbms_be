@@ -60,10 +60,10 @@ export class TransactionService {
       records: {},
       logs: {},
     };
-
+    query.where['isDeleted']= false;
     try {
       const records = await this.db.transaction.findMany({
-        ...query,
+        ...query
       });
 
       dataOut.records = records;
@@ -83,7 +83,7 @@ export class TransactionService {
       record: {},
       logs: {},
     };
-
+    query.where['isDeleted']= false;
     try {
       const record = await this.db.transaction.findFirst({
         ...query,
@@ -240,7 +240,7 @@ export class TransactionService {
 
     try {
       const record = await this.db.transaction.findFirst({
-        where: { transportVehiclePlateNo: key },
+        where: { transportVehiclePlateNo: key, isDeleted:false },
         orderBy: { id: sort },
       });
 
@@ -263,10 +263,9 @@ export class TransactionService {
       record: {},
       logs: {},
     };
-
     try {
       const record = await this.db.transaction.findUnique({
-        where: { id },
+        where: { id, isDeleted:false },
       });
 
       dataOut.record = record;
@@ -370,7 +369,7 @@ export class TransactionService {
 
     try {
       const record = await this.db.transaction.update({
-        where: { id },
+        where: { id, isDeleted:false },
         data: { ...dto, userModified: '' },
       });
 
@@ -388,7 +387,7 @@ export class TransactionService {
 
   async deleteById(id: string, userId: string) {
     const params = {
-      where: { id },
+      where: { id, isDeleted:false },
       data: { isDeleted: true, userModified: userId },
     };
 

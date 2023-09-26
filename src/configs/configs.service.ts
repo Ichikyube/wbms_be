@@ -51,9 +51,8 @@ export class ConfigsService {
   }
 
   async getActiveConfigsToday(): Promise<any[]> {
-    const date = new Date().toLocaleString("id-ID");
-    console.log(date)
-    
+    const date = new Date().toLocaleString('id-ID');
+
     const dateParts = date.split(', ')[0].split('/'); // Split the date
     const timeParts = date.split(', ')[1].split('.'); // Split the time
     // Convert the year, month, and day strings to integers.
@@ -65,11 +64,10 @@ export class ConfigsService {
     const seconds = parseInt(timeParts[2]);
 
     // Create a new Date object using the year, month, and day integers.
-    const parsedDate = Date.UTC(year, month-1, day, hours, minutes, seconds);
-    
-    console.log(parsedDate)
+    const parsedDate = Date.UTC(year, month - 1, day, hours, minutes, seconds);
+
     const today = new Date(parsedDate);
-    console.log(today)
+
     today.setHours(0, 0, 0, 0);
     const midnight = new Date(today.getTime() + 24 * 60 * 60 * 1000);
     const activeConfigs = await this.db.config.findMany({
@@ -82,6 +80,7 @@ export class ConfigsService {
       select: {
         name: true,
         type: true,
+        tempValue: true,
         defaultVal: true,
         start: true,
         end: true,

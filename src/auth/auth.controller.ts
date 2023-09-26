@@ -111,6 +111,7 @@ export class AuthController {
         username,
         email,
         role: userRole.name,
+        access: userRole.permissions,
         name,
         profilePic,
         division,

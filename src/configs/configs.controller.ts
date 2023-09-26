@@ -20,7 +20,7 @@ export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
   @Get('')
-  async getAll(@Res() res: Response) {
+  async getAll() {
     const dataOut = {
       status: true,
       message: '',

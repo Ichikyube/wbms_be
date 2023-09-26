@@ -42,6 +42,7 @@ export class AuthService {
         userRole: {
           select: {
             name: true,
+            permissions: true
           },
         },
         hashedPassword: true,
