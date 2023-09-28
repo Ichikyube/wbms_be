@@ -1,4 +1,3 @@
-import { Status } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { SiteEntity } from './site.entity';
 
@@ -14,9 +13,6 @@ export class Config {
 
   @ApiProperty({ type: Number })
   lvlOfApprvl: number;
-
-  @ApiProperty({ enum: Status, enumName: 'Status' })
-  status: Status;
 
   @ApiProperty({ type: Boolean })
   isDeleted: boolean;

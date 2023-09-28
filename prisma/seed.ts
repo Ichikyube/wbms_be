@@ -175,7 +175,6 @@ async function main() {
           description:
             'Mengubah status menjadi unlock pada timbangan secara realtime',
           lvlOfApprvl: 3,
-          status: 'ACTIVE',
           type: ConfigType.Number,
           defaultVal: '0',
         },
@@ -185,7 +184,6 @@ async function main() {
           description:
             'Mengubah status Unlock menjadi lock pada timbangan sehingga operator tidak bisa melakukan double entry',
           lvlOfApprvl: 3,
-          status: 'ACTIVE',
           type: ConfigType.Number,
           defaultVal: '3000',
         },
@@ -194,7 +192,6 @@ async function main() {
           name: 'manualEntryWB',
           description: 'Manual Entry For Weighbridge',
           lvlOfApprvl: 3,
-          status: 'ACTIVE',
           type: ConfigType.Boolean,
           defaultVal: 'false',
         },
@@ -203,7 +200,6 @@ async function main() {
           name: 'backdatedTemplate',
           description: 'Manual Entry For CPO/PKO Transaction',
           lvlOfApprvl: 3,
-          status: 'DISABLED',
           type: ConfigType.Boolean,
           defaultVal: 'false',
           start: new Date(),
@@ -214,7 +210,6 @@ async function main() {
           description:
             'Fitur melakukan input manual untuk transaksi TBS Internal',
           lvlOfApprvl: 3,
-          status: 'DISABLED',
           type: ConfigType.Boolean,
           defaultVal: 'false',
           start: new Date(),
@@ -227,7 +222,6 @@ async function main() {
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
-          status: 'DISABLED',
           start: new Date(),
         },
       ],

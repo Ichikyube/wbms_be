@@ -116,11 +116,47 @@ export class ConfigsService {
   }
 
   async editById(id: number, dto: any, userId: string) {
+    const { lvlOfApprvl, defaultVal, status, lifespan } = dto;
+
     const data = {
       lvlOfApprvl: parseInt(dto.lvlOfApprvl),
-      status: dto.status,
-      lifespan: dto.lifespan,
+      defaultVal,
+      lifespan,
       userModified: userId,
+    };
+    const params = {
+      where: { id },
+      data,
+    };
+
+    const record = await this.db.config.update(params);
+    return record;
+  }
+
+  async requestApproved(id: number, dto: any, userId: string) {
+    const currentConfig = await this.getById(id);
+    const { tempValue, start } = dto;
+    const data = {
+      tempValue,
+      start,
+      end: new Date(start.getTime() + currentConfig.lifespan * 1000),
+      userModified: userId,
+    };
+    const params = {
+      where: { id },
+      data,
+    };
+
+    const record = await this.db.config.update(params);
+
+    return record;
+  }
+
+  async requestEnded(id: number) {
+    const data = {
+      tempValue: null,
+      start: null,
+      end: null,
     };
     const params = {
       where: { id },

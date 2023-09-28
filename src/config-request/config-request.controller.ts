@@ -25,9 +25,9 @@ export class ConfigRequestController {
     return await this.requestService.getAllRequests();
   }
   @Post('')
-  async createConfigRequest(@Body() dto: CreateConfigRequestDto) {
-    console.log(dto);
-    return await this.requestService.createRequest(dto);
+  async createConfigRequest(@Body() dto: CreateConfigRequestDto, @Req() req: Request) {
+    const userId = req.user['sub'];
+    return await this.requestService.createRequest(userId, dto);
   }
 
   @Patch(':id/approve')

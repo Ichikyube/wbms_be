@@ -76,11 +76,16 @@ model Image {
   dtModified DateTime? @updatedAt @map("date_modified")
 }
 
+enum CompanyType {
+  Eksternal
+  Internal
+}
+
 model Company {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0) @map("ref_type") //0: WBMS, 1: eDispatch
   refId   String? @map("ref_id") @db.VarChar(50)
-
+  type         CompanyType?         
   code         String  @db.VarChar(50)
   codeSap      String? @map("code_sap") @db.VarChar(50)
   name         String  @db.VarChar(50)
@@ -346,7 +351,6 @@ model Config {
   type        ConfigType
   tempValue   String? @map("temp_value")
   defaultVal  String @map("default_value")
-  status      Status?
   start       DateTime?
   end         DateTime?
   lifespan    Int?  @map("livespan") @default(43200)
@@ -593,6 +597,7 @@ model Transaction {
   id    String @id @default(uuid()) @db.Char(36)
   tType Int    @default(1) @map("transaction_type")
 
+  SPBTS          String?  @unique @db.Char(36)
   bonTripNo      String? @map("bon_trip_no") @db.Char(16)
   vehicleStatus  Int     @default(0) @map("vehicle_status")
   deliveryStatus Int     @default(0) @map("delivery_status")

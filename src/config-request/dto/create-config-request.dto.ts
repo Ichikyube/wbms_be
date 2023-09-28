@@ -1,4 +1,4 @@
-import { RequestStatus, Status } from '@prisma/client';
+import { RequestStatus } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateConfigRequestDto {

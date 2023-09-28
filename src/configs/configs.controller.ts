@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigsService } from './configs.service';
@@ -20,6 +21,7 @@ export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
   @Get('')
+  @UseGuards()
   async getAll() {
     const dataOut = {
       status: true,
@@ -89,6 +91,7 @@ export class ConfigsController {
   }
 
   @Get('env')
+  @UseGuards()
   getEnv() {
     return this.configsService.getEnv();
   }

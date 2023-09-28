@@ -14,7 +14,7 @@ export class NotificationsService {
   }
 
   async getAllNotifications() {
-    return this.db.notification.findMany();
+    return this.db.notification.findMany({ where: { isResponded: false } });
   }
 
   async markNotificationAsRead(id: string) {
@@ -23,5 +23,4 @@ export class NotificationsService {
       data: { isResponded: true },
     });
   }
-
 }

@@ -11,17 +11,21 @@ export class ConfigRequestService {
     private config: ConfigService,
   ) {}
 
-  async createRequest(dto: CreateConfigRequestDto) {
-    // const existingSchedule = await this.db.configRequest.findFirst({
-    //   where: {
-    //     schedule: dto.schedule,
-    //   },
-    // });
+  async createRequest(userId: string, dto: CreateConfigRequestDto) {
+    const existingSchedule = await this.db.config.findFirst({
+      where: {
+        start: {
+          gte: dto.schedule,
+          lte: new Date(dto.schedule.getTime() + 24 * 60 * 60 * 1000),
+        },
+      },
+    });
 
-    // if (existingSchedule.schedule.getDate() === dto.schedule.getDate()) {
-    //   if(dto.schedule.getHours()  >= existingSchedule.schedule.getHours() && dto.schedule.getHours() <= existingSchedule.schedule.getHours())
-    //     throw new NotFoundException('Request failed: Schedule already exists for this date.');
-    // } 
+    if (existingSchedule) {
+      throw new NotFoundException(
+        'Request failed: Schedule already exists for this date.',
+      );
+    }
     const config = await this.db.config.findFirst({
       where: { id: dto.configId },
     });
@@ -34,6 +38,7 @@ export class ConfigRequestService {
       approval: [],
       status: RequestStatus.PENDING,
       schedule: dto.schedule,
+      userCreated: userId,
     };
 
     return this.db.configRequest.create({ data });
@@ -91,22 +96,23 @@ export class ConfigRequestService {
     const configLvl = configRequest.config.lvlOfApprvl;
     const signList = JSON.parse(JSON.stringify(configRequest.approval));
     const newList = [...signList, userId];
-    
+
     const currentLevel = signList.length + 1; //setiap kali approval currentLvl naik 1 tingkat
     if (userLvl !== lvl[currentLevel]) return console.log('false approver');
-    //Apabila sign sudah sesuai dengan level dari config, 
+
     /**
      * Hanya apabila approval di semua level approve,
      * maka status request berubah menjadi Approved,
      */
     const data =
-      currentLevel < configLvl? {
+      currentLevel < configLvl
+        ? {
             approval: newList,
           }
         : {
             status: RequestStatus.APPROVED,
             approval: newList,
-        };
+          };
     try {
       await this.db.configRequest.update({
         where: { id: requestId },
@@ -115,4 +121,3 @@ export class ConfigRequestService {
     } catch (e) {}
   }
 }
-

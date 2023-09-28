@@ -60,10 +60,10 @@ export class TransactionService {
       records: {},
       logs: {},
     };
-    query.where['isDeleted']= false;
+    query.where['isDeleted'] = false;
     try {
       const records = await this.db.transaction.findMany({
-        ...query
+        ...query,
       });
 
       dataOut.records = records;
@@ -83,7 +83,7 @@ export class TransactionService {
       record: {},
       logs: {},
     };
-    query.where['isDeleted']= false;
+    query.where['isDeleted'] = false;
     try {
       const record = await this.db.transaction.findFirst({
         ...query,
@@ -240,7 +240,7 @@ export class TransactionService {
 
     try {
       const record = await this.db.transaction.findFirst({
-        where: { transportVehiclePlateNo: key, isDeleted:false },
+        where: { transportVehiclePlateNo: key, isDeleted: false },
         orderBy: { id: sort },
       });
 
@@ -265,7 +265,7 @@ export class TransactionService {
     };
     try {
       const record = await this.db.transaction.findUnique({
-        where: { id, isDeleted:false },
+        where: { id, isDeleted: false },
       });
 
       dataOut.record = record;
@@ -369,7 +369,7 @@ export class TransactionService {
 
     try {
       const record = await this.db.transaction.update({
-        where: { id, isDeleted:false },
+        where: { id, isDeleted: false },
         data: { ...dto, userModified: '' },
       });
 
@@ -387,7 +387,7 @@ export class TransactionService {
 
   async deleteById(id: string, userId: string) {
     const params = {
-      where: { id, isDeleted:false },
+      where: { id, isDeleted: false },
       data: { isDeleted: true, userModified: userId },
     };
 
@@ -475,4 +475,192 @@ export class TransactionService {
   //   const client = this.redisService.getClient();
   //   return client.get(key);
   // }
+
+  //Buah Mentah
+  trxGradingBMPERSENValidate(
+    trxGradingBMPERSEN: number,
+    adTransactionJML_JANJANG: number,
+    adTransactionMILL_ID: string,
+    adTransactionnetbeforegrading: number,
+  ): number {
+    let persenbm: number;
+    let trxGradingBUKG: number = 0;
+    let trxGradingBMKG: number = 0;
+
+    if (trxGradingBMPERSEN !== null) {
+      if (adTransactionJML_JANJANG === 0 || adTransactionJML_JANJANG === null) {
+        // Display an error message (you can handle this as needed)
+        console.error('Jumlah janjang 0 atau tidak ada.');
+        persenbm = 0;
+      } else {
+        persenbm = trxGradingBMPERSEN / adTransactionJML_JANJANG;
+      }
+
+      if (adTransactionMILL_ID === 'BA41') {
+        trxGradingBUKG = Math.round(
+          (persenbm * adTransactionnetbeforegrading) / 100,
+        );
+      }
+
+      if (adTransactionMILL_ID === 'BN41') {
+        trxGradingBMKG = Math.round(
+          persenbm * adTransactionnetbeforegrading * 0.5,
+        );
+      }
+    }
+
+    // Return the relevant value based on your logic
+    // For example, you might want to return trxGradingBUKG or trxGradingBMKG
+    return trxGradingBUKG; // or return trxGradingBMKG;
+  }
+  //Buah Lewat Matang
+  trxGradingBLMPERSENValidate(
+    trxGradingBLMPERSEN: number,
+    adTransactionJML_JANJANG: number,
+    adTransactionMILL_ID: string,
+    adTransactionnetbeforegrading: number,
+    trxGradingTPPERSEN: number,
+  ): number {
+    let persemblm: number = 0;
+
+    if (trxGradingBLMPERSEN !== null) {
+      if (adTransactionJML_JANJANG === 0 || adTransactionJML_JANJANG === null) {
+        // Display an error message (you can handle this as needed)
+        console.error('Jumlah janjang 0 atau tidak ada.');
+      } else {
+        persemblm = trxGradingBLMPERSEN / adTransactionJML_JANJANG;
+
+        if (adTransactionMILL_ID === 'BA41') {
+          return Math.round((persemblm * adTransactionnetbeforegrading) / 100);
+        }
+
+        if (adTransactionMILL_ID === 'BN41') {
+          persemblm *= 100;
+
+          if (persemblm >= 5) {
+            return Math.round(
+              ((25 / 100) * (persemblm - 5) * adTransactionnetbeforegrading) /
+                100,
+            );
+          } else {
+            return 0;
+          }
+        }
+      }
+    }
+
+    // Return 0 if none of the conditions are met
+    return 0;
+  }
+  //TangkaiPanjang
+  trxGradingTPPERSENValidate(
+    trxGradingTPPERSEN: number,
+    adTransactionJML_JANJANG: number,
+    adTransactionMILL_ID: string,
+    adTransactionnetbeforegrading: number,
+  ): number {
+    let persentp: number = 0;
+
+    if (trxGradingTPPERSEN !== null) {
+      if (adTransactionJML_JANJANG === 0 || adTransactionJML_JANJANG === null) {
+        // Display an error message (you can handle this as needed)
+        console.error('Jumlah janjang 0 atau tidak ada.');
+      } else {
+        persentp = (trxGradingTPPERSEN / adTransactionJML_JANJANG) * 100;
+
+        if (adTransactionMILL_ID === 'BA41') {
+          return Math.round((persentp * adTransactionnetbeforegrading) / 100);
+        }
+
+        if (adTransactionMILL_ID === 'BN41') {
+          return Math.round(
+            (persentp * (1 / 100) * adTransactionnetbeforegrading) / 100,
+          );
+        }
+      }
+    }
+
+    // Return 0 if none of the conditions are met
+    return 0;
+  }
+
+  //Sampah
+  trxGradingSAMPAHPERSENValidate(
+    trxGradingSAMPAHPERSEN: number,
+    adTransactionnetbeforegrading: number,
+    adTransactionMILLID: string,
+    adTransactionMTLLID: string,
+  ): number {
+    let trxGradingSAMPAHKG = 0;
+
+    if (trxGradingSAMPAHPERSEN !== null) {
+      trxGradingSAMPAHKG = Math.round(
+        (trxGradingSAMPAHPERSEN / adTransactionnetbeforegrading) * 100,
+      );
+    }
+
+    if (adTransactionMILLID === 'BA4l' || adTransactionMTLLID === 'BN41') {
+      trxGradingSAMPAHKG = 2 * trxGradingSAMPAHPERSEN;
+    }
+
+    return trxGradingSAMPAHKG;
+  }
+  
+  //Air
+  trxGradingAIRPERSENValidate(
+    trxGradingAIRPERSEN: number,
+    adTransactionnetbeforegrading: number,
+  ): number {
+    if (trxGradingAIRPERSEN !== null) {
+      return Math.round(
+        (trxGradingAIRPERSEN * adTransactionnetbeforegrading) / 100,
+      );
+    }
+    return 0; // Return 0 if trxGradingAIRPERSEN is null
+  }
+
+  txxGradingWAJIBValidate(
+    trxGradingWAJIB: number,
+    adTransactionnetbeforegrading: number,
+    adTransactionMILL_ID: string,
+  ): number {
+    if (trxGradingWAJIB !== null) {
+      let trxGradingWAJIBKG = Math.round(
+        (trxGradingWAJIB * adTransactionnetbeforegrading) / 100,
+      );
+
+      if (adTransactionMILL_ID === 'AN41') {
+        trxGradingWAJIBKG = Math.round(
+          (trxGradingWAJIB / 100) * adTransactionnetbeforegrading,
+        );
+      }
+
+      return trxGradingWAJIBKG;
+    }
+
+    return 0; // Return 0 if trxGradingWAJIB is null
+  }
+
+  trxGradingLAINNYAPERSENValidate(
+    trxGradingLAINNYAPERSEN: number,
+    adTransactionnetbeforegrading: number,
+    adTransactionMILL_ID: string
+  ): number {
+    if (trxGradingLAINNYAPERSEN !== null) {
+      let trxGradingLATNNYAKG = Math.round((trxGradingLAINNYAPERSEN * adTransactionnetbeforegrading) / 100);
+
+      if (adTransactionMILL_ID === 'AN41') {
+        trxGradingLATNNYAKG = Math.round((trxGradingLAINNYAPERSEN / 100) * adTransactionnetbeforegrading);
+      }
+
+      return trxGradingLATNNYAKG;
+    }
+
+    // Return 0 if trxGradingLAINNYAPERSEN is null
+    return 0;
+  }
+  // Assuming hitunggrading is a function, define it here
+  private hitunggrading(): void {
+    // Implement the logic for hitunggrading if it exists
+  }
 }

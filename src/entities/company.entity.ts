@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Company } from '@prisma/client';
+import { Company, CompanyType } from '@prisma/client';
 
 export class CompanyEntity implements Company {
   @ApiProperty() id: string;
 
   @ApiProperty() refType: number;
   @ApiProperty() refId: string  | null;
-
+  @ApiProperty() type: CompanyType;
   @ApiProperty() code: string;
   @ApiProperty() codeSap: string  | null;
   @ApiProperty() name: string;
