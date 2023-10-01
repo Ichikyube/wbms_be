@@ -116,6 +116,7 @@ export class AuthService {
       },
       select: {
         id: true,
+        username: true,
         email: true,
         hashedRT: true,
         userRole: {
@@ -131,7 +132,7 @@ export class AuthService {
     if (!rtMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.signTokens({
       sub: user.id,
-      username: user.email,
+      username: user.username,
       role: user.userRole.name,
     });
 
@@ -186,7 +187,7 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: '1h',
+        expiresIn: '4m',
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,

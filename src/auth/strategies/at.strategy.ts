@@ -11,12 +11,12 @@ import { JwtPayload } from '../types/jwtPayload.type';
 export class AtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   constructor(
     config: ConfigService,
+    private db: DbService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         ExtractJwt.fromAuthHeaderAsBearerToken(),
         AtStrategy.extractJWT,
-
       ]),
       ignoreExpiration: false,
       secretOrKey: config.get('WBMS_JWT_AT_KEY'),
@@ -24,11 +24,25 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   }
 
   private static extractJWT(req: Request): string | null {
-    if(req.headers.authorization) return req.headers.authorization;
+    if (req.headers.authorization) return req.headers.authorization;
     return null;
   }
 
-  async validate(payload: JwtPayload) {
+  async validate(payload: JwtPayload) { //req: Request
+    // const user = await this.db.user.findUnique({
+    //   where: { id: payload.sub },
+    //   select: {
+    //     id: true,
+    //     username: true,
+    //     email: true,
+    //     userRole: {
+    //       select: {
+    //         name: true,
+    //       },
+    //     },
+    //   },
+    // });
+    // req.user = payload
     return payload;
   }
 }

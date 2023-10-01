@@ -7,7 +7,7 @@ export class CreateTransactionDto {
   @IsNumber()
   @IsNotEmpty()
   tType: number;
-
+  @ApiProperty() SPBTS?: string;
   @ApiProperty() bonTripNo?: string;
   @ApiProperty() vehicleStatus: number;
   @ApiProperty() deliveryStatus: number;

@@ -171,7 +171,7 @@ async function main() {
       data: [
         {
           id: 1,
-          name: 'Zero Lock',
+          name: 'zeroLock',
           description:
             'Mengubah status menjadi unlock pada timbangan secara realtime',
           lvlOfApprvl: 3,
@@ -180,7 +180,7 @@ async function main() {
         },
         {
           id: 2,
-          name: 'UnStable Lock',
+          name: 'stableLock',
           description:
             'Mengubah status Unlock menjadi lock pada timbangan sehingga operator tidak bisa melakukan double entry',
           lvlOfApprvl: 3,
@@ -197,7 +197,7 @@ async function main() {
         },
         {
           id: 4,
-          name: 'backdatedTemplate',
+          name: 'backDatedTemplate',
           description: 'Manual Entry For CPO/PKO Transaction',
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
@@ -222,6 +222,96 @@ async function main() {
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
+          start: new Date(),
+        },
+        {
+          id: 7,
+          name: 'signnameBONTRIP',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Json,
+          defaultVal: '{PGS:"", MILLHEAD:""}',
+          start: new Date(),
+        },
+        {
+          id: 8,
+          name: 'potonganBuahMentah',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '3',
+          start: new Date(),
+        },
+        {
+          id: 9,
+          name: 'potonganBuahlewatMatang',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '1',
+          start: new Date(),
+        },
+        {
+          id: 10,
+          name: 'potonganTangkaiPanjang',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '2',
+          start: new Date(),
+        },
+        {
+          id: 11,
+          name: 'potonganTandanKosong',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '4',
+          start: new Date(),
+        },
+        {
+          id: 12,
+          name: 'potonganSampah',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '5',
+          start: new Date(),
+        },
+        {
+          id: 13,
+          name: 'potonganAir',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '3',
+          start: new Date(),
+        },
+        {
+          id: 14,
+          name: 'potonganParteno',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '2',
+          start: new Date(),
+        },
+        {
+          id: 15,
+          name: 'potonganBrondolan',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          type: ConfigType.Number,
+          defaultVal: '10',
           start: new Date(),
         },
       ],

@@ -7,7 +7,7 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
-version: '3.8'
+version: '4.0'
 services:
   watchtower:
     image: containrrr/watchtower:latest
@@ -150,63 +150,72 @@ services:
       PMA_ARBITRARY: 1
     networks:
       - armin-net
-
-  wbms-backend:
-    image: almyra/wbms_tbe:latest
-    depends_on:
-      - wbms-db
+  adminer:
+    image: adminer:latest
     restart: always
     ports:
-      - 6001:6001
-
-    environment:
-      WBMS_APP_PORT: '6001'
-
-      WBMS_DB_DOMAIN: 'wbms-db'
-      WBMS_DB_PORT: '3306'
-      WBMS_DB_USER: 'wbms_dbu'
-      WBMS_DB_PASSWORD: '3031323334'
-      WBMS_DB_NAME: 'wbms'
-
-      # 1: PKS, 2: T30, 3: BULKING
-      WBMS_SITE_TYPE: '1'
-
-      WBMS_WB_PORT: '9001'
-      WBMS_WB_MIN_WEIGHT: 1
-      WBMS_WB_STABLE_PERIOD: 3000
-
-      WBMS_SEMAI_API_KEY: 'lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso'
-      WBMS_SEMAI_API_URL: 'https://dispatch-api-dev.semaigroup.com/external-channel'
-      WBMS_SEMAI_CERT: './cert/pks4.wb.cert.pem'
-      WBMS_SEMAI_KEY: './cert/pks4.wb.key.pem'
-      UPLOAD_LOCATION: ./upload
-      MAX_FILE_SIZE: 5000000
-
-      LDAP_HOST: 'ldap://ldap.wbms.dsn'
-      LDAP_DN: 'cn=admin,dc=wbms,dc=dsn'
-      LDAP_PASSWORD: 'admin'
-      LDAP_BASE_DN: 'dc=wbms,dc=dsn'
-      LDAP_SEARCH_FILTER: '(uid={{username}})(email=*@foo.com))'
-    volumes:
-      - ../armin/server/upload:/wbms_be/upload
+      - 8282:8080
+    environment: 
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_SERVER: wbms-db
+      ADMINER_DESIGN: galkaev #nette
+      ADMINER_DEFAULT_DB_NAME: wbms
+      ADMINER_PLUGINS: tables-filter tinymce
     networks:
       - armin-net
+  # wbms-backend:
+  #   image: almyra/wbms_tbe:latest
+  #   depends_on:
+  #     - wbms-db
+  #   restart: always
+  #   ports:
+  #     - 6001:6001
+  #   environment:
+  #     WBMS_APP_PORT: '6001'
 
-  wbms-fe:
-    image: 'almyra/wbms_fe:latest'
-    depends_on:
-      - wbms-backend
-    restart: always
-    # build:
-    #     context: ./client
-    #     dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    # volumes:
-    #     - ./client:/app
-    networks:
-      - armin-net
+  #     WBMS_DB_DOMAIN: 'wbms-db'
+  #     WBMS_DB_PORT: '3306'
+  #     WBMS_DB_USER: 'wbms_dbu'
+  #     WBMS_DB_PASSWORD: '3031323334'
+  #     WBMS_DB_NAME: 'wbms'
 
+  #     # 1: PKS, 2: T30, 3: BULKING
+  #     WBMS_SITE_TYPE: '1'
+
+  #     WBMS_WB_PORT: '9001'
+  #     WBMS_WB_MIN_WEIGHT: 1
+  #     WBMS_WB_STABLE_PERIOD: 3000
+
+  #     WBMS_SEMAI_API_KEY: 'lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso'
+  #     WBMS_SEMAI_API_URL: 'https://dispatch-api-dev.semaigroup.com/external-channel'
+  #     WBMS_SEMAI_CERT: './cert/pks4.wb.cert.pem'
+  #     WBMS_SEMAI_KEY: './cert/pks4.wb.key.pem'
+  #     UPLOAD_LOCATION: ./upload
+  #     MAX_FILE_SIZE: 5000000
+
+  #     LDAP_HOST: 'ldap://ldap.wbms.dsn'
+  #     LDAP_DN: 'cn=admin,dc=wbms,dc=dsn'
+  #     LDAP_PASSWORD: 'admin'
+  #     LDAP_BASE_DN: 'dc=wbms,dc=dsn'
+  #     LDAP_SEARCH_FILTER: '(uid={{username}})(email=*@foo.com))'
+  #   volumes:
+  #     - ../armin/server/upload:/wbms_be/upload
+  #   networks:
+  #     - armin-net
+  # wbms-fe:
+  #   image: 'almyra/wbms_fe:latest'
+  #   depends_on:
+  #     - wbms-backend
+  #   restart: always
+  #   # build:
+  #   #     context: ./client
+  #   #     dockerfile: Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   # volumes:
+  #   #     - ./client:/app
+  #   networks:
+  #     - armin-net
 networks:
   armin-net:
     driver: bridge

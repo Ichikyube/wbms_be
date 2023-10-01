@@ -27,6 +27,12 @@ export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
 
   async validate(req: Request, payload: JwtPayloadWithRt) {
 
+    // Check if refresh token has expired
+    const expiresAt = new Date(payload.exp * 1000);
+    console.log(expiresAt)
+    if (expiresAt < new Date()) {
+      throw new Error('Expired refresh token');
+    }
     let refreshToken = null;
     if (req.cookies && "rt" in req.cookies) refreshToken = req.cookies.rt;
     else refreshToken = req?.get("authorization")?.replace("Bearer", "").trim();

@@ -8,6 +8,7 @@ import { DriverEntity } from './driver.entity';
 import { CompanyEntity } from './company.entity';
 import { ProductEntity } from './product.entity';
 import { CustomerEntity } from './customer.entity';
+import { TransportVehicleEntity } from './transport-vehicle.entity';
 
 export class TransactionEntity {
   @ApiProperty({ type: String })
@@ -15,7 +16,7 @@ export class TransactionEntity {
 
   @ApiProperty({ type: Number })
   tType: number = 1;
-
+  @ApiProperty() SPBTS?: string;
   @ApiPropertyOptional({ type: String })
   bonTripNo?: string;
 
@@ -345,4 +346,6 @@ export class TransactionEntity {
 
   @ApiPropertyOptional({ type: () => StorageTankEntity })
   destinationSinkStorageTank?: StorageTankEntity;
+  @ApiPropertyOptional({ type: () => TransportVehicleEntity })
+  transportVehicle?: TransportVehicleEntity;
 }

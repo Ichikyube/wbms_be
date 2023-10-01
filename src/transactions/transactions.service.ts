@@ -479,32 +479,33 @@ export class TransactionService {
   //Buah Mentah
   trxGradingBMPERSENValidate(
     trxGradingBMPERSEN: number,
-    adTransactionJML_JANJANG: number,
+    qtyTbs: number,
     adTransactionMILL_ID: string,
-    adTransactionnetbeforegrading: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
   ): number {
     let persenbm: number;
     let trxGradingBUKG: number = 0;
     let trxGradingBMKG: number = 0;
-
+    const weightnetto = originWeighInKg - originWeighOutKg;
     if (trxGradingBMPERSEN !== null) {
-      if (adTransactionJML_JANJANG === 0 || adTransactionJML_JANJANG === null) {
+      if (qtyTbs === 0 || qtyTbs === null) {
         // Display an error message (you can handle this as needed)
         console.error('Jumlah janjang 0 atau tidak ada.');
         persenbm = 0;
       } else {
-        persenbm = trxGradingBMPERSEN / adTransactionJML_JANJANG;
+        persenbm = trxGradingBMPERSEN / qtyTbs;
       }
 
       if (adTransactionMILL_ID === 'BA41') {
         trxGradingBUKG = Math.round(
-          (persenbm * adTransactionnetbeforegrading) / 100,
+          (persenbm * weightnetto) / 100,
         );
       }
 
       if (adTransactionMILL_ID === 'BN41') {
         trxGradingBMKG = Math.round(
-          persenbm * adTransactionnetbeforegrading * 0.5,
+          persenbm * weightnetto * 0.5,
         );
       }
     }
@@ -516,22 +517,23 @@ export class TransactionService {
   //Buah Lewat Matang
   trxGradingBLMPERSENValidate(
     trxGradingBLMPERSEN: number,
-    adTransactionJML_JANJANG: number,
+    qtyTbs: number,
     adTransactionMILL_ID: string,
-    adTransactionnetbeforegrading: number,
-    trxGradingTPPERSEN: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
+    persentasiTangkaiPanjang: number,
   ): number {
     let persemblm: number = 0;
-
+    const weightnetto = originWeighInKg - originWeighOutKg;
     if (trxGradingBLMPERSEN !== null) {
-      if (adTransactionJML_JANJANG === 0 || adTransactionJML_JANJANG === null) {
+      if (qtyTbs === 0 || qtyTbs === null) {
         // Display an error message (you can handle this as needed)
         console.error('Jumlah janjang 0 atau tidak ada.');
       } else {
-        persemblm = trxGradingBLMPERSEN / adTransactionJML_JANJANG;
+        persemblm = trxGradingBLMPERSEN / qtyTbs;
 
         if (adTransactionMILL_ID === 'BA41') {
-          return Math.round((persemblm * adTransactionnetbeforegrading) / 100);
+          return Math.round((persemblm * weightnetto) / 100);
         }
 
         if (adTransactionMILL_ID === 'BN41') {
@@ -539,7 +541,7 @@ export class TransactionService {
 
           if (persemblm >= 5) {
             return Math.round(
-              ((25 / 100) * (persemblm - 5) * adTransactionnetbeforegrading) /
+              ((25 / 100) * (persemblm - 5) * weightnetto) /
                 100,
             );
           } else {
@@ -553,28 +555,29 @@ export class TransactionService {
     return 0;
   }
   //TangkaiPanjang
-  trxGradingTPPERSENValidate(
-    trxGradingTPPERSEN: number,
-    adTransactionJML_JANJANG: number,
+  hitungPotonganTPPERSEN(
+    persentasiTangkaiPanjang: number,
+    qtyTbs: number,
     adTransactionMILL_ID: string,
-    adTransactionnetbeforegrading: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
   ): number {
     let persentp: number = 0;
-
-    if (trxGradingTPPERSEN !== null) {
-      if (adTransactionJML_JANJANG === 0 || adTransactionJML_JANJANG === null) {
+    const weightnetto = originWeighInKg - originWeighOutKg;
+    if (persentasiTangkaiPanjang !== null) {
+      if (qtyTbs === 0 || qtyTbs === null) {
         // Display an error message (you can handle this as needed)
         console.error('Jumlah janjang 0 atau tidak ada.');
       } else {
-        persentp = (trxGradingTPPERSEN / adTransactionJML_JANJANG) * 100;
+        persentp = (persentasiTangkaiPanjang / qtyTbs) * 100;
 
         if (adTransactionMILL_ID === 'BA41') {
-          return Math.round((persentp * adTransactionnetbeforegrading) / 100);
+          return Math.round((persentp * weightnetto) / 100);
         }
 
         if (adTransactionMILL_ID === 'BN41') {
           return Math.round(
-            (persentp * (1 / 100) * adTransactionnetbeforegrading) / 100,
+            (persentp * (1 / 100) * weightnetto) / 100,
           );
         }
       }
@@ -587,19 +590,19 @@ export class TransactionService {
   //Sampah
   trxGradingSAMPAHPERSENValidate(
     trxGradingSAMPAHPERSEN: number,
-    adTransactionnetbeforegrading: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
     adTransactionMILLID: string,
-    adTransactionMTLLID: string,
   ): number {
     let trxGradingSAMPAHKG = 0;
-
+    const weightnetto = originWeighInKg - originWeighOutKg;
     if (trxGradingSAMPAHPERSEN !== null) {
       trxGradingSAMPAHKG = Math.round(
-        (trxGradingSAMPAHPERSEN / adTransactionnetbeforegrading) * 100,
+        (trxGradingSAMPAHPERSEN / weightnetto) * 100,
       );
     }
 
-    if (adTransactionMILLID === 'BA4l' || adTransactionMTLLID === 'BN41') {
+    if (adTransactionMILLID === 'BA4l' || adTransactionMILLID === 'BN41') {
       trxGradingSAMPAHKG = 2 * trxGradingSAMPAHPERSEN;
     }
 
@@ -609,11 +612,13 @@ export class TransactionService {
   //Air
   trxGradingAIRPERSENValidate(
     trxGradingAIRPERSEN: number,
-    adTransactionnetbeforegrading: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
   ): number {
+    const weightnetto = originWeighInKg - originWeighOutKg;
     if (trxGradingAIRPERSEN !== null) {
       return Math.round(
-        (trxGradingAIRPERSEN * adTransactionnetbeforegrading) / 100,
+        (trxGradingAIRPERSEN * weightnetto) / 100,
       );
     }
     return 0; // Return 0 if trxGradingAIRPERSEN is null
@@ -621,17 +626,19 @@ export class TransactionService {
 
   txxGradingWAJIBValidate(
     trxGradingWAJIB: number,
-    adTransactionnetbeforegrading: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
     adTransactionMILL_ID: string,
   ): number {
+    const weightnetto = originWeighInKg - originWeighOutKg;
     if (trxGradingWAJIB !== null) {
       let trxGradingWAJIBKG = Math.round(
-        (trxGradingWAJIB * adTransactionnetbeforegrading) / 100,
+        (trxGradingWAJIB * weightnetto) / 100,
       );
 
       if (adTransactionMILL_ID === 'AN41') {
         trxGradingWAJIBKG = Math.round(
-          (trxGradingWAJIB / 100) * adTransactionnetbeforegrading,
+          (trxGradingWAJIB / 100) * weightnetto,
         );
       }
 
@@ -643,14 +650,16 @@ export class TransactionService {
 
   trxGradingLAINNYAPERSENValidate(
     trxGradingLAINNYAPERSEN: number,
-    adTransactionnetbeforegrading: number,
+    originWeighInKg: number,
+    originWeighOutKg: number,
     adTransactionMILL_ID: string
   ): number {
+    const weightnetto = originWeighInKg - originWeighOutKg;
     if (trxGradingLAINNYAPERSEN !== null) {
-      let trxGradingLATNNYAKG = Math.round((trxGradingLAINNYAPERSEN * adTransactionnetbeforegrading) / 100);
+      let trxGradingLATNNYAKG = Math.round((trxGradingLAINNYAPERSEN * weightnetto) / 100);
 
       if (adTransactionMILL_ID === 'AN41') {
-        trxGradingLATNNYAKG = Math.round((trxGradingLAINNYAPERSEN / 100) * adTransactionnetbeforegrading);
+        trxGradingLATNNYAKG = Math.round((trxGradingLAINNYAPERSEN / 100) * weightnetto);
       }
 
       return trxGradingLATNNYAKG;
@@ -659,8 +668,5 @@ export class TransactionService {
     // Return 0 if trxGradingLAINNYAPERSEN is null
     return 0;
   }
-  // Assuming hitunggrading is a function, define it here
-  private hitunggrading(): void {
-    // Implement the logic for hitunggrading if it exists
-  }
+
 }
