@@ -26,6 +26,7 @@ export class AuthService {
 
   async signin(dto: SigninDto): Promise<{ tokens: Tokens; user: any }> {
     // find the user by username
+    if(!dto.email) dto.email = dto.username;
     const user = await this.db.user.findFirst({
       where: {
         OR: [
@@ -65,7 +66,8 @@ export class AuthService {
     if (!user) throw new ForbiddenException('Invalid username or password.');
     if (user.isLDAPUser) {
       const isAuthenticated = await this.ldapAuthService.authenticate(
-        user.username,
+        // user.username,//
+        dto.username,
         dto.password,
       );
       if (!isAuthenticated) {

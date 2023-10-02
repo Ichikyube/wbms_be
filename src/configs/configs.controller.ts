@@ -14,6 +14,7 @@ import { Request, Response } from 'express';
 import { ConfigsService } from './configs.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { IS_PUBLIC_KEY, Public } from 'src/common/decorators';
 @ApiTags('Configs')
 @ApiBearerAuth('access-token')
 @Controller('configs')
@@ -21,7 +22,7 @@ export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
   @Get('')
-  @UseGuards()
+  @Public()
   async getAll() {
     const dataOut = {
       status: true,
@@ -91,7 +92,7 @@ export class ConfigsController {
   }
 
   @Get('env')
-  @UseGuards()
+  @Public()
   getEnv() {
     return this.configsService.getEnv();
   }
