@@ -1,16 +1,17 @@
 import { Body, Controller, Get, Param, Patch, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { NotificationsService } from './notifications.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateNotificationDto } from './dto/create-notification';
 import { Request } from 'express';
 @ApiBearerAuth('access-token')
+@ApiTags('Notifications')
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
   
   @Post()
-  async createNotification(@Body('message') dto: CreateNotificationDto) {
+  async createNotification(@Body() dto: CreateNotificationDto) {
     return this.notificationsService.createNotification(dto);
   }
 

@@ -37,6 +37,7 @@ import { ConfigRequestsAdminModule } from './config-requests-admin/config-reques
 import { NotificationsModule } from './notifications/notifications.module';
 import { SseController } from './sse/sse.controller';
 import { RedisModule } from './redis/redis.module';
+import { GradingCalculatorGateway } from './grading-calculator/grading-calculator.gateway';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { RedisModule } from './redis/redis.module';
       provide: APP_INTERCEPTOR,
       useClass: TimestampInterceptor,
     },
+    GradingCalculatorGateway,
     // SseGateway,
   ],
   // controllers: [SseController],

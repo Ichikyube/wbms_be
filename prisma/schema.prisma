@@ -6,28 +6,6 @@ generator client {
   // output   = "./generated/client"
 }
 
-// generator prismaClassGenerator {
-//     provider = "prisma-class-generator"
-//     output   = "../src/generated/prisma-class"
-//     dryRun                 = "false"
-//     separateRelationFields = "true"
-//     useUndefinedDefault    = "true"
-// }
-
-// generator nestjsDto {
-//   provider                        = "prisma-generator-nestjs-dto"
-//   output                          = "../src/generated/nestjs-dto"
-//   outputToNestJsResourceStructure = "false"
-//   exportRelationModifierClasses   = "true"
-//   reExport                        = "false"
-//   createDtoPrefix                 = "Create"
-//   updateDtoPrefix                 = "Update"
-//   dtoSuffix                       = "Dto"
-//   entityPrefix                    = ""
-//   entitySuffix                    = "Entity"
-//   fileNamingStyle                 = "camel"
-// }
-
 datasource db {
   provider = "mysql"
   url      = env("WBMS_DB_URL")
@@ -341,6 +319,7 @@ enum ConfigType {
   Number
   Json
   String
+  Function
 }
 
 model Config {
@@ -350,7 +329,7 @@ model Config {
   lvlOfApprvl Int    @map("level_of_approval")
   type        ConfigType
   tempValue   String? @map("temp_value")
-  defaultVal  String @map("default_value")
+  defaultVal  String @map("default_value") @db.Text
   start       DateTime?
   end         DateTime?
   lifespan    Int?  @map("livespan") @default(43200)
@@ -365,6 +344,8 @@ model Config {
 model Notification {
   id         String    @id @default(uuid()) @db.Char(36)
   message    String
+  sender     String?
+  photo      String?
   target     Json
   isResponded   Boolean  @default(false) @map("is_responded")
   dtCreated  DateTime @default(now())    

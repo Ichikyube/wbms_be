@@ -31,7 +31,6 @@ export class ProvincesService {
       (model) => model.name === 'Province',
     ).fields;
     const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
     return attr;
   }
   

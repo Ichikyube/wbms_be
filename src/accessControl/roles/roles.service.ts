@@ -70,7 +70,6 @@ export class RolesService {
   async parseData(data) {
     const result = {};
     for (const item of data) {
-      console.log(item);
       const role = item.name;
       const permissions = item.permissions;
       const rolePermissions = {};
@@ -217,7 +216,6 @@ export class RolesService {
         id,
       },
     });
-    console.log(role);
     if (role.name === 'Admin Master' || role.name === 'Admin System') {
       throw new Error('Cannot delete admin role');
     }

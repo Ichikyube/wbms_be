@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConfigRequestDto } from './dto/create-config-request.dto';
 import { DbService } from 'src/db/db.service';
-import { ConfigService } from '@nestjs/config';
 import { RequestStatus } from '@prisma/client';
+import { ConfigsService } from 'src/configs/configs.service';
 
 @Injectable()
 export class ConfigRequestService {
   constructor(
     private db: DbService,
-    private config: ConfigService,
+    private configService: ConfigsService,
   ) {}
 
   async createRequest(userId: string, dto: CreateConfigRequestDto) {
@@ -91,7 +91,7 @@ export class ConfigRequestService {
     const userLvl = lvlMap[userId];
     const configRequest = await this.db.configRequest.findUnique({
       where: { id: requestId },
-      include: { config: { select: { lvlOfApprvl: true } } },
+      include: { config: { select: { lvlOfApprvl: true, id: true } } },
     });
     const configLvl = configRequest.config.lvlOfApprvl;
     const signList = JSON.parse(JSON.stringify(configRequest.approval));
@@ -118,6 +118,10 @@ export class ConfigRequestService {
         where: { id: requestId },
         data,
       });
+      if (currentLevel === configLvl) {
+        const confData = {tempValue: true, start: configRequest.schedule}
+        this.configService.requestApproved(configRequest.configId, confData, userId);
+      };
     } catch (e) {}
   }
 }

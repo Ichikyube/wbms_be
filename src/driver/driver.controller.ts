@@ -24,11 +24,6 @@ export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
   @Get('')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -59,21 +54,13 @@ export class DriverController {
   }
 
   @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
+
   async getAttributes() {
     return await this.driverService.getAttributes();
   }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'delete',
-    possession: 'own',
-  })
+
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -104,11 +91,6 @@ export class DriverController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -134,11 +116,6 @@ export class DriverController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -171,11 +148,6 @@ export class DriverController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -206,11 +178,6 @@ export class DriverController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -243,11 +210,6 @@ export class DriverController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -278,11 +240,6 @@ export class DriverController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'driver',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity })
   async create(@Body() dto: CreateDriverDto, @Req() req: Request) {
     const dataOut = {

@@ -29,7 +29,6 @@ export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
 
     // Check if refresh token has expired
     const expiresAt = new Date(payload.exp * 1000);
-    console.log(expiresAt)
     if (expiresAt < new Date()) {
       throw new Error('Expired refresh token');
     }
