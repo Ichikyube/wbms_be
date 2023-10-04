@@ -505,6 +505,76 @@ async function main() {
             return 0; // Return 0 if trxGradingWAJIB is null
           }`,
         },
+        {
+          id: 16,
+          name: 'trxTypeCodes',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.Json,
+          defaultVal: `{"company":"BURKS","millPlant":"MWERKS","millStoLoc":"MLGORT","transitStoLoc":"TRLGORT"}`,
+        },
+        {
+          id: 17,
+          name: 'WBMS_SEMAI_API_KEY',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.String,
+          defaultVal: `lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso`,
+        },
+        {
+          id: 17,
+          name: 'WBMS_SEMAI_API_URL',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.String,
+          defaultVal: `https://dispatch.dsngroup.co.id/api/external-channel/`,
+        },
+        {
+          id: 18,
+          name: 'WBMS_WB_IP',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.String,
+          defaultVal: `localhost`,
+        },
+        {
+          id: 19,
+          name: 'WBMS_WB_MIN_WEIGHT',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.Number,
+          defaultVal: `1`,
+        },
+        {
+          id: 20,
+          name: 'WBMS_WB_PORT',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.Number,
+          defaultVal: `9001`,
+        },
+        {
+          id: 21,
+          name: 'WBMS_WB_STABLE_PERIOD',
+          description:
+            'Fitur melakukan input manual untuk transaksi TBS External',
+          lvlOfApprvl: 3,
+          lifespan: null,
+          type: ConfigType.Number,
+          defaultVal: `3000`,
+        },
       ],
       skipDuplicates: true,
     });

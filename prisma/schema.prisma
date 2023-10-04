@@ -333,7 +333,7 @@ model Config {
   defaultVal  String @map("default_value") @db.Text
   start       DateTime?
   end         DateTime?
-  lifespan    Int?  @map("livespan") @default(43200)
+  lifespan    Int?  @map("livespan")
 
   userModified  String?         @map("user_modified") @db.Char(36)
   dtModified    DateTime?       @updatedAt @map("date_modified")

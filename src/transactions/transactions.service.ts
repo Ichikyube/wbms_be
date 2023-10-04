@@ -105,13 +105,13 @@ export class TransactionService {
       message: '',
       data: {
         transaction: {},
-        tType: '',
+        typeTransaction: '',
         urlPath: '',
       },
       logs: {},
     };
 
-    const { content, tType } = body;
+    const { content, typeTransaction } = body;
 
     try {
       const response = await this.semaiAPI.decodeQrcode({ content });
@@ -131,13 +131,13 @@ export class TransactionService {
       const urlMapping = this.configWbms.WbTransactionUrlMapping();
 
       try {
-        dataOut.data.tType =
-          statusMapping[tType][decodedQrcode.vehicleOperationStatus][
+        dataOut.data.typeTransaction =
+          statusMapping[typeTransaction][decodedQrcode.vehicleOperationStatus][
             decodedQrcode.deliveryStatus
           ];
 
         dataOut.data.urlPath =
-          urlMapping[tType][decodedQrcode.vehicleOperationStatus][
+          urlMapping[typeTransaction][decodedQrcode.vehicleOperationStatus][
             decodedQrcode.deliveryStatus
           ];
       } catch (error) {
@@ -148,14 +148,14 @@ export class TransactionService {
 
       const transaction: CreateTransactionDto = this.copyQrToTransaction(
         decodedQrcode,
-        tType,
+        typeTransaction,
       );
 
       const dtTransaction = await this.searchFirst({
         where: {
           transportVehiclePlateNo: transaction.transportVehiclePlateNo,
           progressStatus: { not: 15 },
-          tType,
+          typeTransaction,
         },
         orderBy: { bonTripNo: 'desc' },
       }).then((res) => res.record);
@@ -167,7 +167,7 @@ export class TransactionService {
 
       //     transaction = new CreateTransactionDto();
 
-      //     transaction.tType = tType;
+      //     transaction.typeTransaction = typeTransaction;
       //     transaction.bonTripNo = `P041${moment().format('YYMMDDHHmmss')}`; //moment().valueOf()
       //     transaction.progressStatus = 0;
       //   }
@@ -176,7 +176,7 @@ export class TransactionService {
       //     if (!dtTransaction) {
       //       transaction = new CreateTransactionDto();
 
-      //       transaction.tType = tType;
+      //       transaction.typeTransaction = typeTransaction;
       //       transaction.bonTripNo = `P041${moment().format('YYMMDDHHmmss')}`; //moment().valueOf()
       //     } else transaction = dtTransaction as CreateTransactionDto;
 
@@ -187,7 +187,7 @@ export class TransactionService {
       // if (!dtTransaction) {
       //   transaction = new CreateTransactionDto();
 
-      //   transaction.tType = tType;
+      //   transaction.typeTransaction = typeTransaction;
       //   transaction.bonTripNo = '';
       // } else transaction = dtTransaction as CreateTransactionDto;
 
@@ -210,7 +210,7 @@ export class TransactionService {
       logs: {},
     };
 
-    const { content, tType } = query;
+    const { content, typeTransaction } = query;
 
     // console.log(query);
     // console.log(`${this.WBMS_SEMAI_API_URL}/sites`);
@@ -393,10 +393,10 @@ export class TransactionService {
     return record;
   }
 
-  private copyQrToTransaction(dto: QrcodeDto, tType): CreateTransactionDto {
+  private copyQrToTransaction(dto: QrcodeDto, typeTransaction): CreateTransactionDto {
     const transaction = new TransactionEntity();
 
-    transaction.typeTransaction = tType;
+    transaction.typeTransaction = typeTransaction;
 
     transaction.bonTripNo = dto.externalRefNo;
     transaction.vehicleStatus = dto.vehicleOperationStatus;
