@@ -11,6 +11,8 @@ export class CreateTransactionDto {
   @IsNumber()
   @IsNotEmpty()
   typeSite: number;
+  @ApiProperty() afdeling?: string;
+  @ApiProperty() blok?: string;
   @ApiProperty() sptbs?: string;
   @ApiProperty() bonTripNo?: string;
   @ApiProperty() vehicleStatus: number;

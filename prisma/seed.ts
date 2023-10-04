@@ -231,8 +231,6 @@ async function main() {
           name: 'trxGradingPencentage',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Json,
           defaultVal:
             '{"trxGradingBMPERSEN":0, "trxGradingBLMPERSEN":0, "trxGradingTPPesen":0, "trxGradingSAMPAHPERSEN":0, "trxGradingAIRPERSEN":0, "trxGradingLAINNYAPERSEN":0, "trxGradingWAJIB":0}',
@@ -243,8 +241,6 @@ async function main() {
           name: 'potonganBuahMentah',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: `trxGradingBMPERSENValidate(
             trxGradingBMPERSEN: number,
@@ -284,8 +280,6 @@ async function main() {
           name: 'potonganBuahlewatMatang',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: `trxGradingBLMPERSENValidate(
             trxGradingBLMPERSEN: number,
@@ -329,8 +323,6 @@ async function main() {
           name: 'potonganTangkaiPanjang',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: `trxGradingTPPERSENValidate(
             trxGradingTPPesen: number,
@@ -368,8 +360,6 @@ async function main() {
           name: 'potonganTandanKosong',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: ``,
         },
@@ -378,8 +368,6 @@ async function main() {
           name: 'potonganSampah',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: `trxGradingSAMPAHPERSENValidate(
             trxGradingSAMPAHPERSEN: number,
@@ -407,8 +395,6 @@ async function main() {
           name: 'potonganAir',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: `trxGradingAIRPERSENValidate(
             trxGradingAIRPERSEN: number,
@@ -428,8 +414,6 @@ async function main() {
           name: 'potonganParteno',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: ``,
         },
@@ -438,8 +422,6 @@ async function main() {
           name: 'potonganBrondolan',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: ``,
         },
@@ -448,8 +430,6 @@ async function main() {
           name: 'potonganLainnya',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Function,
           defaultVal: `trxGradingLAINNYAPERSENValidate(
             trxGradingLAINNYAPERSEN: number,
@@ -510,18 +490,14 @@ async function main() {
           name: 'trxTypeCodes',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Json,
-          defaultVal: `{"company":"BURKS","millPlant":"MWERKS","millStoLoc":"MLGORT","transitStoLoc":"TRLGORT"}`,
+          defaultVal: `{"company":"DS","millPlant":"DS43","millStoLoc":"TW30","transitStoLoc":""}`,
         },
         {
           id: 17,
           name: 'WBMS_SEMAI_API_KEY',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.String,
           defaultVal: `lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso`,
         },
@@ -530,8 +506,6 @@ async function main() {
           name: 'WBMS_SEMAI_API_URL',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.String,
           defaultVal: `https://dispatch.dsngroup.co.id/api/external-channel/`,
         },
@@ -540,8 +514,6 @@ async function main() {
           name: 'WBMS_WB_IP',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.String,
           defaultVal: `localhost`,
         },
@@ -550,8 +522,6 @@ async function main() {
           name: 'WBMS_WB_MIN_WEIGHT',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Number,
           defaultVal: `1`,
         },
@@ -560,8 +530,6 @@ async function main() {
           name: 'WBMS_WB_PORT',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Number,
           defaultVal: `9001`,
         },
@@ -570,8 +538,6 @@ async function main() {
           name: 'WBMS_WB_STABLE_PERIOD',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
-          lvlOfApprvl: 3,
-          lifespan: null,
           type: ConfigType.Number,
           defaultVal: `3000`,
         },
