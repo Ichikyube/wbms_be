@@ -310,6 +310,7 @@ model ConfigRequest {
   dtCreated    DateTime        @default(now()) @map("date_created")
   dtModified   DateTime?       @updatedAt @map("date_modified")
   config       Config          @relation(fields: [configId], references: [id])
+  notification Notification?
 
   @@map("config_requests")
 }
@@ -347,8 +348,11 @@ model Notification {
   sender     String?
   photo      String?
   target     Json
+  configRequestId String? @unique @db.VarChar(36)
   isResponded   Boolean  @default(false) @map("is_responded")
-  dtCreated  DateTime @default(now())    
+  dtCreated  DateTime @default(now())   
+
+  configRequest ConfigRequest? @relation(fields: [configRequestId], references: [id])
 }
 
 model Profile {
