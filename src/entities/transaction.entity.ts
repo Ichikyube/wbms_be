@@ -20,7 +20,7 @@ export class TransactionEntity {
   @ApiProperty({ type: Number })
   typeTransaction: number = 1;
 
-  @ApiProperty() SPBTS?: string;
+  @ApiProperty() sptbs?: string;
   @ApiPropertyOptional({ type: String })
   bonTripNo?: string;
 

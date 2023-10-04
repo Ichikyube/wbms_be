@@ -396,7 +396,7 @@ export class TransactionService {
   private copyQrToTransaction(dto: QrcodeDto, tType): CreateTransactionDto {
     const transaction = new TransactionEntity();
 
-    transaction.tType = tType;
+    transaction.typeTransaction = tType;
 
     transaction.bonTripNo = dto.externalRefNo;
     transaction.vehicleStatus = dto.vehicleOperationStatus;
