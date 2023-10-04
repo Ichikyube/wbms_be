@@ -15,7 +15,11 @@ export class TransactionEntity {
   id: string;
 
   @ApiProperty({ type: Number })
-  tType: number = 1;
+  typeSite: number = 1;
+
+  @ApiProperty({ type: Number })
+  typeTransaction: number = 1;
+
   @ApiProperty() SPBTS?: string;
   @ApiPropertyOptional({ type: String })
   bonTripNo?: string;
@@ -325,7 +329,7 @@ export class TransactionEntity {
 
   @ApiPropertyOptional({ type: () => CustomerEntity })
   customer?: CustomerEntity | null;
-  
+
   @ApiPropertyOptional({ type: () => ProductEntity })
   product?: ProductEntity;
 
