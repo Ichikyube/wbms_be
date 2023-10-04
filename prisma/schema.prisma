@@ -576,8 +576,8 @@ model TransportVehicle {
 
 model Transaction {
   id    String @id @default(uuid()) @db.Char(36)
-  tType Int    @default(1) @map("transaction_type")
-
+  typeSite        Int @default(1)
+  typeTransaction Int @default(1)
   SPBTS          String?  @unique @db.Char(36)
   bonTripNo      String? @map("bon_trip_no") @db.Char(16)
   vehicleStatus  Int     @default(0) @map("vehicle_status")
