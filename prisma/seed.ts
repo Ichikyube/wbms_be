@@ -183,7 +183,7 @@ async function main() {
           id: 2,
           name: 'stableLock',
           description:
-            'Mengubah status Unlock menjadi lock pada timbangan sehingga operator tidak bisa melakukan double entry',
+            'Menstabilkan timbangan dengan waktu yang ditentukan',
           lvlOfApprvl: 3,
           lifespan: null,
           type: ConfigType.Number,
@@ -192,7 +192,7 @@ async function main() {
         {
           id: 3,
           name: 'manualEntryWB',
-          description: 'Manual Entry For Weighbridge',
+          description: 'Manual Input Berat Timbangan',
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
@@ -200,47 +200,43 @@ async function main() {
         {
           id: 4,
           name: 'backDatedTemplate',
-          description: 'Manual Entry For CPO/PKO Transaction',
+          description: 'Fitur melakukan upload file csv ke database',
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
-          start: new Date(),
         },
         {
           id: 5,
           name: 'backDatedForm',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS Internal',
+            'Fitur melakukan input manual transaksi selain CPO/PKO tanggal lampau yang di masukkan satu persatu secara manual',
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
-          start: new Date(),
         },
         {
           id: 6,
           name: 'editTransaction',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur melakukan Edit data transaksi selain CPO dan PKO',
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
-          start: new Date(),
         },
         {
           id: 7,
           name: 'trxGradingPencentage',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan %/JJg setiap pks',
           type: ConfigType.Json,
           defaultVal:
             '{"trxGradingBMPERSEN":0, "trxGradingBLMPERSEN":0, "trxGradingTPPesen":0, "trxGradingSAMPAHPERSEN":0, "trxGradingAIRPERSEN":0, "trxGradingLAINNYAPERSEN":0, "trxGradingWAJIB":0}',
-          start: new Date(),
         },
         {
           id: 8,
           name: 'potonganBuahMentah',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Buah Mentah',
           type: ConfigType.Function,
           defaultVal: `trxGradingBMPERSENValidate(
             trxGradingBMPERSEN: number,
@@ -279,7 +275,7 @@ async function main() {
           id: 9,
           name: 'potonganBuahlewatMatang',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Buah lewat Matang',
           type: ConfigType.Function,
           defaultVal: `trxGradingBLMPERSENValidate(
             trxGradingBLMPERSEN: number,
@@ -322,7 +318,7 @@ async function main() {
           id: 10,
           name: 'potonganTangkaiPanjang',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Tangkai Panjang',
           type: ConfigType.Function,
           defaultVal: `trxGradingTPPERSENValidate(
             trxGradingTPPesen: number,
@@ -359,7 +355,7 @@ async function main() {
           id: 11,
           name: 'potonganTandanKosong',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Tandan Kosong',
           type: ConfigType.Function,
           defaultVal: ``,
         },
@@ -367,7 +363,7 @@ async function main() {
           id: 12,
           name: 'potonganSampah',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Sampah',
           type: ConfigType.Function,
           defaultVal: `trxGradingSAMPAHPERSENValidate(
             trxGradingSAMPAHPERSEN: number,
@@ -394,7 +390,7 @@ async function main() {
           id: 13,
           name: 'potonganAir',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Air',
           type: ConfigType.Function,
           defaultVal: `trxGradingAIRPERSENValidate(
             trxGradingAIRPERSEN: number,
@@ -413,7 +409,7 @@ async function main() {
           id: 14,
           name: 'potonganParteno',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Parteno',
           type: ConfigType.Function,
           defaultVal: ``,
         },
@@ -421,7 +417,7 @@ async function main() {
           id: 15,
           name: 'potonganBrondolan',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Brondolan',
           type: ConfigType.Function,
           defaultVal: ``,
         },
@@ -429,7 +425,7 @@ async function main() {
           id: 16,
           name: 'potonganLainnya',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Lainnya',
           type: ConfigType.Function,
           defaultVal: `trxGradingLAINNYAPERSENValidate(
             trxGradingLAINNYAPERSEN: number,
@@ -458,10 +454,10 @@ async function main() {
           `,
         },
         {
-          id: 15,
+          id: 17,
           name: 'potonganWajib',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur menentukan rumus untuk potongan Wajib',
           lvlOfApprvl: 3,
           lifespan: null,
           type: ConfigType.Function,
@@ -486,31 +482,31 @@ async function main() {
           }`,
         },
         {
-          id: 16,
+          id: 18,
           name: 'trxTypeCodes',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
           type: ConfigType.Json,
-          defaultVal: `{"company":"DS","millPlant":"DS43","millStoLoc":"TW30","transitStoLoc":""}`,
+          defaultVal: `{"company":"DS","millPlant":"DS43","millStoLoc":"TW30","transitStoLoc":"MK"}`,
         },
         {
-          id: 17,
+          id: 19,
           name: 'WBMS_SEMAI_API_KEY',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur melakukan autentikasi with semai',
           type: ConfigType.String,
           defaultVal: `lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso`,
         },
         {
-          id: 17,
+          id: 20,
           name: 'WBMS_SEMAI_API_URL',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'URL WBMS',
           type: ConfigType.String,
           defaultVal: `https://dispatch.dsngroup.co.id/api/external-channel/`,
         },
         {
-          id: 18,
+          id: 21,
           name: 'WBMS_WB_IP',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
@@ -518,23 +514,23 @@ async function main() {
           defaultVal: `localhost`,
         },
         {
-          id: 19,
+          id: 22,
           name: 'WBMS_WB_MIN_WEIGHT',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Fitur melakukan minimal berat timbang',
           type: ConfigType.Number,
           defaultVal: `1`,
         },
         {
-          id: 20,
+          id: 23,
           name: 'WBMS_WB_PORT',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Port timbangan',
           type: ConfigType.Number,
           defaultVal: `9001`,
         },
         {
-          id: 21,
+          id: 24,
           name: 'WBMS_WB_STABLE_PERIOD',
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',

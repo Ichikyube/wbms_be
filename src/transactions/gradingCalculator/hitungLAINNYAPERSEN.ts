@@ -1,4 +1,4 @@
-export function trxGradingLAINNYAPERSENValidate(
+export function hitungLAINNYAPERSEN(
   trxGradingLAINNYAPERSEN: number,
   originWeighInKg: number,
   originWeighOutKg: number,
@@ -6,17 +6,17 @@ export function trxGradingLAINNYAPERSENValidate(
 ): number {
   const weightnetto = originWeighInKg - originWeighOutKg;
   if (trxGradingLAINNYAPERSEN !== null) {
-    let trxGradingLATNNYAKG = Math.round(
+    let trxGradingLAINNYAKG = Math.round(
       (trxGradingLAINNYAPERSEN * weightnetto) / 100,
     );
 
     if (adTransactionMILL_ID === 'AN41') {
-      trxGradingLATNNYAKG = Math.round(
+      trxGradingLAINNYAKG = Math.round(
         (trxGradingLAINNYAPERSEN / 100) * weightnetto,
       );
     }
 
-    return trxGradingLATNNYAKG;
+    return trxGradingLAINNYAKG;
   }
 
   // Return 0 if trxGradingLAINNYAPERSEN is null

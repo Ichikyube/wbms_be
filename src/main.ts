@@ -2,16 +2,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
 import SwaggerDocumentation from './settings/swagger.config';
 import * as fs from 'fs';
 import { AccessControl } from 'accesscontrol';
+import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
 // const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
 // const ac = new AccessControl(grantsObject);
-
+import { createServer } from 'http';
 declare const module: any;
 
 async function bootstrap() {
@@ -28,6 +29,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
+  app.useWebSocketAdapter(new CalcSocketIoAdapter());
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
@@ -46,7 +48,6 @@ async function bootstrap() {
   const swaggerDoc = new SwaggerDocumentation(app);
   swaggerDoc.serve();
   await app.listen(WBMS_APP_PORT || 6001);
-
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());

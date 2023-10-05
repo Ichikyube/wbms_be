@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CacheModule } from '@nestjs/cache-manager';
@@ -37,6 +42,11 @@ import { ConfigRequestsAdminModule } from './config-requests-admin/config-reques
 import { NotificationsModule } from './notifications/notifications.module';
 import { SseController } from './sse/sse.controller';
 import { RedisModule } from './redis/redis.module';
+// import { GradingCalculatorGateway } from './grading-calculator/grading-calculator.gateway';
+import { XmlMiddleware } from './common/middlewares/xml.middleware';
+import { GradingCalculatorModule } from './grading-calculator/grading-calculator.module';
+import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
+import { SocketMiddleware } from './common/middlewares/socket.middleware';
 import { GradingCalculatorGateway } from './grading-calculator/grading-calculator.gateway';
 
 @Module({
@@ -73,6 +83,7 @@ import { GradingCalculatorGateway } from './grading-calculator/grading-calculato
     ConfigRequestModule,
     ConfigRequestsAdminModule,
     NotificationsModule,
+    // GradingCalculatorModule,
     // RedisModule,
   ],
   providers: [
@@ -84,9 +95,21 @@ import { GradingCalculatorGateway } from './grading-calculator/grading-calculato
       provide: APP_INTERCEPTOR,
       useClass: TimestampInterceptor,
     },
+    CalcSocketIoAdapter,
     GradingCalculatorGateway,
     // SseGateway,
   ],
   // controllers: [SseController],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(XmlMiddleware).forRoutes({
+      path: '/transactions/:id',
+      method: RequestMethod.GET,
+    });
+    consumer.apply(SocketMiddleware).forRoutes({
+      path: '/calculator',
+      method: RequestMethod.ALL,
+    });
+  }
+}

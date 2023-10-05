@@ -1,5 +1,5 @@
 //Air
-export function trxGradingAIRPERSENValidate(
+export function hitungAIRPERSEN(
   trxGradingAIRPERSEN: number,
   originWeighInKg: number,
   originWeighOutKg: number,

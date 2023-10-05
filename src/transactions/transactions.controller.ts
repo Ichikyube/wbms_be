@@ -60,31 +60,19 @@ export class TransactionController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'read',
-    possession: 'own',
-  })
+
   searchMany(@Body() query: any) {
     return this.transactionService.searchMany(query);
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'read',
-    possession: 'own',
-  })
+
   searchFirst(@Body() query: any) {
     return this.transactionService.searchFirst(query);
   }
 
   @Get('search-qr')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'read',
-    possession: 'own',
-  })
+
   searchByQR(@Body() query: any) {
     return this.transactionService.searchByQR(query);
   }
@@ -100,21 +88,11 @@ export class TransactionController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'create',
-    possession: 'own',
-  })
   create(@Body() dto: CreateTransactionDto) {
     return this.transactionService.create(dto);
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiOkResponse({
     description: 'Transaction has been successfully updated.',
     type: UpdateTransactionDto,
@@ -124,11 +102,6 @@ export class TransactionController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiOkResponse({ description: 'Transaction has been successfully deleted.' })
   @ApiNotFoundResponse({ description: 'Transaction not found.' })
   async deleteById(@Param('id') id: string, @Req() req: Request) {

@@ -1,4 +1,4 @@
-export function txxGradingWAJIBValidate(
+export function hitungWAJIBPERSEN(
   trxGradingWAJIB: number,
   originWeighInKg: number,
   originWeighOutKg: number,

@@ -584,7 +584,7 @@ model Transaction {
   typeTransaction Int @default(1)
   afdeling       String?
   blok           String?
-  sptbs          String?  @unique @db.Char(36)
+  sptbs          String? @db.Char(36)
   bonTripNo      String? @map("bon_trip_no") @db.Char(16)
   vehicleStatus  Int     @default(0) @map("vehicle_status")
   deliveryStatus Int     @default(0) @map("delivery_status")

@@ -21,6 +21,40 @@ import { IS_PUBLIC_KEY, Public } from 'src/common/decorators';
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
+  @Get('f')
+  @Public()
+  async getEnvy() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        config: {
+          records: null,
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    try {
+      const records = await this.configsService.get();
+
+      dataOut.data.config.records = records;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+    }
+    // Set the Cache-Control header
+    // res.setHeader(
+    //   `Cache-Control`,
+    //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
+    // );
+
+    return dataOut;
+  }
+
   @Get('')
   @Public()
   async getAll() {

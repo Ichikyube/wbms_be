@@ -1,5 +1,5 @@
 //Sampah
-export function trxGradingSAMPAHPERSENValidate(
+export function hitungSAMPAHPERSEN(
   trxGradingSAMPAHPERSEN: number,
   originWeighInKg: number,
   originWeighOutKg: number,

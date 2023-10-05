@@ -1,5 +1,5 @@
 //TangkaiPanjang
-export function trxGradingTPPERSENValidate(
+export function hitungTPPERSEN(
   trxGradingTPPesen: number,
   qtyTbs: number,
   adTransactionMILL_ID: string,

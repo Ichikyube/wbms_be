@@ -1,5 +1,5 @@
 //Buah Lewat Matang
-export function trxGradingBLMPERSENValidate(
+export function hitungBLMPERSEN(
   trxGradingBLMPERSEN: number,
   qtyTbs: number,
   adTransactionMILL_ID: string,

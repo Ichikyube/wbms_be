@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import * as Strategy from 'passport-ldapauth';
+import Strategy from 'passport-ldapauth';
 import { Request } from 'express';
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldapauth') {

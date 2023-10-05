@@ -1,14 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 
 @Injectable()
 export class ConfigsService {
+  private readonly envConfig: Record<string, string>;
+
   constructor(
     private db: DbService,
     private config: ConfigService,
-  ) {}
+  ) {
+    const filePath = `${process.env.NODE_ENV || 'development'}.env`;
 
+    if (fs.existsSync(filePath)) {
+      this.envConfig = dotenv.parse(fs.readFileSync(filePath));
+    } else {
+      this.envConfig = {};
+    }
+  }
+  
+  get(): string {
+    return this.envConfig["WBMS_SEMAI_API_URL"];
+  }
   async getEnv() {
     const dataOut = {
       status: true,
@@ -226,5 +241,18 @@ export class ConfigsService {
     };
 
     return statusMapping;
+  }
+
+  async updateEnvVariableFromDatabase(): Promise<void> {
+    const configs = await this.getAll();
+
+    if (configs && configs.length > 0) {
+      for (const config of configs) {
+        const { name, defaultVal } = config;
+
+        // Update the environment variable in memory
+        this.config[name] = defaultVal;
+      }
+    }
   }
 }

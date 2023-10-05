@@ -1,5 +1,5 @@
 //Buah Mentah
-export function trxGradingBMPERSENValidate(
+export function hitungBMPERSEN(
   trxGradingBMPERSEN: number,
   qtyTbs: number,
   adTransactionMILL_ID: string,
