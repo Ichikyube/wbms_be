@@ -46,7 +46,6 @@ import { RedisModule } from './redis/redis.module';
 import { XmlMiddleware } from './common/middlewares/xml.middleware';
 import { GradingCalculatorModule } from './grading-calculator/grading-calculator.module';
 import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
-import { SocketMiddleware } from './common/middlewares/socket.middleware';
 import { GradingCalculatorGateway } from './grading-calculator/grading-calculator.gateway';
 
 @Module({
@@ -83,33 +82,21 @@ import { GradingCalculatorGateway } from './grading-calculator/grading-calculato
     ConfigRequestModule,
     ConfigRequestsAdminModule,
     NotificationsModule,
-    // GradingCalculatorModule,
+    GradingCalculatorModule,
     // RedisModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AtGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TimestampInterceptor,
-    },
-    CalcSocketIoAdapter,
-    GradingCalculatorGateway,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AtGuard,
+    // },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: TimestampInterceptor,
+    // },
+
     // SseGateway,
   ],
   // controllers: [SseController],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(XmlMiddleware).forRoutes({
-      path: '/transactions/:id',
-      method: RequestMethod.GET,
-    });
-    consumer.apply(SocketMiddleware).forRoutes({
-      path: '/calculator',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+export class AppModule {}

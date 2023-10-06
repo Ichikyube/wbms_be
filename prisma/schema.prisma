@@ -79,7 +79,7 @@ model Company {
   contactName  String? @map("contact_name") @db.VarChar(50)
   contactEmail String? @map("contact_email") @db.VarChar(30)
   contactPhone String? @map("contact_phone") @db.VarChar(30)
-
+  persenPotngWajib Int?
   isMillOperator Boolean @default(false) @map("is_mill_operator")
   isTransporter  Boolean @default(false) @map("is_transporter")
   isSiteOperator Boolean @default(false) @map("is_site_operator")
@@ -430,7 +430,7 @@ model Product {
   refId   String? @map("ref_id") @db.VarChar(50)
 
   productGroupName String?
-
+  batch         String?  @db.Char(36)
   code          String  @db.VarChar(50)
   codeSap       String? @map("code_sap") @db.VarChar(50)
   name          String  @db.VarChar(50)
@@ -585,6 +585,12 @@ model Transaction {
   afdeling       String?
   blok           String?
   sptbs          String? @db.Char(36)
+  millPlant      String? @db.Char(36)
+  checkGrade     Boolean?
+  spbNo          String? @db.Char(36)
+  yearPlant      Int?
+  indikator      String? @db.Char(3)
+  sapCode        String? @db.Char(36)
   bonTripNo      String? @map("bon_trip_no") @db.Char(16)
   vehicleStatus  Int     @default(0) @map("vehicle_status")
   deliveryStatus Int     @default(0) @map("delivery_status")

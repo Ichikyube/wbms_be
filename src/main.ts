@@ -12,7 +12,6 @@ import { AccessControl } from 'accesscontrol';
 import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
 // const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
 // const ac = new AccessControl(grantsObject);
-import { createServer } from 'http';
 declare const module: any;
 
 async function bootstrap() {
@@ -29,7 +28,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
-  app.useWebSocketAdapter(new CalcSocketIoAdapter());
+  app.useWebSocketAdapter(new CalcSocketIoAdapter(app));
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.useGlobalPipes(

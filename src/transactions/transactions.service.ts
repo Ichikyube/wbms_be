@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DbService } from 'src/db/db.service';
+import { create } from 'xmlbuilder2';
 import moment from 'moment';
-
+import { Prisma } from '@prisma/client';
+import { DbService } from 'src/db/db.service';
 import { SemaiService } from 'src/semai/semai.service';
 import { ConfigsService } from 'src/configs/configs.service';
-
 import { CreateTransactionDto } from './dto/create-transactionDto';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
-import { Prisma } from '@prisma/client';
+
 import { TransactionEntity } from 'src/entities';
 
 @Injectable()
@@ -74,6 +74,177 @@ export class TransactionService {
     }
 
     return dataOut;
+  }
+
+  convertToXml(tag: string, value: string): string {
+    return `<${tag}>${value}</${tag}>`;
+  }
+
+  convertDataToXml(data: string[]): string {
+    return data.map((item) => this.convertToXml(item, `{${item}}`)).join('\n');
+  }
+  async searchManyToSAP(format: boolean, payload: any) {
+    let record;
+    const { date, id_ba, Year_of_Planting, afdeling, site } = payload;
+    const parts = date.split('-');
+    const day = parseInt(parts[0]);
+    const month = parts[1]; // Months are 0-based in JavaScript Date objects
+    const year = parseInt(parts[2]);
+    const inputDate = new Date(Date.UTC(year, month - 1, day, 7));
+    const endOfDay = new Date(
+      new Date(inputDate).getTime() + 24 * 60 * 60 * 1000,
+    );
+    const query = {
+      where: {
+        dtCreated: {
+          gte: inputDate,
+          lte: endOfDay,
+        },
+        // MILL_PLANT: id_ba,
+        isDeleted: false,
+      },
+      select: {
+        originWeighInTimestamp: true,
+        originWeighOutTimestamp: true,
+        bonTripNo: true,
+        product: {
+          select: {
+            batch: true,
+          },
+        },
+        driverName: true,
+        transportVehiclePlateNo: true,
+        originWeighInKg: true,
+        originWeighOutKg: true,
+        qtyTbs: true,
+        sapCode: true,
+        spbNo: true,
+        transporter: {
+          select: {
+            codeSap: true,
+          },
+        },
+        checkGrade: true,
+      },
+    };
+
+    try {
+      record = await this.db.transaction.findMany(query);
+    } catch (error) {
+      throw error;
+    }
+
+    let mappedData = record.map(
+      ({
+        originWeighInTimestamp,
+        originWeighOutTimestamp,
+        originWeighOutKg,
+        originWeighInKg,
+        bonTripNo,
+        product,
+        driverName,
+        transportVehiclePlateNo,
+        destinationSite,
+        originSite,
+        qtyTbs,
+        sapCode,
+        spbNo,
+        transporter,
+        checkGrade,
+      }) => {
+        const Batch = product.batch;
+        const Trans_Code = transporter.codeSap;
+        const weightBrutto = Math.abs(originWeighOutKg - originWeighInKg);
+        const weightNetto = Math.abs(originWeighOutKg - originWeighInKg);
+        return {
+          Company: this.config.get('Company_Code'),
+          Mill_Plant: this.config.get('Mill_Plant'),
+          Mill_SLoc: this.config.get('Mill_SLoc'),
+          Transit_SLoc: this.config.get('Transit_SLoc'),
+          Indicator: 'IN',
+          WB_Ticket: bonTripNo,
+          WB_Date_In: moment(originWeighInTimestamp).format('DD.MM.YYYY'),
+          WB_Time_In: moment(originWeighInTimestamp).format('HH:mm:ss'),
+          WB_Date_Out: moment(originWeighOutTimestamp).format('DD.MM.YYYY'),
+          WB_Time_Out: moment(originWeighOutTimestamp).format('HH:mm:ss'),
+
+          Material: sapCode,
+          Batch,
+          Car_Plate: transportVehiclePlateNo,
+          Driver_Name: driverName,
+          Trans_Code,
+          Contract_No: '',
+          Contract_Item: '',
+          Vendor_ID: '',
+          SPB_No: spbNo,
+
+          Fruit_Type: 'B',
+          Check_Grade: checkGrade,
+          Year_of_Planting: Year_of_Planting,
+          Vendor_Qty: weightBrutto,
+          WB_In_Quantity: originWeighInKg,
+          WB_Out_Quantity: originWeighOutKg,
+          Net_Quantity_Before_Grading: weightBrutto,
+          Grading_Flat_Percent: null,
+          Net_Quantity_After_Grading: weightNetto,
+          UoM: 'KG',
+          FROO_Un_ripe: 'nilai potongan dlm kg',
+          FRO_Under_ripe: 'nilai potongan dlm kg',
+          FRX_Over_ripe: 'nilai potongan dlm kg',
+          FR5_Rotten: 'nilai potongan dlm kg',
+          TK_Empty_Bunch: 'nilai potongan dlm kg',
+          BM_Loose_Fruit: 'nilai potongan dlm kg',
+          SMPH_Garbage_and_Dirt: 'nilai potongan dlm kg',
+          TP_Long_Stalk: 'nilai potongan dlm kg',
+          FRP_Parthenocarphic: 'nilai potongan dlm kg',
+          ABN_Abnormal: 'nilai potongan dlm kg',
+          EAT_Eaten_by_Rats: 'nilai potongan dlm kg',
+          FR3_Bunch_LessThan_3_Kg: 'nilai potongan dlm kg',
+          AIR_Water: 'AIR_Water',
+          LAIN2_Others: 'LAIN2_Others',
+          FROOBUNCH_Un_ripe: 0,
+          FROBUNCH_Under_ripe: 0,
+          FRXBUNCH_Over_ripe: 0,
+          FR5BUNCH_Rotten: 0,
+          TKBUNCH_Empty_Bunch: 0,
+          TPBUNCH_Long_Stalk: 0,
+          FRPBUNCH_Parthenocarphic: 0,
+          ABNBUNCH_Abnormal: 0,
+          EATBUNCH_Eaten_by_Rats: 0,
+          FR3BUNCH_Bunch_LessThan_3_Kg: 0,
+          LAIN2BUNCH_Others: 0,
+
+          Dura: 0,
+          Tenera: 0,
+          Dura_Bunch: 0,
+          Tenera_Bunch: 0,
+          Total_Bunch: qtyTbs,
+
+          ORIGIN: null,
+          AFDELING: afdeling,
+          SITE: site,
+        };
+      },
+    );
+    // console.log(mappedData);
+    if (format === true) {
+      const root = create({ version: '1.0', encoding: 'UTF-8' }).ele('data');
+
+      mappedData.forEach((dt) => {
+        const wbelement = root.ele('WBDATA'); // Create a WBDATA element
+
+        for (const key in dt) {
+          // Inside the WBDATA element, create a child element with the current key
+          wbelement.ele(key).txt(dt[key]).up();
+        }
+          // Move up to the root element
+          wbelement.up();
+      });
+      const xml = root.end({ prettyPrint: true });
+      console.log(xml);
+      return xml;
+    }
+    return mappedData;
   }
 
   async searchFirst(query: any) {
@@ -192,7 +363,6 @@ export class TransactionService {
       // } else transaction = dtTransaction as CreateTransactionDto;
 
       dataOut.data.transaction = transaction;
-
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -393,7 +563,10 @@ export class TransactionService {
     return record;
   }
 
-  private copyQrToTransaction(dto: QrcodeDto, typeTransaction): CreateTransactionDto {
+  private copyQrToTransaction(
+    dto: QrcodeDto,
+    typeTransaction,
+  ): CreateTransactionDto {
     const transaction = new TransactionEntity();
 
     transaction.typeTransaction = typeTransaction;
@@ -472,125 +645,4 @@ export class TransactionService {
   //   const client = this.redisService.getClient();
   //   return client.get(key);
   // }
-  async syncSap (dataMappings: any) {
-    const {
-      Company,
-      Mill_Plant,
-      Mill_SLoc,
-      Transit_SLoc,
-      Indicator,
-      WB_Ticket,
-      WB_Date_In,
-      WB_Time_In,
-      WB_Date_Out,
-      WB_Time_Out,
-      Material,
-      Batch,
-      Car_Plate,
-      Driver_Name,
-      Trans_Code,
-      Contract_No,
-      Contract_Item,
-      Vendor_ID,
-      SPB_No,
-      Fruit_Type,
-      Check_Grade,
-      Year_of_Planting,
-      Vendor_Qty,
-      WB_In_Quantity,
-      WB_Out_Quantity,
-      Net_Quantity_Before_Grading,
-      Grading_Flat_Percent,
-      Net_Quantity_After_Grading,
-      UoM,
-      FROO_Un_ripe,
-      FRO_Under_ripe,
-      FRX_Over_ripe,
-      FR5_Rotten,
-      TK_Empty_Bunch,
-      BM_Loose_Fruit,
-      SMPH_Garbage_and_Dirt,
-      TP_Long_Stalk,
-      FRP_Parthenocarphic,
-      ABN_Abnormal,
-      EAT_Eaten_by_Rats,
-      FR3_Bunch_LessThan_3_Kg,
-      AIR_Water,
-      LAIN2_Others,
-      FROOBUNCH_Un_ripe,
-      FROBUNCH_Under_ripe,
-      FRXBUNCH_Over_ripe,
-      FR5BUNCH_Rotten,
-      TKBUNCH_Empty_Bunch,
-      TPBUNCH_Long_Stalk,
-      FRPBUNCH_Parthenocarphic,
-      ABNBUNCH_Abnormal,
-      EATBUNCH_Eaten_by_Rats,
-      FR3BUNCH_Bunch_LessThan_3_Kg,
-      LAIN2BUNCH_Others,
-      Dura,
-      Tenera,
-      Dura_Bunch,
-      Tenera_Bunch,
-      Total_Bunch,
-      ORIGIN,
-      KONSTAN,
-      AFDELING,
-      SITE
-    } = dataMappings;
-  }
-  async integrateSap (fetch_result: any) {
-    const dataMappings = {
-      Company: fetch_result.Company,
-      Mill_Plant: fetch_result.Mill_Plant,
-      Mill_SLoc: fetch_result.Mill_SLoc,
-      Transit_SLoc: fetch_result.Transit_SLoc,
-      Indicator: fetch_result['Indicator(I/O)'],
-      WB_Ticket: fetch_result.WB_Ticket,
-      WB_Date_In: fetch_result.WB_Date_In,
-      WB_Time_In: fetch_result.WB_Time_In,
-      WB_Date_Out: fetch_result.WB_Date_Out,
-      WB_Time_Out: fetch_result.WB_Time_Out,
-      Material: fetch_result.Material,
-      Batch: fetch_result.Batch,
-      Car_Plate: fetch_result.Car_Plate,
-      Driver_Name: fetch_result.Driver_Name,
-      Trans_Code: fetch_result.Trans_Code,
-      Contract_No: fetch_result.Contract_No,
-      Contract_Item: fetch_result.Contract_Item,
-      Vendor_ID: fetch_result.Vendor_ID,
-      SPB_No: fetch_result.SPB_No,
-      Fruit_Type: fetch_result.Fruit_Type,
-      Check_Grade: fetch_result.Check_Grade,
-      Year_of_Planting: fetch_result.Year_of_Planting,
-      Vendor_Qty: fetch_result.Vendor_Qty,
-      WB_In_Quantity: fetch_result.WB_In_Quantity,
-      WB_Out_Quantity: fetch_result.WB_Out_Quantity,
-      Net_Quantity_Before_Grading: fetch_result.Net_Quantity_Before_Grading,
-      Grading_Flat_Percent: fetch_result.Grading_Flat_Percent,
-      Net_Quantity_After_Grading: fetch_result.Net_Quantity_After_Grading,
-      UoM: fetch_result.UoM,
-      FROO_Un_ripe: fetch_result.FROO_Un_ripe,
-      FROBUNCH_Under_ripe: fetch_result.FROBUNCH_Under_ripe,
-      FRXBUNCH_Over_ripe: fetch_result.FRXBUNCH_Over_ripe,
-      FR5BUNCH_Rotten: fetch_result.FR5BUNCH_Rotten,
-      TKBUNCH_Empty_Bunch: fetch_result.TKBUNCH_Empty_Bunch,
-      TPBUNCH_Long_Stalk: fetch_result.TPBUNCH_Long_Stalk,
-      FRPBUNCH_Parthenocarphic: fetch_result.FRPBUNCH_Parthenocarphic,
-      ABNBUNCH_Abnormal: fetch_result.ABNBUNCH_Abnormal,
-      EATBUNCH_Eaten_by_Rats: fetch_result.EATBUNCH_Eaten_by_Rats,
-      FR3BUNCH_Bunch_LessThan_3_Kg: fetch_result.FR3BUNCH_Bunch_LessThan_3_Kg,
-      LAIN2BUNCH_Others: fetch_result.LAIN2BUNCH_Others,
-      Dura: fetch_result.Dura,
-      Tenera: fetch_result.Tenera,
-      Dura_Bunch: fetch_result.Dura_Bunch,
-      Tenera_Bunch: fetch_result.Tenera_Bunch,
-      Total_Bunch: fetch_result.Total_Bunch,
-      ORIGIN: fetch_result.ORIGIN,
-      KONSTAN: fetch_result.KONSTAN,
-      AFDELING: fetch_result.AFDELING,
-      SITE: fetch_result.SITE
-    }
-    
-  }
 }

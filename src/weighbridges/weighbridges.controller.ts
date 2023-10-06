@@ -23,11 +23,6 @@ export class WeighbridgesController {
   constructor(private weighbridgesService: WeighbridgesService) {}
 
   @Get('')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiOkResponse({ type: WeighbridgeEntity, isArray: true })
   async getAll() {
     const dataOut = {

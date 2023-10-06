@@ -7,7 +7,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { SocketMiddleware } from 'src/common/middlewares/socket.middleware';
 import { hitungAIRPERSEN } from 'src/transactions/gradingCalculator/hitungAIRPERSEN';
 import { hitungBLMPERSEN } from 'src/transactions/gradingCalculator/hitungBLMPERSEN';
 import { hitungBMPERSEN } from 'src/transactions/gradingCalculator/hitungBMPERSEN';
@@ -19,23 +18,33 @@ import { hitungTandanKosongPERSEN } from 'src/transactions/gradingCalculator/hit
 import { hitungTPPERSEN } from 'src/transactions/gradingCalculator/hitungTPPERSEN';
 import { hitungWAJIBPERSEN } from 'src/transactions/gradingCalculator/hitungWAJIBPERSEN';
 
-@WebSocketGateway({
-  middlewares: [SocketMiddleware],
-})
+@WebSocketGateway()
 export class GradingCalculatorGateway implements OnGatewayConnection {
+  // handleConnection(client: any, ...args: any[]) {
+  //   throw new Error('Method not implemented.');
+  // }
   @WebSocketServer()
   server: Server;
 
   handleConnection(@ConnectedSocket() client: Socket) {
-    console.log('ya', client);
+    console.log('ya');
+    this.server.emit(
+      'calculateWater',
+      'This is a response from the server over WebSocket',
+    );
   }
 
   // handleDisconnect(@ConnectedSocket() client: Socket) {
   //   // Handle disconnection event
   // }
-  @SubscribeMessage('calculateWater')
-  hitungPotonganAir(client: any): void {
+  // @SubscribeMessage('calculateWater')
+  hitungPotonganAir(@ConnectedSocket() client: Socket): any {
     console.log('aiiiiir');
+    this.server.emit(
+      'calculateWater',
+      'This is a response from the server over WebSocket',
+    );
+    return 'nana potongan';
   }
 
   // @SubscribeMessage('calculateTrash')

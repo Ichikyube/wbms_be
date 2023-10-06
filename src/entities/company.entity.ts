@@ -3,7 +3,7 @@ import { Company, CompanyType } from '@prisma/client';
 
 export class CompanyEntity implements Company {
   @ApiProperty() id: string;
-
+  @ApiProperty() persenPotngWajib: number;
   @ApiProperty() refType: number;
   @ApiProperty() refId: string  | null;
   @ApiProperty() type: CompanyType;

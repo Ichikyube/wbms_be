@@ -21,7 +21,7 @@ export class TimestampInterceptor implements NestInterceptor {
     );
   }
   
-  private updateTimestamps(entity: any, userId: number) {
+  private updateTimestamps(entity: any, userId: string) {
     if (!entity.userCreated) {
       entity.userCreated = userId;
     }
