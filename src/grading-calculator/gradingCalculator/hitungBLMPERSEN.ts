@@ -1,20 +1,17 @@
 //Buah Lewat Matang
 export function hitungBLMPERSEN(
-  trxGradingBLMPERSEN: number,
-  qtyTbs: number,
   adTransactionMILL_ID: string,
-  originWeighInKg: number,
-  originWeighOutKg: number,
-  persentasiTangkaiPanjang: number,
+  qtyTbs: number,
+  weightnetto: number,
+  trxGradingPERSEN: number,
 ): number {
   let persemblm: number = 0;
-  const weightnetto = originWeighInKg - originWeighOutKg;
-  if (trxGradingBLMPERSEN !== null) {
+  if (trxGradingPERSEN !== null) {
     if (qtyTbs === 0 || qtyTbs === null) {
       // Display an error message (you can handle this as needed)
       console.error('Jumlah janjang 0 atau tidak ada.');
     } else {
-      persemblm = trxGradingBLMPERSEN / qtyTbs;
+      persemblm = trxGradingPERSEN / qtyTbs;
 
       if (adTransactionMILL_ID === 'BA41') {
         return Math.round((persemblm * weightnetto) / 100);

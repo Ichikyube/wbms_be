@@ -14,7 +14,7 @@ export function ApiFile(
     ApiBody({
       schema: {
         type: 'object',
-        required: required ? [fieldName] : [],
+        required: required ? [fieldName] : null,
         properties: {
           [fieldName]: {
             type: 'string',

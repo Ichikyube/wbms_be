@@ -26,27 +26,21 @@ import { StorageTanksModule } from './storageTanks/storageTanks.module';
 import { ProductGroupsModule } from './productGroups/productGroups.module';
 import { ProvincesModule } from './provinces/provinces.module';
 import { SemaiModule } from './semai/semai.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
-import { AtGuard, RtGuard } from './common/guards';
-import { TimestampInterceptor } from './common/interceptors/timestamp.interceptor';
+import { AtGuard } from './common/guards';
 import { FilesModule } from './files/files.module';
 import { join } from 'path';
 import { RolesModule } from './accessControl/roles/roles.module';
 import { RbacModule } from './accessControl/rbac.module';
-import { RolesService } from './accessControl/roles/roles.service';
-// import { SseGateway } from './sse/sse.gateway';
 import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
+// import { SseGateway } from './sse/sse.gateway';
 import { SseController } from './sse/sse.controller';
 import { RedisModule } from './redis/redis.module';
-// import { GradingCalculatorGateway } from './grading-calculator/grading-calculator.gateway';
-import { XmlMiddleware } from './common/middlewares/xml.middleware';
 import { GradingCalculatorModule } from './grading-calculator/grading-calculator.module';
-import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
-import { GradingCalculatorGateway } from './grading-calculator/grading-calculator.gateway';
 
 @Module({
   imports: [
@@ -86,15 +80,10 @@ import { GradingCalculatorGateway } from './grading-calculator/grading-calculato
     // RedisModule,
   ],
   providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AtGuard,
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: TimestampInterceptor,
-    // },
-
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
     // SseGateway,
   ],
   // controllers: [SseController],

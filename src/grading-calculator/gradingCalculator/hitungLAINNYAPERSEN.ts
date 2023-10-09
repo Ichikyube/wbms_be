@@ -1,18 +1,17 @@
 export function hitungLAINNYAPERSEN(
-  trxGradingLAINNYAPERSEN: number,
-  originWeighInKg: number,
-  originWeighOutKg: number,
   adTransactionMILL_ID: string,
+  qtyTbs: number,
+  weightnetto: number,
+  trxGradingPERSEN: number,
 ): number {
-  const weightnetto = originWeighInKg - originWeighOutKg;
-  if (trxGradingLAINNYAPERSEN !== null) {
+  if (trxGradingPERSEN !== null) {
     let trxGradingLAINNYAKG = Math.round(
-      (trxGradingLAINNYAPERSEN * weightnetto) / 100,
+      (trxGradingPERSEN * weightnetto) / 100,
     );
 
     if (adTransactionMILL_ID === 'AN41') {
       trxGradingLAINNYAKG = Math.round(
-        (trxGradingLAINNYAPERSEN / 100) * weightnetto,
+        (trxGradingPERSEN / 100) * weightnetto,
       );
     }
 

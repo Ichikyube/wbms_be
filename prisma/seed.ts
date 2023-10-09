@@ -230,7 +230,7 @@ async function main() {
             'Fitur menentukan %/JJg setiap pks',
           type: ConfigType.Json,
           defaultVal:
-            '{"trxGradingBMPERSEN":0, "trxGradingBLMPERSEN":0, "trxGradingTPPesen":0, "trxGradingSAMPAHPERSEN":0, "trxGradingAIRPERSEN":0, "trxGradingLAINNYAPERSEN":0, "trxGradingWAJIB":0}',
+            '{"trxGradingBMPERSEN":0, "trxGradingBLMPERSEN":0, "trxGradingTPPERSEN":0, "trxGradingTKPERSEN":0, "trxGradingPartenoPERSEN":0, "trxGradingBrondolanPERSEN":0, "trxGradingSAMPAHPERSEN":0, "trxGradingAIRPERSEN":0}',
         },
         {
           id: 8,

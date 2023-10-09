@@ -347,7 +347,7 @@ model Notification {
   message    String
   sender     String?
   photo      String?
-  target     Json
+  target     Json?
   configRequestId String? @unique @db.VarChar(36)
   isResponded   Boolean  @default(false) @map("is_responded")
   dtCreated  DateTime @default(now())   

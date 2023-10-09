@@ -28,7 +28,7 @@ import { TransactionEntity } from 'src/entities';
 import { ExportToSapDto } from './dto/exportToSap.dto';
 
 @ApiTags('Transactions')
-// @ApiBearerAuth('access-token')
+@ApiBearerAuth('access-token')
 @Controller('transactions')
 export class TransactionController {
   constructor(private transactionService: TransactionService) {}

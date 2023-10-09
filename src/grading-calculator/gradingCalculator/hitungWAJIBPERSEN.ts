@@ -1,10 +1,8 @@
 export function hitungWAJIBPERSEN(
   trxGradingWAJIB: number,
-  originWeighInKg: number,
-  originWeighOutKg: number,
+  weightnetto: number,
   adTransactionMILL_ID: string,
 ): number {
-  const weightnetto = originWeighInKg - originWeighOutKg;
   if (trxGradingWAJIB !== null) {
     let trxGradingWAJIBKG = Math.round((trxGradingWAJIB * weightnetto) / 100);
 
