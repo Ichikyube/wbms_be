@@ -146,7 +146,7 @@ export class ProductsService {
                   companyRefId: site?.companyId,
                   companyName: site?.companyName,
 
-                  code: site?.code,
+                  codeSap: site?.code,
                   name: site?.name,
                   shortName: site?.shortName,
                   description: site?.description,
@@ -175,7 +175,7 @@ export class ProductsService {
                   companyRefId: site?.companyId,
                   companyName: site?.companyName,
 
-                  code: site?.code,
+                  codeSap: site?.code,
                   name: site?.name,
                   shortName: site?.shortName,
                   description: site?.description,
