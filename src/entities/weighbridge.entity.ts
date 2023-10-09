@@ -6,7 +6,7 @@ export class WeighbridgeEntity implements Weighbridge {
 
   @ApiProperty() siteId: string;
 
-  @ApiProperty() code: string;
+  @ApiProperty() codeSap: string;
   @ApiProperty() name: string;
 
   @ApiProperty() isDeleted: boolean;

@@ -7,7 +7,7 @@ export class MillEntity implements Mill {
   @ApiProperty() siteId: string;
   @ApiProperty() companyId: string;
 
-  @ApiProperty() code: string;
+  @ApiProperty() codeSap: string;
   @ApiProperty() name: string;
 
   @ApiProperty() isDeleted: boolean;

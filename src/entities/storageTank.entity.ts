@@ -19,7 +19,6 @@ export class StorageTankEntity implements StorageTank {
   @ApiProperty() productRefId: string;
   @ApiProperty() productName: string;
 
-  @ApiProperty() code: string;
   @ApiProperty() codeSap: string;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string;

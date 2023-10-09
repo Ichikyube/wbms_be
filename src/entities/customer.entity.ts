@@ -8,7 +8,6 @@ export class CustomerEntity implements Customer {
   @ApiProperty() cityId: string;
   // @ApiProperty() barcodeTypeId: string;
 
-  @ApiProperty() code: string;
   @ApiProperty() codeSap: string;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string;

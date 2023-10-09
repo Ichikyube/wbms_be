@@ -17,7 +17,6 @@ export class SiteEntity implements Site {
 
   @ApiProperty() cityId: string;
 
-  @ApiProperty() code: string;
   @ApiProperty() codeSap: string;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string;
