@@ -1,18 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
-import { DbService } from "src/db/db.service";
-import { SemaiService } from "src/semai/semai.service";
-import { CreateSiteDto, UpdateSiteDto } from "./dto";
-import { SiteEntity } from "src/entities";
-import { Prisma } from "@prisma/client";
+import { DbService } from 'src/db/db.service';
+import { SemaiService } from 'src/semai/semai.service';
+import { CreateSiteDto, UpdateSiteDto } from './dto';
+import { SiteEntity } from 'src/entities';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SitesService {
   constructor(
     private db: DbService,
     private config: ConfigService,
-    private semaiService: SemaiService
+    private semaiService: SemaiService,
   ) {}
 
   async getAll(): Promise<SiteEntity[]> {
@@ -30,7 +30,7 @@ export class SitesService {
 
     return records;
   }
-  
+
   async getAttributes() {
     const modelFields = await Prisma.dmmf.datamodel.models.find(
       (model) => model.name === 'Site',
@@ -104,7 +104,7 @@ export class SitesService {
   async updateById(
     id: string,
     dto: UpdateSiteDto,
-    userId: string
+    userId: string,
   ): Promise<SiteEntity> {
     const params = {
       where: { id },
@@ -150,7 +150,7 @@ export class SitesService {
                   companyRefId: site?.companyId,
                   companyName: site?.companyName,
 
-                  code: site?.code,
+                  codeSap: site?.code,
                   name: site?.name,
                   shortName: site?.shortName,
                   description: site?.description,
@@ -179,7 +179,7 @@ export class SitesService {
                   companyRefId: site?.companyId,
                   companyName: site?.companyName,
 
-                  code: site?.code,
+                  codeSap: site?.code,
                   name: site?.name,
                   shortName: site?.shortName,
                   description: site?.description,
@@ -192,8 +192,8 @@ export class SitesService {
 
                   isDeleted: !!site?.isDeleted,
 
-                  userCreated: "",
-                  userModified: "",
+                  userCreated: '',
+                  userModified: '',
                 },
               })
               .then((res) => console.log(res));
