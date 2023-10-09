@@ -245,9 +245,9 @@ export class ConfigsController {
   }
 
   @Patch(':id/approve')
-  async approveRequest(@Param('id') id: number, dto: any, @Req() req: Request) {
+  async approveRequest(@Param('id') id: number, tempvalue: string,  schedule: Date, @Req() req: Request) {
     const userId = req.user['sub'];
-    return await this.configsService.requestApproved(id, dto, userId);
+    return await this.configsService.requestApproved(id, tempvalue, schedule, userId);
   }
 
   @Patch(':id/ended')

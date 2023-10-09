@@ -9,7 +9,6 @@ export class CreateProductDto {
 
   @ApiProperty() productGroupName?: string;
 
-  @ApiProperty() @IsString() @IsNotEmpty() code: string;
   @ApiProperty({ required: false }) @IsString() @IsOptional() codeSap?: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiProperty({ required: false }) @IsString() @IsOptional() shortName?: string;

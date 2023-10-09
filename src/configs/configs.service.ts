@@ -148,13 +148,13 @@ export class ConfigsService {
     return record;
   }
 
-  async requestApproved(id: number, dto: any, userId: string) {
+  async requestApproved(id: number, tempValue : any, start: Date, userId: string) {
     const currentConfig = await this.getById(id);
-    const { tempValue, start } = dto;
+    console.log(start)
     const data = {
       tempValue,
       start,
-      end: new Date(start.getTime() + currentConfig.lifespan * 1000),
+      end: new Date(new Date(start).getTime() + currentConfig.lifespan * 1000),
       userModified: userId,
     };
     const params = {

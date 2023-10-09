@@ -117,7 +117,7 @@ export class TransactionService {
         originWeighInKg: true,
         originWeighOutKg: true,
         qtyTbs: true,
-        sapCode: true,
+        codeSap: true,
         spbNo: true,
         transporter: {
           select: {
@@ -147,7 +147,7 @@ export class TransactionService {
         destinationSite,
         originSite,
         qtyTbs,
-        sapCode,
+        codeSap,
         spbNo,
         transporter,
         checkGrade,
@@ -168,7 +168,7 @@ export class TransactionService {
           WB_Date_Out: moment(originWeighOutTimestamp).format('DD.MM.YYYY'),
           WB_Time_Out: moment(originWeighOutTimestamp).format('HH:mm:ss'),
 
-          Material: sapCode,
+          Material: codeSap,
           Batch,
           Car_Plate: transportVehiclePlateNo,
           Driver_Name: driverName,
@@ -241,7 +241,6 @@ export class TransactionService {
           wbelement.up();
       });
       const xml = root.end({ prettyPrint: true });
-      console.log(xml);
       return xml;
     }
     return mappedData;

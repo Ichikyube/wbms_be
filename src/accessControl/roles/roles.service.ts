@@ -84,10 +84,13 @@ export class RolesService {
           for (const { action, possession, attributes } of grants) {
             if(action) {
               const grantKey = `${action}:${possession}`;
-              const exception = attributes.map(
-                (attribute) => `!${attribute.attr}`,
-              );
-              resourcePermissions[grantKey] = ['*', ...exception];
+              if(attributes){
+                const exception = attributes.map(
+                  (attribute) => `!${attribute.attr}`,
+                );
+                resourcePermissions[grantKey] = ['*', ...exception];
+              }
+              
             }
           }
           rolePermissions[resource] = resourcePermissions;

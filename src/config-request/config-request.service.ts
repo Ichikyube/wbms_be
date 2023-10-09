@@ -119,8 +119,9 @@ export class ConfigRequestService {
         data,
       });
       if (currentLevel === configLvl) {
-        const confData = {tempValue: true, start: configRequest.schedule}
-        this.configService.requestApproved(configRequest.configId, confData, userId);
+        const tempValue= "true"; 
+        const start= configRequest.schedule;
+        this.configService.requestApproved(configRequest.configId, tempValue, start, userId);
       };
     } catch (e) {}
   }

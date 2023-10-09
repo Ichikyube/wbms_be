@@ -12,7 +12,6 @@ export class CreateSiteDto {
 
   @ApiProperty({ required: false }) @IsUUID() @IsOptional() cityId?: string;
 
-  @ApiProperty() @IsString() @IsNotEmpty() code: string;
   @ApiProperty({ required: false }) @IsString() @IsOptional() codeSap: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiProperty({ required: false }) @IsString() @IsOptional() shortName?: string;

@@ -21,7 +21,6 @@ export class CreateStorageTankDto {
   @ApiPropertyOptional() @IsUUID() @IsOptional() productRefId: string;
   @ApiProperty() @IsString() @IsNotEmpty() productName: string;
 
-  @ApiProperty() @IsString() @IsNotEmpty() code: string;
   @ApiProperty() @IsString() @IsOptional() codeSap: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiPropertyOptional() @IsString() @IsOptional() shortName: string;

@@ -1,47 +1,37 @@
-[
-  {
-    "resource": "Province",
-    "grants": [
-      { "action": "read", "possession": "own", "attributes": [] },
-      { "action": "create", "possession": "own", "attributes": [] },
-      { "action": "update", "possession": "own", "attributes": [] },
-      { "action": "delete", "possession": "own", "attributes": [] }
-    ]
-  },
-  {
-    "resource": "City",
-    "grants": [
-      { "action": "read", "possession": "own", "attributes": [] },
-      { "action": "create", "possession": "own", "attributes": [] },
-      { "action": "update", "possession": "own", "attributes": [] },
-      { "action": "delete", "possession": "own", "attributes": [] }
-    ]
-  },
-  {
-    "resource": "Driver",
-    "grants": [
-      {
-        "action": "read",
-        "possession": "own",
-        "attributes": [
-          { "attr": "refType" },
-          { "attr": "refId" },
-          { "attr": "companyId" },
-          { "attr": "companyRefId" },
-          { "attr": "companyName" }
-        ]
-      },
-      { "action": "create", "possession": "own", "attributes": [] },
-      {
-        "action": "update",
-        "possession": "own",
-        "attributes": [
-          { "attr": "refId" },
-          { "attr": "codeSap" },
-          { "attr": "companyId" }
-        ]
-      },
-      { "action": "delete", "possession": "own", "attributes": [] }
-    ]
+{
+  "adminIT": { "user": {}, "config": {} },
+  "admin_system": { "user": {}, "config": {} },
+  "admin_HC": { "user": {}, "config": {} },
+  "Staffsus": {
+    "Company": {
+      "read:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    },
+    "Product": {
+      "read:any": ["*", "!"],
+      "create:any": ["*", "!"],
+      "update:any": ["*", "!"],
+      "delete:any": ["*", "!"]
+    },
+    "Site": {
+      "read:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    },
+    "Transaction": {
+      "read:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    },
+    "Weighbridge": {
+      "read:own": ["*", "!"],
+      "create:own": ["*", "!"],
+      "update:own": ["*", "!"],
+      "delete:own": ["*", "!"]
+    }
   }
-]
+}
