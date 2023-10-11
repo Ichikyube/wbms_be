@@ -9,6 +9,7 @@ import {
   Delete,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request, Response } from 'express';
@@ -29,6 +30,7 @@ import { ExportToSapDto } from './dto/exportToSap.dto';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('access-token')
+// @UseInterceptors(CacheInterceptor)
 @Controller('transactions')
 export class TransactionController {
   constructor(private transactionService: TransactionService) {}
@@ -54,9 +56,8 @@ export class TransactionController {
   }
 
   @Post('Sap')
-  async searchManytoSAP(@Query('format') format: boolean, @Body() payload: ExportToSapDto) {
-
-    return await this.transactionService.searchManyToSAP(format, payload);
+  async searchManytoSAP(@Query('useXml') xml: boolean, @Body() payload: ExportToSapDto) {
+    return await this.transactionService.searchManyToSAP(xml, payload);
   }
 
   @Post('search-many')
@@ -123,6 +124,7 @@ export class TransactionController {
 
     return dataOut;
   }
+
 
   // @Get()
   // async findAll(): Promise<string[]> {

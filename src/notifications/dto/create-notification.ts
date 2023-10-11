@@ -6,5 +6,5 @@ export class CreateNotificationDto {
   @ApiProperty() @IsString() @IsNotEmpty() message: string;
 
   @ApiProperty()
-  target: JsonValue;
+  target?: JsonValue;
 }

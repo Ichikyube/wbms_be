@@ -5,11 +5,12 @@ export class GradingCalculatorDto {
   weightnetto?: number;
   millCode?: string;
   trxGradingAIRPERSEN?: number;
-  trxGradingTPPesen?: number;
-  trxGradingTKPesen?: number;
+  trxGradingTPPERSEN?: number;
+  trxGradingTKPERSEN?: number;
   trxGradingSAMPAHPERSEN?: number;
   trxGradingBLMPERSEN?: number;
   trxGradingBMPERSEN?: number;
   trxGradingPartenoPERSEN?: number;
   trxGradingBrondolanPERSEN?: number;
+  trxGradingWajibPERSEN?: number;
 }

@@ -7,6 +7,7 @@ export class CompanyEntity implements Company {
   @ApiProperty() refType: number;
   @ApiProperty() refId: string  | null;
   @ApiProperty() type: CompanyType;
+  @ApiProperty() codeVendor: string  | null;
   @ApiProperty() codeSap: string  | null;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string  | null;

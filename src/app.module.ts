@@ -41,6 +41,10 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { SseController } from './sse/sse.controller';
 import { RedisModule } from './redis/redis.module';
 import { GradingCalculatorModule } from './grading-calculator/grading-calculator.module';
+import { TemporaryDataService } from './temporary-data/temporary-data.service';
+import { TemporaryDataController } from './temporary-data/temporary-data.controller';
+import { TemporaryDataModule } from './temporary-data/temporary-data.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -49,6 +53,7 @@ import { GradingCalculatorModule } from './grading-calculator/grading-calculator
       rootPath: join(__dirname, '..', 'upload'),
       serveRoot: '/img/',
     }),
+    ScheduleModule.forRoot(),
     CacheModule.register({ isGlobal: true }),
     DbModule,
     AuthModule,
@@ -77,6 +82,7 @@ import { GradingCalculatorModule } from './grading-calculator/grading-calculator
     ConfigRequestsAdminModule,
     NotificationsModule,
     GradingCalculatorModule,
+    TemporaryDataModule,
     // RedisModule,
   ],
   providers: [

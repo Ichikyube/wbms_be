@@ -7,6 +7,7 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
@@ -43,28 +44,43 @@ export class GradingCalculatorGateway
       qtyTbs,
       weightnetto,
       trxGradingAIRPERSEN,
-      trxGradingTPPesen,
-      trxGradingTKPesen,
+      trxGradingTPPERSEN,
+      trxGradingTKPERSEN,
       trxGradingSAMPAHPERSEN,
       trxGradingBLMPERSEN,
       trxGradingBMPERSEN,
       trxGradingPartenoPERSEN,
       trxGradingBrondolanPERSEN,
+      trxGradingWajibPERSEN
     } = data;
-    console.log(data);
-    const result = this.gradingCalculator.hitungPotongan(
-      millCode,
-      qtyTbs,
-      weightnetto,
-      trxGradingAIRPERSEN,
-      trxGradingTPPesen,
-      trxGradingTKPesen,
-      trxGradingSAMPAHPERSEN,
-      trxGradingBLMPERSEN,
-      trxGradingBMPERSEN,
-      trxGradingPartenoPERSEN,
-      trxGradingBrondolanPERSEN,
-    );
-    this.server.emit("result", result)
+    
+    try {
+      // Assuming this.gradingCalculator.hitungPotongan is a synchronous function
+      const results = this.gradingCalculator.hitungPotongan(
+        millCode,
+        qtyTbs,
+        weightnetto,
+        trxGradingAIRPERSEN,
+        trxGradingTPPERSEN,
+        trxGradingTKPERSEN,
+        trxGradingSAMPAHPERSEN,
+        trxGradingBLMPERSEN,
+        trxGradingBMPERSEN,
+        trxGradingPartenoPERSEN,
+        trxGradingBrondolanPERSEN,
+        trxGradingWajibPERSEN
+      );
+
+      console.log(results);
+
+      // Assuming this.server is your WebSocket server
+      this.server.emit("result", results);
+
+      return results; // Assuming you want to send the results back to the client
+    } catch (error) {
+      console.error('Error calculating potongan:', error);
+      throw new WsException('Error calculating potongan'); // Adjust this error handling as needed
+    }
   }
+
 }

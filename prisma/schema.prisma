@@ -63,7 +63,8 @@ model Company {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0) @map("ref_type") //0: WBMS, 1: eDispatch
   refId   String? @map("ref_id") @db.VarChar(50)
-  type         CompanyType?         
+  type         CompanyType?     
+  codeVendor   String? @map("code_vendor") @db.VarChar(50)    
   codeSap      String? @map("code_sap") @db.VarChar(50)
   name         String  @db.VarChar(50)
   shortName    String? @map("short_name") @db.VarChar(50)
@@ -339,6 +340,14 @@ model Config {
   @@map("configs")
 }
 
+model TemporaryData {
+  id              String    @id @db.Char(36)
+  data            Json
+  signed          Json      
+  expirationDate  DateTime   // Add this line
+}
+
+
 model Notification {
   id         String    @id @default(uuid()) @db.Char(36)
   message    String
@@ -580,10 +589,10 @@ model Transaction {
   afdeling       String?
   blok           String?
   sptbs          String? @db.Char(36)
-  millPlant      String? @db.Char(36)
-  checkGrade     Boolean?
+  millPlant      String? @db.Char(36) @map("mill_code")
+  checkGrade     Boolean? @map("check_grade")
   spbNo          String? @db.Char(36)
-  yearPlant      Int?
+  yearPlant      Int?   @map("year_of_plant")
   indikator      String? @db.Char(3)
   codeSap        String?  @map("code_sap") @db.VarChar(50)
   bonTripNo      String? @map("bon_trip_no") @db.Char(16)
@@ -658,7 +667,19 @@ model Transaction {
 
   potonganWajib Float @default(0) @map("potongan_wajib")
   potonganLain  Float @default(0) @map("potongan_lain")
-
+  potngnBM      Float? @map("potongan_buah_mentah")
+  potngnBLM     Float? @map("potongan_buah_lewat_matang")
+  potngnTK      Float? @map("potongan_tandan_kosong")
+  potngnTP      Float? @map("potongan_tangkai_kosong")
+  potngnSampah  Float? @map("potongan_sampah")
+  potngnAir     Float? @map("potongan_air")
+  potngnParteno Float? @map("potongan_parteno")
+  potngnBrondolan Float? @map("potongan_brondolan")
+  potngnBKM       Float? @map("potongan_buah_kurang_matang")
+  potngnBusuk     Float? @map("potongan_busuk")
+  potngnAbnormal  Float? @map("potongan_abnormal")
+  potngnBuahKecil Float? @map("potongan_buah_kecil")
+  potngnDimknHama Float? @map("potongan_dimakan_hama")
   destinationWeighInKg           Float     @default(0) @map("destination_weigh_in_kg")
   destinationWeighInRemark       String?   @map("destination_weigh_in_remark") @db.VarChar(500)
   destinationWeighInOperatorName String?   @map("destination_weigh_in_operator_name") @db.VarChar(50)

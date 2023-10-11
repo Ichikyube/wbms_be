@@ -3,6 +3,7 @@ import { CompanyType } from '@prisma/client';
 import { IsUUID, IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateCompanyDto {
+  @ApiProperty() @IsString() codeVendor?: string;
   @ApiProperty() @IsString() codeSap?: string;
   @ApiProperty() @IsString() type?: CompanyType;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;

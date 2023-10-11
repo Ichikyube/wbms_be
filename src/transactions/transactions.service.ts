@@ -83,7 +83,7 @@ export class TransactionService {
   convertDataToXml(data: string[]): string {
     return data.map((item) => this.convertToXml(item, `{${item}}`)).join('\n');
   }
-  async searchManyToSAP(format: boolean, payload: any) {
+  async searchManyToSAP(useXml: boolean, payload: any) {
     let record;
     const { date, id_ba, Year_of_Planting, afdeling, site } = payload;
     const parts = date.split('-');
@@ -144,13 +144,27 @@ export class TransactionService {
         product,
         driverName,
         transportVehiclePlateNo,
-        destinationSite,
-        originSite,
         qtyTbs,
         codeSap,
+        codeVendor,
         spbNo,
         transporter,
         checkGrade,
+        potngnBM,    
+        potngnBLM,     
+        potngnTK,    
+        potngnTP,     
+        potngnSampah,  
+        potngnAir, 
+        potngnParteno, 
+        potngnBrondolan, 
+        potngnBKM,
+        potngnBusuk,     
+        potngnAbnormal,  
+        potngnBuahKecil, 
+        potngnDimknHama,
+        potonganLain,
+        potonganWajib
       }) => {
         const Batch = product.batch;
         const Trans_Code = transporter.codeSap;
@@ -188,20 +202,20 @@ export class TransactionService {
           Grading_Flat_Percent: null,
           Net_Quantity_After_Grading: weightNetto,
           UoM: 'KG',
-          FROO_Un_ripe: 'nilai potongan dlm kg',
-          FRO_Under_ripe: 'nilai potongan dlm kg',
-          FRX_Over_ripe: 'nilai potongan dlm kg',
-          FR5_Rotten: 'nilai potongan dlm kg',
-          TK_Empty_Bunch: 'nilai potongan dlm kg',
-          BM_Loose_Fruit: 'nilai potongan dlm kg',
-          SMPH_Garbage_and_Dirt: 'nilai potongan dlm kg',
-          TP_Long_Stalk: 'nilai potongan dlm kg',
-          FRP_Parthenocarphic: 'nilai potongan dlm kg',
-          ABN_Abnormal: 'nilai potongan dlm kg',
-          EAT_Eaten_by_Rats: 'nilai potongan dlm kg',
-          FR3_Bunch_LessThan_3_Kg: 'nilai potongan dlm kg',
-          AIR_Water: 'AIR_Water',
-          LAIN2_Others: 'LAIN2_Others',
+          FROO_Un_ripe: potngnBM,
+          FRO_Under_ripe: potngnBKM,
+          FRX_Over_ripe: potngnBLM,
+          FR5_Rotten: potngnBusuk,
+          TK_Empty_Bunch: potngnTK,
+          BM_Loose_Fruit: potngnBrondolan,
+          SMPH_Garbage_and_Dirt: potngnSampah,
+          TP_Long_Stalk: potngnTP,
+          FRP_Parthenocarphic: potngnParteno,
+          ABN_Abnormal: potngnAbnormal,
+          EAT_Eaten_by_Rats: potngnDimknHama,
+          FR3_Bunch_LessThan_3_Kg: potngnBuahKecil,
+          AIR_Water: potngnAir,
+          LAIN2_Others: potonganLain,
           FROOBUNCH_Un_ripe: 0,
           FROBUNCH_Under_ripe: 0,
           FRXBUNCH_Over_ripe: 0,
@@ -222,12 +236,12 @@ export class TransactionService {
 
           ORIGIN: null,
           AFDELING: afdeling,
-          SITE: site,
+          SITE: transporter.codeVendor,
         };
       },
     );
     // console.log(mappedData);
-    if (format === true) {
+    if (useXml === true) {
       const root = create({ version: '1.0', encoding: 'UTF-8' }).ele('data');
 
       mappedData.forEach((dt) => {
@@ -237,8 +251,8 @@ export class TransactionService {
           // Inside the WBDATA element, create a child element with the current key
           wbelement.ele(key).txt(dt[key]).up();
         }
-          // Move up to the root element
-          wbelement.up();
+        // Move up to the root element
+        wbelement.up();
       });
       const xml = root.end({ prettyPrint: true });
       return xml;
@@ -644,4 +658,26 @@ export class TransactionService {
   //   const client = this.redisService.getClient();
   //   return client.get(key);
   // }
+
+  generateBonTripCode(prefix) {
+    // try {
+    //   const database = client.db('mydatabase');
+    //   const collection = database.collection('mycollection');
+    //   while (true) {
+    //     const timestamp = Date.now().toString(36);
+    //     const random = Math.random().toString(36).substr(2, 5); // Adjust as needed
+    //     const idCode = `${prefix}-${timestamp}-${random}`;
+    //     const existing = await collection.findOne({ idCode });
+    //     if (!existing) {
+    //       return idCode; // Unique ID code found
+    //     }
+    //   }
+    // } finally {
+    //   await client.close();
+    // }
+  }
+  // Usage
+  // generateUniqueCode('TX')
+  //   .then(idCode => console.log(`Generated ID Code: ${idCode}`))
+  //   .catch(error => console.error(error));
 }

@@ -1,13 +1,14 @@
 export function hitungWAJIBPERSEN(
-  trxGradingWAJIB: number,
-  weightnetto: number,
   adTransactionMILL_ID: string,
+  qtyTbs: number,
+  weightnetto: number,
+  trxGradingPERSEN: number,
 ): number {
-  if (trxGradingWAJIB !== null) {
-    let trxGradingWAJIBKG = Math.round((trxGradingWAJIB * weightnetto) / 100);
+  if (trxGradingPERSEN !== null) {
+    let trxGradingWAJIBKG = Math.round((trxGradingPERSEN * weightnetto) / 100);
 
     if (adTransactionMILL_ID === 'AN41') {
-      trxGradingWAJIBKG = Math.round((trxGradingWAJIB / 100) * weightnetto);
+      trxGradingWAJIBKG = Math.round((trxGradingPERSEN / 100) * weightnetto);
     }
 
     return trxGradingWAJIBKG;

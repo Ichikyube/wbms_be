@@ -8,10 +8,9 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ConfigRequestService } from './config-request.service';
 import { CreateConfigRequestDto } from './dto/create-config-request.dto';
-import { UpdateConfigRequestDto } from './dto/update-config-request.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Configs-Request')

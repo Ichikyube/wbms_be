@@ -18,13 +18,14 @@ export class GradingCalculatorService {
     qtyTbs: number,
     weightnetto: number,
     trxGradingAIRPERSEN: number,
-    trxGradingTPPesen: number,
-    trxGradingTKPesen: number,
+    trxGradingTPPERSEN: number,
+    trxGradingTKPERSEN: number,
     trxGradingSAMPAHPERSEN: number,
     trxGradingBLMPERSEN: number,
     trxGradingBMPERSEN: number,
     trxGradingPartenoPERSEN: number,
     trxGradingBrondolanPERSEN: number,
+    trxGradingWajibPERSEN: number
   ) {
 
     const calculatedBM = hitungBMPERSEN(
@@ -55,13 +56,13 @@ export class GradingCalculatorService {
       millCode,
       qtyTbs,
       weightnetto,
-      trxGradingTPPesen,
+      trxGradingTPPERSEN,
     );
     const calculatedTK = hitungTandanKosongPERSEN(
       millCode,
       qtyTbs,
       weightnetto,
-      trxGradingTKPesen,
+      trxGradingTKPERSEN,
     );
     const calculatedParteno = hitungPartenoPERSEN(
       millCode,
@@ -75,8 +76,8 @@ export class GradingCalculatorService {
       weightnetto,
       trxGradingBrondolanPERSEN,
     );
-    // hitungPotonganLainnya(millCode, qtyTbs, weightnetto);
-    // hitungPotonganWajib(millCode, qtyTbs, weightnetto);
+    // const calculatedPotonganOthers = hitungLAINNYAPERSEN(millCode, qtyTbs, weightnetto, trxGradingTPPesen);
+    const calculatedObligatory = hitungWAJIBPERSEN(millCode, qtyTbs, weightnetto, trxGradingWajibPERSEN);
     return {
       calculatedBM,
       calculatedBLM,
@@ -85,12 +86,11 @@ export class GradingCalculatorService {
       calculatedTP,
       calculatedTK,
       calculatedParteno,
-      calculatedBrondolan
+      calculatedBrondolan,
+      // calculatedOthers,
+      calculatedObligatory
     };
   }
   
-  // calculatedBM, calculatedBLM, calculatedWater, calculatedTrash, calculatedTP, calculatedTK,calculatedParteno, calculatedBrondolan, calculatedObligatory, calculatedOthers
-  // hitungPotonganLainnya(client: any): void {}
 
-  // hitungPotonganWajib(client: any): void {}
 }

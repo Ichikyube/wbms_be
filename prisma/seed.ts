@@ -171,20 +171,18 @@ async function main() {
       data: [
         {
           id: 1,
-          name: 'zeroLock',
+          name: 'WBMS_WB_MIN_WEIGHT',
           description:
-            'Mengubah status menjadi unlock pada timbangan secara realtime',
-          lvlOfApprvl: 3,
+            'Berat minimum untuk masuk hitungan timbangan WB',
           lifespan: null,
           type: ConfigType.Number,
-          defaultVal: '0',
+          defaultVal: '1',
         },
         {
           id: 2,
-          name: 'stableLock',
+          name: 'WBMS_WB_STABLE_PERIOD',
           description:
             'Menstabilkan timbangan dengan waktu yang ditentukan',
-          lvlOfApprvl: 3,
           lifespan: null,
           type: ConfigType.Number,
           defaultVal: '3000',
@@ -227,7 +225,7 @@ async function main() {
           id: 7,
           name: 'trxGradingPencentage',
           description:
-            'Fitur menentukan %/JJg setiap pks',
+            'Fitur menentukan %/JJg setiap PKS',
           type: ConfigType.Json,
           defaultVal:
             '{"trxGradingBMPERSEN":0, "trxGradingBLMPERSEN":0, "trxGradingTPPERSEN":0, "trxGradingTKPERSEN":0, "trxGradingPartenoPERSEN":0, "trxGradingBrondolanPERSEN":0, "trxGradingSAMPAHPERSEN":0, "trxGradingAIRPERSEN":0}',
@@ -491,52 +489,60 @@ async function main() {
         },
         {
           id: 19,
-          name: 'WBMS_SEMAI_API_KEY',
+          name: 'WBMS_SITE_TYPE',
           description:
-            'Fitur melakukan autentikasi with semai',
+            '# 1: PKS, 2: T30, 3: BULKING',
           type: ConfigType.String,
-          defaultVal: `lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso`,
+          defaultVal: `1`,
         },
         {
           id: 20,
-          name: 'WBMS_SEMAI_API_URL',
+          name: 'WBMS_SITE_CODE',
           description:
-            'URL WBMS',
+            'Site code',
           type: ConfigType.String,
-          defaultVal: `https://dispatch.dsngroup.co.id/api/external-channel/`,
+          defaultVal: `P04`,
         },
         {
           id: 21,
-          name: 'WBMS_WB_IP',
+          name: 'WBMS_BONTRIP_SUFFIX',
           description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
+            'Akhiran kode Bontrip',
           type: ConfigType.String,
-          defaultVal: `localhost`,
+          defaultVal: `1`,
         },
         {
           id: 22,
-          name: 'WBMS_WB_MIN_WEIGHT',
+          name: 'WBMS_BONTRIP_SUFFIX_BACKDATED_FORM',
           description:
-            'Fitur melakukan minimal berat timbang',
-          type: ConfigType.Number,
+            'Akhiran kode Bontrip pada backdated form',
+          type: ConfigType.String,
           defaultVal: `1`,
         },
         {
           id: 23,
+          name: 'WBMS_BONTRIP_SUFFIX_BACKDATED_TEMPLATE',
+          description:
+            'Akhiran kode Bontrip pada backdated template',
+          type: ConfigType.String,
+          defaultVal: `1`,
+        },
+        {
+          id: 24,
+          name: 'WBMS_WB_IP',
+          description:
+            'URL WBMS',
+          type: ConfigType.String,
+          defaultVal: `localhost`,
+        },
+        {
+          id: 25,
           name: 'WBMS_WB_PORT',
           description:
             'Port timbangan',
           type: ConfigType.Number,
           defaultVal: `9001`,
-        },
-        {
-          id: 24,
-          name: 'WBMS_WB_STABLE_PERIOD',
-          description:
-            'Fitur melakukan input manual untuk transaksi TBS External',
-          type: ConfigType.Number,
-          defaultVal: `3000`,
-        },
+        }
       ],
       skipDuplicates: true,
     });
