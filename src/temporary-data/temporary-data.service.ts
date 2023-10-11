@@ -46,11 +46,9 @@ export class TemporaryDataService {
     // Get today's date
     const today = new Date();
     // Add three days to today's date
-    const threeDaysFromToday = new Date(today.setDate(today.getDate() + 3));
     // Convert the date three days from today to a string
     // const threeDaysFromTodayString = threeDaysFromToday.toLocaleDateString();
     const expDate = new Date(today.setDate(today.getDate() + 3));
-    console.log(dto.data);
     const data = {
       data: dto.data,
       id,
@@ -59,15 +57,106 @@ export class TemporaryDataService {
     };
     return this.db.temporaryData.create({ data });
   }
+
+  async insertManyTemporaryData(data: any[]): Promise<void> {
+    const today = new Date();
+    const expDate = new Date(today.setDate(today.getDate() + 3));
+    const lastId =  await this.db.temporaryData.findFirst({
+      orderBy: { id: 'desc' },
+      select: { id: true },
+    });
+    let startId = lastId ? parseInt(lastId.id.split('-')[1]) + 1 : 1;
+    const recordsToCreate = data.map( (item) => {
+      let id = `trx-${startId++}`;
+
+      return {
+        data:{...item},
+        id,
+        expirationDate: expDate,
+        signed: [], // Assuming 'signed' is an array field in your model
+      };
+    });
+
+    await this.db.temporaryData.createMany({
+      data: recordsToCreate,
+      skipDuplicates: true,
+    });
+  }
+
   async approveTemporaryData(id: string) {
     // Get the temporary data from the cache.
-    const temporaryData = await this.cacheManager.get('temporary-data');
+    const existingData = await this.db.temporaryData.findUnique({
+      where: { id },
+    });
 
     // If the temporary data exists, save it to the permanent database and delete it from the cache.
-    if (temporaryData) {
-      await this.db.transaction.create(temporaryData);
-
-      await this.cacheManager.del('temporary-data');
+    if (existingData) {
+      const tempData = JSON.parse(JSON.stringify(existingData?.data));
+      const {
+        afdeling,
+        blok,
+        bonTripNo,
+        deliveryOrderNo,
+        driverName,
+        originWeighInKg,
+        originWeighInTimestamp,
+        originWeighOutKg,
+        originWeighOutTimestamp,
+        productId,
+        productName,
+        progressStatus,
+        qtyTbs,
+        sptbs,
+        transportVehiclePlateNo,
+        transportVehicleSccModel,
+        transporterCompanyName,
+        transporterId,
+        typeSite,
+        typeTransaction,
+      } = tempData;
+      const data = {
+        afdeling,
+        blok,
+        bonTripNo: bonTripNo.slice(0, 15),
+        deliveryOrderNo,
+        driverName,
+        originWeighInKg: parseInt(originWeighInKg),
+        originWeighInTimestamp: new Date(originWeighInTimestamp),
+        originWeighOutKg: parseInt(originWeighOutKg),
+        originWeighOutTimestamp: new Date(originWeighOutTimestamp),
+        productId,
+        productName,
+        progressStatus,
+        qtyTbs: parseInt(qtyTbs),
+        sptbs,
+        transportVehiclePlateNo,
+        transportVehicleSccModel: parseInt(transportVehicleSccModel),
+        transporterCompanyName,
+        transporterId,
+        typeSite: parseInt(typeSite),
+        typeTransaction: parseInt(typeTransaction),
+      };
+      const dataOut = {
+        status: true,
+        message: '',
+        data: {
+          transaction: {
+            record: null,
+            page: 0,
+          },
+        },
+        logs: {},
+      };
+      try {
+        const record = await this.db.transaction.create({ data });
+        await this.deleteDataById(id);
+        dataOut.data.transaction.record = record;
+      } catch (error) {
+        dataOut.status = false;
+        dataOut.message = error.message;
+        dataOut.logs = { ...dataOut.logs, error };
+      }
+      return dataOut;
     }
   }
 
@@ -81,7 +170,7 @@ export class TemporaryDataService {
     });
   }
 
-  async deleteTransactionsData(id) {
+  async deleteDataById(id) {
     await this.db.temporaryData.deleteMany({
       where: {
         id,
