@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TemporaryDataController } from './temporary-Data.controller';
+import { TemporaryDataController } from './temporary-data.controller';
 import { TemporaryDataService } from './temporary-data.service';
 
 @Module({

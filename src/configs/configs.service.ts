@@ -24,6 +24,7 @@ export class ConfigsService {
   get(): string {
     return this.envConfig["WBMS_SEMAI_API_URL"];
   }
+  
   async getEnv() {
     const dataOut = {
       status: true,

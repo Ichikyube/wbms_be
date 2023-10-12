@@ -308,11 +308,6 @@ export class CustomerGroupsController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'customersGroupData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerGroupEntity })
   async updateById(
     @Param('id') id: string,

@@ -4,7 +4,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { DbService } from 'src/db/db.service';
 import { CreateTemporaryDataDto } from './dto/create-temporaryData.dto';
 import { TemporaryData } from '@prisma/client';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 @Injectable()
 export class TemporaryDataService {
   constructor(

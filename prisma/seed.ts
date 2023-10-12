@@ -172,8 +172,7 @@ async function main() {
         {
           id: 1,
           name: 'WBMS_WB_MIN_WEIGHT',
-          description:
-            'Berat minimum untuk masuk hitungan timbangan WB',
+          description: 'Berat minimum untuk masuk hitungan timbangan WB',
           lifespan: null,
           type: ConfigType.Number,
           defaultVal: '1',
@@ -181,8 +180,7 @@ async function main() {
         {
           id: 2,
           name: 'WBMS_WB_STABLE_PERIOD',
-          description:
-            'Menstabilkan timbangan dengan waktu yang ditentukan',
+          description: 'Menstabilkan timbangan dengan waktu yang ditentukan',
           lifespan: null,
           type: ConfigType.Number,
           defaultVal: '3000',
@@ -215,8 +213,7 @@ async function main() {
         {
           id: 6,
           name: 'editTransaction',
-          description:
-            'Fitur melakukan Edit data transaksi selain CPO dan PKO',
+          description: 'Fitur melakukan Edit data transaksi selain CPO dan PKO',
           lvlOfApprvl: 3,
           type: ConfigType.Boolean,
           defaultVal: 'false',
@@ -224,8 +221,7 @@ async function main() {
         {
           id: 7,
           name: 'trxGradingPencentage',
-          description:
-            'Fitur menentukan %/JJg setiap PKS',
+          description: 'Fitur menentukan %/JJg setiap PKS',
           type: ConfigType.Json,
           defaultVal:
             '{"trxGradingBMPERSEN":0, "trxGradingBLMPERSEN":0, "trxGradingTPPERSEN":0, "trxGradingTKPERSEN":0, "trxGradingPartenoPERSEN":0, "trxGradingBrondolanPERSEN":0, "trxGradingSAMPAHPERSEN":0, "trxGradingAIRPERSEN":0}',
@@ -233,8 +229,7 @@ async function main() {
         {
           id: 8,
           name: 'potonganBuahMentah',
-          description:
-            'Fitur menentukan rumus untuk potongan Buah Mentah',
+          description: 'Fitur menentukan rumus untuk potongan Buah Mentah',
           type: ConfigType.Function,
           defaultVal: `trxGradingBMPERSENValidate(
             trxGradingBMPERSEN: number,
@@ -315,8 +310,7 @@ async function main() {
         {
           id: 10,
           name: 'potonganTangkaiPanjang',
-          description:
-            'Fitur menentukan rumus untuk potongan Tangkai Panjang',
+          description: 'Fitur menentukan rumus untuk potongan Tangkai Panjang',
           type: ConfigType.Function,
           defaultVal: `trxGradingTPPERSENValidate(
             trxGradingTPPesen: number,
@@ -352,16 +346,14 @@ async function main() {
         {
           id: 11,
           name: 'potonganTandanKosong',
-          description:
-            'Fitur menentukan rumus untuk potongan Tandan Kosong',
+          description: 'Fitur menentukan rumus untuk potongan Tandan Kosong',
           type: ConfigType.Function,
           defaultVal: ``,
         },
         {
           id: 12,
           name: 'potonganSampah',
-          description:
-            'Fitur menentukan rumus untuk potongan Sampah',
+          description: 'Fitur menentukan rumus untuk potongan Sampah',
           type: ConfigType.Function,
           defaultVal: `trxGradingSAMPAHPERSENValidate(
             trxGradingSAMPAHPERSEN: number,
@@ -387,8 +379,7 @@ async function main() {
         {
           id: 13,
           name: 'potonganAir',
-          description:
-            'Fitur menentukan rumus untuk potongan Air',
+          description: 'Fitur menentukan rumus untuk potongan Air',
           type: ConfigType.Function,
           defaultVal: `trxGradingAIRPERSENValidate(
             trxGradingAIRPERSEN: number,
@@ -406,24 +397,21 @@ async function main() {
         {
           id: 14,
           name: 'potonganParteno',
-          description:
-            'Fitur menentukan rumus untuk potongan Parteno',
+          description: 'Fitur menentukan rumus untuk potongan Parteno',
           type: ConfigType.Function,
           defaultVal: ``,
         },
         {
           id: 15,
           name: 'potonganBrondolan',
-          description:
-            'Fitur menentukan rumus untuk potongan Brondolan',
+          description: 'Fitur menentukan rumus untuk potongan Brondolan',
           type: ConfigType.Function,
           defaultVal: ``,
         },
         {
           id: 16,
           name: 'potonganLainnya',
-          description:
-            'Fitur menentukan rumus untuk potongan Lainnya',
+          description: 'Fitur menentukan rumus untuk potongan Lainnya',
           type: ConfigType.Function,
           defaultVal: `trxGradingLAINNYAPERSENValidate(
             trxGradingLAINNYAPERSEN: number,
@@ -454,8 +442,7 @@ async function main() {
         {
           id: 17,
           name: 'potonganWajib',
-          description:
-            'Fitur menentukan rumus untuk potongan Wajib',
+          description: 'Fitur menentukan rumus untuk potongan Wajib',
           lvlOfApprvl: 3,
           lifespan: null,
           type: ConfigType.Function,
@@ -490,59 +477,60 @@ async function main() {
         {
           id: 19,
           name: 'WBMS_SITE_TYPE',
-          description:
-            '# 1: PKS, 2: T30, 3: BULKING',
+          description: '# 1: PKS, 2: T30, 3: BULKING',
           type: ConfigType.String,
           defaultVal: `1`,
         },
         {
           id: 20,
           name: 'WBMS_SITE_CODE',
-          description:
-            'Site code',
+          description: 'Site code',
           type: ConfigType.String,
           defaultVal: `P04`,
         },
         {
           id: 21,
           name: 'WBMS_BONTRIP_SUFFIX',
-          description:
-            'Akhiran kode Bontrip',
+          description: 'Akhiran kode Bontrip',
           type: ConfigType.String,
           defaultVal: `1`,
         },
         {
           id: 22,
           name: 'WBMS_BONTRIP_SUFFIX_BACKDATED_FORM',
-          description:
-            'Akhiran kode Bontrip pada backdated form',
+          description: 'Akhiran kode Bontrip pada backdated form',
           type: ConfigType.String,
           defaultVal: `1`,
         },
         {
           id: 23,
           name: 'WBMS_BONTRIP_SUFFIX_BACKDATED_TEMPLATE',
-          description:
-            'Akhiran kode Bontrip pada backdated template',
+          description: 'Akhiran kode Bontrip pada backdated template',
           type: ConfigType.String,
           defaultVal: `1`,
         },
         {
           id: 24,
           name: 'WBMS_WB_IP',
-          description:
-            'URL WBMS',
+          description: 'URL WBMS',
           type: ConfigType.String,
           defaultVal: `localhost`,
         },
         {
           id: 25,
           name: 'WBMS_WB_PORT',
-          description:
-            'Port timbangan',
+          description: 'Port timbangan',
           type: ConfigType.Number,
           defaultVal: `9001`,
-        }
+        },
+        {
+          id: 26,
+          name: 'namaPrintBONTRIP',
+          description:
+            'Nama yang tertera di bawah Bontrip selaku PGS dan Mill Head',
+          type: ConfigType.Json,
+          defaultVal: `{"namePGS":"", "nameMillHead":""}`,
+        },
       ],
       skipDuplicates: true,
     });
