@@ -472,13 +472,13 @@ async function main() {
           description:
             'Fitur melakukan input manual untuk transaksi TBS External',
           type: ConfigType.Json,
-          defaultVal: `{"company":"DS","millPlant":"DS43","millStoLoc":"TW30","transitStoLoc":"MK"}`,
+          defaultVal: `{"company":"DS","codePlant":"DS43","millStoLoc":"TW30","transitStoLoc":"MK"}`,
         },
         {
           id: 19,
           name: 'WBMS_SITE_TYPE',
           description: '# 1: PKS, 2: T30, 3: BULKING',
-          type: ConfigType.String,
+          type: ConfigType.Number,
           defaultVal: `1`,
         },
         {

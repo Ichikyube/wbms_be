@@ -84,7 +84,7 @@ model Company {
   refId   String? @map("ref_id") @db.VarChar(50)
   type         CompanyType?     
   codeVendor   String? @map("code_vendor") @db.VarChar(50)    
-  codeSap      String? @map("code_sap") @db.VarChar(50)
+  code         String?  @db.VarChar(50)
   name         String  @db.VarChar(50)
   shortName    String? @map("short_name") @db.VarChar(50)
   address      String? @db.VarChar(250)
@@ -127,7 +127,7 @@ model Customer {
   cityId          String @map("city_id") @db.Char(36)
   // barcodeTypeId   String? @db.Char(36)
 
-  codeSap      String? @map("code_sap") @db.VarChar(50)
+  code      String?  @db.VarChar(50)
   name         String  @db.VarChar(50)
   shortName    String? @map("short_name") @db.VarChar(50)
   address      String? @db.VarChar(250)
@@ -223,7 +223,7 @@ model Site {
 
   cityId String? @map("city_id") @db.Char(36)
 
-  codeSap     String? @map("code_sap") @db.VarChar(50)
+  code     String?  @db.VarChar(50)
   name        String  @db.VarChar(50)
   shortName   String? @map("short_name") @db.VarChar(50)
   description String? @db.VarChar(500)
@@ -262,7 +262,7 @@ model Mill {
   siteId    String @map("site_id") @db.Char(36)
   companyId String @map("company_id") @db.Char(36)
 
-  codeSap      String? @map("code_sap") @db.VarChar(50)
+  code      String?  @db.VarChar(50)
   name String @db.VarChar(50)
 
   isDeleted    Boolean   @default(false) @map("is_deleted")
@@ -281,7 +281,7 @@ model Weighbridge {
   id     String @id @default(uuid()) @db.Char(36)
   siteId String @map("site_id") @db.Char(36)
 
-  codeSap       String? @map("code_sap") @db.VarChar(50)
+  code       String?  @db.VarChar(50)
   name String @db.VarChar(50)
 
   isDeleted    Boolean   @default(false) @map("is_deleted")
@@ -456,7 +456,7 @@ model Product {
 
   productGroupName String?
   batch         String?  @db.Char(36)
-  codeSap       String? @map("code_sap") @db.VarChar(50)
+  code       String?  @db.VarChar(50)
   name          String  @db.VarChar(50)
   shortName     String? @map("short_name") @db.VarChar(50)
   description   String? @db.VarChar(500)
@@ -508,7 +508,7 @@ model StorageTank {
   productRefId String? @map("product_ref_id") @db.VarChar(50)
   productName  String? @map("product_name") @db.VarChar(50)
 
-  codeSap     String  @map("code_sap") @db.VarChar(50)
+  code     String   @db.VarChar(50)
   name        String  @db.VarChar(50)
   shortName   String? @map("short_name") @db.VarChar(50)
   description String? @db.VarChar(500)
@@ -536,7 +536,7 @@ model Driver {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0) @map("ref_type")
   refId   String? @map("ref_id") @db.VarChar(50)
-  codeSap String  @map("code_sap") @db.VarChar(50)
+  code String   @db.VarChar(50)
 
   companyId    String? @map("company_id") @db.Char(36)
   companyRefId String? @map("company_ref_id") @db.VarChar(50)
@@ -567,7 +567,7 @@ model TransportVehicle {
   id      String  @id @default(uuid()) @db.Char(36)
   refType Int     @default(0) @map("ref_type")
   refId   String? @map("ref_id") @db.VarChar(50)
-  codeSap String  @map("code_sap") @db.VarChar(50)
+  code String   @db.VarChar(50)
 
   companyId    String? @map("company_id") @db.Char(36)
   companyRefId String? @map("company_ref_id") @db.VarChar(50)
@@ -576,7 +576,6 @@ model TransportVehicle {
   productId    String? @map("product_id") @db.Char(36)
   productRefId String? @map("product_ref_id") @db.VarChar(50)
   productName  String  @map("product_name") @db.VarChar(50)
-  productCode  String  @map("product_code") @db.VarChar(50)
 
   plateNo  String  @map("plate_no") @db.VarChar(10)
   capacity Float?
@@ -607,13 +606,15 @@ model Transaction {
   typeTransaction Int @default(1)
   afdeling       String?
   blok           String?
+  kebun          String? @db.Char(20)
   sptbs          String? @db.Char(36)
-  millPlant      String? @db.Char(36) @map("mill_code")
+  codePlant      String? @db.Char(36) @map("code_plant")
+  yearPlant      Int?   @map("year_of_plant")
   checkGrade     Boolean? @map("check_grade")
   spbNo          String? @db.Char(36)
-  yearPlant      Int?   @map("year_of_plant")
+
   indikator      String? @db.Char(3)
-  codeSap        String?  @map("code_sap") @db.VarChar(50)
+  code        String?   @db.VarChar(50)
   bonTripNo      String? @map("bon_trip_no") @db.Char(16)
   vehicleStatus  Int     @default(0) @map("vehicle_status")
   deliveryStatus Int     @default(0) @map("delivery_status")

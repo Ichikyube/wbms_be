@@ -25,11 +25,6 @@ export class MillsController {
   constructor(private millsService: MillsService) {}
 
   @Get('')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -59,22 +54,7 @@ export class MillsController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.millsService.getAttributes();
-  }
-
   @Get('deleted')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {

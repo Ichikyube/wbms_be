@@ -59,16 +59,6 @@ export class ProvincesController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.provincesService.getAttributes();
-  }
-
   @Get('deleted')
   @UseRoles({
     resource: 'provincesData',

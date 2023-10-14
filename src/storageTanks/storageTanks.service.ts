@@ -4,10 +4,105 @@ import { DbService } from 'src/db/db.service';
 import { CreateStorageTankDto, UpdateStorageTankDto } from './dto';
 import { StorageTankEntity } from 'src/entities';
 import { Prisma } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { SemaiService } from 'src/semai/semai.service';
 
 @Injectable()
 export class StorageTanksService {
-  constructor(private db: DbService) {}
+  constructor(
+    private db: DbService,
+    private config: ConfigService,
+    private semaiService: SemaiService,
+  ) {}
+
+  async syncWithSemai() {
+    const storageTanks = await this.semaiService.storageTanks().then((res) => res.data.storageTanks);
+
+    if (storageTanks?.length > 0)
+    storageTanks.forEach(({ 
+      allowableSccModel,
+      capacityKg,
+      code,
+      createdBy,
+      createdTime,
+      heightMeter,
+      id,
+      isDeleted,
+      name,
+      productId,
+      productName,
+      shortName,
+      siteId,
+      siteName,
+      stockOwnerId,
+      stockOwnerName,
+      updatedBy,
+      updatedTime}) => {
+        this.db.storageTank
+          .findFirstOrThrow({
+            where: {
+              refType: 1,
+              refId: id,
+            },
+          })
+          .then((res) => {
+            this.db.storageTank
+              .update({
+                where: { id: res.id },
+                data: {
+                  siteRefId: siteId,
+                  siteName,
+                  stockOwnerRefId: stockOwnerId,
+                  stockOwnerName,
+                  productRefId: productId,
+                  productName,
+                  code,
+                  name,
+                  shortName,
+                  capacity: capacityKg,
+                  height: heightMeter,
+                  sccModel: allowableSccModel,
+                  isDeleted,
+                  userCreated: createdBy,
+                  userModified: updatedBy,
+                  dtCreated: createdTime,
+                  dtModified: updatedTime,
+                },
+              })
+              .then((res) => console.log(res));
+          })
+          .catch(() => {
+            this.db.storageTank
+              .create({
+                data: {
+                  refType: 1,
+                  refId: id,
+                  siteRefId: siteId,
+                  siteName,
+                  stockOwnerRefId: stockOwnerId,
+                  stockOwnerName,
+                  productRefId: productId,
+                  productName,
+                  code,
+                  name,
+                  shortName,
+                  description: "string",
+                  capacity: capacityKg,
+                  height: heightMeter,
+                  sccModel: allowableSccModel,
+                  isDeleted,
+                  userCreated: createdBy,
+                  userModified: updatedBy,
+                  dtCreated: createdTime,
+                  dtModified: updatedTime,
+                },
+              })
+              .then((res) => console.log(res));
+          });
+      });
+
+    return storageTanks;
+  }
 
   async getAll(): Promise<StorageTankEntity[]> {
     const records = await this.db.storageTank.findMany({
@@ -16,15 +111,7 @@ export class StorageTanksService {
 
     return records;
   }
-  
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'StorageTank',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
+
   async getAllDeleted(): Promise<StorageTankEntity[]> {
     const records = await this.db.storageTank.findMany({
       where: { isDeleted: true },
@@ -73,7 +160,10 @@ export class StorageTanksService {
     return records;
   }
 
-  async create(dto: CreateStorageTankDto, userId: string): Promise<StorageTankEntity> {
+  async create(
+    dto: CreateStorageTankDto,
+    userId: string,
+  ): Promise<StorageTankEntity> {
     const params = {
       data: {
         ...dto,
@@ -87,7 +177,11 @@ export class StorageTanksService {
     return record;
   }
 
-  async updateById(id: string, dto: UpdateStorageTankDto, userId: string): Promise<StorageTankEntity> {
+  async updateById(
+    id: string,
+    dto: UpdateStorageTankDto,
+    userId: string,
+  ): Promise<StorageTankEntity> {
     const params = {
       where: { id },
       data: { ...dto, userModified: userId },

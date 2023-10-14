@@ -4,6 +4,8 @@ import { DbService } from 'src/db/db.service';
 import { CreateMillDto, UpdateMillDto } from './dto';
 import { MillEntity } from 'src/entities';
 import { Prisma } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { SemaiService } from 'src/semai/semai.service';
 
 @Injectable()
 export class MillsService {
@@ -23,32 +25,25 @@ export class MillsService {
       include: {
         site: {
           select: {
-            id:true,
+            id: true,
             name: true,
-            shortName:true,
-            description:true,
-          }
+            shortName: true,
+            description: true,
+          },
         },
         company: {
           select: {
-            id:true,
-            name:true,
-            shortName:true,
-          }
-        }
+            id: true,
+            name: true,
+            shortName: true,
+          },
+        },
       },
     });
 
     return records;
   }
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Mill',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
+
   async getAllDeleted(): Promise<MillEntity[]> {
     const records = await this.db.mill.findMany({
       where: { isDeleted: true },

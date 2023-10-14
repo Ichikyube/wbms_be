@@ -5,54 +5,110 @@ import {
   Post,
   Controller,
   Patch,
-  Delete,
   Req,
-  Res,
-  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigsService } from './configs.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
-import { IS_PUBLIC_KEY, Public } from 'src/common/decorators';
+import { Public } from 'src/common/decorators';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import { YAML_CONFIG_FILENAME } from './configuration';
+import { join } from 'path';
 @ApiTags('Configs')
 @ApiBearerAuth('access-token')
 @Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
-  @Get('f')
-  @Public()
-  async getEnvy() {
-    const dataOut = {
-      status: true,
-      message: '',
-      data: {
-        config: {
-          records: null,
-          totalRecords: 0,
-          page: 0,
-        },
-      },
-      logs: {},
-    };
+  // @Get('f')
+  // @Public()
+  // async getEnvy() {
+  //   const dataOut = {
+  //     status: true,
+  //     message: '',
+  //     data: {
+  //       config: {
+  //         records: null,
+  //         totalRecords: 0,
+  //         page: 0,
+  //       },
+  //     },
+  //     logs: {},
+  //   };
 
+  //   try {
+  //     const records = await this.configsService.get();
+
+  //     dataOut.data.config.records = records;
+  //   } catch (error) {
+  //     dataOut.status = false;
+  //     dataOut.message = error.message;
+  //     dataOut.logs = { ...dataOut.logs, error };
+  //   }
+  //   // Set the Cache-Control header
+  //   // res.setHeader(
+  //   //   `Cache-Control`,
+  //   //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
+  //   // );
+
+  //   return dataOut;
+  // }
+  @Get()
+  getConfigVar() {
     try {
-      const records = await this.configsService.get();
-
-      dataOut.data.config.records = records;
+      const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+      const config = yaml.load(configContent);
+      return config;
     } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { ...dataOut.logs, error };
+      return { error: 'Error loading config' };
     }
-    // Set the Cache-Control header
-    // res.setHeader(
-    //   `Cache-Control`,
-    //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
-    // );
+  }
 
-    return dataOut;
+  @Get('get-wb-port')
+  getWbPort() {
+    const wbPort = this.configsService.get('WBMS_WB.PORT');
+    return { wbPort };
+  }
+  
+  @Get('get-config')
+  getConfig() {
+    return this.configsService.getConfig();
+  }
+
+  @Post('/update-var')
+  updateConfigVar(@Body() newConfig: Record<string, any>) {
+    try {
+      const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+      const config = yaml.load(configContent);
+
+      // Update the config with the new values
+      for (const key in newConfig) {
+        if (newConfig.hasOwnProperty(key) && config.hasOwnProperty(key)) {
+          config[key] = newConfig[key];
+        }
+      }
+
+      // Write the updated config back to the file
+      fs.writeFileSync(join(__dirname, YAML_CONFIG_FILENAME), yaml.dump(config));
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Error updating config' };
+    }
+  }
+
+  @Post('/update-env')
+  updateEnvironment(@Body() data: { newVariable: string }) {
+    try {
+      // Assuming your environment file is named .env
+      const envFile = fs.readFileSync('.env', 'utf-8');
+      const updatedEnvFile = envFile + `\nNEW_VARIABLE=${data.newVariable}`;
+      fs.writeFileSync('.env', updatedEnvFile);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
   }
 
   @Get('')

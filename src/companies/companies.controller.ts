@@ -26,7 +26,8 @@ import { CompanyEntity } from 'src/entities';
 @Controller('companies')
 export class CompaniesController {
   constructor(private companiesService: CompaniesService) {}
-
+  
+  
   @Get('sync-with-semai')
   async syncWithSemai() {
     const dataOut = {
@@ -55,7 +56,7 @@ export class CompaniesController {
 
     return dataOut;
   }
-  
+
   @Get('')
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async getAll() {
@@ -86,22 +87,8 @@ export class CompaniesController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.companiesService.getAttributes();
-  }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -132,11 +119,6 @@ export class CompaniesController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -162,11 +144,6 @@ export class CompaniesController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -199,11 +176,6 @@ export class CompaniesController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -234,11 +206,6 @@ export class CompaniesController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async searchFirstDeleted(@Body() query: any) {
     const dataOut = {
@@ -271,11 +238,6 @@ export class CompaniesController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -306,11 +268,6 @@ export class CompaniesController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async create(@Body() dto: CreateCompanyDto, @Req() req: Request) {
     const dataOut = {
@@ -337,11 +294,6 @@ export class CompaniesController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async updateById(
     @Param('id') id: string,
@@ -372,11 +324,6 @@ export class CompaniesController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'companiesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CompanyEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

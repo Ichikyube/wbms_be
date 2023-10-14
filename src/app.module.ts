@@ -4,7 +4,7 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AuthModule } from './auth/auth.module';
@@ -31,7 +31,7 @@ import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
 import { AtGuard } from './common/guards';
 import { FilesModule } from './files/files.module';
-import { join } from 'path';
+import path, { join } from 'path';
 import { RolesModule } from './accessControl/roles/roles.module';
 import { RbacModule } from './accessControl/rbac.module';
 import { ConfigRequestModule } from './config-request/config-request.module';
@@ -39,16 +39,18 @@ import { ConfigRequestsAdminModule } from './config-requests-admin/config-reques
 import { NotificationsModule } from './notifications/notifications.module';
 // import { SseGateway } from './sse/sse.gateway';
 import { SseController } from './sse/sse.controller';
-import { RedisModule } from './redis/redis.module';
 import { GradingCalculatorModule } from './grading-calculator/grading-calculator.module';
-import { TemporaryDataService } from './temporary-data/temporary-data.service';
-import { TemporaryDataController } from './temporary-data/temporary-data.controller';
 import { TemporaryDataModule } from './temporary-data/temporary-data.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import configuration from './configs/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      // envFilePath: path.resolve(__dirname, '../.env'), // if you want to specify the path to env file
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'upload'),
       serveRoot: '/img/',

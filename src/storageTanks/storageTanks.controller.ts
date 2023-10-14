@@ -23,12 +23,36 @@ import { StorageTankEntity } from 'src/entities';
 export class StorageTanksController {
   constructor(private storageTanksService: StorageTanksService) {}
 
+  @Get('sync-with-semai')
+  async syncWithSemai() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        site: {
+          records: [],
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    try {
+      const records = await this.storageTanksService.syncWithSemai();
+
+      dataOut.data.site.records = records;
+      dataOut.data.site.totalRecords = records.length;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+    }
+
+    return dataOut;
+  }
+
   @Get('')
-  @UseRoles({
-    resource: 'storageTanksData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: StorageTankEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -56,16 +80,6 @@ export class StorageTanksController {
     }
 
     return dataOut;
-  }
-
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.storageTanksService.getAttributes();
   }
 
   @Get('deleted')
@@ -104,11 +118,6 @@ export class StorageTanksController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'storageTanksData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: StorageTankEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {

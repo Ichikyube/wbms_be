@@ -25,16 +25,6 @@ export class BarcodeTypesController {
     return this.customerTypesService.getAll();
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'barcodeData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.customerTypesService.getAttributes();
-  }
-
   @Post('search-many')
   @UseRoles({
     resource: 'barcodeData',

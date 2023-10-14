@@ -1,30 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { ConfigService } from '@nestjs/config';
-import * as dotenv from 'dotenv';
 import * as fs from 'fs';
-
+import * as yaml from 'js-yaml';
+import { YAML_CONFIG_FILENAME } from './configuration';
+import { join } from 'path';
 @Injectable()
 export class ConfigsService {
   private readonly envConfig: Record<string, string>;
-
+  private configs: any;
   constructor(
     private db: DbService,
     private config: ConfigService,
   ) {
-    const filePath = `${process.env.NODE_ENV || 'development'}.env`;
+    this.loadConfig();
+    console.log("env", this.configs)
+  }
 
-    if (fs.existsSync(filePath)) {
-      this.envConfig = dotenv.parse(fs.readFileSync(filePath));
-    } else {
-      this.envConfig = {};
+  private loadConfig() {
+    try {
+      const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+      this.setConfig(yaml.load(configContent));
+    } catch (error) {
+      console.error('Error loading config:', error);
     }
   }
-  
-  get(): string {
-    return this.envConfig["WBMS_SEMAI_API_URL"];
+
+  get(key: string): string {
+    return this.envConfig[key];
   }
-  
+
+  set(key: string, value: string): void {
+    this.envConfig[key] = value;
+  }
+  setConfig(records) {
+    this.configs = records;
+  }
+  getConfig() {
+    return this.configs;
+  }
+
   async getEnv() {
     const dataOut = {
       status: true,
@@ -38,12 +53,12 @@ export class ConfigsService {
         WBMS_SEMAI_BACKEND_URL: this.config.get('WBMS_SEMAI_BACKEND_URL'),
         WBMS_SEMAI_API_KEY: this.config.get('WBMS_SEMAI_API_KEY'),
 
-        WBMS_WB_IP: this.config.get('WBMS_WB_IP'),
-        WBMS_WB_PORT: this.config.get('WBMS_WB_PORT'),
-        WBMS_WB_MIN_WEIGHT: this.config.get('WBMS_WB_MIN_WEIGHT'),
-        WBMS_WB_STABLE_PERIOD: this.config.get('WBMS_WB_STABLE_PERIOD'),
+        WBMS_WB_IP: this.config.get('WBMS_WB.IP'),
+        WBMS_WB_PORT: this.config.get('WBMS_WB.PORT'),
+        WBMS_WB_MIN_WEIGHT: this.config.get('WBMS_WB.MIN_WEIGHT'),
+        WBMS_WB_STABLE_PERIOD: this.config.get('WBMS_WB.STABLE_PERIOD'),
       };
-
+      console.log(ENV)
       dataOut.data = { ...dataOut.data, ENV };
     } catch (error) {
       dataOut.status = false;
@@ -149,9 +164,14 @@ export class ConfigsService {
     return record;
   }
 
-  async requestApproved(id: number, tempValue : any, start: Date, userId: string) {
+  async requestApproved(
+    id: number,
+    tempValue: any,
+    start: Date,
+    userId: string,
+  ) {
     const currentConfig = await this.getById(id);
-    console.log(start)
+    console.log(start);
     const data = {
       tempValue,
       start,

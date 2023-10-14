@@ -31,14 +31,6 @@ export class SitesService {
     return records;
   }
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Site',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
   async getAllDeleted(): Promise<SiteEntity[]> {
     const records = await this.db.site.findMany({
       where: { isDeleted: true },
@@ -150,7 +142,7 @@ export class SitesService {
                   companyRefId: site?.companyId,
                   companyName: site?.companyName,
 
-                  codeSap: site?.code,
+                  code: site?.code,
                   name: site?.name,
                   shortName: site?.shortName,
                   description: site?.description,
@@ -179,7 +171,7 @@ export class SitesService {
                   companyRefId: site?.companyId,
                   companyName: site?.companyName,
 
-                  codeSap: site?.code,
+                  code: site?.code,
                   name: site?.name,
                   shortName: site?.shortName,
                   description: site?.description,

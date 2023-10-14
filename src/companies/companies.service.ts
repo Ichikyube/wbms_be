@@ -8,7 +8,120 @@ import { SemaiService } from 'src/semai/semai.service';
 
 @Injectable()
 export class CompaniesService {
-  constructor(private db: DbService, private semaiService: SemaiService) {}
+  constructor(
+    private db: DbService,
+    private semaiService: SemaiService,
+  ) {}
+
+  async syncWithSemai() {
+    const companies = await this.semaiService
+      .transporters()
+      .then((res) => res.data.transporters);
+
+    if (companies?.length > 0)
+      companies.forEach(
+        ({
+          id,
+          name,
+          address,
+          addressExt,
+          postalCode,
+          city,
+          province,
+          country,
+          contactName,
+          contactEmail,
+          contactPhone,
+          phone,
+          url,
+          code,
+          shortName,
+          isMill,
+          isEstate,
+          isTransporter,
+          isDeleted,
+          createdTime,
+          createdBy,
+          updatedTime,
+          updatedBy,
+          deletedTime,
+          deletedBy,
+        }) => {
+          this.db.site
+            .findFirstOrThrow({
+              where: {
+                refType: 1,
+                refId: id,
+              },
+            })
+            .then((res) => {
+              this.db.company
+                .update({
+                  where: { id: res.id },
+                  data: {
+                    code,
+                    name,
+                    shortName,
+                    address,
+                    addressExt,
+                    postalCode,
+                    country,
+                    province,
+                    city,
+                    phone,
+                    url,
+                    contactName,
+                    contactEmail,
+                    contactPhone,
+                    isMillOperator:isMill,
+                    isTransporter,
+                    isEstate,
+                    isDeleted,
+                    userCreated: createdBy,
+                    userModified: isDeleted ? deletedBy : updatedBy,
+                    dtCreated: createdTime,
+                    dtModified: isDeleted ? deletedTime : updatedTime,
+                  },
+                })
+                .then((res) => console.log(res));
+            })
+            .catch(() => {
+              this.db.company
+                .create({
+                  data: {
+                    refType: 1,
+                    refId: id,
+                    code,
+                    name,
+                    shortName,
+                    address,
+                    addressExt,
+                    postalCode,
+                    country,
+                    province,
+                    city,
+                    phone,
+                    url,
+                    contactName,
+                    contactEmail,
+                    contactPhone,
+                    isMillOperator:isMill,
+                    isTransporter,
+                    isEstate,
+                    isDeleted,
+                    userCreated: createdBy,
+                    userModified: isDeleted ? deletedBy : updatedBy,
+                    dtCreated: createdTime,
+                    dtModified: isDeleted ? deletedTime : updatedTime,
+                  },
+                })
+                .then((res) => console.log(res));
+            });
+        },
+      );
+
+    return companies;
+  }
 
   async getAll(): Promise<CompanyEntity[]> {
     const records = await this.db.company.findMany({
@@ -26,14 +139,6 @@ export class CompaniesService {
     return records;
   }
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Company',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
   async getAllDeleted(): Promise<CompanyEntity[]> {
     const records = await this.db.company.findMany({
       where: { isDeleted: true },
@@ -122,80 +227,79 @@ export class CompaniesService {
     return record;
   }
 
-  
-  async syncWithSemai() {
-    const companies = await this.semaiService.companies().then((res) => res.data.companies);
+  // async syncWithSemai() {
+  //   const companies = await this.semaiService.companies().then((res) => res.data.companies);
 
-    if (companies?.length > 0)
-      companies.forEach((site) => {
-        this.db.site
-          .findFirstOrThrow({
-            where: {
-              refType: 1,
-              refId: site.id,
-            },
-          })
-          .then((res) => {
-            this.db.site
-              .update({
-                where: { id: res.id },
-                data: {
-                  sourceSiteRefId: site?.sourceSiteId,
-                  sourceSiteName: site?.sourceSiteName,
+  //   if (companies?.length > 0)
+  //     companies.forEach((site) => {
+  //       this.db.site
+  //         .findFirstOrThrow({
+  //           where: {
+  //             refType: 1,
+  //             refId: site.id,
+  //           },
+  //         })
+  //         .then((res) => {
+  //           this.db.site
+  //             .update({
+  //               where: { id: res.id },
+  //               data: {
+  //                 sourceSiteRefId: site?.sourceSiteId,
+  //                 sourceSiteName: site?.sourceSiteName,
 
-                  companyRefId: site?.companyId,
-                  companyName: site?.companyName,
+  //                 companyRefId: site?.companyId,
+  //                 companyName: site?.companyName,
 
-                  codeSap: site?.code,
-                  name: site?.name,
-                  shortName: site?.shortName,
-                  description: site?.description,
+  //                 code: site?.code,
+  //                 name: site?.name,
+  //                 shortName: site?.shortName,
+  //                 description: site?.description,
 
-                  latitude: site?.latitude,
-                  longitude: site?.longitude,
-                  solarCalibration: site?.solarCalibration,
+  //                 latitude: site?.latitude,
+  //                 longitude: site?.longitude,
+  //                 solarCalibration: site?.solarCalibration,
 
-                  isMill: site?.isMill,
+  //                 isMill: site?.isMill,
 
-                  isDeleted: !!site?.isDeleted,
-                },
-              })
-              .then((res) => console.log(res));
-          })
-          .catch(() => {
-            this.db.site
-              .create({
-                data: {
-                  refType: 1,
-                  refId: site.id,
+  //                 isDeleted: !!site?.isDeleted,
+  //               },
+  //             })
+  //             .then((res) => console.log(res));
+  //         })
+  //         .catch(() => {
+  //           this.db.site
+  //             .create({
+  //               data: {
+  //                 refType: 1,
+  //                 refId: site.id,
 
-                  sourceSiteRefId: site?.sourceSiteId,
-                  sourceSiteName: site?.sourceSiteName,
+  //                 sourceSiteRefId: site?.sourceSiteId,
+  //                 sourceSiteName: site?.sourceSiteName,
 
-                  companyRefId: site?.companyId,
-                  companyName: site?.companyName,
+  //                 companyRefId: site?.companyId,
+  //                 companyName: site?.companyName,
 
-                  codeSap: site?.code,
-                  name: site?.name,
-                  shortName: site?.shortName,
-                  description: site?.description,
+  //                 code: site?.code,
+  //                 name: site?.name,
+  //                 shortName: site?.shortName,
+  //                 description: site?.description,
 
-                  latitude: site?.latitude,
-                  longitude: site?.longitude,
-                  solarCalibration: site?.solarCalibration,
+  //                 latitude: site?.latitude,
+  //                 longitude: site?.longitude,
+  //                 solarCalibration: site?.solarCalibration,
 
-                  isMill: site?.isMill,
+  //                 isMill: site?.isMill,
 
-                  isDeleted: !!site?.isDeleted,
+  //                 isDeleted: !!site?.isDeleted,
 
-                  userCreated: "",
-                  userModified: "",
-                },
-              })
-              .then((res) => console.log(res));
-          });
-      });
+  //                 userCreated: "",
+  //                 userModified: "",
+  //               },
+  //             })
+  //             .then((res) => console.log(res));
+  //         });
+  //     });
 
-    return companies;
-  }
+  //   return companies;
+  // }
 }

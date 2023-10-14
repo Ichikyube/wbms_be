@@ -24,11 +24,6 @@ export class CustomersController {
   constructor(private customersService: CustomersService) {}
 
   @Get('')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -64,9 +59,6 @@ export class CustomersController {
     action: 'read',
     possession: 'own',
   })
-  async getAttributes() {
-    return await this.customersService.getAttributes();
-  }
 
   @Get('deleted')
   @UseRoles({

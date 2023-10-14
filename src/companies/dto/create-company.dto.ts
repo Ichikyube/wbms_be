@@ -4,7 +4,7 @@ import { IsUUID, IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateCompanyDto {
   @ApiProperty() @IsString() codeVendor?: string;
-  @ApiProperty() @IsString() codeSap?: string;
+  @ApiProperty() @IsString() code?: string;
   @ApiProperty() @IsString() type?: CompanyType;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiProperty() @IsString() shortName?: string;

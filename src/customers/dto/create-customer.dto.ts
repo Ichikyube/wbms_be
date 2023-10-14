@@ -7,7 +7,7 @@ export class CreateCustomerDto {
   @ApiProperty() @IsUUID() @IsNotEmpty() cityId: string;
   // @IsUUID() @ApiProperty() barcodeTypeId: string;
 
-  @ApiProperty() @IsString() @IsNotEmpty() codeSap: string;
+  @ApiProperty() @IsString() @IsNotEmpty() code: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
   @ApiProperty() @IsString() shortName: string;
   @ApiProperty() @IsString() address: string;

@@ -10,8 +10,13 @@
         "include": "../cert/**",
         "outDir": "dist/semai/cert",
         "watchAssets": true
+      },
+      {
+        "include": "./configs/*.yaml",
+        "outDir": "dist",
+        "watchAssets": true
       }
-    ],
+    ],  
     "plugins": ["@nestjs/swagger"]
   }
 }

@@ -26,12 +26,36 @@ export class TransportVehicleController {
     private readonly transportVehicleService: TransportVehicleService,
   ) {}
 
+  @Get('sync-with-semai')
+  async syncWithSemai() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        site: {
+          records: [],
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    try {
+      const records = await this.transportVehicleService.syncWithSemai();
+
+      dataOut.data.site.records = records;
+      dataOut.data.site.totalRecords = records.length;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+    }
+
+    return dataOut;
+  }
+
   @Get('')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiOkResponse({ type: TransportVehicleEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -59,16 +83,6 @@ export class TransportVehicleController {
     }
 
     return dataOut;
-  }
-
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.transportVehicleService.getAttributes();
   }
 
   @Get('deleted')

@@ -7,7 +7,7 @@ import { DbService } from 'src/db/db.service';
 import { SemaiService } from 'src/semai/semai.service';
 import { ConfigsService } from 'src/configs/configs.service';
 import { CreateTransactionDto } from './dto/create-transactionDto';
-import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
+import { QrcodeDto } from 'src/semai/dto/qrcode.dto';
 
 import { TransactionEntity } from 'src/entities';
 
@@ -16,7 +16,7 @@ export class TransactionService {
   constructor(
     private db: DbService,
     private config: ConfigService,
-    private semaiAPI: SemaiService,
+    private semaiService: SemaiService,
     private configWbms: ConfigsService,
   ) {}
 
@@ -117,11 +117,11 @@ export class TransactionService {
         originWeighInKg: true,
         originWeighOutKg: true,
         qtyTbs: true,
-        codeSap: true,
+        code: true,
         spbNo: true,
         transporter: {
           select: {
-            codeSap: true,
+            code: true,
           },
         },
         checkGrade: true,
@@ -145,29 +145,29 @@ export class TransactionService {
         driverName,
         transportVehiclePlateNo,
         qtyTbs,
-        codeSap,
+        code,
         codeVendor,
         spbNo,
         transporter,
         checkGrade,
-        potngnBM,    
-        potngnBLM,     
-        potngnTK,    
-        potngnTP,     
-        potngnSampah,  
-        potngnAir, 
-        potngnParteno, 
-        potngnBrondolan, 
+        potngnBM,
+        potngnBLM,
+        potngnTK,
+        potngnTP,
+        potngnSampah,
+        potngnAir,
+        potngnParteno,
+        potngnBrondolan,
         potngnBKM,
-        potngnBusuk,     
-        potngnAbnormal,  
-        potngnBuahKecil, 
+        potngnBusuk,
+        potngnAbnormal,
+        potngnBuahKecil,
         potngnDimknHama,
         potonganLain,
-        potonganWajib
+        potonganWajib,
       }) => {
         const Batch = product.batch;
-        const Trans_Code = transporter.codeSap;
+        const Trans_Code = transporter.code;
         const weightBrutto = Math.abs(originWeighOutKg - originWeighInKg);
         const weightNetto = Math.abs(originWeighOutKg - originWeighInKg);
         return {
@@ -182,7 +182,7 @@ export class TransactionService {
           WB_Date_Out: moment(originWeighOutTimestamp).format('DD.MM.YYYY'),
           WB_Time_Out: moment(originWeighOutTimestamp).format('HH:mm:ss'),
 
-          Material: codeSap,
+          Material: code,
           Batch,
           Car_Plate: transportVehiclePlateNo,
           Driver_Name: driverName,
@@ -298,7 +298,7 @@ export class TransactionService {
     const { content, typeTransaction } = body;
 
     try {
-      const response = await this.semaiAPI.decodeQrcode({ content });
+      const response = await this.semaiService.decodeQrcode({ content });
 
       if (!response.status) {
         dataOut.status = false;

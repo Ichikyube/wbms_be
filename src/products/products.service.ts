@@ -8,7 +8,10 @@ import { SemaiService } from 'src/semai/semai.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(private db: DbService, private semaiService: SemaiService) {}
+  constructor(
+    private db: DbService,
+    private semaiService: SemaiService,
+  ) {}
 
   async getAll(): Promise<ProductEntity[]> {
     const records = await this.db.product.findMany({
@@ -24,15 +27,6 @@ export class ProductsService {
     });
 
     return records;
-  }
-  
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Product',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
   }
 
   async getAllDeleted(): Promise<ProductEntity[]> {
@@ -122,79 +116,80 @@ export class ProductsService {
 
     return record;
   }
-  
+
   async syncWithSemai() {
-    const products = await this.semaiService.products().then((res) => res.data.products);
+    const products = await this.semaiService
+      .products()
+      .then((res) => res.data.products);
 
     if (products?.length > 0)
-      products.forEach((site) => {
-        this.db.site
-          .findFirstOrThrow({
-            where: {
-              refType: 1,
-              refId: site.id,
-            },
-          })
-          .then((res) => {
-            this.db.site
-              .update({
-                where: { id: res.id },
-                data: {
-                  sourceSiteRefId: site?.sourceSiteId,
-                  sourceSiteName: site?.sourceSiteName,
-
-                  companyRefId: site?.companyId,
-                  companyName: site?.companyName,
-
-                  codeSap: site?.code,
-                  name: site?.name,
-                  shortName: site?.shortName,
-                  description: site?.description,
-
-                  latitude: site?.latitude,
-                  longitude: site?.longitude,
-                  solarCalibration: site?.solarCalibration,
-
-                  isMill: site?.isMill,
-
-                  isDeleted: !!site?.isDeleted,
-                },
-              })
-              .then((res) => console.log(res));
-          })
-          .catch(() => {
-            this.db.site
-              .create({
-                data: {
-                  refType: 1,
-                  refId: site.id,
-
-                  sourceSiteRefId: site?.sourceSiteId,
-                  sourceSiteName: site?.sourceSiteName,
-
-                  companyRefId: site?.companyId,
-                  companyName: site?.companyName,
-
-                  codeSap: site?.code,
-                  name: site?.name,
-                  shortName: site?.shortName,
-                  description: site?.description,
-
-                  latitude: site?.latitude,
-                  longitude: site?.longitude,
-                  solarCalibration: site?.solarCalibration,
-
-                  isMill: site?.isMill,
-
-                  isDeleted: !!site?.isDeleted,
-
-                  userCreated: "",
-                  userModified: "",
-                },
-              })
-              .then((res) => console.log(res));
-          });
-      });
+      products.forEach(
+        ({
+          id,
+          code,
+          name,
+          shortName,
+          description,
+          productGroup,
+          certification,
+          isDeleted,
+          createdBy,
+          updatedBy,
+          deletedBy,
+          createdTime,
+          updatedTime,
+          deletedTime,
+        }) => {
+          this.db.product
+            .findFirstOrThrow({
+              where: {
+                refType: 1,
+                refId: id,
+              },
+            })
+            .then((res) => {
+              this.db.product
+                .update({
+                  where: { id: res.id },
+                  data: {
+                    productGroupName: productGroup,
+                    code,
+                    name,
+                    shortName,
+                    description,
+                    certification,
+                    isDeleted,
+                    userCreated: createdBy,
+                    userModified: isDeleted ? deletedBy : updatedBy,
+                    dtCreated: createdTime,
+                    dtModified: isDeleted ? deletedTime : updatedTime,
+                  },
+                })
+                .then((res) => console.log(res));
+            })
+            .catch(() => {
+              this.db.product
+                .create({
+                  data: {
+                    refType: 1,
+                    refId: id,
+                    productGroupName: productGroup,
+                    code,
+                    name,
+                    shortName,
+                    description,
+                    certification,
+                    isDeleted,
+                    userCreated: createdBy,
+                    userModified: isDeleted ? deletedBy : updatedBy,
+                    dtCreated: createdTime,
+                    dtModified: isDeleted ? deletedTime : updatedTime,
+                  },
+                })
+                .then((res) => console.log(res));
+            });
+        },
+      );
 
     return products;
   }

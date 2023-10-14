@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Customer } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { Customer } from '@prisma/client';
 
 export class CustomerEntity implements Customer {
   @ApiProperty() id: string;
@@ -8,7 +8,7 @@ export class CustomerEntity implements Customer {
   @ApiProperty() cityId: string;
   // @ApiProperty() barcodeTypeId: string;
 
-  @ApiProperty() codeSap: string;
+  @ApiProperty() code: string;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string;
   @ApiProperty() address: string;

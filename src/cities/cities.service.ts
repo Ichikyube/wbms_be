@@ -27,14 +27,6 @@ export class CitiesService {
     return record;
   }
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'City',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    return attr;
-  }
-
   // async updateView():Promise<Observable<CityEntity[]>>{
   //   const records = await this.db.city.findMany({
   //     where: { isDeleted: false },

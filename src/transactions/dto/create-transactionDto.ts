@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
-import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
+import { QrcodeDto } from 'src/semai/dto/qrcode.dto';
 
 export class CreateTransactionDto {
   @ApiProperty()
@@ -22,7 +22,7 @@ export class CreateTransactionDto {
   sptbs?: string = undefined;
 
   @ApiPropertyOptional({ type: String })
-  millPlant?: string = undefined;
+  codePlant?: string = undefined;
 
   @ApiPropertyOptional({ type: Boolean })
   checkGrade?: boolean = undefined;
@@ -37,7 +37,7 @@ export class CreateTransactionDto {
   indikator?: string = undefined;
 
   @ApiPropertyOptional({ type: String })
-  codeSap?: string = undefined;
+  code?: string = undefined;
 
   @ApiPropertyOptional({ type: String })
   bonTripNo?: string = undefined;

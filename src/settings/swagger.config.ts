@@ -23,12 +23,12 @@ export default class SwaggerDocumentation {
         },
         'access-token',
       )
+      .addSecurity('ApiKeyAuth', {
+        type: 'apiKey',
+        in: 'header',
+        name: 'X-API-KEY',
+      })
       .addTag('DNS')
-      // .addSecurity('ApiKeyAuth', {
-      //   type: 'apiKey',
-      //   in: 'header',
-      //   name: 'Authorization',
-      // })
       // .addSecurityRequirements('ApiKeyAuth')
       .build();
 

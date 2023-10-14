@@ -10,18 +10,13 @@ import SwaggerDocumentation from './settings/swagger.config';
 import * as fs from 'fs';
 import { AccessControl } from 'accesscontrol';
 import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
-// const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
-// const ac = new AccessControl(grantsObject);
+import path from 'path';
+const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
+const ac = new AccessControl(grantsObject);
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  printEnvVar();
-
-  const config = new ConfigService();
-
-  const WBMS_APP_PORT = config.get('WBMS_APP_PORT');
 
   app.enableCors({
     origin: ['http://localhost:3000', 'http://192.168.1.122:3000'],
@@ -42,10 +37,13 @@ async function bootstrap() {
     }),
   );
 
+  const config = app.get(ConfigService);
+  await printEnvVar(config);
   const prismaService = app.get(DbService);
   await prismaService.enableShutdownHooks(app);
   const swaggerDoc = new SwaggerDocumentation(app);
   swaggerDoc.serve();
+  const WBMS_APP_PORT = config.get('WBMS_APP.PORT');
   await app.listen(WBMS_APP_PORT || 6001);
   if (module.hot) {
     module.hot.accept();
@@ -54,11 +52,9 @@ async function bootstrap() {
 }
 bootstrap();
 
-const printEnvVar = () => {
-  const config = new ConfigService();
-
-  const WBMS_APP_DOMAIN = config.get('WBMS_APP_DOMAIN');
-  const WBMS_APP_PORT = config.get('WBMS_APP_PORT');
+const printEnvVar = (config) => {
+  const WBMS_APP_DOMAIN = config.get('WBMS_APP.DOMAIN');
+  const WBMS_APP_PORT = config.get('WBMS_APP.PORT');
 
   const WBMS_DB_DOMAIN = config.get('WBMS_DB_DOMAIN');
   const WBMS_DB_PORT = config.get('WBMS_DB_PORT');
@@ -68,12 +64,12 @@ const printEnvVar = () => {
   const WBMS_DB_NAME = config.get('WBMS_DB_NAME');
   const WBMS_DB_URL = config.get('WBMS_DB_URL');
 
-  const WBMS_SITE_TYPE = config.get('WBMS_SITE_TYPE');
+  const WBMS_SITE_TYPE = config.get('WBMS_SITE.TYPE');
 
-  const WBMS_WB_IP = config.get('WBMS_WB_IP');
-  const WBMS_WB_PORT = config.get('WBMS_WB_PORT');
-  const WBMS_WB_MIN_WEIGHT = config.get('WBMS_WB_MIN_WEIGHT');
-  const WBMS_WB_STABLE_PERIOD = config.get('WBMS_WB_STABLE_PERIOD');
+  const WBMS_WB_IP = config.get('WBMS_WB.IP');
+  const WBMS_WB_PORT = config.get('WBMS_WB.PORT');
+  const WBMS_WB_MIN_WEIGHT = config.get('WBMS_WB.MIN_WEIGHT');
+  const WBMS_WB_STABLE_PERIOD = config.get('WBMS_WB.STABLE_PERIOD');
 
   const WBMS_SEMAI_API_URL = config.get('WBMS_SEMAI_API_URL');
   const WBMS_SEMAI_API_KEY = config.get('WBMS_SEMAI_API_KEY');

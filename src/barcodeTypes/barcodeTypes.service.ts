@@ -39,14 +39,6 @@ export class BarcodeTypesService {
     return dataOut;
   }
   
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'BarcodeType',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
   async getAllDeleted() {
     const dataOut = {
       status: true,

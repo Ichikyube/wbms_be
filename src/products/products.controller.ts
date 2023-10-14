@@ -23,12 +23,36 @@ import { ProductEntity } from 'src/entities';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
+  @Get('sync-with-semai')
+  async syncWithSemai() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        site: {
+          records: [],
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    try {
+      const records = await this.productsService.syncWithSemai();
+
+      dataOut.data.site.records = records;
+      dataOut.data.site.totalRecords = records.length;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+    }
+
+    return dataOut;
+  }
+
   @Get('')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -56,16 +80,6 @@ export class ProductsController {
     }
 
     return dataOut;
-  }
-
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.productsService.getAttributes();
   }
 
   @Get('deleted')

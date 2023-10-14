@@ -25,14 +25,6 @@ export class ProvincesService {
 
     return records;
   }
-
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Province',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    return attr;
-  }
   
   async getAllDeleted(): Promise<ProvinceEntity[]> {
     const records = await this.db.province.findMany({

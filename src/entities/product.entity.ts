@@ -9,7 +9,7 @@ export class ProductEntity implements Product {
 
   @ApiProperty() productGroupName: string;
   @ApiProperty() batch: string;
-  @ApiProperty() codeSap: string;
+  @ApiProperty() code: string;
   @ApiProperty() name: string;
   @ApiProperty() shortName: string;
   @ApiProperty() description: string;

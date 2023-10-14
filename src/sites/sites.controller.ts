@@ -24,11 +24,6 @@ export class SitesController {
   constructor(private readonly sitesService: SitesService) {}
 
   @Get('sync-with-semai')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'read',
-    possession: 'own',
-  })
   async syncWithSemai() {
     const dataOut = {
       status: true,
@@ -58,11 +53,6 @@ export class SitesController {
   }
 
   @Get('')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -92,22 +82,8 @@ export class SitesController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-  async getAttributes() {
-    return await this.sitesService.getAttributes();
-  }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -138,11 +114,6 @@ export class SitesController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -168,11 +139,6 @@ export class SitesController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity })
   async searchFirst(@Body() query: any) {
     const dataOut = {
@@ -205,11 +171,6 @@ export class SitesController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchMany(@Body() query: any) {
     const dataOut = {
@@ -277,11 +238,6 @@ export class SitesController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
   async searchManyDeleted(@Body() query: any) {
     const dataOut = {
@@ -312,11 +268,6 @@ export class SitesController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity })
   async create(@Body() dto: CreateSiteDto, @Req() req: Request) {
     const dataOut = {
@@ -343,11 +294,6 @@ export class SitesController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity })
   async updateById(
     @Param('id') id: string,
@@ -378,11 +324,6 @@ export class SitesController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {

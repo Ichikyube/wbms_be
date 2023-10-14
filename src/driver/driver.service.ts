@@ -8,7 +8,10 @@ import { SemaiService } from 'src/semai/semai.service';
 
 @Injectable()
 export class DriverService {
-  constructor(private db: DbService, private semaiService: SemaiService) {}
+  constructor(
+    private db: DbService,
+    private semaiService: SemaiService,
+  ) {}
 
   async getAll(): Promise<DriverEntity[]> {
     const records = await this.db.driver.findMany({
@@ -24,16 +27,6 @@ export class DriverService {
     });
 
     return records;
-  }
-
-
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Driver',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
   }
 
   async getAllDeleted(): Promise<DriverEntity[]> {
@@ -124,80 +117,91 @@ export class DriverService {
     return record;
   }
 
-  
   async syncWithSemai() {
-    const products = await this.semaiService.products().then((res) => res.data.products);
+    const drivers = await this.semaiService
+      .vehicleOperators()
+      .then((res) => res.data.vehicleOperators);
 
-    if (products?.length > 0)
-      products.forEach((site) => {
-        this.db.site
-          .findFirstOrThrow({
-            where: {
-              refType: 1,
-              refId: site.id,
-            },
-          })
-          .then((res) => {
-            this.db.site
-              .update({
-                where: { id: res.id },
-                data: {
-                  sourceSiteRefId: site?.sourceSiteId,
-                  sourceSiteName: site?.sourceSiteName,
+    if (drivers?.length > 0)
+      drivers.forEach(
+        ({
+          id,
+          companyId,
+          name,
+          employeeNo,
+          citizenNo,
+          drivingLicenseNo,
+          drivingLicenseExpiryDate,
+          phone,
+          email,
+          address,
+          companyName,
+          createdTime,
+          createdBy,
+          updatedTime,
+          updatedBy,
+          deletedTime,
+          deletedBy,
+          isDeleted,
+        }) => {
+          this.db.driver
+            .findFirstOrThrow({
+              where: {
+                refType: 1,
+                refId: id,
+              },
+            })
+            .then((res) => {
+              this.db.driver
+                .update({
+                  where: { id: res.id },
+                  data: {
+                    companyRefId: companyId,
+                    companyName,
+                    nik: employeeNo,
+                    name,
+                    address,
+                    email,
+                    phone,
+                    licenseNo: drivingLicenseNo,
+                    licenseED: drivingLicenseExpiryDate,
+                    isDeleted,
+                    userCreated: createdBy,
+                    userModified: isDeleted ? deletedBy : updatedBy,
+                    dtCreated: createdTime,
+                    dtModified: isDeleted ? deletedTime : updatedTime,
+                  },
+                })
+                .then((res) => console.log(res));
+            })
+            .catch(() => {
+              this.db.driver
+                .create({
+                  data: {
+                    refType: 1,
+                    refId: id,
+                    code: citizenNo,
+                    companyRefId: companyId,
+                    companyName,
+                    nik: employeeNo,
+                    name,
+                    address,
+                    email,
+                    phone,
+                    licenseNo: drivingLicenseNo,
+                    licenseED: drivingLicenseExpiryDate,
+                    isDeleted,
+                    userCreated: createdBy,
+                    userModified: isDeleted ? deletedBy : updatedBy,
+                    dtCreated: createdTime,
+                    dtModified: isDeleted ? deletedTime : updatedTime,
+                  },
+                })
+                .then((res) => console.log(res));
+            });
+        },
+      );
 
-                  companyRefId: site?.companyId,
-                  companyName: site?.companyName,
-
-                  codeSap: site?.code,
-                  name: site?.name,
-                  shortName: site?.shortName,
-                  description: site?.description,
-
-                  latitude: site?.latitude,
-                  longitude: site?.longitude,
-                  solarCalibration: site?.solarCalibration,
-
-                  isMill: site?.isMill,
-
-                  isDeleted: !!site?.isDeleted,
-                },
-              })
-              .then((res) => console.log(res));
-          })
-          .catch(() => {
-            this.db.site
-              .create({
-                data: {
-                  refType: 1,
-                  refId: site.id,
-
-                  sourceSiteRefId: site?.sourceSiteId,
-                  sourceSiteName: site?.sourceSiteName,
-
-                  companyRefId: site?.companyId,
-                  companyName: site?.companyName,
-
-                  codeSap: site?.code,
-                  name: site?.name,
-                  shortName: site?.shortName,
-                  description: site?.description,
-
-                  latitude: site?.latitude,
-                  longitude: site?.longitude,
-                  solarCalibration: site?.solarCalibration,
-
-                  isMill: site?.isMill,
-
-                  isDeleted: !!site?.isDeleted,
-
-                  userCreated: "",
-                  userModified: "",
-                },
-              })
-              .then((res) => console.log(res));
-          });
-      });
-
-    return products;
+    return drivers;
   }
 }

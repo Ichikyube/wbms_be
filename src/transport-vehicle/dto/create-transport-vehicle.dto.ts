@@ -17,14 +17,13 @@ export class CreateTransportVehicleDto {
   @IsOptional()
   companyRefId?: string;
   @ApiProperty() @IsString() @IsNotEmpty() companyName: string;
-  @ApiProperty({ required: false }) @IsString() @IsOptional() codeSap: string;
+  @ApiProperty({ required: false }) @IsString() @IsOptional() code: string;
   @ApiProperty() @IsUUID() @IsNotEmpty() productId: string;
   @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
   productRefId?: string;
   @ApiProperty() @IsString() @IsNotEmpty() productName: string;
-  @ApiProperty() @IsString() @IsNotEmpty() productCode: string;
 
   @ApiProperty() @IsString() @IsNotEmpty() plateNo: string;
   @ApiProperty({ required: false }) @IsNumber() @IsOptional() capacity?: number;

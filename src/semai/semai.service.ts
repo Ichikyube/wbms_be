@@ -16,6 +16,7 @@ export class SemaiService {
     private config: ConfigService,
   ) {
     console.log(resolve(this.WBMS_SEMAI_CERT));
+    console.log(resolve(this.WBMS_SEMAI_API_URL))
   }
 
   WBMS_SEMAI_API_URL = this.config.get('WBMS_SEMAI_API_URL');
@@ -37,44 +38,23 @@ export class SemaiService {
     },
   });
 
-  create(createSemaiDto: DecodeQrcodeDto) {
-    return 'This action adds a new semai';
-  }
-
-  findAll() {
-    return `This action returns all semai`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} semai`;
-  }
-
-  update(id: number, updateSemaiDto: UpdateSemaiDto) {
-    return `This action updates a #${id} semai`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} semai`;
-  }
-
-  async companies() {
+  async storageTanks() {
     const dataOut = {
       status: true,
       message: '',
       data: {
-        companies: [],
+        storageTanks: [],
       },
       logs: {},
     };
 
     try {
       const response = await this.api
-        .get(`sites?pageSize=0`)
+        .get(`storage-tanks?pageSize=0`)
         .then((res) => res?.data);
-
+      console.log(response)
       if (!response.success) throw new Error(response?.message);
-      console.log(response);
-      dataOut.data.companies = response.record;
+      dataOut.data.storageTanks = response.records;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -101,13 +81,13 @@ export class SemaiService {
 
       if (!response.success) throw new Error(response?.message);
 
-      dataOut.data.products = response.record;
+      dataOut.data.products = response.records;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
       dataOut.logs = { error };
     }
-
+    
     return dataOut;
   }
 
@@ -138,33 +118,6 @@ export class SemaiService {
     return dataOut;
   }
 
-  async storageTanks() {
-    const dataOut = {
-      status: true,
-      message: '',
-      data: {
-        storageTanks: [],
-      },
-      logs: {},
-    };
-
-    try {
-      const response = await this.api
-        .get(`storage-tanks?pageSize=0`)
-        .then((res) => res?.data);
-
-      if (!response.success) throw new Error(response?.message);
-
-      dataOut.data.storageTanks = response.record;
-    } catch (error) {
-      dataOut.status = false;
-      dataOut.message = error.message;
-      dataOut.logs = { error };
-    }
-
-    return dataOut;
-  }
-
   async transportVehicles() {
     const dataOut = {
       status: true,
@@ -182,7 +135,7 @@ export class SemaiService {
 
       if (!response.success) throw new Error(response?.message);
 
-      dataOut.data.transportVehicles = response.record;
+      dataOut.data.transportVehicles = response.records;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -209,7 +162,7 @@ export class SemaiService {
 
       if (!response.success) throw new Error(response?.message);
 
-      dataOut.data.transporters = response.record;
+      dataOut.data.transporters = response.records;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;
@@ -236,7 +189,7 @@ export class SemaiService {
 
       if (!response.success) throw new Error(response?.message);
 
-      dataOut.data.vehicleOperators = response.record;
+      dataOut.data.vehicleOperators = response.records;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

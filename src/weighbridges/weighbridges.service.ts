@@ -35,15 +35,6 @@ export class WeighbridgesService {
     return records;
   }
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'Weighbridge',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
-
   async getAllDeleted(): Promise<WeighbridgeEntity[]> {
     const records = await this.db.weighbridge.findMany({
       where: { isDeleted: true },

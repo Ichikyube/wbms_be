@@ -9,10 +9,19 @@ export class CreateProductDto {
 
   @ApiProperty() productGroupName?: string;
 
-  @ApiProperty({ required: false }) @IsString() @IsOptional() codeSap?: string;
+  @ApiProperty({ required: false }) @IsString() @IsOptional() code?: string;
   @ApiProperty() @IsString() @IsNotEmpty() name: string;
-  @ApiProperty({ required: false }) @IsString() @IsOptional() shortName?: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  shortName?: string;
 
-  @ApiProperty({ required: false }) @IsString() @IsOptional() description?: string;
-  @ApiProperty({ required: false }) @IsString() @IsOptional() certification?: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  description?: string;
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  certification?: string;
 }

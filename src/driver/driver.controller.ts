@@ -23,6 +23,36 @@ import { DriverEntity } from 'src/entities';
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
+  
+  @Get('sync-with-semai')
+  async syncWithSemai() {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        driver: {
+          records: [],
+          totalRecords: 0,
+          page: 0,
+        },
+      },
+      logs: {},
+    };
+
+    try {
+      const records = await this.driverService.syncWithSemai();
+
+      dataOut.data.driver.records = records;
+      dataOut.data.driver.totalRecords = records.length;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, error };
+    }
+
+    return dataOut;
+  }
+
   @Get('')
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
   async getAll() {
@@ -51,12 +81,6 @@ export class DriverController {
     }
 
     return dataOut;
-  }
-
-  @Get('attr')
-
-  async getAttributes() {
-    return await this.driverService.getAttributes();
   }
 
   @Get('deleted')

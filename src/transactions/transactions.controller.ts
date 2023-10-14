@@ -8,10 +8,7 @@ import {
   Query,
   Delete,
   Req,
-  UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request, Response } from 'express';
 import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto';
@@ -19,13 +16,10 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { UseRoles } from 'nest-access-control';
 import {
   ApiBearerAuth,
-  ApiConsumes,
-  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { TransactionEntity } from 'src/entities';
 import { ExportToSapDto } from './dto/exportToSap.dto';
 
 @ApiTags('Transactions')
@@ -36,11 +30,6 @@ export class TransactionController {
   constructor(private transactionService: TransactionService) {}
 
   @Get('')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'read',
-    possession: 'own',
-  })
   getAll() {
     return this.transactionService.getAll();
   }

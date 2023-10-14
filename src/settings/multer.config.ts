@@ -14,7 +14,7 @@ export const multerConfig = {
 export const multerOptions = {
   // Enable file size limits
   limits: {
-    fileSize: +process.env.MAX_FILE_SIZE,
+    fileSize: + process.env.MAX_FILE_SIZE,
   },
   // Check the mimetypes to allow for upload
   fileFilter: (

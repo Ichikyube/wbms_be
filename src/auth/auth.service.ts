@@ -22,11 +22,14 @@ export class AuthService {
     private config: ConfigService,
     private usersService: UsersService,
     private ldapAuthService: LdapAuthService,
-  ) {}
+  ) {
+    const wbmsWbPort = this.config.get<string>('WBMS_WB.PORT');
+    console.log(wbmsWbPort);
+  }
 
   async signin(dto: SigninDto): Promise<{ tokens: Tokens; user: any }> {
     // find the user by username
-    if(!dto.email) dto.email = dto.username;
+    if (!dto.email) dto.email = dto.username;
     const user = await this.db.user.findFirst({
       where: {
         OR: [
@@ -43,7 +46,7 @@ export class AuthService {
         userRole: {
           select: {
             name: true,
-            permissions: true
+            permissions: true,
           },
         },
         hashedPassword: true,
@@ -111,7 +114,6 @@ export class AuthService {
   }
 
   async refreshToken(userId: string, rt: string): Promise<Tokens> {
-
     const user = await this.db.user.findFirst({
       where: {
         id: userId,

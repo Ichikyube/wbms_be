@@ -66,15 +66,6 @@ export class UsersService {
     return records;
   }
 
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'User',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
-
   async getAllDeleted(): Promise<any[]> {
     const records = await this.db.user.findMany({
       where: { isDeleted: true },

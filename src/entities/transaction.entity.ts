@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma, Transaction } from '@prisma/client';
 import { IsString, IsNotEmpty } from 'class-validator';
-import { QrcodeDto } from 'src/semai/dto/qrcode.dt';
+import { QrcodeDto } from 'src/semai/dto/qrcode.dto';
 import { StorageTankEntity } from './storageTank.entity';
 import { SiteEntity } from './site.entity';
 import { DriverEntity } from './driver.entity';

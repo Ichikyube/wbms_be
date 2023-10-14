@@ -24,14 +24,7 @@ export class CustomerGroupsService {
 
     return records;
   }
-  async getAttributes() {
-    const modelFields = await Prisma.dmmf.datamodel.models.find(
-      (model) => model.name === 'CustomerGroup',
-    ).fields;
-    const attr = await modelFields.map((modelField) => modelField.name);
-    console.log(attr);
-    return attr;
-  }
+
   async getAllDeleted(): Promise<CustomerGroupEntity[]> {
     const records = await this.db.customerGroup.findMany({
       where: { isDeleted: true },
