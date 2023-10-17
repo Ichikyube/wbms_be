@@ -1,12 +1,4 @@
-import {
-  Body,
-  Get,
-  Param,
-  Post,
-  Controller,
-  Patch,
-  Req,
-} from '@nestjs/common';
+import { Body, Get, Param, Post, Controller, Patch, Req } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ConfigsService } from './configs.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -21,65 +13,40 @@ import { join } from 'path';
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
 
-  // @Get('f')
-  // @Public()
-  // async getEnvy() {
-  //   const dataOut = {
-  //     status: true,
-  //     message: '',
-  //     data: {
-  //       config: {
-  //         records: null,
-  //         totalRecords: 0,
-  //         page: 0,
-  //       },
-  //     },
-  //     logs: {},
-  //   };
-
+  // @Get()
+  // getConfigVar() {
   //   try {
-  //     const records = await this.configsService.get();
-
-  //     dataOut.data.config.records = records;
+  //     const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+  //     const config = yaml.load(configContent);
+  //     return config;
   //   } catch (error) {
-  //     dataOut.status = false;
-  //     dataOut.message = error.message;
-  //     dataOut.logs = { ...dataOut.logs, error };
+  //     return { error: 'Error loading config' };
   //   }
   //   // Set the Cache-Control header
   //   // res.setHeader(
   //   //   `Cache-Control`,
   //   //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
   //   // );
-
-  //   return dataOut;
   // }
-  @Get()
-  getConfigVar() {
-    try {
-      const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
-      const config = yaml.load(configContent);
-      return config;
-    } catch (error) {
-      return { error: 'Error loading config' };
-    }
-  }
 
   @Get('get-wb-port')
   getWbPort() {
     const wbPort = this.configsService.get('WBMS_WB.PORT');
     return { wbPort };
   }
-  
-  @Get('get-config')
-  getConfig() {
-    return this.configsService.getConfig();
-  }
+
+  // @Get('get-config')
+  // getConfig() {
+  //   return this.configsService.getConfig();
+  // }
 
   @Post('/update-var')
   updateConfigVar(@Body() newConfig: Record<string, any>) {
     try {
-      const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+      const configContent = fs.readFileSync(
+        join(__dirname, YAML_CONFIG_FILENAME),
+        'utf8',
+      );
       const config = yaml.load(configContent);
 
       // Update the config with the new values
@@ -90,7 +57,10 @@ export class ConfigsController {
       }
 
       // Write the updated config back to the file
-      fs.writeFileSync(join(__dirname, YAML_CONFIG_FILENAME), yaml.dump(config));
+      fs.writeFileSync(
+        join(__dirname, YAML_CONFIG_FILENAME),
+        yaml.dump(config),
+      );
 
       return { success: true };
     } catch (error) {
@@ -136,7 +106,6 @@ export class ConfigsController {
 
     try {
       const records = await this.configsService.getAll();
-
       dataOut.data.config.records = records;
       dataOut.data.config.totalRecords = records.length;
     } catch (error) {
@@ -301,9 +270,19 @@ export class ConfigsController {
   }
 
   @Patch(':id/approve')
-  async approveRequest(@Param('id') id: number, tempvalue: string,  schedule: Date, @Req() req: Request) {
+  async approveRequest(
+    @Param('id') id: number,
+    tempvalue: string,
+    schedule: Date,
+    @Req() req: Request,
+  ) {
     const userId = req.user['sub'];
-    return await this.configsService.requestApproved(id, tempvalue, schedule, userId);
+    return await this.configsService.requestApproved(
+      id,
+      tempvalue,
+      schedule,
+      userId,
+    );
   }
 
   @Patch(':id/ended')

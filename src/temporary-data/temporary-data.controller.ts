@@ -12,9 +12,9 @@ export class TemporaryDataController {
     private temporaryDataService: TemporaryDataService,
   ) {}
 
-  @Get('all')
-  async getAllData(): Promise<{ [key: string]: any }> {
-    return this.temporaryDataService.getAllData();
+  @Get('transactions')
+  async getAllTransactions(): Promise<{ [key: string]: any }> {
+    return this.temporaryDataService.getAllTransactions();
   }
 
   @Post('admin-request')

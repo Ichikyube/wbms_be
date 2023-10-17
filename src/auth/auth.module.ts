@@ -5,7 +5,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AtStrategy, RtStrategy } from './strategies';
 import { UsersModule } from 'src/users/users.module';
-import { LdapStrategy } from './strategies/ldap.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LdapAuthService } from './ldap-auth/ldap-auth.service';
 
@@ -14,7 +13,7 @@ import { LdapAuthService } from './ldap-auth/ldap-auth.service';
     UsersModule,
     JwtModule.register({
       secret:  process.env.WBMS_JWT_AT_KEY,
-      signOptions: { expiresIn: '4m' },
+      signOptions: { expiresIn: '35m' },
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -24,12 +23,8 @@ import { LdapAuthService } from './ldap-auth/ldap-auth.service';
       }),
       inject: [ConfigService],
     }),
-    PassportModule,
-    // PassportModule.register({ defaultStrategy: 'ldapAuth' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, RtStrategy, AtStrategy, LdapStrategy, LdapAuthService],
-  exports: [PassportModule],
-  // exports: [PassportModule.register({ defaultStrategy: 'ldapAuth' })],
+  providers: [AuthService, RtStrategy, AtStrategy, LdapAuthService],
 })
 export class AuthModule {}

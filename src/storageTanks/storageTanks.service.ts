@@ -62,11 +62,11 @@ export class StorageTanksService {
                   capacity: capacityKg,
                   height: heightMeter,
                   sccModel: allowableSccModel,
-                  isDeleted,
+                  isDeleted: isDeleted === 1? true: false,
                   userCreated: createdBy,
                   userModified: updatedBy,
-                  dtCreated: createdTime,
-                  dtModified: updatedTime,
+                  dtCreated: new Date(createdTime),
+                  dtModified: new Date(updatedTime),
                 },
               })
               .then((res) => console.log(res));
@@ -90,11 +90,11 @@ export class StorageTanksService {
                   capacity: capacityKg,
                   height: heightMeter,
                   sccModel: allowableSccModel,
-                  isDeleted,
+                  isDeleted: isDeleted === 1? true: false,
                   userCreated: createdBy,
                   userModified: updatedBy,
-                  dtCreated: createdTime,
-                  dtModified: updatedTime,
+                  dtCreated: new Date(createdTime),
+                  dtModified: new Date(updatedTime),
                 },
               })
               .then((res) => console.log(res));

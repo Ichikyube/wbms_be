@@ -29,7 +29,7 @@ export class StorageTanksController {
       status: true,
       message: '',
       data: {
-        site: {
+        storageTanks: {
           records: [],
           totalRecords: 0,
           page: 0,
@@ -41,8 +41,8 @@ export class StorageTanksController {
     try {
       const records = await this.storageTanksService.syncWithSemai();
 
-      dataOut.data.site.records = records;
-      dataOut.data.site.totalRecords = records.length;
+      dataOut.data.storageTanks.records = records;
+      dataOut.data.storageTanks.totalRecords = records.length;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

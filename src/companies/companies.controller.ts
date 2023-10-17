@@ -34,7 +34,7 @@ export class CompaniesController {
       status: true,
       message: '',
       data: {
-        site: {
+        companies: {
           records: [],
           totalRecords: 0,
           page: 0,
@@ -46,8 +46,8 @@ export class CompaniesController {
     try {
       const records = await this.companiesService.syncWithSemai();
 
-      dataOut.data.site.records = records;
-      dataOut.data.site.totalRecords = records.length;
+      dataOut.data.companies.records = records;
+      dataOut.data.companies.totalRecords = records.length;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

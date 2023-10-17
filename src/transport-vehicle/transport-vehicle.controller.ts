@@ -32,7 +32,7 @@ export class TransportVehicleController {
       status: true,
       message: '',
       data: {
-        site: {
+        transportVehicle: {
           records: [],
           totalRecords: 0,
           page: 0,
@@ -44,8 +44,8 @@ export class TransportVehicleController {
     try {
       const records = await this.transportVehicleService.syncWithSemai();
 
-      dataOut.data.site.records = records;
-      dataOut.data.site.totalRecords = records.length;
+      dataOut.data.transportVehicle.records = records;
+      dataOut.data.transportVehicle.totalRecords = records.length;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

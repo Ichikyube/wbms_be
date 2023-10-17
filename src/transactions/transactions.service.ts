@@ -395,9 +395,6 @@ export class TransactionService {
 
     const { content, typeTransaction } = query;
 
-    // console.log(query);
-    // console.log(`${this.WBMS_SEMAI_API_URL}/sites`);
-
     try {
     } catch (error) {
       dataOut.status = false;

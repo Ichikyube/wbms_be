@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as ldap from 'ldapjs';
 
 @Injectable()
 export class LdapAuthService {
+  constructor(private config: ConfigService) {}
   async authenticate(username: string, password: string): Promise<boolean> {
-    const ldapUrl = process.env.LDAP_HOST;
-    const ldapBaseDN = process.env.LDAP_BASE_DN; // The Base DN of your LDAP server
-    const ldapDN = process.env.LDAP_DN;
+    const ldapUrl = this.config.get<string>('LDAP_HOST');
+    const ldapBaseDN = this.config.get<string>('LDAP_BASE_DN');
+    const ldapDN = this.config.get<string>('LDAP_DN');
+
     const client = ldap.createClient({
       url: ldapUrl,
     });
@@ -16,15 +19,14 @@ export class LdapAuthService {
     const isEmail = emailRegex.test(username);
 
     if (isEmail) {
-
-        return new Promise<boolean>((resolve, reject) => {
-          client.bind(ldapDN, "admin", function (err) {
-            if (err) {
-              console.log("OH no", err);
-              client.unbind();
-              reject(err);
-              return;
-            }
+      return new Promise<boolean>((resolve, reject) => {
+        client.bind(ldapDN, 'admin', function (err) {
+          if (err) {
+            console.log('OH no', err);
+            client.unbind();
+            reject(err);
+            return;
+          }
           client.search(
             `ou=employees,${ldapBaseDN}`,
             {
@@ -61,7 +63,7 @@ export class LdapAuthService {
 
           if (err) {
             // LDAP authentication failed
-            reject(err); // Reject with the error
+            console.log(err); // Reject with the error
           } else {
             // LDAP authentication successful
             resolve(true);

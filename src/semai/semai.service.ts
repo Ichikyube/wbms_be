@@ -19,7 +19,7 @@ export class SemaiService {
     console.log(resolve(this.WBMS_SEMAI_API_URL))
   }
 
-  WBMS_SEMAI_API_URL = this.config.get('WBMS_SEMAI_API_URL');
+  WBMS_SEMAI_API_URL = this.config.get('WBMS_SEMAI.API_URL');
   WBMS_SEMAI_API_KEY = this.config.get('WBMS_SEMAI_API_KEY');
   WBMS_SEMAI_CERT = this.config.get('WBMS_SEMAI_CERT');
   WBMS_SEMAI_KEY = this.config.get('WBMS_SEMAI_KEY');

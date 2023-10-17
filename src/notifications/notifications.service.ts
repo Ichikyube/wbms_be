@@ -19,7 +19,6 @@ export class NotificationsService {
   async getAllNotifications(userId: string) {
     return this.db.notification.findMany({
       where: {
-        isResponded: false,
         target: {
           array_contains: userId
         }
@@ -28,10 +27,20 @@ export class NotificationsService {
     
   }
 
-  async markNotificationAsRead(id: string) {
+  async markNotificationAsRead(userId: string, id: string) {
+    const notification = await this.db.notification.findUnique({
+      where: { id },
+    });
+  
+    if (!notification) {
+      throw new Error(`Notification with ID ${id} not found`);
+    }
+  
+    const updatedTarget = JSON.parse(JSON.stringify(notification.target)).filter(targetId => targetId !== userId);
+  
     return this.db.notification.update({
       where: { id },
-      data: { isResponded: true },
+      data: { target: updatedTarget },
     });
   }
 }

@@ -29,7 +29,7 @@ export class ProductsController {
       status: true,
       message: '',
       data: {
-        site: {
+        products: {
           records: [],
           totalRecords: 0,
           page: 0,
@@ -41,8 +41,8 @@ export class ProductsController {
     try {
       const records = await this.productsService.syncWithSemai();
 
-      dataOut.data.site.records = records;
-      dataOut.data.site.totalRecords = records.length;
+      dataOut.data.products.records = records;
+      dataOut.data.products.totalRecords = records.length;
     } catch (error) {
       dataOut.status = false;
       dataOut.message = error.message;

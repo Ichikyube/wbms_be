@@ -17,11 +17,11 @@ WBMS_SITE:
   CODE: 'P04'
   TYPE: 1
 
-WBMS_SEMAI_API_URL: "https://dispatch.dsngroup.co.id/api/external-channel"
+WBMS_SEMAI:
+  API_URL: "https://dispatch.dsngroup.co.id/api/external-channel"
 
-LDAP:
-  HOST: 'ldap://ldap.wbms.dsn'
-  DN: 'cn:admin,dc:wbms,dc:dsn'
-  PASSWORD: 'admin'
-  BASE_DN: 'dc:wbms,dc:dsn'
-  SEARCH_FILTER: '(uid:{{username}})(email:*@foo.com))'
+LDAP_HOST: 'ldap://ldap.wbms.dsn'
+LDAP_DN: 'cn:admin,dc:wbms,dc:dsn'
+LDAP_PASSWORD: 'admin'
+LDAP_BASE_DN: 'dc:wbms,dc:dsn'
+LDAP_SEARCH_FILTER: '(uid:{{username}})(email:*@foo.com))'

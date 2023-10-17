@@ -531,6 +531,18 @@ async function main() {
           type: ConfigType.Json,
           defaultVal: `{"namePGS":"", "nameMillHead":""}`,
         },
+        {
+          id: 27,
+          name: 'ldapConfig',
+          description: 'Setting ldap login',
+          type: ConfigType.Json,
+          defaultVal: `{LDAP_HOST: 'ldap://ldap.wbms.dsn'
+          LDAP_DN: 'cn:admin,dc:wbms,dc:dsn'
+          LDAP_PASSWORD: 'admin'
+          LDAP_BASE_DN: 'dc:wbms,dc:dsn'
+          LDAP_SEARCH_FILTER: '(uid:{{username}})(email:*@foo.com))'
+          }`,
+        },
       ],
       skipDuplicates: true,
     });

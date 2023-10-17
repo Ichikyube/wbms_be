@@ -158,11 +158,11 @@ export class ProductsService {
                     shortName,
                     description,
                     certification,
-                    isDeleted,
+                    isDeleted: isDeleted === 1? true: false,
                     userCreated: createdBy,
                     userModified: isDeleted ? deletedBy : updatedBy,
-                    dtCreated: createdTime,
-                    dtModified: isDeleted ? deletedTime : updatedTime,
+                    dtCreated: new Date(createdTime),
+                    dtModified: isDeleted ? new Date(deletedTime) : new Date(updatedTime),
                   },
                 })
                 .then((res) => console.log(res));
@@ -179,11 +179,11 @@ export class ProductsService {
                     shortName,
                     description,
                     certification,
-                    isDeleted,
+                    isDeleted: isDeleted === 1? true: false,
                     userCreated: createdBy,
                     userModified: isDeleted ? deletedBy : updatedBy,
-                    dtCreated: createdTime,
-                    dtModified: isDeleted ? deletedTime : updatedTime,
+                    dtCreated: new Date(createdTime),
+                    dtModified: isDeleted ? new Date(deletedTime) : new Date(updatedTime),
                   },
                 })
                 .then((res) => console.log(res));

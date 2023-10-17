@@ -71,7 +71,7 @@ const printEnvVar = (config) => {
   const WBMS_WB_MIN_WEIGHT = config.get('WBMS_WB.MIN_WEIGHT');
   const WBMS_WB_STABLE_PERIOD = config.get('WBMS_WB.STABLE_PERIOD');
 
-  const WBMS_SEMAI_API_URL = config.get('WBMS_SEMAI_API_URL');
+  const WBMS_SEMAI_API_URL = config.get('WBMS_SEMAI.API_URL');
   const WBMS_SEMAI_API_KEY = config.get('WBMS_SEMAI_API_KEY');
 
   console.log(`WBMS_APP_DOMAIN: ${WBMS_APP_DOMAIN}`);

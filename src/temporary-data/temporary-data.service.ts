@@ -194,7 +194,19 @@ export class TemporaryDataService {
     });
   }
 
-  async getAllData(): Promise<{ [key: string]: any }> {
+  async getAllTransactions(): Promise<{ [key: string]: any }> {
+    const transactions = await this.db.temporaryData.findMany({
+      where: {
+        id: {
+          contains: 'trx',
+        },
+      },
+    });
+
+    return transactions;
+  }
+
+  async getAllAdminRequest(): Promise<{ [key: string]: any }> {
     const keys = await this.cacheManager.store.keys();
     const values = await Promise.all(
       keys.map((key) => this.cacheManager.store.get(key)),

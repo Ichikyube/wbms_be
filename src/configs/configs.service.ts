@@ -8,23 +8,23 @@ import { join } from 'path';
 @Injectable()
 export class ConfigsService {
   private readonly envConfig: Record<string, string>;
-  private configs: any;
+  // private configs: any;
   constructor(
     private db: DbService,
     private config: ConfigService,
   ) {
-    this.loadConfig();
-    console.log("env", this.configs)
+    // this.loadConfig();
+    // console.log("env", this.configs);
   }
 
-  private loadConfig() {
-    try {
-      const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
-      this.setConfig(yaml.load(configContent));
-    } catch (error) {
-      console.error('Error loading config:', error);
-    }
-  }
+  // private loadConfig() {
+  //   try {
+  //     const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+  //     this.setConfig(yaml.load(configContent));
+  //   } catch (error) {
+  //     console.error('Error loading config:', error);
+  //   }
+  // }
 
   get(key: string): string {
     return this.envConfig[key];
@@ -33,12 +33,12 @@ export class ConfigsService {
   set(key: string, value: string): void {
     this.envConfig[key] = value;
   }
-  setConfig(records) {
-    this.configs = records;
-  }
-  getConfig() {
-    return this.configs;
-  }
+  // setConfig(records) {
+  //   this.configs = records;
+  // }
+  // getConfig() {
+  //   return this.configs;
+  // }
 
   async getEnv() {
     const dataOut = {
@@ -50,7 +50,7 @@ export class ConfigsService {
 
     try {
       const ENV = {
-        WBMS_SEMAI_BACKEND_URL: this.config.get('WBMS_SEMAI_BACKEND_URL'),
+        WBMS_SEMAI_BACKEND_URL: this.config.get('WBMS_SEMAI.API_URL'),
         WBMS_SEMAI_API_KEY: this.config.get('WBMS_SEMAI_API_KEY'),
 
         WBMS_WB_IP: this.config.get('WBMS_WB.IP'),
@@ -73,11 +73,10 @@ export class ConfigsService {
     const records = await this.db.config.findMany({
       orderBy: [
         {
-          name: 'desc',
+          id: 'desc',
         },
       ],
     });
-
     return records;
   }
 
@@ -150,7 +149,7 @@ export class ConfigsService {
     const { lvlOfApprvl, defaultVal, status, lifespan } = dto;
 
     const data = {
-      lvlOfApprvl: parseInt(dto.lvlOfApprvl),
+      lvlOfApprvl: parseInt(lvlOfApprvl),
       defaultVal,
       lifespan,
       userModified: userId,

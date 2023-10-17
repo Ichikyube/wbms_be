@@ -13,7 +13,7 @@ import { NextFunction, Response } from 'express';
 
 import { LdapAuthService } from './ldap-auth/ldap-auth.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-@ApiBearerAuth()
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -191,7 +191,7 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: '75m',
+        expiresIn: '35m',
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,

@@ -128,7 +128,6 @@ export class DriverService {
           id,
           companyId,
           name,
-          employeeNo,
           citizenNo,
           drivingLicenseNo,
           drivingLicenseExpiryDate,
@@ -158,18 +157,20 @@ export class DriverService {
                   data: {
                     companyRefId: companyId,
                     companyName,
-                    nik: employeeNo,
+                    nik: citizenNo,
                     name,
                     address,
                     email,
                     phone,
                     licenseNo: drivingLicenseNo,
-                    licenseED: drivingLicenseExpiryDate,
-                    isDeleted,
+                    licenseED: drivingLicenseExpiryDate? new Date(drivingLicenseExpiryDate) : null,
+                    isDeleted: isDeleted === 1 ? true : false,
                     userCreated: createdBy,
                     userModified: isDeleted ? deletedBy : updatedBy,
-                    dtCreated: createdTime,
-                    dtModified: isDeleted ? deletedTime : updatedTime,
+                    dtCreated: new Date(createdTime),
+                    dtModified: isDeleted
+                      ? new Date(deletedTime)
+                      : new Date(updatedTime),
                   },
                 })
                 .then((res) => console.log(res));
@@ -183,18 +184,20 @@ export class DriverService {
                     code: citizenNo,
                     companyRefId: companyId,
                     companyName,
-                    nik: employeeNo,
+                    nik: citizenNo,
                     name,
                     address,
                     email,
                     phone,
                     licenseNo: drivingLicenseNo,
-                    licenseED: drivingLicenseExpiryDate,
-                    isDeleted,
+                    licenseED: drivingLicenseExpiryDate? new Date(drivingLicenseExpiryDate) : null,
+                    isDeleted: isDeleted === 1 ? true : false,
                     userCreated: createdBy,
                     userModified: isDeleted ? deletedBy : updatedBy,
-                    dtCreated: createdTime,
-                    dtModified: isDeleted ? deletedTime : updatedTime,
+                    dtCreated: new Date(createdTime),
+                    dtModified: isDeleted
+                      ? new Date(deletedTime)
+                      : new Date(updatedTime),
                   },
                 })
                 .then((res) => console.log(res));

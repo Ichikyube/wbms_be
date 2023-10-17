@@ -96,7 +96,7 @@ model Company {
   phone        String? @db.VarChar(30)
   url          String? @db.VarChar(100)
   contactName  String? @map("contact_name") @db.VarChar(50)
-  contactEmail String? @map("contact_email") @db.VarChar(30)
+  contactEmail String? @map("contact_email") @db.VarChar(80)
   contactPhone String? @map("contact_phone") @db.VarChar(30)
   persenPotngWajib Int?
   isMillOperator Boolean @default(false) @map("is_mill_operator")
@@ -364,6 +364,8 @@ model TemporaryData {
   data            Json
   signed          Json      
   expirationDate  DateTime   // Add this line
+
+  @@map("temporary_data")
 }
 
 
@@ -372,12 +374,12 @@ model Notification {
   message    String
   sender     String?
   photo      String?
-  target     Json?
+  target     Json
   configRequestId String? @unique @db.VarChar(36)
-  isResponded   Boolean  @default(false) @map("is_responded")
   dtCreated  DateTime @default(now())   
 
   configRequest ConfigRequest? @relation(fields: [configRequestId], references: [id])
+  @@map("notification")
 }
 
 model Profile {
@@ -447,6 +449,7 @@ model RoleArchive {
   permissions  Json
   userCreated  String?   @map("user_created") @db.VarChar(36)
   dtCreated    DateTime  @default(now()) @map("date_created")
+  @@map("role_archive")
 }
 
 model Product {
@@ -545,7 +548,7 @@ model Driver {
   nik     String  @unique @db.VarChar(30)
   name    String  @db.VarChar(50)
   address String? @db.VarChar(250)
-  email   String? @db.VarChar(30)
+  email   String? @db.VarChar(80)
   phone   String? @db.VarChar(30)
 
   licenseNo String?   @map("license_no") @db.VarChar(30)
