@@ -26,4 +26,10 @@ export class NotificationsController {
     const userId = req.user['sub'];
     return this.notificationsService.markNotificationAsRead(userId, id);
   }
+
+  @Patch(':requestConfigId/forwarded')
+  async modifyByRequestId(@Req() req: Request, @Param('requestConfigId') requestConfigId: string, @Body() body) {
+    const userId = req.user['sub'];
+    return this.notificationsService.modifyByRequestId(requestConfigId, body);
+  }
 }

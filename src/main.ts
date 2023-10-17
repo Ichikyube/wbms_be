@@ -11,8 +11,8 @@ import * as fs from 'fs';
 import { AccessControl } from 'accesscontrol';
 import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
 import path from 'path';
-const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
-const ac = new AccessControl(grantsObject);
+// const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
+// const ac = new AccessControl(grantsObject);
 declare const module: any;
 
 async function bootstrap() {
