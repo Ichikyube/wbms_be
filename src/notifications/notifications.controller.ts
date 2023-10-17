@@ -22,7 +22,7 @@ export class NotificationsController {
   }
   
   @Patch(':id/read')
-  async markNotificationAsRead(@Param('id') id: string) {
+  async markNotificationAsRead(@Req() req: Request, @Param('id') id: string) {
     const userId = req.user['sub'];
     return this.notificationsService.markNotificationAsRead(userId, id);
   }
