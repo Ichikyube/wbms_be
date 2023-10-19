@@ -24,7 +24,7 @@ export class LdapAuthService {
           if (err) {
             console.log('OH no', err);
             client.unbind();
-            reject(err);
+            console.log(err);
             return;
           }
           client.search(
@@ -37,7 +37,7 @@ export class LdapAuthService {
               if (err) {
                 console.log(err);
                 client.unbind();
-                reject(err);
+                console.log(err);
                 return;
               }
 

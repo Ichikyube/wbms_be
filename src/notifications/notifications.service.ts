@@ -7,11 +7,14 @@ export class NotificationsService {
   constructor(private readonly db: DbService) {}
 
   async createNotification(dto: CreateNotificationDto) {
-    const { message, target } = dto;
+    const { message, target, configRequestId, photo, sender } = dto;
     return this.db.notification.create({
       data: {
         message,
         target,
+        configRequestId,
+        photo,
+        sender
       },
     });
   }

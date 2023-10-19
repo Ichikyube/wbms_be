@@ -178,7 +178,7 @@ export class AuthService {
     const secret = this.config.get('WBMS_JWT_KEY');
     const token = await this.jwt.signAsync(jwtPayload, {
       secret,
-      expiresIn: '15m',
+      expiresIn: '5h',
     });
 
     return { access_token: token };
@@ -191,7 +191,7 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_at,
-        expiresIn: '35m',
+        expiresIn: '5h',
       }),
       await this.jwt.signAsync(jwtPayload, {
         secret: secret_rt,

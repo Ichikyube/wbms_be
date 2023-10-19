@@ -11,7 +11,12 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request } from 'express';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { TransportVehicleService } from './transport-vehicle.service';
 import { CreateTransportVehicleDto, UpdateTransportVehicleDto } from './dto';

@@ -1,41 +1,5 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker compose reference guide at
-# https://docs.docker.com/compose/compose-file/
-
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
-version: '4.0'
+version: '2.0'
 services:
-  watchtower:
-    image: containrrr/watchtower:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      WATCHTOWER_SCHEDULE: '15 9 * * *'
-      TZ: 'Asia/Jakarta'
-      WATCHTOWER_CLEANUP: true
-      WATCHTOWER_ROLLING_RESTART: true
-      WATCHTOWER_INCLUDE_STOPPED: true
-      WATCHTOWER_REVIVE_STOPPED: true
-      WATCHTOWER_HEAD_BASED_DIGEST_CHECKING: true
-    networks:
-      - armin-net
-  # redis:
-  #   container_name: redis
-  #   image: redis:latest
-  #   restart: always
-  #   entrypoint: redis-server --appendonly yes --requirepass wbmsapp --maxmemory 512mb --maxmemory-policy allkeys-lru
-  #   ports:
-  #     - 6379:6379
-  #   volumes:
-  #     - redis:/data
-  #     - /etc/timezone:/etc/timezone:ro
-  #     - /etc/localtime:/etc/localtime:ro
-  #   networks:
-  #     - armin-net
   openldap:
     image: osixia/openldap:latest
     container_name: openldap
@@ -93,31 +57,6 @@ services:
       - openldap
     networks:
       - armin-net
-  # openldap-ui:
-  #   image: wheelybird/ldap-user-manager:v1.5
-  #   container_name: openldap-ui
-  #   environment:
-  #     LDAP_URI: ldap://wbms.dsn:389
-  #     LDAP_BASE_DN: dc=wbms,dc=dsn
-  #     # LDAP_REQUIRE_STARTTLS: false
-  #     DEFAULT_USER_GROUP: staff
-  #     LDAP_ADMINS_GROUP: admins
-  #     LDAP_ADMIN_BIND_DN: cn=admin,dc=wbms,dc=dsn
-  #     LDAP_ADMIN_BIND_PWD: admin
-  #     LDAP_USER_OU: employees
-  #     LDAP_GROUP_OU: roles
-  #     LDAP_IGNORE_CERT_ERRORS: true
-  #     ACCOUNT_REQUESTS_ENABLED: false
-  #     FORCE_RFC2307BIS: true
-  #     NO_HTTPS: TRUE
-  #     # PASSWORD_HASH: SSHA
-  #     SERVER_HOSTNAME: wbms.dsn
-  #   depends_on:
-  #     - openldap
-  #   ports:
-  #     - 18080:80
-  #   networks:
-  #     - armin-net
   wbms-db:
     image: 'bitnami/mariadb'
     restart: always
@@ -150,19 +89,6 @@ services:
       PMA_ARBITRARY: 1
     networks:
       - armin-net
-  # adminer:
-  #   image: adminer:latest
-  #   restart: always
-  #   ports:
-  #     - 8282:8080
-  #   environment:
-  #     ADMINER_DEFAULT_DB_DRIVER: mysql
-  #     ADMINER_DEFAULT_SERVER: wbms-db
-  #     ADMINER_DESIGN: galkaev #nette
-  #     ADMINER_DEFAULT_DB_NAME: wbms
-  #     ADMINER_PLUGINS: tables-filter tinymce
-  #   networks:
-  #     - armin-net
   wbms-backend:
     image: almyra/wbms_tbe:latest
     depends_on:
@@ -171,33 +97,16 @@ services:
     ports:
       - 6001:6001
     environment:
-      WBMS_APP_PORT: '6001'
-
       WBMS_DB_DOMAIN: 'wbms-db'
       WBMS_DB_PORT: '3306'
       WBMS_DB_USER: 'wbms_dbu'
       WBMS_DB_PASSWORD: '3031323334'
       WBMS_DB_NAME: 'wbms'
 
-      # 1: PKS, 2: T30, 3: BULKING
-      WBMS_SITE_TYPE: '1'
-
-      WBMS_WB_PORT: '9001'
-      WBMS_WB_MIN_WEIGHT: 1
-      WBMS_WB_STABLE_PERIOD: 3000
-
       WBMS_SEMAI_API_KEY: 'lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso'
       WBMS_SEMAI_API_URL: 'https://dispatch-api-dev.semaigroup.com/external-channel'
       WBMS_SEMAI_CERT: './cert/pks4.wb.cert.pem'
       WBMS_SEMAI_KEY: './cert/pks4.wb.key.pem'
-      UPLOAD_LOCATION: ./upload
-      MAX_FILE_SIZE: 5000000
-
-      LDAP_HOST: 'ldap://ldap.wbms.dsn'
-      LDAP_DN: 'cn=admin,dc=wbms,dc=dsn'
-      LDAP_PASSWORD: 'admin'
-      LDAP_BASE_DN: 'dc=wbms,dc=dsn'
-      LDAP_SEARCH_FILTER: '(uid={{username}})(email=*@foo.com))'
     volumes:
       - ../armin/server/upload:/wbms_be/upload
     networks:
@@ -212,13 +121,11 @@ services:
     #     dockerfile: Dockerfile
     ports:
       - '3000:3000'
-    # volumes:
-    #     - ./client:/app
     networks:
       - armin-net
 networks:
   armin-net:
-    driver: bridge
+    driver: nat
 volumes:
   ldap-data:
   ldap-config:

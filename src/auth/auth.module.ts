@@ -13,7 +13,7 @@ import { LdapAuthService } from './ldap-auth/ldap-auth.service';
     UsersModule,
     JwtModule.register({
       secret:  process.env.WBMS_JWT_AT_KEY,
-      signOptions: { expiresIn: '35m' },
+      signOptions: { expiresIn: '5h' },
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

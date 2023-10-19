@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wbms-backend
+spec:
+  replicas: 1  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: wbms-backend
+  template:
+    metadata:
+      labels:
+        app: wbms-backend
+    spec:
+      containers:
+        - name: wbms-backend
+          image: almyra/wbms_tbe:latest
+          ports:
+            - containerPort: 6001
+          env:
+            - name: WBMS_DB_DOMAIN
+              value: wbms-db
+            - name: WBMS_DB_PORT
+              value: "3306"
+            - name: WBMS_DB_USER
+              value: "wbms_dbu"
+            - name: WBMS_DB_PASSWORD
+              value: "3031323334"
+            - name: WBMS_DB_NAME
+              value: "wbms"
+            - name: WBMS_SEMAI_API_KEY
+              value: "lg8EzYBtTVJnBuTSjQIJkChoDNlGMpso"
+            - name: WBMS_SEMAI_API_URL
+              value: "https://dispatch-api-dev.semaigroup.com/external-channel"
+            - name: WBMS_SEMAI_CERT
+              value: "./cert/pks4.wb.cert.pem"
+            - name: WBMS_SEMAI_KEY
+              value: "./cert/pks4.wb.key.pem"
+          volumeMounts:
+            - name: upload-volume
+              mountPath: /wbms_be/upload
+      volumes:
+        - name: upload-volume
+          hostPath:
+            path: /path/to/host/upload  # Replace with the actual host path
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wbms-backend-service
+spec:
+  selector:
+    app: wbms-backend
+  ports:
+    - protocol: TCP
+      port: 6001
+      targetPort: 6001
+  type: NodePort  # Adjust the service type as needed
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-internal-communication
+spec:
+  podSelector:
+    matchLabels:
+      app: wbms-backend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: wbms-db
