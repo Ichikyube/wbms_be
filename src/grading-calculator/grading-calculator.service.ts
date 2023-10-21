@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { JsonObject } from '@prisma/client/runtime/library';
-import { hitungAIRPERSEN } from 'src/grading-calculator/gradingCalculator/hitungAIRPERSEN';
-import { hitungBLMPERSEN } from 'src/grading-calculator/gradingCalculator/hitungBLMPERSEN';
-import { hitungBMPERSEN } from 'src/grading-calculator/gradingCalculator/hitungBMPERSEN';
-import { hitungBrondolanPERSEN } from 'src/grading-calculator/gradingCalculator/hitungBrondolanPERSEN';
-import { hitungLAINNYAPERSEN } from 'src/grading-calculator/gradingCalculator/hitungLAINNYAPERSEN';
-import { hitungPartenoPERSEN } from 'src/grading-calculator/gradingCalculator/hitungPartenoPERSEN';
-import { hitungSAMPAHPERSEN } from 'src/grading-calculator/gradingCalculator/hitungSAMPAHPERSEN';
-import { hitungTandanKosongPERSEN } from 'src/grading-calculator/gradingCalculator/hitungTKPERSEN';
-import { hitungTPPERSEN } from 'src/grading-calculator/gradingCalculator/hitungTPPERSEN';
-import { hitungWAJIBPERSEN } from 'src/grading-calculator/gradingCalculator/hitungWAJIBPERSEN';
+import { hitungPotonganAir } from 'src/grading-calculator/functions/hitungPotonganAir';
+import { hitungPotBuahLewatMatang } from 'src/grading-calculator/functions/hitungPotBuahLewatMatang';
+import { hitungPotBuahMentah } from 'src/grading-calculator/functions/hitungPotBuahMentah';
+import { hitungPotonganBrondolan } from 'src/grading-calculator/functions/hitungPotonganBrondolan';
+import { hitungPotonganLainnya } from 'src/grading-calculator/functions/hitungPotonganLainnya';
+import { hitungPotonganParteno } from 'src/grading-calculator/functions/hitungPotonganParteno';
+import { hitungPotonganSampah } from 'src/grading-calculator/functions/hitungPotonganSampah';
+import { hitungPotTandanKosong } from 'src/grading-calculator/functions/hitungPotTandanKosong';
+import { hitungPotTangkaiPanjang } from 'src/grading-calculator/functions/hitungPotTangkaiPanjang';
+import { hitungPotonganWajib } from 'src/grading-calculator/functions/hitungPotonganWajib';
 
 @Injectable()
 export class GradingCalculatorService {
@@ -28,56 +28,56 @@ export class GradingCalculatorService {
     trxGradingWajibPERSEN: number
   ) {
 
-    const calculatedBM = hitungBMPERSEN(
+    const calculatedBM = hitungPotBuahMentah(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingBMPERSEN,
     );
-    const calculatedBLM = hitungBLMPERSEN(
+    const calculatedBLM = hitungPotBuahLewatMatang(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingBLMPERSEN,
     );
-    const calculatedWater = hitungAIRPERSEN(
+    const calculatedWater = hitungPotonganAir(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingAIRPERSEN,
     );
-    const calculatedTrash = hitungSAMPAHPERSEN(
+    const calculatedTrash = hitungPotonganSampah(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingSAMPAHPERSEN,
     );
-    const calculatedTP = hitungTPPERSEN(
+    const calculatedTP = hitungPotTangkaiPanjang(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingTPPERSEN,
     );
-    const calculatedTK = hitungTandanKosongPERSEN(
+    const calculatedTK = hitungPotTandanKosong(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingTKPERSEN,
     );
-    const calculatedParteno = hitungPartenoPERSEN(
+    const calculatedParteno = hitungPotonganParteno(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingPartenoPERSEN,
     );
-    const calculatedBrondolan = hitungBrondolanPERSEN(
+    const calculatedBrondolan = hitungPotonganBrondolan(
       millCode,
       qtyTbs,
       weightnetto,
       trxGradingBrondolanPERSEN,
     );
-    // const calculatedPotonganOthers = hitungLAINNYAPERSEN(millCode, qtyTbs, weightnetto, trxGradingTPPesen);
-    const calculatedObligatory = hitungWAJIBPERSEN(millCode, qtyTbs, weightnetto, trxGradingWajibPERSEN);
+    // const calculatedPotonganOthers = hitungPotonganLainnya(millCode, qtyTbs, weightnetto, trxGradingTPPesen);
+    const calculatedObligatory = hitungPotonganWajib(millCode, qtyTbs, weightnetto, trxGradingWajibPERSEN);
     return {
       calculatedBM,
       calculatedBLM,

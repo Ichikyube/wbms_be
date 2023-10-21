@@ -7,27 +7,12 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { YAML_CONFIG_FILENAME } from './configuration';
 import { join } from 'path';
+import { UpdateConfigDto } from './dto/update-config.dto';
 @ApiTags('Configs')
 @ApiBearerAuth('access-token')
 @Controller('configs')
 export class ConfigsController {
   constructor(private configsService: ConfigsService) {}
-
-  // @Get()
-  // getConfigVar() {
-  //   try {
-  //     const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
-  //     const config = yaml.load(configContent);
-  //     return config;
-  //   } catch (error) {
-  //     return { error: 'Error loading config' };
-  //   }
-  //   // Set the Cache-Control header
-  //   // res.setHeader(
-  //   //   `Cache-Control`,
-  //   //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
-  //   // );
-  // }
 
   @Get('get-wb-port')
   getWbPort() {
@@ -81,6 +66,57 @@ export class ConfigsController {
     }
   }
 
+  @Post(':id/edit-function')
+  async updateFunctions(
+    @Body() data: UpdateConfigDto,
+    @Param('id') id: number,
+    @Req() req: Request,
+  ) {
+    const dataOut = {
+      status: true,
+      message: '',
+      data: {
+        config: null,
+      },
+      logs: {},
+    };
+
+    try {
+      const userId = req.user['sub'];
+      const [params, code] = data.defaultVal.split('<##FunctionCode##>');
+      const record = await this.configsService.editGradingFunction(
+        id,
+        params,
+        code,
+        userId,
+      );
+
+      dataOut.data.config = record;
+    } catch (error) {
+      dataOut.status = false;
+      dataOut.message = error.message;
+      dataOut.logs = { ...dataOut.logs, reqBody: data, error };
+    }
+
+    return dataOut;
+  }
+
+  // @Get()
+  // getConfigVar() {
+  //   try {
+  //     const configContent = fs.readFileSync(join(__dirname, YAML_CONFIG_FILENAME), 'utf8');
+  //     const config = yaml.load(configContent);
+  //     return config;
+  //   } catch (error) {
+  //     return { error: 'Error loading config' };
+  //   }
+  //   // Set the Cache-Control header
+  //   // res.setHeader(
+  //   //   `Cache-Control`,
+  //   //   `max-age=${timeRemainingInSeconds}, private=true, immutable=true`,
+  //   // );
+  // }
+
   @Get('')
   @Public()
   async getAll() {
@@ -96,13 +132,6 @@ export class ConfigsController {
       },
       logs: {},
     };
-    // Calculate the time remaining until 24:00
-    // const now = new Date();
-    // const midnight = new Date(now);
-    // midnight.setHours(24, 0, 0, 0);
-    // const timeRemainingInSeconds = Math.floor(
-    //   (midnight.getTime() - now.getTime()) / 1000,
-    // );
 
     try {
       const records = await this.configsService.getAll();
@@ -113,6 +142,13 @@ export class ConfigsController {
       dataOut.message = error.message;
       dataOut.logs = { ...dataOut.logs, error };
     }
+    // Calculate the time remaining until 24:00
+    // const now = new Date();
+    // const midnight = new Date(now);
+    // midnight.setHours(24, 0, 0, 0);
+    // const timeRemainingInSeconds = Math.floor(
+    //   (midnight.getTime() - now.getTime()) / 1000,
+    // );
     // Set the Cache-Control header
     // res.setHeader(
     //   `Cache-Control`,

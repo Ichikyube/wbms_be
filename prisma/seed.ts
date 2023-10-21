@@ -231,13 +231,13 @@ async function main() {
           name: 'potonganBuahMentah',
           description: 'Fitur menentukan rumus untuk potongan Buah Mentah',
           type: ConfigType.Function,
-          defaultVal: `trxGradingBMPERSENValidate(
+          defaultVal: `
             trxGradingBMPERSEN: number,
             qtyTbs: number,
             adTransactionMILL_ID: string,
             originWeighInKg: number,
             originWeighOutKg: number,
-          ): number {
+            <##FunctionCode##>
             let persenbm: number;
             let trxGradingBMKG: number = 0;
             const weightnetto = originWeighInKg - originWeighOutKg;
@@ -259,10 +259,8 @@ async function main() {
               }
             }
           
-            // Return the relevant value based on your logic
-            // For example, you might want to return trxGradingBMKG or trxGradingBMKG
-            return trxGradingBMKG; // or return trxGradingBMKG;
-          }`,
+            return trxGradingBMKG; 
+          `,
         },
         {
           id: 9,
@@ -270,22 +268,21 @@ async function main() {
           description:
             'Fitur menentukan rumus untuk potongan Buah lewat Matang',
           type: ConfigType.Function,
-          defaultVal: `trxGradingBLMPERSENValidate(
+          defaultVal: `
             trxGradingBLMPERSEN: number,
             qtyTbs: number,
             adTransactionMILL_ID: string,
             originWeighInKg: number,
             originWeighOutKg: number,
-            persentasiTangkaiPanjang: number,
-          ): number {
+            persentasiTangkaiPanjang: number
+            <##FunctionCode##>
             let persemblm: number = 0;
-            const weightnetto = originWeighInKg - originWeighOutKg;
-            if (trxGradingBLMPERSEN !== null) {
+            if (trxGradingPERSEN !== null) {
               if (qtyTbs === 0 || qtyTbs === null) {
                 // Display an error message (you can handle this as needed)
                 console.error('Jumlah janjang 0 atau tidak ada.');
               } else {
-                persemblm = trxGradingBLMPERSEN / qtyTbs;
+                persemblm = trxGradingPERSEN / qtyTbs;
           
                 if (adTransactionMILL_ID === 'BA41') {
                   return Math.round((persemblm * weightnetto) / 100);
@@ -304,21 +301,20 @@ async function main() {
             }
           
             // Return 0 if none of the conditions are met
-            return 0;
-          }`,
+            return 0;`,
         },
         {
           id: 10,
           name: 'potonganTangkaiPanjang',
           description: 'Fitur menentukan rumus untuk potongan Tangkai Panjang',
           type: ConfigType.Function,
-          defaultVal: `trxGradingTPPERSENValidate(
+          defaultVal: `
             trxGradingTPPesen: number,
             qtyTbs: number,
             adTransactionMILL_ID: string,
             originWeighInKg: number,
             originWeighOutKg: number,
-          ): number {
+            <##FunctionCode##>
             let persentp: number = 0;
             const weightnetto = originWeighInKg - originWeighOutKg;
             if (trxGradingTPPesen !== null) {
@@ -340,7 +336,6 @@ async function main() {
           
             // Return 0 if none of the conditions are met
             return 0;
-          }
           `,
         },
         {
@@ -355,12 +350,12 @@ async function main() {
           name: 'potonganSampah',
           description: 'Fitur menentukan rumus untuk potongan Sampah',
           type: ConfigType.Function,
-          defaultVal: `trxGradingSAMPAHPERSENValidate(
+          defaultVal: `
             trxGradingSAMPAHPERSEN: number,
             originWeighInKg: number,
             originWeighOutKg: number,
             adTransactionMILLID: string,
-          ): number {
+            <##FunctionCode##>
             let trxGradingSAMPAHKG = 0;
             const weightnetto = originWeighInKg - originWeighOutKg;
             if (trxGradingSAMPAHPERSEN !== null) {
@@ -373,25 +368,23 @@ async function main() {
               trxGradingSAMPAHKG = 2 * trxGradingSAMPAHPERSEN;
             }
           
-            return trxGradingSAMPAHKG;
-          }`,
+            return trxGradingSAMPAHKG;`,
         },
         {
           id: 13,
           name: 'potonganAir',
           description: 'Fitur menentukan rumus untuk potongan Air',
           type: ConfigType.Function,
-          defaultVal: `trxGradingAIRPERSENValidate(
+          defaultVal: `
             trxGradingAIRPERSEN: number,
             originWeighInKg: number,
             originWeighOutKg: number,
-          ): number {
+            <##FunctionCode##>
             const weightnetto = originWeighInKg - originWeighOutKg;
             if (trxGradingAIRPERSEN !== null) {
               return Math.round((trxGradingAIRPERSEN * weightnetto) / 100);
             }
             return 0; // Return 0 if trxGradingAIRPERSEN is null
-          }
           `,
         },
         {
@@ -413,12 +406,12 @@ async function main() {
           name: 'potonganLainnya',
           description: 'Fitur menentukan rumus untuk potongan Lainnya',
           type: ConfigType.Function,
-          defaultVal: `trxGradingLAINNYAPERSENValidate(
+          defaultVal: `
             trxGradingLAINNYAPERSEN: number,
             originWeighInKg: number,
             originWeighOutKg: number,
             adTransactionMILL_ID: string,
-          ): number {
+          <##FunctionCode##>
             const weightnetto = originWeighInKg - originWeighOutKg;
             if (trxGradingLAINNYAPERSEN !== null) {
               let trxGradingLATNNYAKG = Math.round(
@@ -436,7 +429,7 @@ async function main() {
           
             // Return 0 if trxGradingLAINNYAPERSEN is null
             return 0;
-          }
+          
           `,
         },
         {
@@ -446,12 +439,12 @@ async function main() {
           lvlOfApprvl: 3,
           lifespan: null,
           type: ConfigType.Function,
-          defaultVal: `txxGradingWAJIBValidate(
+          defaultVal: `
             trxGradingWAJIB: number,
             originWeighInKg: number,
             originWeighOutKg: number,
             adTransactionMILL_ID: string,
-          ): number {
+          <##FunctionCode##>
             const weightnetto = originWeighInKg - originWeighOutKg;
             if (trxGradingWAJIB !== null) {
               let trxGradingWAJIBKG = Math.round((trxGradingWAJIB * weightnetto) / 100);
@@ -464,7 +457,7 @@ async function main() {
             }
           
             return 0; // Return 0 if trxGradingWAJIB is null
-          }`,
+          `,
         },
         {
           id: 18,

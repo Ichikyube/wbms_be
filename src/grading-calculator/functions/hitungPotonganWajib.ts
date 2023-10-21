@@ -1,4 +1,4 @@
-export function hitungWAJIBPERSEN(
+export function hitungPotonganWajib(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,

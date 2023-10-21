@@ -1,5 +1,5 @@
 //Sampah
-export function hitungSAMPAHPERSEN(
+export function hitungPotonganSampah(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,

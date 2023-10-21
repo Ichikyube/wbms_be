@@ -1,5 +1,4 @@
-//Air
-export function hitungAIRPERSEN(
+export function hitungPotonganAir(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,

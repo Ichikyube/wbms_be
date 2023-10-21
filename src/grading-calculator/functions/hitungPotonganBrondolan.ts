@@ -1,4 +1,4 @@
-export function hitungBrondolanPERSEN(
+export function hitungPotonganBrondolan(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,

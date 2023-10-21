@@ -56,8 +56,7 @@ export class TransportVehicleService {
                   where: { id: res.id },
                   data: {
                     companyRefId: companyId,
-                    companyName: companyName,
-
+                    companyName,
                     code,
                     productRefId: productId,
                     productName,
@@ -82,6 +81,8 @@ export class TransportVehicleService {
               this.db.transportVehicle
                 .create({
                   data: {
+                    refType: 1,
+                    refId: id,
                     companyRefId: companyId,
                     companyName: companyName,
 

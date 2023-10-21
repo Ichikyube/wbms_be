@@ -65,8 +65,9 @@ export class TemporaryDataService {
       orderBy: { id: 'desc' },
       select: { id: true },
     });
+    
     let startId = lastId ? parseInt(lastId.id.split('-')[1]) + 1 : 1;
-    const recordsToCreate = data.map( (item) => {
+    const recordsToCreate = data.filter((item)=> item !== null).map( (item) => {
       let id = `trx-${startId++}`;
 
       return {
@@ -92,6 +93,8 @@ export class TemporaryDataService {
     // If the temporary data exists, save it to the permanent database and delete it from the cache.
     if (existingData) {
       const tempData = JSON.parse(JSON.stringify(existingData?.data));
+      
+
       const {
         afdeling,
         blok,

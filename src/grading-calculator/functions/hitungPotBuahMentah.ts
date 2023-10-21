@@ -1,5 +1,5 @@
 //Buah Mentah
-export function hitungBMPERSEN(
+export function hitungPotBuahMentah(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,
@@ -9,7 +9,6 @@ export function hitungBMPERSEN(
   let trxGradingBMKG: number = 0;
   if (trxGradingPERSEN !== null) {
     if (qtyTbs === 0 || qtyTbs === null) {
-      // Display an error message (you can handle this as needed)
       console.error('Jumlah janjang 0 atau tidak ada.');
       persenbm = 0;
     } else {
@@ -25,7 +24,5 @@ export function hitungBMPERSEN(
     }
   }
 
-  // Return the relevant value based on your logic
-  // For example, you might want to return trxGradingBMKG or trxGradingBMKG
-  return trxGradingBMKG; // or return trxGradingBMKG;
+  return trxGradingBMKG;
 }

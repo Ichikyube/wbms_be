@@ -4,7 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { YAML_CONFIG_FILENAME } from './configuration';
-import { join } from 'path';
+import { join, resolve } from 'path';
+import { JsonArray } from '@prisma/client/runtime/library';
 @Injectable()
 export class ConfigsService {
   private readonly envConfig: Record<string, string>;
@@ -58,7 +59,7 @@ export class ConfigsService {
         WBMS_WB_MIN_WEIGHT: this.config.get('WBMS_WB.MIN_WEIGHT'),
         WBMS_WB_STABLE_PERIOD: this.config.get('WBMS_WB.STABLE_PERIOD'),
       };
-      console.log(ENV)
+      console.log(ENV);
       dataOut.data = { ...dataOut.data, ENV };
     } catch (error) {
       dataOut.status = false;
@@ -143,6 +144,45 @@ export class ConfigsService {
     });
 
     return record;
+  }
+  async editGradingFunction(
+    id: number,
+    params: string,
+    bodyFunction: string,
+    userId: string,
+  ) {
+    const { name: functionName } = await this.db.config.findFirst({
+      where: { id },
+      select: { name: true },
+    });
+    const filePath = resolve(
+      __dirname,
+      `../src/grading-calculator/functions/${functionName}.ts`,
+    );
+    const defaultParams = `  adTransactionMILL_ID: string,
+    qtyTbs: number,
+    weightnetto: number,
+    trxGradingPERSEN: number`;
+    const gradingFunction = `export function ${functionName}(
+      ${defaultParams}
+    ): number {
+      ${bodyFunction}
+    }`;
+    console.log('test');
+    fs.promises.writeFile(filePath, gradingFunction);
+    try {
+      const record = await this.db.config.update({
+        where: { id },
+        data: {
+          defaultVal: `${params}<##FunctionCode##>${bodyFunction}`,
+          userModified: userId,
+          dtModified: new Date(),
+        },
+      });
+      return record;
+    } catch (error) {
+      return console.log(error.message);
+    }
   }
 
   async editById(id: number, dto: any, userId: string) {

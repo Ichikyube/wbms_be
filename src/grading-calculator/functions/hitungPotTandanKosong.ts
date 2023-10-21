@@ -1,4 +1,4 @@
-export function hitungTandanKosongPERSEN(
+export function hitungPotTandanKosong(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,

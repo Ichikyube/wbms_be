@@ -22,7 +22,7 @@ export class LdapAuthService {
       return new Promise<boolean>((resolve, reject) => {
         client.bind(ldapDN, 'admin', function (err) {
           if (err) {
-            console.log('OH no', err);
+            console.log('Oh no', err);
             client.unbind();
             console.log(err);
             return;

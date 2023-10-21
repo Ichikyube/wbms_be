@@ -1,23 +1,23 @@
-export function hitungLAINNYAPERSEN(
+export function hitungPotonganParteno(
   adTransactionMILL_ID: string,
   qtyTbs: number,
   weightnetto: number,
   trxGradingPERSEN: number,
 ): number {
   if (trxGradingPERSEN !== null) {
-    let trxGradingLAINNYAKG = Math.round(
+    let trxGradingPartenoKG = Math.round(
       (trxGradingPERSEN * weightnetto) / 100,
     );
 
     if (adTransactionMILL_ID === 'AN41') {
-      trxGradingLAINNYAKG = Math.round(
+      trxGradingPartenoKG = Math.round(
         (trxGradingPERSEN / 100) * weightnetto,
       );
     }
 
-    return trxGradingLAINNYAKG;
+    return trxGradingPartenoKG;
   }
 
-  // Return 0 if trxGradingLAINNYAPERSEN is null
+  // Return 0 if trxGradingPartenoPERSEN is null
   return 0;
 }
