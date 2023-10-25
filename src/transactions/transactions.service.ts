@@ -10,6 +10,7 @@ import { CreateTransactionDto } from './dto/create-transactionDto';
 import { QrcodeDto } from 'src/semai/dto/qrcode.dto';
 
 import { TransactionEntity } from 'src/entities';
+import { addDays } from 'date-fns';
 
 @Injectable()
 export class TransactionService {
@@ -83,24 +84,18 @@ export class TransactionService {
   convertDataToXml(data: string[]): string {
     return data.map((item) => this.convertToXml(item, `{${item}}`)).join('\n');
   }
-  async searchManyToSAP(useXml: boolean, payload: any) {
-    let record;
-    const { date, id_ba, Year_of_Planting, afdeling, site } = payload;
-    const parts = date.split('-');
-    const day = parseInt(parts[0]);
-    const month = parts[1]; // Months are 0-based in JavaScript Date objects
-    const year = parseInt(parts[2]);
-    const inputDate = new Date(Date.UTC(year, month - 1, day, 7));
-    const endOfDay = new Date(
-      new Date(inputDate).getTime() + 24 * 60 * 60 * 1000,
-    );
+
+  async searchManyToSAP(date: any, id_ba: string, useXml: boolean) {
+    let records;
+    console.log(date);
+    const endOfDay = addDays(date, 1);
     const query = {
       where: {
         dtCreated: {
-          gte: inputDate,
+          gte: date,
           lte: endOfDay,
         },
-        // MILL_PLANT: id_ba,
+        codePlant: id_ba,
         isDeleted: false,
       },
       select: {
@@ -129,12 +124,12 @@ export class TransactionService {
     };
 
     try {
-      record = await this.db.transaction.findMany(query);
+      records = await this.db.transaction.findMany(query);
     } catch (error) {
       throw error;
     }
 
-    let mappedData = record.map(
+    let mappedData = records.map(
       ({
         originWeighInTimestamp,
         originWeighOutTimestamp,
@@ -146,8 +141,9 @@ export class TransactionService {
         transportVehiclePlateNo,
         qtyTbs,
         code,
-        codeVendor,
         spbNo,
+        afdeling,
+        yearPlant,
         transporter,
         checkGrade,
         potngnBM,
@@ -164,7 +160,6 @@ export class TransactionService {
         potngnBuahKecil,
         potngnDimknHama,
         potonganLain,
-        potonganWajib,
       }) => {
         const Batch = product.batch;
         const Trans_Code = transporter.code;
@@ -181,25 +176,23 @@ export class TransactionService {
           WB_Time_In: moment(originWeighInTimestamp).format('HH:mm:ss'),
           WB_Date_Out: moment(originWeighOutTimestamp).format('DD.MM.YYYY'),
           WB_Time_Out: moment(originWeighOutTimestamp).format('HH:mm:ss'),
-
           Material: code,
           Batch,
           Car_Plate: transportVehiclePlateNo,
           Driver_Name: driverName,
           Trans_Code,
-          Contract_No: '',
-          Contract_Item: '',
-          Vendor_ID: '',
+          Contract_No: ' ',
+          Contract_Item: ' ',
+          Vendor_ID: ' ',
           SPB_No: spbNo,
-
           Fruit_Type: 'B',
           Check_Grade: checkGrade,
-          Year_of_Planting: Year_of_Planting,
+          Year_of_Planting: yearPlant,
           Vendor_Qty: weightBrutto,
           WB_In_Quantity: originWeighInKg,
           WB_Out_Quantity: originWeighOutKg,
           Net_Quantity_Before_Grading: weightBrutto,
-          Grading_Flat_Percent: null,
+          Grading_Flat_Percent: 0,
           Net_Quantity_After_Grading: weightNetto,
           UoM: 'KG',
           FROO_Un_ripe: potngnBM,
@@ -227,14 +220,12 @@ export class TransactionService {
           EATBUNCH_Eaten_by_Rats: 0,
           FR3BUNCH_Bunch_LessThan_3_Kg: 0,
           LAIN2BUNCH_Others: 0,
-
           Dura: 0,
           Tenera: 0,
           Dura_Bunch: 0,
           Tenera_Bunch: 0,
           Total_Bunch: qtyTbs,
-
-          ORIGIN: null,
+          ORIGIN: ' ',
           AFDELING: afdeling,
           SITE: transporter.codeVendor,
         };

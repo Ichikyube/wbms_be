@@ -1,19 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsDate, IsString } from 'class-validator';
-import { isString } from 'lodash';
-import moment from 'moment';
+import { IsBoolean } from 'class-validator';
 
 export class ExportToSapDto {
   @ApiProperty({
-    type: 'string',
+    type: String,
     format: 'date',
-    example: '23-08-2023',
+    example: '21-08-2023',
   })
-  // @IsDate()
-  // @Transform(({value}) => moment(value, 'DD-MM-YYYY').toDate())
+  @Transform(({ value }) => {
+    const parts = String(value).split('-');
+    const day = parseInt(parts[0]);
+    const month = parseInt(parts[1]); // Parse as integer
+    const year = parseInt(parts[2]);
+    const hour = 7;
+    const inputDate = new Date(Date.UTC(year, month - 1, day, hour));
+
+    return inputDate;
+  })
   date: string;
 
-  @ApiProperty()
-  id_ba: string;
+  @ApiProperty({ type: String, default: null })
+  id_ba?: string;
+  @ApiProperty({ type: Boolean }) @IsBoolean() useXml: boolean;
 }

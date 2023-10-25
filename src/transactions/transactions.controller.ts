@@ -44,9 +44,10 @@ export class TransactionController {
     return this.transactionService.openCreateByQrcodeSemai(body);
   }
 
-  @Post('Sap')
-  async searchManytoSAP(@Query('useXml') xml: boolean, @Body() payload: ExportToSapDto) {
-    return await this.transactionService.searchManyToSAP(xml, payload);
+  @Post('apitpks')
+  async searchManytoSAP(@Body() payload: ExportToSapDto) {
+    const { date, id_ba, useXml } = payload;
+    return await this.transactionService.searchManyToSAP(date, id_ba, useXml);
   }
 
   @Post('search-many')
@@ -113,7 +114,6 @@ export class TransactionController {
 
     return dataOut;
   }
-
 
   // @Get()
   // async findAll(): Promise<string[]> {
