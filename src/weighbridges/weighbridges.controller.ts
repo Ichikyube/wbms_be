@@ -7,14 +7,15 @@ import {
   Patch,
   Delete,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { WeighbridgesService } from './weighbridges.service';
 import { CreateWeighbridgeDto, UpdateWeighbridgeDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { WeighbridgeEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Weighbridges')
 @ApiBearerAuth('access-token')
@@ -24,7 +25,7 @@ export class WeighbridgesController {
 
   @Get('')
   @ApiOkResponse({ type: WeighbridgeEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -37,7 +38,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.weighbridgesService.getAll();
 
@@ -53,13 +57,8 @@ export class WeighbridgesController {
   }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -72,7 +71,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.weighbridgesService.getAllDeleted();
 
@@ -88,11 +90,6 @@ export class WeighbridgesController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -118,13 +115,8 @@ export class WeighbridgesController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -137,7 +129,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.weighbridgesService.searchFirst(query);
 
@@ -155,13 +150,8 @@ export class WeighbridgesController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -174,7 +164,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.weighbridgesService.searchMany(query);
 
@@ -190,13 +183,8 @@ export class WeighbridgesController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -209,7 +197,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.weighbridgesService.searchFirstDeleted(query);
 
@@ -227,13 +218,8 @@ export class WeighbridgesController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -246,7 +232,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.weighbridgesService.searchManyDeleted(query);
 
@@ -262,11 +251,6 @@ export class WeighbridgesController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async create(@Body() dto: CreateWeighbridgeDto, @Req() req: Request) {
     const dataOut = {
@@ -277,7 +261,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.weighbridgesService.create(dto, userId);
@@ -293,11 +280,6 @@ export class WeighbridgesController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async updateById(
     @Param('id') id: string,
@@ -312,7 +294,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.weighbridgesService.updateById(id, dto, userId);
@@ -328,11 +313,6 @@ export class WeighbridgesController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'weightBridgesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: WeighbridgeEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -343,7 +323,10 @@ export class WeighbridgesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Weighbridge');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.weighbridgesService.deleteById(id, userId);

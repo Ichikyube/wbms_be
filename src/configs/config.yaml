@@ -1,5 +1,5 @@
 WBMS_APP:
-  DOMAIN: "localhost"
+  DOMAIN: 'localhost'
   PORT: 6001
 
 WBMS_WB:
@@ -12,13 +12,13 @@ WBMS_BONTRIP:
   SUFFIX_BACKDATED_TEMPLATE: '1'
   SUFFIX_BACKDATED_FORM: '1'
   SUFFIX: '1'
-  
+
 WBMS_SITE:
   CODE: 'P04'
   TYPE: 1
 
-WBMS_SEMAI:
-  API_URL: "https://dispatch.dsngroup.co.id/api/external-channel"
+SEMAI:
+  BACKUPDOMAIN: 'dsn-pks4wb-02'
 
 LDAP_HOST: 'ldap://ldap.wbms.dsn'
 LDAP_DN: 'cn:admin,dc:wbms,dc:dsn'

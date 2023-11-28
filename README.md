@@ -13,6 +13,10 @@ LDIF
 ldapadd -x -D 'cn=admin,dc=wbms,dc=dsn' -w admin -h ldap://openldap:389 -p 389  -f  '/assets/openldap/custom/ldif/bootstrap.ldif'
 ldapsearch -x -h ldap://openldap:389 -p 389  -D "cn=admin,dc=wbms,dc=dsn"  -w admin -s base 'dc=wbms,dc=dsn'
 
+LDAP_HOST=192.168.202.24
+LDAP_USERNAME=null
+LDAP_PASSWORD=null
+LDAP_BASE_DN="dc=hco,dc=dsngroup,dc=co,dc=id"
 
 Yes, Redis can be used to handle Server-Sent Events (SSE) in a web application. SSE is a technology that allows a web server to push real-time updates to a web browser over a single HTTP connection. While SSE is typically used for simpler real-time scenarios compared to more advanced technologies like WebSockets, Redis can still play a role in implementing SSE.
 

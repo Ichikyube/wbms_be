@@ -8,8 +8,8 @@ import {
   Delete,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request } from 'express';
 import {
   ApiBearerAuth,
@@ -20,8 +20,8 @@ import {
 
 import { TransportVehicleService } from './transport-vehicle.service';
 import { CreateTransportVehicleDto, UpdateTransportVehicleDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { TransportVehicleEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Transport Vehicles')
 @ApiBearerAuth('access-token')
@@ -62,7 +62,7 @@ export class TransportVehicleController {
 
   @Get('')
   @ApiOkResponse({ type: TransportVehicleEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -75,7 +75,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.transportVehicleService.getAll();
 
@@ -91,13 +94,8 @@ export class TransportVehicleController {
   }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -110,7 +108,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.transportVehicleService.getAllDeleted();
 
@@ -126,13 +127,8 @@ export class TransportVehicleController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -141,7 +137,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.transportVehicleService.getById(id);
 
@@ -156,13 +155,8 @@ export class TransportVehicleController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -175,7 +169,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.transportVehicleService.searchFirst(query);
 
@@ -193,13 +190,8 @@ export class TransportVehicleController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -212,7 +204,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.transportVehicleService.searchMany(query);
 
@@ -228,13 +223,8 @@ export class TransportVehicleController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -247,7 +237,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record =
         await this.transportVehicleService.searchFirstDeleted(query);
@@ -266,13 +259,8 @@ export class TransportVehicleController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -285,7 +273,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records =
         await this.transportVehicleService.searchManyDeleted(query);
@@ -302,11 +293,6 @@ export class TransportVehicleController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'carsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async create(@Body() dto: CreateTransportVehicleDto, @Req() req: Request) {
     const dataOut = {
@@ -317,7 +303,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.transportVehicleService.create(dto, userId);
@@ -333,11 +322,6 @@ export class TransportVehicleController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async updateById(
     @Param('id') id: string,
@@ -352,7 +336,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.transportVehicleService.updateById(
@@ -372,11 +359,6 @@ export class TransportVehicleController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'carsData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: TransportVehicleEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -387,7 +369,10 @@ export class TransportVehicleController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('TransportVehicle');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.transportVehicleService.deleteById(id, userId);

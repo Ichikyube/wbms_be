@@ -1,25 +1,19 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-
 import cookieParser from 'cookie-parser';
-
 import { AppModule } from './app.module';
 import { DbService } from './db/db.service';
 import SwaggerDocumentation from './settings/swagger.config';
-import * as fs from 'fs';
-import { AccessControl } from 'accesscontrol';
 import { CalcSocketIoAdapter } from './grading-calculator/websocket.adapter';
-import path from 'path';
-// const grantsObject = JSON.parse(fs.readFileSync('./rbac-policy.json', 'utf8'));
-// const ac = new AccessControl(grantsObject);
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log', 'error', 'warn'],
+  });
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://192.168.1.122:3000'],
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });

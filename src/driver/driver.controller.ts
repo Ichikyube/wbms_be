@@ -8,14 +8,14 @@ import {
   Delete,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { DriverService } from './driver.service';
 import { CreateDriverDto, UpdateDriverDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { DriverEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Drivers')
 @ApiBearerAuth('access-token')
@@ -23,7 +23,6 @@ import { DriverEntity } from 'src/entities';
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 
-  
   @Get('sync-with-semai')
   async syncWithSemai() {
     const dataOut = {
@@ -55,7 +54,7 @@ export class DriverController {
 
   @Get('')
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -68,7 +67,13 @@ export class DriverController {
       },
       logs: {},
     };
-
+    console.log(req.user['role'])
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    console.log(permission)
+    console.log(permission.granted)
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.driverService.getAll();
 
@@ -84,9 +89,8 @@ export class DriverController {
   }
 
   @Get('deleted')
-
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -99,7 +103,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.driverService.getAllDeleted();
 
@@ -116,7 +123,7 @@ export class DriverController {
 
   @Get(':id')
   @ApiCreatedResponse({ type: DriverEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -125,7 +132,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.driverService.getById(id);
 
@@ -141,7 +151,7 @@ export class DriverController {
 
   @Post('search-first')
   @ApiCreatedResponse({ type: DriverEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -154,7 +164,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.driverService.searchFirst(query);
 
@@ -173,7 +186,7 @@ export class DriverController {
 
   @Post('search-many')
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -186,7 +199,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.driverService.searchMany(query);
 
@@ -203,7 +219,7 @@ export class DriverController {
 
   @Post('search-first-deleted')
   @ApiCreatedResponse({ type: DriverEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -216,7 +232,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.driverService.searchFirstDeleted(query);
 
@@ -235,7 +254,7 @@ export class DriverController {
 
   @Post('search-many-deleted')
   @ApiCreatedResponse({ type: DriverEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -248,7 +267,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.driverService.searchManyDeleted(query);
 
@@ -274,7 +296,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.driverService.create(dto, userId);
@@ -290,11 +315,6 @@ export class DriverController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: DriverEntity })
   async updateById(
     @Param('id') id: string,
@@ -309,7 +329,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.driverService.updateById(id, dto, userId);
@@ -325,11 +348,6 @@ export class DriverController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'driverData',
-    action: 'delete',
-    possession: 'own',
-  })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
@@ -339,7 +357,10 @@ export class DriverController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Driver');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.driverService.deleteById(id, userId);

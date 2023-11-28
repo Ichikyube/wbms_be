@@ -4,15 +4,36 @@ import { DbService } from 'src/db/db.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
 import { CityEntity } from 'src/entities';
 import { Prisma } from '@prisma/client';
-// import { SseGateway } from 'src/sse/sse.gateway';
 import { Observable, from, map } from 'rxjs';
+import { SseService } from 'src/sse/sse.service';
 
 @Injectable()
 export class CitiesService {
   constructor(
     private db: DbService,
-    // private readonly sseGateway: SseGateway,
+    private readonly sseGateway: SseService,
   ) {}
+
+  async updateView(): Promise<Observable<CityEntity>> {
+    const records = await this.db.city.findMany({
+      where: { isDeleted: false },
+      include: {
+        province: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    await this.sseGateway.emitUpdateToClients('');
+    return from(records).pipe(
+      map((city) => {
+        return city;
+      }),
+    );
+  }
 
   async create(dto: CreateCityDto, userId: string): Promise<CityEntity> {
     const params = {
@@ -26,22 +47,6 @@ export class CitiesService {
     const record = await this.db.city.create(params);
     return record;
   }
-
-  // async updateView():Promise<Observable<CityEntity[]>>{
-  //   const records = await this.db.city.findMany({
-  //     where: { isDeleted: false },
-  //     include: {
-  //       province: true,
-  //     },
-  //   });
-  //   await this.sseGateway.emitUpdateToClients(records);
-
-  //   return from(records).pipe(
-  //     map((city) => {
-  //       return city;
-  //     }),
-  //   );
-  // }
 
   async getAll(): Promise<CityEntity[]> {
     const records = await this.db.city.findMany({
@@ -130,7 +135,7 @@ export class CitiesService {
       },
     };
     const record = await this.db.city.update(params);
-
+    await this.sseGateway.emitUpdateToClients(record);
     return record;
   }
 

@@ -85,9 +85,14 @@ export class TransactionService {
     return data.map((item) => this.convertToXml(item, `{${item}}`)).join('\n');
   }
 
-  async searchManyToSAP(date: any, id_ba: string, useXml: boolean) {
+  async downloadSAPWBpark(
+    date: Date,
+    id_ba: string,
+    origin: string,
+    useXml: boolean,
+  ) {
+    //origin itu estate
     let records;
-    console.log(date);
     const endOfDay = addDays(date, 1);
     const query = {
       where: {
@@ -96,6 +101,7 @@ export class TransactionService {
           lte: endOfDay,
         },
         codePlant: id_ba,
+        originSiteName: origin,
         isDeleted: false,
       },
       select: {
@@ -249,6 +255,38 @@ export class TransactionService {
       return xml;
     }
     return mappedData;
+  }
+
+  async getEventsBeforeDate(targetDate) {
+    const yesterdayTrx = await this.db.transaction.findFirst({
+      where: {
+        dtCreated: {
+          lt: targetDate, // "lt" stands for less than
+        },
+      },
+    });
+
+    return yesterdayTrx;
+  }
+
+  async getEventsAfterDate(targetDate) {
+    const nextDayTrx = await this.db.transaction.findFirst({
+      where: {
+        dtCreated: {
+          gt: targetDate, // "gt" stands for greater than
+        },
+      },
+    });
+
+    return nextDayTrx;
+  }
+
+  async getTransactionDates() {
+    const events = await this.db.transaction.findMany({
+      select: { dtCreated: true },
+    });
+
+    return events;
   }
 
   async searchFirst(query: any) {

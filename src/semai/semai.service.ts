@@ -1,44 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
-import * as fs from 'fs';
-import * as https from 'https';
-
-import { DbService } from 'src/db/db.service';
 import { DecodeQrcodeDto } from './dto/decode-qrcode.dto';
 import { UpdateSemaiDto } from './dto/update-semai.dto';
-import { resolve } from 'path';
+import { AxiosService } from './axios.service';
 
 @Injectable()
 export class SemaiService {
-  constructor(
-    private db: DbService,
-    private config: ConfigService,
-  ) {
-    console.log(resolve(this.WBMS_SEMAI_CERT));
-    console.log(resolve(this.WBMS_SEMAI_API_URL))
+  constructor(private readonly axiosService: AxiosService) {
+    console.log(
+      `WBMS_SEMAI_BACKEND_URL: ${this.axiosService.api.defaults.baseURL},`)
   }
 
-  WBMS_SEMAI_API_URL = this.config.get('WBMS_SEMAI.API_URL');
-  WBMS_SEMAI_API_KEY = this.config.get('WBMS_SEMAI_API_KEY');
-  WBMS_SEMAI_CERT = this.config.get('WBMS_SEMAI_CERT');
-  WBMS_SEMAI_KEY = this.config.get('WBMS_SEMAI_KEY');
-
-  httpsAgent = new https.Agent({
-    cert: fs.readFileSync(resolve(this.WBMS_SEMAI_CERT)),
-    key: fs.readFileSync(resolve(this.WBMS_SEMAI_KEY)),
-  });
-
-  // httpsAgent: this.httpsAgent,
-  api = axios.create({
-    baseURL: `${this.WBMS_SEMAI_API_URL}/`,
-    httpsAgent: this.httpsAgent,
-    headers: {
-      'x-api-key': this.WBMS_SEMAI_API_KEY,
-    },
-  });
-
-  async storageTanks() {
+  async storageTanks(): Promise<any> {
     const dataOut = {
       status: true,
       message: '',
@@ -49,10 +21,9 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`storage-tanks?pageSize=0`)
         .then((res) => res?.data);
-      console.log(response)
       if (!response.success) throw new Error(response?.message);
       dataOut.data.storageTanks = response.records;
     } catch (error) {
@@ -73,9 +44,8 @@ export class SemaiService {
       },
       logs: {},
     };
-
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`products?pageSize=0`)
         .then((res) => res?.data);
 
@@ -87,7 +57,7 @@ export class SemaiService {
       dataOut.message = error.message;
       dataOut.logs = { error };
     }
-    
+
     return dataOut;
   }
 
@@ -102,7 +72,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`sites?pageSize=0`)
         .then((res) => res?.data);
 
@@ -129,7 +99,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`transport-vehicles?pageSize=0`)
         .then((res) => res?.data);
 
@@ -156,7 +126,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`transporters?pageSize=0`)
         .then((res) => res?.data);
 
@@ -183,7 +153,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`vehicle-operators?pageSize=0`)
         .then((res) => res?.data);
 
@@ -210,7 +180,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/decode-qrcode`, dto)
         .then((res) => res?.data);
 
@@ -242,7 +212,7 @@ export class SemaiService {
 
       console.log(dto);
 
-      const response = await this.api
+      const response = await this.axiosService.api
         .get(`cmd/encode-qrcode/${orderId}/${functionCode}`)
         .then((res) => res?.data);
 
@@ -271,7 +241,7 @@ export class SemaiService {
     try {
       console.log(dto);
 
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/dispatch-delivery`, dto)
         .then((res) => res?.data);
 
@@ -298,7 +268,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/reject-delivery`, dto)
         .then((res) => res?.data);
 
@@ -325,7 +295,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/close-delivery-as-canceled`, dto)
         .then((res) => res?.data);
 
@@ -352,7 +322,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/close-delivery-as-accepted`, dto)
         .then((res) => res?.data);
 
@@ -382,7 +352,7 @@ export class SemaiService {
       console.log('data in');
       console.log(dto);
 
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/close-delivery-as-rejected`, dto)
         .then((res) => res?.data);
 
@@ -415,7 +385,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/validate-dispatch-delivery`, dto)
         .then((res) => res?.data);
 
@@ -442,7 +412,7 @@ export class SemaiService {
     };
 
     try {
-      const response = await this.api
+      const response = await this.axiosService.api
         .post(`cmd/validate-unloading`, dto)
         .then((res) => res?.data);
 

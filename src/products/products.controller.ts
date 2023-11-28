@@ -8,14 +8,14 @@ import {
   Delete,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { ProductEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Products')
 @ApiBearerAuth('access-token')
@@ -54,7 +54,7 @@ export class ProductsController {
 
   @Get('')
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -67,7 +67,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.productsService.getAll();
 
@@ -83,13 +86,8 @@ export class ProductsController {
   }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -102,7 +100,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.productsService.getAllDeleted();
 
@@ -118,13 +119,8 @@ export class ProductsController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -133,7 +129,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.productsService.getById(id);
 
@@ -148,13 +147,8 @@ export class ProductsController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -167,7 +161,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.productsService.searchFirst(query);
 
@@ -185,13 +182,8 @@ export class ProductsController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -204,7 +196,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.productsService.searchMany(query);
 
@@ -220,13 +215,8 @@ export class ProductsController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -239,7 +229,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.productsService.searchFirstDeleted(query);
 
@@ -257,13 +250,8 @@ export class ProductsController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -276,7 +264,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.productsService.searchManyDeleted(query);
 
@@ -292,11 +283,6 @@ export class ProductsController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'productsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity })
   async create(@Body() dto: CreateProductDto, @Req() req: Request) {
     const dataOut = {
@@ -307,7 +293,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.productsService.create(dto, userId);
@@ -323,11 +312,6 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity })
   async updateById(
     @Param('id') id: string,
@@ -342,7 +326,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.productsService.updateById(id, dto, userId);
@@ -358,11 +345,6 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'productsData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProductEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -373,7 +355,10 @@ export class ProductsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Product');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.productsService.deleteById(id, userId);

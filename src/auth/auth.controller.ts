@@ -21,11 +21,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { AuthService } from './auth.service';
 import { AtGuard, RtGuard } from 'src/common/guards';
-import { SigninDto, SignupDto } from './dto';
-import { AuthGuard } from '@nestjs/passport';
+import { SigninDto } from './dto';
 
 @ApiTags('Auth')
 @ApiBearerAuth('access-token')

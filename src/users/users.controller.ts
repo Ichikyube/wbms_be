@@ -14,6 +14,7 @@ import {
   UseInterceptors,
   Res,
   Sse,
+  ForbiddenException,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -25,15 +26,13 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { UseRoles } from 'nest-access-control';
-
 import { Observable, interval, map } from 'rxjs';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Users')
 @ApiBearerAuth('access-token')
@@ -75,22 +74,17 @@ export class UsersController {
     return dataOut;
   }
 
-  // @Sse('sse')
-  // sse(): Observable<MessageEvent> {
-  //   return interval(1000).pipe(
-  //     map((_) => ({ data: { hello: 'world' } }) as MessageEvent),
-  //   );
-  // }
+  @Sse('sse')
+  sse(): Observable<MessageEvent> {
+    return interval(1000).pipe(
+      map((_) => ({ data: { hello: 'world' } }) as MessageEvent),
+    );
+  }
 
   @Get()
-  @UseRoles({
-    resource: 'usersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiOperation({ summary: 'Lists of users' })
   @HttpCode(HttpStatus.OK)
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -103,7 +97,10 @@ export class UsersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const users = await this.usersService.getAll();
 
@@ -119,12 +116,7 @@ export class UsersController {
   }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'delete',
-    possession: 'own',
-  })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -137,7 +129,10 @@ export class UsersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       dataOut.data.user.records = await this.usersService.getAllDeleted();
     } catch (error) {
@@ -150,12 +145,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'delete',
-    possession: 'own',
-  })
-  async getById(@Param('id') userId: string) {
+  async getById(@Param('id') userId: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -168,13 +158,16 @@ export class UsersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const user = await this.usersService.getById(userId);
 
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
-        const { username, email, userRole } = user;
+      const { username, email, userRole } = user;
       dataOut.data.user.records.push({
         username,
         role: userRole,
@@ -197,51 +190,38 @@ export class UsersController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'read',
-    possession: 'own',
-  })
-  searchFirst(@Body() query: any) {
+  searchFirst(@Body() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.usersService.searchFirst(query);
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'read',
-    possession: 'own',
-  })
-  searchMany(@Body() query: any) {
+  searchMany(@Body() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.usersService.searchMany(query);
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'read',
-    possession: 'own',
-  })
-  searchFirstDeleted(@Body() query: any) {
+  searchFirstDeleted(@Body() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.usersService.searchFirstDeleted(query);
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'read',
-    possession: 'own',
-  })
   searchDeleted(@Body() query: any) {
     return this.usersService.searchManyDeleted(query);
   }
 
   @Post()
-  @UseRoles({
-    resource: 'usersData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiOperation({
     summary: 'Create a user',
   })
@@ -268,7 +248,10 @@ export class UsersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       console.log(dto.isLDAPUser);
@@ -277,7 +260,7 @@ export class UsersController {
       const { name, profilePic, division, position, phone, alamat } =
         user.profile;
       const { username, email, userRole } = user;
-      
+
       dataOut.data.user = {
         username,
         role: userRole,
@@ -311,7 +294,10 @@ export class UsersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const user = await this.usersService.updateUserRole(userId, roleId);
 
@@ -339,11 +325,6 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiOperation({
     summary: 'Update a user',
   })
@@ -367,7 +348,10 @@ export class UsersController {
       },
       logs: {},
     };
-    const user = await this.usersService.updateById(userId, dto, file, userId);
+    const permission = ac.can(req.user['role']).readAny('User');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const user = await this.usersService.updateById(
         userId,
@@ -400,11 +384,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'usersData',
-    action: 'delete',
-    possession: 'own',
-  })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,

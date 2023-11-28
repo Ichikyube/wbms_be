@@ -8,14 +8,14 @@ import {
   Delete,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { SitesService } from './sites.service';
 import { CreateSiteDto, UpdateSiteDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { SiteEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Sites')
 @ApiBearerAuth('access-token')
@@ -37,7 +37,6 @@ export class SitesController {
       },
       logs: {},
     };
-
     try {
       const records = await this.sitesService.syncWithSemai();
 
@@ -54,7 +53,7 @@ export class SitesController {
 
   @Get('')
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -67,7 +66,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.sitesService.getAll();
 
@@ -82,10 +84,9 @@ export class SitesController {
     return dataOut;
   }
 
-
   @Get('deleted')
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -98,7 +99,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.sitesService.getAllDeleted();
 
@@ -115,7 +119,7 @@ export class SitesController {
 
   @Get(':id')
   @ApiCreatedResponse({ type: SiteEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -124,7 +128,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.sitesService.getById(id);
 
@@ -140,7 +147,7 @@ export class SitesController {
 
   @Post('search-first')
   @ApiCreatedResponse({ type: SiteEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -153,7 +160,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.sitesService.searchFirst(query);
 
@@ -172,7 +182,7 @@ export class SitesController {
 
   @Post('search-many')
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -185,7 +195,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.sitesService.searchMany(query);
 
@@ -201,13 +214,8 @@ export class SitesController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'sitesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: SiteEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -220,7 +228,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.sitesService.searchFirstDeleted(query);
 
@@ -239,7 +250,7 @@ export class SitesController {
 
   @Post('search-many-deleted')
   @ApiCreatedResponse({ type: SiteEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -252,7 +263,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.sitesService.searchManyDeleted(query);
 
@@ -278,7 +292,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.sitesService.create(dto, userId);
@@ -308,7 +325,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.sitesService.updateById(id, dto, userId);
@@ -334,7 +354,10 @@ export class SitesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Site');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.sitesService.deleteById(id, userId);

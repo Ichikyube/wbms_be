@@ -7,26 +7,20 @@ import {
   Patch,
   Delete,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { CompanyEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Companies')
 @ApiBearerAuth('access-token')
-@UseRoles({
-  resource: 'companiesData',
-  action: 'read',
-  possession: 'own',
-})
 @Controller('companies')
 export class CompaniesController {
   constructor(private companiesService: CompaniesService) {}
-  
   
   @Get('sync-with-semai')
   async syncWithSemai() {
@@ -59,7 +53,7 @@ export class CompaniesController {
 
   @Get('')
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -72,7 +66,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.companiesService.getAll();
 
@@ -90,7 +87,7 @@ export class CompaniesController {
 
   @Get('deleted')
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -103,7 +100,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.companiesService.getAllDeleted();
 
@@ -120,7 +120,7 @@ export class CompaniesController {
 
   @Get(':id')
   @ApiCreatedResponse({ type: CompanyEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -129,7 +129,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.companiesService.getById(id);
 
@@ -145,7 +148,7 @@ export class CompaniesController {
 
   @Post('search-first')
   @ApiCreatedResponse({ type: CompanyEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -158,7 +161,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.companiesService.searchFirst(query);
 
@@ -177,7 +183,7 @@ export class CompaniesController {
 
   @Post('search-many')
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -190,7 +196,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.companiesService.searchMany(query);
 
@@ -207,7 +216,7 @@ export class CompaniesController {
 
   @Post('search-first-deleted')
   @ApiCreatedResponse({ type: CompanyEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -220,7 +229,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.companiesService.searchFirstDeleted(query);
 
@@ -239,7 +251,7 @@ export class CompaniesController {
 
   @Post('search-many-deleted')
   @ApiCreatedResponse({ type: CompanyEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -252,7 +264,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.companiesService.searchManyDeleted(query);
 
@@ -278,7 +293,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.companiesService.create(dto, userId);
@@ -308,7 +326,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.companiesService.updateById(id, dto, userId);
@@ -334,7 +355,10 @@ export class CompaniesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Company');
+    if (!permission.granted) {
+        throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.companiesService.deleteById(id, userId);

@@ -8,34 +8,44 @@ import {
   Query,
   Delete,
   Req,
+  ForbiddenException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { TransactionService } from './transactions.service';
 import { CreateTransactionDto } from './dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { UseRoles } from 'nest-access-control';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { ExportToSapDto } from './dto/exportToSap.dto';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('access-token')
-// @UseInterceptors(CacheInterceptor)
 @Controller('transactions')
 export class TransactionController {
   constructor(private transactionService: TransactionService) {}
 
   @Get('')
-  getAll() {
+  getAll(@Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.getAll();
   }
 
   @Get(':id')
-  getById(@Param('id') id: string) {
+  getById(@Param('id') id: string, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.getById(id);
   }
 
@@ -45,38 +55,91 @@ export class TransactionController {
   }
 
   @Post('apitpks')
-  async searchManytoSAP(@Body() payload: ExportToSapDto) {
-    const { date, id_ba, useXml } = payload;
-    return await this.transactionService.searchManyToSAP(date, id_ba, useXml);
+  @ApiQuery({
+    name: 'date',
+    type: String,
+    description: 'The selected date',
+    example: '20230821',
+  })
+  @ApiQuery({
+    name: 'millplant',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'origin',
+    type: String,
+    required: false,
+  })
+  async downloadSAPWBpark(
+    @Query('date') date: string,
+    @Query('millplant') millplant: string = null,
+    @Query('origin') origin: string = null,
+    @Query('usexml') useXml: boolean = true,
+  ) {
+    const year = parseInt(date.substring(0, 4));
+    const month = parseInt(date.substring(4, 6));
+    const day = parseInt(date.substring(6, 8));
+    const hour = 7;
+    const inputDate = new Date(Date.UTC(year, month - 1, day, hour));
+    return await this.transactionService.downloadSAPWBpark(
+      inputDate,
+      millplant,
+      origin,
+      useXml,
+    );
   }
 
+  @Post('all-dates')
+  getTransactionDates(@Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
+    return this.transactionService.getTransactionDates();
+  }
   @Post('search-many')
-  searchMany(@Body() query: any) {
+  searchMany(@Body() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.searchMany(query);
   }
 
   @Post('search-first')
-  searchFirst(@Body() query: any) {
+  searchFirst(@Body() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.searchFirst(query);
   }
 
   @Get('search-qr')
-  searchByQR(@Body() query: any) {
+  searchByQR(@Body() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.searchByQR(query);
   }
 
   @Get('getByPlateNo')
-  @UseRoles({
-    resource: 'transactionsData',
-    action: 'read',
-    possession: 'own',
-  })
-  getByPlateNo(@Query() query: any) {
+  getByPlateNo(@Query() query: any, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.getByPlateNo(query);
   }
 
   @Post()
-  create(@Body() dto: CreateTransactionDto) {
+  create(@Body() dto: CreateTransactionDto, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.create(dto);
   }
 
@@ -85,7 +148,15 @@ export class TransactionController {
     description: 'Transaction has been successfully updated.',
     type: UpdateTransactionDto,
   })
-  updateById(@Param('id') id: string, @Body() dto: UpdateTransactionDto) {
+  updateById(
+    @Param('id') id: string,
+    @Body() dto: UpdateTransactionDto,
+    @Req() req: Request,
+  ) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     return this.transactionService.updateById(id, dto);
   }
 
@@ -93,6 +164,10 @@ export class TransactionController {
   @ApiOkResponse({ description: 'Transaction has been successfully deleted.' })
   @ApiNotFoundResponse({ description: 'Transaction not found.' })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
+    const permission = ac.can(req.user['role']).readAny('Transaction');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     const dataOut = {
       status: true,
       message: '',

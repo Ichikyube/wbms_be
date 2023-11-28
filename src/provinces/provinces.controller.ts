@@ -8,14 +8,14 @@ import {
   Delete,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ProvincesService } from './provinces.service';
 import { CreateProvinceDto, UpdateProvinceDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { ProvinceEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Provinces')
 @ApiBearerAuth('access-token')
@@ -23,13 +23,7 @@ import { ProvinceEntity } from 'src/entities';
 export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
-  // @Roles("Administrator")
   @Get('')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAll() {
     const dataOut = {
@@ -60,11 +54,6 @@ export class ProvincesController {
   }
 
   @Get('deleted')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
   async getAllDeleted() {
     const dataOut = {
@@ -95,11 +84,6 @@ export class ProvincesController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async getById(@Param('id') id: string) {
     const dataOut = {
@@ -125,13 +109,8 @@ export class ProvincesController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -144,7 +123,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.provincesService.searchFirst(query);
 
@@ -162,13 +144,8 @@ export class ProvincesController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -181,7 +158,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.provincesService.searchMany(query);
 
@@ -197,13 +177,8 @@ export class ProvincesController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -216,7 +191,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.provincesService.searchFirstDeleted(query);
 
@@ -234,13 +212,8 @@ export class ProvincesController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -253,7 +226,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.provincesService.searchManyDeleted(query);
 
@@ -269,11 +245,6 @@ export class ProvincesController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async create(@Body() dto: CreateProvinceDto, @Req() req: Request) {
     const dataOut = {
@@ -284,7 +255,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       // const userId = req.user['sub']
       const userId = '';
@@ -301,11 +275,6 @@ export class ProvincesController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async updateById(
     @Param('id') id: string,
@@ -320,7 +289,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.provincesService.updateById(id, dto, userId);
@@ -336,11 +308,6 @@ export class ProvincesController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'provincesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: ProvinceEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -351,7 +318,10 @@ export class ProvincesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Province');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.provincesService.deleteById(id, userId);

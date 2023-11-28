@@ -9,7 +9,7 @@ export class LdapAuthService {
     const ldapUrl = this.config.get<string>('LDAP_HOST');
     const ldapBaseDN = this.config.get<string>('LDAP_BASE_DN');
     const ldapDN = this.config.get<string>('LDAP_DN');
-
+    const ldapSearchFilter = this.config.get<string>('LDAP_SEARCH_FILTER');
     const client = ldap.createClient({
       url: ldapUrl,
     });
@@ -28,10 +28,10 @@ export class LdapAuthService {
             return;
           }
           client.search(
-            `ou=employees,${ldapBaseDN}`,
+            `ou=employees, ${ldapBaseDN}`,
             {
               scope: 'sub',
-              filter: `(mail=${username})`,
+              filter: ldapSearchFilter,
             },
             function (err, res) {
               if (err) {

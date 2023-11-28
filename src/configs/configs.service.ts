@@ -51,7 +51,6 @@ export class ConfigsService {
 
     try {
       const ENV = {
-        WBMS_SEMAI_BACKEND_URL: this.config.get('WBMS_SEMAI.API_URL'),
         WBMS_SEMAI_API_KEY: this.config.get('WBMS_SEMAI_API_KEY'),
 
         WBMS_WB_IP: this.config.get('WBMS_WB.IP'),

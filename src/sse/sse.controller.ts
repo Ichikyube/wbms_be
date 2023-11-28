@@ -1,30 +1,55 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, Res, Sse } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { SseService } from './sse.service';
+import { Observable, fromEvent, map } from 'rxjs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
+function createMessageEvent(data: any): MessageEvent {
+  const event = new MessageEvent('message', {
+    data: JSON.stringify(data),
+  });
+  return event;
+}
+
+@ApiBearerAuth('access-token')
 @Controller('sse')
 export class SseController {
-  @Get()
-  async stream(@Res() res: Response) {
+  constructor(
+    private readonly sseService: SseService,
+    private eventEmitter: EventEmitter2,
+  ) {}
+  private readonly sseConnections = new Map<string, EventSource>();
+
+  @Sse('/sse')
+  async sse(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Observable<MessageEvent>> {
+    const client = this.sseService.handleConnection(req.user['id']);
+
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.flushHeaders();
+    return this.sseService.sendEvents();
+    // return fromEvent(this.eventEmitter, 'sse.event').pipe(
+    //   map((payload) => ({
+    //     data: JSON.stringify(payload),
+    //   })),
+    // );
+  }
 
-    const sendHeartbeat = () => {
-      res.write(`data: Heartbeat\n\n`);
-    };
-
-    const intervalId = setInterval(sendHeartbeat, 5000);
-
-    // Simulate sending real-time data
-    for (let i = 0; i < 10; i++) {
-      res.write(`data: Message ${i}\n\n`);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    }
-
-    res.on('close', () => {
-      clearInterval(intervalId);
-      res.end();
-    });
+  @Sse('/sse')
+  async userSse(): Promise<Observable<MessageEvent>> {
+    return fromEvent(this.eventEmitter, 'sse.event').pipe(
+      map((payload) => createMessageEvent(payload)),
+    );
+  }
+  @Sse()
+  @Get('/user-events')
+  async getUserEvents(req: Request) {
+    const sseConnection = new EventSource('/user-events');
+    this.sseConnections.set(req.socket.remoteAddress, sseConnection);
+    return await this.sseService.sendEvents();
   }
 }

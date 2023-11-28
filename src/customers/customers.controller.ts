@@ -7,15 +7,14 @@ import {
   Patch,
   Delete,
   Req,
-  UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto, UpdateCustomerDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { CustomerEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Customers')
 @ApiBearerAuth('access-token')
@@ -25,7 +24,7 @@ export class CustomersController {
 
   @Get('')
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -38,7 +37,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.customersService.getAll();
 
@@ -53,21 +55,9 @@ export class CustomersController {
     return dataOut;
   }
 
-  @Get('attr')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
-
   @Get('deleted')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -80,7 +70,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.customersService.getAllDeleted();
 
@@ -96,13 +89,8 @@ export class CustomersController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -111,7 +99,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.customersService.getById(id);
 
@@ -126,13 +117,8 @@ export class CustomersController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -145,7 +131,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.customersService.searchFirst(query);
 
@@ -163,13 +152,8 @@ export class CustomersController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -182,7 +166,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.customersService.searchMany(query);
 
@@ -198,13 +185,8 @@ export class CustomersController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -217,7 +199,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.customersService.searchFirstDeleted(query);
 
@@ -235,13 +220,8 @@ export class CustomersController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -254,7 +234,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.customersService.searchManyDeleted(query);
 
@@ -270,11 +253,6 @@ export class CustomersController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity })
   async create(@Body() dto: CreateCustomerDto, @Req() req: Request) {
     const dataOut = {
@@ -285,7 +263,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.customersService.create(dto, userId);
@@ -301,11 +282,6 @@ export class CustomersController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity })
   async updateById(
     @Param('id') id: string,
@@ -320,7 +296,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.customersService.updateById(id, dto, userId);
@@ -336,11 +315,6 @@ export class CustomersController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'customersData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CustomerEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -351,7 +325,10 @@ export class CustomersController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Customer');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.customersService.deleteById(id, userId);

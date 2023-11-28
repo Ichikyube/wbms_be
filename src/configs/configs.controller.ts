@@ -1,5 +1,5 @@
 import { Body, Get, Param, Post, Controller, Patch, Req } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ConfigsService } from './configs.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators';
@@ -8,6 +8,7 @@ import * as yaml from 'js-yaml';
 import { YAML_CONFIG_FILENAME } from './configuration';
 import { join } from 'path';
 import { UpdateConfigDto } from './dto/update-config.dto';
+
 @ApiTags('Configs')
 @ApiBearerAuth('access-token')
 @Controller('configs')
@@ -186,11 +187,11 @@ export class ConfigsController {
     return dataOut;
   }
 
-  @Get('env')
-  @Public()
-  getEnv() {
-    return this.configsService.getEnv();
-  }
+  // @Get('env')
+  // @Public()
+  // getEnv() {
+  //   return this.configsService.getEnv();
+  // }
 
   @Post('search-many')
   async searchMany(@Body() query: any) {

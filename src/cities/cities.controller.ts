@@ -9,14 +9,19 @@ import {
   Req,
   Sse,
   Res,
+  ForbiddenException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { CitiesService } from './cities.service';
 import { CreateCityDto, UpdateCityDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { CityEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 import { Observable } from 'rxjs';
 
 @ApiTags('Cities')
@@ -25,19 +30,14 @@ import { Observable } from 'rxjs';
 export class CitiesController {
   constructor(private citiesService: CitiesService) {}
 
-  // @Sse('city')
-  // async updateCities(@Res() res: Response): Promise<Observable<any>> {
-  //   await this.citiesService.handleDatabaseUpdate();
-  //   return ({ message: 'Update triggered' });
-  // }
+  @Sse('sse')
+  async updateCities(@Res() res: Response): Promise<Observable<any>> {
+    return await this.citiesService.updateView();
+  }
+
   @Get('')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiOkResponse({ type: CityEntity, isArray: true })
-  async getAll() {
+  async getAll(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -50,7 +50,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.citiesService.getAll();
 
@@ -65,16 +68,9 @@ export class CitiesController {
     return dataOut;
   }
 
-
-
   @Get('deleted')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -87,7 +83,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).deleteAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.citiesService.getAllDeleted();
 
@@ -103,13 +102,8 @@ export class CitiesController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -118,7 +112,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.citiesService.getById(id);
 
@@ -133,13 +130,8 @@ export class CitiesController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -152,7 +144,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.citiesService.searchFirst(query);
 
@@ -170,13 +165,8 @@ export class CitiesController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -189,7 +179,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.citiesService.searchMany(query);
 
@@ -205,13 +198,8 @@ export class CitiesController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -224,7 +212,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.citiesService.searchFirstDeleted(query);
 
@@ -242,13 +233,8 @@ export class CitiesController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -261,7 +247,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.citiesService.searchManyDeleted(query);
 
@@ -277,11 +266,6 @@ export class CitiesController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity })
   async create(@Body() dto: CreateCityDto, @Req() req: Request) {
     const dataOut = {
@@ -292,7 +276,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.citiesService.create(dto, userId);
@@ -307,11 +294,6 @@ export class CitiesController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity })
   async updateById(
     @Param('id') id: string,
@@ -326,7 +308,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.citiesService.updateById(id, dto, userId);
@@ -342,11 +327,6 @@ export class CitiesController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'citiesData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: CityEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -357,7 +337,10 @@ export class CitiesController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('City');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.citiesService.deleteById(id, userId);

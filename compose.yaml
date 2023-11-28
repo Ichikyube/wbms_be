@@ -1,5 +1,27 @@
 version: '2.0'
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    # depends_on:
+    #   - wbms-backend
+    networks:
+      - armin-net
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - '80:80'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - armin-net
+  whoami:
+    image: jwilder/whoami
+    environment:
+      - VIRTUAL_HOST=whoami.local
+    networks:
+      - armin-net
   wbms-db:
     image: 'bitnami/mariadb'
     restart: always
@@ -43,10 +65,11 @@ services:
       - ../armin/server/upload:/wbms_be/upload
     networks:
       - armin-net
+
   wbms-fe:
     image: 'almyra/wbms_fe:latest'
-    depends_on:
-      - wbms-backend
+    # depends_on:
+    #   - wbms-backend
     restart: always
     # build:
     #     context: ./client
@@ -55,6 +78,7 @@ services:
       - '3000:3000'
     networks:
       - armin-net
+      - host
 networks:
   armin-net:
     driver: nat

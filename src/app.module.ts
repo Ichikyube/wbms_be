@@ -31,18 +31,19 @@ import { DriverModule } from './driver/driver.module';
 import { TransportVehicleModule } from './transport-vehicle/transport-vehicle.module';
 import { AtGuard } from './common/guards';
 import { FilesModule } from './files/files.module';
-import path, { join } from 'path';
-import { RolesModule } from './accessControl/roles/roles.module';
-import { RbacModule } from './accessControl/rbac.module';
+import { join } from 'path';
+import { RolesModule } from './roles/roles.module';
 import { ConfigRequestModule } from './config-request/config-request.module';
 import { ConfigRequestsAdminModule } from './config-requests-admin/config-requests-admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
-// import { SseGateway } from './sse/sse.gateway';
-import { SseController } from './sse/sse.controller';
 import { GradingCalculatorModule } from './grading-calculator/grading-calculator.module';
 import { TemporaryDataModule } from './temporary-data/temporary-data.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import configuration from './configs/configuration';
+import { SseController } from './sse/sse.controller';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { SseService } from './sse/sse.service';
+import { BroadcastService } from './sse/broadcast.service';
 
 @Module({
   imports: [
@@ -50,6 +51,22 @@ import configuration from './configs/configuration';
       isGlobal: true,
       load: [configuration],
       // envFilePath: path.resolve(__dirname, '../.env'), // if you want to specify the path to env file
+    }),
+    EventEmitterModule.forRoot({
+      // set this to `true` to use wildcards
+      wildcard: false,
+      // the delimiter used to segment namespaces
+      delimiter: '.',
+      // set this to `true` if you want to emit the newListener event
+      newListener: false,
+      // set this to `true` if you want to emit the removeListener event
+      removeListener: false,
+      // the maximum amount of listeners that can be assigned to an event
+      maxListeners: 10,
+      // show event name in memory leak message when more than maximum amount of listeners is assigned
+      verboseMemoryLeak: false,
+      // disable throwing uncaughtException if an error event is emitted and it has no listeners
+      ignoreErrors: false,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'upload'),
@@ -85,15 +102,15 @@ import configuration from './configs/configuration';
     NotificationsModule,
     GradingCalculatorModule,
     TemporaryDataModule,
-    // RedisModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AtGuard,
     },
-    // SseGateway,
+    SseService,
+    BroadcastService,
   ],
-  // controllers: [SseController],
+  controllers: [SseController],
 })
 export class AppModule {}

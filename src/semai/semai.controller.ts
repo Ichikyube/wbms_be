@@ -7,25 +7,40 @@ import {
   Param,
   Delete,
   UseGuards,
+  Inject,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { SemaiService } from './semai.service';
 import { DecodeQrcodeDto, UpdateSemaiDto } from './dto';
 import { ApiSecurity } from '@nestjs/swagger';
+import { AxiosService } from './axios.service';
+import { SemaiAxiosInterceptor } from './semai.interceptor';
 
 @ApiTags('Semai')
 @ApiSecurity('ApiKeyAuth')
 @ApiBearerAuth('access-token')
 @Controller('semai')
 export class SemaiController {
-  constructor(private readonly semaiService: SemaiService) {}
+  constructor(
+    private readonly semaiService: SemaiService,
+    private readonly axiosService: AxiosService,
+  ) {}
+  @Get('resetUrl')
+  resetConfig() {
+    return this.axiosService.resetConfig();
+  }
+
+
   @Get('products')
-  products() {
+  @UseInterceptors(SemaiAxiosInterceptor)
+  products(): Promise<{ status: boolean; message: string; data: { products: any[]; }; logs: {}; }> {
     return this.semaiService.products();
   }
 
   @Get('sites')
+  @UseInterceptors(SemaiAxiosInterceptor)
   sites() {
     return this.semaiService.sites();
   }

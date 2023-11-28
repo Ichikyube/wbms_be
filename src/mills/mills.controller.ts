@@ -8,15 +8,15 @@ import {
   Delete,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { MillsService } from './mills.service';
 import { CreateMillDto, UpdateMillDto } from './dto';
-import { UseRoles } from 'nest-access-control';
 import { MillEntity } from 'src/entities';
+import { ac } from 'src/settings/rbac.config';
 
 @ApiTags('Mills')
 @ApiBearerAuth('access-token')
@@ -56,7 +56,7 @@ export class MillsController {
 
   @Get('deleted')
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
-  async getAllDeleted() {
+  async getAllDeleted(@Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -69,7 +69,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.millsService.getAllDeleted();
 
@@ -85,13 +88,8 @@ export class MillsController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'read',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -100,7 +98,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.millsService.getById(id);
 
@@ -115,13 +116,8 @@ export class MillsController {
   }
 
   @Post('search-first')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity })
-  async searchFirst(@Body() query: any) {
+  async searchFirst(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -134,7 +130,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.millsService.searchFirst(query);
 
@@ -152,13 +151,8 @@ export class MillsController {
   }
 
   @Post('search-many')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
-  async searchMany(@Body() query: any) {
+  async searchMany(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -171,7 +165,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.millsService.searchMany(query);
 
@@ -187,13 +184,8 @@ export class MillsController {
   }
 
   @Post('search-first-deleted')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity })
-  async searchFirstDeleted(@Body() query: any) {
+  async searchFirstDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -206,7 +198,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const record = await this.millsService.searchFirstDeleted(query);
 
@@ -224,13 +219,8 @@ export class MillsController {
   }
 
   @Post('search-many-deleted')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity, isArray: true })
-  async searchManyDeleted(@Body() query: any) {
+  async searchManyDeleted(@Body() query: any, @Req() req: Request) {
     const dataOut = {
       status: true,
       message: '',
@@ -243,7 +233,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const records = await this.millsService.searchManyDeleted(query);
 
@@ -259,11 +252,6 @@ export class MillsController {
   }
 
   @Post()
-  @UseRoles({
-    resource: 'millsData',
-    action: 'create',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity })
   async create(@Body() dto: CreateMillDto, @Req() req: Request) {
     const dataOut = {
@@ -274,7 +262,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.millsService.create(dto, userId);
@@ -290,11 +281,6 @@ export class MillsController {
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'update',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity })
   async updateById(
     @Param('id') id: string,
@@ -309,7 +295,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = req.user['sub'];
       const record = await this.millsService.updateById(id, dto, userId);
@@ -325,11 +314,6 @@ export class MillsController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'millsData',
-    action: 'delete',
-    possession: 'own',
-  })
   @ApiCreatedResponse({ type: MillEntity })
   async deleteById(@Param('id') id: string, @Req() req: Request) {
     const dataOut = {
@@ -340,7 +324,10 @@ export class MillsController {
       },
       logs: {},
     };
-
+    const permission = ac.can(req.user['role']).readAny('Mill');
+    if (!permission.granted) {
+      throw new ForbiddenException('You do not have enough permissions');
+    }
     try {
       const userId = ''; // req.user['sub']
       const record = await this.millsService.deleteById(id, userId);
